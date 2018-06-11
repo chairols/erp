@@ -11,7 +11,7 @@ class Classname extends CI_Controller{
 
   function index()
   {
-
+    echo "test";
   }
 
 }

@@ -7,6 +7,9 @@ class Usuarios_model extends CI_Model{
         parent::__construct();
     }
 
+    /*
+     *  Usuarios/login
+     */
     public function get_usuario($usuario, $password) {
         $query = $this->db->query("SELECT 
                                         idusuario,
@@ -20,5 +23,13 @@ class Usuarios_model extends CI_Model{
                                         usuario = '$usuario' AND
                                         password = '$password'");
         return $query->row_array();
+    }
+    
+    
+    /*
+     *  Usuarios/login
+     */
+    public function update($where, $idusuario) {
+        $this->db->update('usuarios', $where, array('idusuario' => $idusuario));
     }
 }

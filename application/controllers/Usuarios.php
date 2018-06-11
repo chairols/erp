@@ -37,6 +37,12 @@ class Usuarios extends CI_Controller{
                     'correo' => $usuario['email']
                 );
                 $this->session->set_userdata($datos);
+                
+                $datos = array(
+                    'ultimo_acceso' => date("Y-m-d H:i:s")
+                );
+                $this->usuarios_model->update($datos, $usuario['idusuario']);
+                
                 redirect('/dashboard/', 'refresh');
             }
         }

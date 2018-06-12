@@ -27,6 +27,10 @@ class Menu_model extends CI_Model {
         return $query->result_array();
     }
     
+    
+    /*
+     *  libraries/r_session
+     */
     public function get_perfil_menu($idperfil, $menu) {
         $query = $this->db->query("SELECT * 
                                     FROM
@@ -38,6 +42,58 @@ class Menu_model extends CI_Model {
                                         m.idmenu = pm.idmenu");
         
         return $query->result_array();
+    }
+    
+    /*
+     *  Menu/listar
+     */
+    public function get_cantidad_pendientes($titulo) {
+        $query = $this->db->query("SELECT COUNT(*) as cantidad
+                                    FROM
+                                        menu
+                                    WHERE
+                                        titulo LIKE '%$titulo%' OR
+                                        menu LIKE '%$titulo%'");
+        
+        return $query->row_array();
+    }
+    
+    
+    /*
+     *  Menu/listar
+     */
+    public function gets_where_titulo_limit($titulo, $pagina, $cantidad_por_pagina) {
+        $query = $this->db->query("SELECT *
+                                    FROM
+                                        menu
+                                    WHERE
+                                        titulo LIKE '%$titulo%' OR
+                                        menu LIKE '%$titulo%'
+                                    ORDER BY
+                                        titulo
+                                    LIMIT $pagina, $cantidad_por_pagina");
+        return $query->result_array();
+    }
+    
+    
+    /*
+     *  Menu/listar
+     */
+    public function gets() {
+        $query = $this->db->query("SELECT *
+                    FROM
+                        menu");
+        return $query->result_array();
+                    
+    }
+    
+    /*
+     *  Menu/listar
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('menu', $where);
+        
+        return $query->row_array();
     }
 
 }

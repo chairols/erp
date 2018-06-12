@@ -32,4 +32,17 @@ class Usuarios_model extends CI_Model{
     public function update($where, $idusuario) {
         $this->db->update('usuarios', $where, array('idusuario' => $idusuario));
     }
+    
+    
+    /*
+     *  Usuarios/login
+     */
+    public function get_perfil($idusuario) {
+        $where = array(
+            'idusuario' => $idusuario
+        );
+        $query = $this->db->get_where('usuarios_perfiles', $where);
+        
+        return $query->row_array();
+    }
 }

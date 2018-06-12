@@ -28,13 +28,15 @@ class Usuarios extends CI_Controller{
         } else {
             $usuario = $this->usuarios_model->get_usuario($this->input->post('usuario'), sha1($this->input->post('password')));
             if (!empty($usuario)) {
+                $perfil = $this->usuarios_model->get_perfil($usuario['idusuario']);
                 
                 $datos = array(
                     'SID' => $usuario['idusuario'],
                     'usuario' => $usuario['usuario'],
                     'nombre' => $usuario['nombre'],
                     'apellido' => $usuario['apellido'],
-                    'correo' => $usuario['email']
+                    'correo' => $usuario['email'],
+                    'perfil' => $perfil['idperfil']
                 );
                 $this->session->set_userdata($datos);
                 

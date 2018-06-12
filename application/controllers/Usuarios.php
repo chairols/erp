@@ -7,7 +7,8 @@ class Usuarios extends CI_Controller{
         parent::__construct();
         $this->load->library(array(
             'form_validation',
-            'session'
+            'session',
+            'r_session'
         ));
         $this->load->model(array(
             'usuarios_model'
@@ -63,4 +64,17 @@ class Usuarios extends CI_Controller{
         redirect('/usuarios/login/', 'refresh');
     }
 
+    public function listar() {
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
+        $data['title'] = 'Listar Usuarios';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = '';
+        
+        $this->load->view('layout/header', $data);
+        $this->load->view('layout/menu');
+        $this->load->view('usuarios/listar');
+        $this->load->view('layout/footer');
+    }
 }

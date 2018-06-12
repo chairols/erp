@@ -215,7 +215,7 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="/assets/templates/AdminLTE-2.3.11/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                <span class="hidden-xs">Alexander Pierce</span>
+                                <span class="hidden-xs"><?= $session['nombre'] ?> <?= $session['apellido'] ?></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
@@ -253,10 +253,6 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- Control Sidebar Toggle Button -->
-                        <li>
-                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                        </li>
                     </ul>
                 </div>
             </nav>
@@ -265,71 +261,7 @@
         <aside class="main-sidebar">
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
-                <!-- Sidebar user panel -->
-                <div class="user-panel">
-                    <div class="pull-left image">
-                        <img src="/assets/templates/AdminLTE-2.3.11/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                    </div>
-                    <div class="pull-left info">
-                        <p>Alexander Pierce</p>
-                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                    </div>
-                </div>
-                <!-- search form -->
-                <form action="#" method="get" class="sidebar-form">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search...">
-                        <span class="input-group-btn">
-                            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                            </button>
-                        </span>
-                    </div>
-                </form>
-                <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
-                <ul class="sidebar-menu">
-                    <li>
-                        <a href="pages/widgets.html">
-                            <i class="fa fa-th"></i> <span>Widgets</span>
-                            <span class="pull-right-container">
-                                <small class="label pull-right bg-green">new</small>
-                            </span>
-                        </a>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-share"></i> <span>Multilevel</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-                            <li>
-                                <a href="#"><i class="fa fa-circle-o"></i> Level One
-                                    <span class="pull-right-container">
-                                        <i class="fa fa-angle-left pull-right"></i>
-                                    </span>
-                                </a>
-                                <ul class="treeview-menu">
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
-                                    <li>
-                                        <a href="#"><i class="fa fa-circle-o"></i> Level Two
-                                            <span class="pull-right-container">
-                                                <i class="fa fa-angle-left pull-right"></i>
-                                            </span>
-                                        </a>
-                                        <ul class="treeview-menu">
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-                        </ul>
-                    </li>
-                </ul>
                 <ul class="sidebar-menu">
                     <?php foreach ($menu['menu'] as $m1) { ?>
                         <li class="<?= (count($m1['submenu']) > 0) ? "treeview " : "" ?><?= ($m1['active'] == 1) ? "active" : "" ?>">
@@ -357,17 +289,17 @@
                                                 <?php } ?>
                                             </a>
                                             <!-- Comienza el tercer nivel del menú -->
-                                            <?php if(count($m2['submenu']) > 0) { ?>
-                                            <ul class="treeview-menu">
-                                                <?php foreach($m2['submenu'] as $m3) { ?>
-                                                <li class="<?=($m3['active'] == 1)?"active":""?>">
-                                                    <a href="<?=$m3['href']?>">
-                                                        <i class="<?=$m3['icono']?>"></i> 
-                                                        <span><?=$m3['titulo']?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                            </ul>
+                                            <?php if (count($m2['submenu']) > 0) { ?>
+                                                <ul class="treeview-menu">
+                                                    <?php foreach ($m2['submenu'] as $m3) { ?>
+                                                        <li class="<?= ($m3['active'] == 1) ? "active" : "" ?>">
+                                                            <a href="<?= $m3['href'] ?>">
+                                                                <i class="<?= $m3['icono'] ?>"></i> 
+                                                                <span><?= $m3['titulo'] ?></span>
+                                                            </a>
+                                                        </li>
+                                                    <?php } ?>
+                                                </ul>
                                             <?php } ?>
                                         </li>
                                     <?php } ?>
@@ -379,3 +311,43 @@
             </section>
             <!-- /.sidebar -->
         </aside>
+        <?php
+        $breadcrumbs = array();
+        foreach ($menu['menu'] as $m1) {
+            if ($m1['active'] == 1) {
+                $breadcrumbs[0]['icono'] = $m1['icono'];
+                $breadcrumbs[0]['titulo'] = $m1['titulo'];
+            }
+            if (count($m1['submenu']) > 0) {
+                foreach ($m1['submenu'] as $m2) {
+                    if ($m2['active'] == 1) {
+                        $breadcrumbs[1]['icono'] = $m2['icono'];
+                        $breadcrumbs[1]['titulo'] = $m2['titulo'];
+                    }
+                    if (count($m2['submenu']) > 0) {
+                        foreach ($m2['submenu'] as $m3) {
+                            if ($m3['active'] == 1) {
+                                $breadcrumbs[2]['icono'] = $m3['icono'];
+                                $breadcrumbs[2]['titulo'] = $m3['titulo'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        ?>
+        <section class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    <?=$title?>
+                </h1>
+                <ol class="breadcrumb">
+                    <?php foreach ($breadcrumbs as $b) { ?>
+                        <li>
+                            <i class="<?= $b['icono'] ?>"></i>
+                            <?= $b['titulo'] ?>
+                        </li>
+                    <?php } ?>
+                </ol>
+            </section>
+        

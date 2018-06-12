@@ -356,6 +356,19 @@
                                                     </span>
                                                 <?php } ?>
                                             </a>
+                                            <!-- Comienza el tercer nivel del menú -->
+                                            <?php if(count($m2['submenu']) > 0) { ?>
+                                            <ul class="treeview-menu">
+                                                <?php foreach($m2['submenu'] as $m3) { ?>
+                                                <li class="<?=($m3['active'] == 1)?"active":""?>">
+                                                    <a href="<?=$m3['href']?>">
+                                                        <i class="<?=$m3['icono']?>"></i> 
+                                                        <span><?=$m3['titulo']?></span>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>
+                                            </ul>
+                                            <?php } ?>
                                         </li>
                                     <?php } ?>
                                 </ul>

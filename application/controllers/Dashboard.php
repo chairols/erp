@@ -15,7 +15,7 @@ class Dashboard extends CI_Controller {
         $this->r_session->check($session);
     }
 
-    function index() {
+    public function index() {
         $data['title'] = 'Dashboard';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();

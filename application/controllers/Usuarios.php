@@ -18,7 +18,7 @@ class Usuarios extends CI_Controller{
         ));
     }
 
-    function login() {
+    public function login() {
 
         $this->form_validation->set_rules('usuario', 'Usuario', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');

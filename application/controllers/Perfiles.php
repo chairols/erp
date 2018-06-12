@@ -33,6 +33,7 @@ class Perfiles extends CI_Controller {
          * inicio paginador
          */
         $total_rows = $this->perfiles_model->get_cantidad($perfil, 'A');
+        $config['reuse_query_string'] = TRUE;
         $config['base_url'] = '/perfiles/listar/';
         $config['total_rows'] = $total_rows['cantidad'];
         $config['per_page'] = $per_page;

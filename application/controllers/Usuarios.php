@@ -83,6 +83,7 @@ class Usuarios extends CI_Controller{
          * inicio paginador
          */
         $total_rows = $this->usuarios_model->get_cantidad($codigo, 'A');
+        $config['reuse_query_string'] = TRUE;
         $config['base_url'] = '/usuarios/listar/';
         $config['total_rows'] = $total_rows['cantidad'];
         $config['per_page'] = $per_page;

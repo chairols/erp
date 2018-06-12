@@ -33,6 +33,7 @@ class Marcas extends CI_Controller {
          * inicio paginador
          */
         $total_rows = $this->marcas_model->get_cantidad($marca, 'A');
+        $config['reuse_query_string'] = TRUE;
         $config['base_url'] = '/marcas/listar/';
         $config['total_rows'] = $total_rows['cantidad'];
         $config['per_page'] = $per_page;

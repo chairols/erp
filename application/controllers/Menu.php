@@ -32,6 +32,7 @@ class Menu extends CI_Controller {
          * inicio paginador
          */
         $total_rows = $this->menu_model->get_cantidad_pendientes($titulo);
+        $config['reuse_query_string'] = TRUE;
         $config['base_url'] = '/menu/listar/';
         $config['total_rows'] = $total_rows['cantidad'];
         $config['per_page'] = $per_page;

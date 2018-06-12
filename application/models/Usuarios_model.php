@@ -45,4 +45,49 @@ class Usuarios_model extends CI_Model{
         
         return $query->row_array();
     }
+    
+    
+    /*
+     *  Usuarios/listar
+     */
+    public function get_cantidad($codigo, $estado) {
+        $query = $this->db->query("SELECT COUNT(*) as cantidad
+                                    FROM
+                                        usuarios u,
+                                        usuarios_perfiles up,
+                                        perfiles p
+                                    WHERE
+                                        (u.usuario LIKE '%$codigo%' OR
+                                        u.nombre LIKE '%$codigo%' OR
+                                        u.apellido LIKE '%$codigo%' OR
+                                        u.email LIKE '%$codigo%') AND
+                                        u.estado = '$estado' AND
+                                        u.idusuario = up.idusuario AND
+                                        up.idperfil = p.idperfil");
+        return $query->row_array();
+    }
+    
+    
+    /*
+     *  Usuarios/listar
+     */
+    public function gets_limit($codigo, $pagina, $cantidad, $estado) {
+        $query = $this->db->query("SELECT *
+                                    FROM
+                                        usuarios u,
+                                        usuarios_perfiles up,
+                                        perfiles p
+                                    WHERE
+                                        (u.usuario LIKE '%$codigo%' OR
+                                        u.nombre LIKE '%$codigo%' OR
+                                        u.apellido LIKE '%$codigo%' OR
+                                        u.email LIKE '%$codigo%') AND
+                                        u.estado = '$estado' AND
+                                        u.idusuario = up.idusuario AND
+                                        up.idperfil = p.idperfil
+                                    ORDER BY
+                                        u.usuario
+                                    LIMIT $pagina, $cantidad");
+        return $query->result_array();
+    }
 }

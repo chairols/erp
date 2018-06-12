@@ -35,12 +35,12 @@ class R_session {
         if($this->CI->uri->segment(2))
             $string .= $this->CI->uri->segment(2).'/';
         
-        /*
-        $acceso = $this->CI->menu_model->get_rol_menu($session['perfil'], $string);
         
-        if(!isset($acceso[0]['idmenu'])) {
-            //show_404();
-        }*/
+        $acceso = $this->CI->menu_model->get_perfil_menu($session['perfil'], $string);
+        
+        if(empty($acceso)) {
+            show_404();
+        }
     }
     
     public function get_menu() {

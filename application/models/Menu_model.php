@@ -26,5 +26,18 @@ class Menu_model extends CI_Model {
                                         m.orden, m.menu" );
         return $query->result_array();
     }
+    
+    public function get_perfil_menu($idperfil, $menu) {
+        $query = $this->db->query("SELECT * 
+                                    FROM
+                                        menu m,
+                                        perfiles_menu pm
+                                    WHERE
+                                        m.href = '$menu' AND
+                                        pm.idperfil = '$idperfil' AND
+                                        m.idmenu = pm.idmenu");
+        
+        return $query->result_array();
+    }
 
 }

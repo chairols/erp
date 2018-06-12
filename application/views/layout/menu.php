@@ -334,13 +334,32 @@
                     <?php foreach ($menu['menu'] as $m1) { ?>
                         <li class="<?= (count($m1['submenu']) > 0) ? "treeview " : "" ?><?= ($m1['active'] == 1) ? "active" : "" ?>">
                             <a href="<?= $m1['href'] ?>">
-                                <i class="<?= $m1['icono'] ?>"></i> <span><?= $m1['titulo'] ?></span>
+                                <i class="<?= $m1['icono'] ?>"></i> 
+                                <span><?= $m1['titulo'] ?></span>
                                 <?php if (count($m1['submenu']) > 0) { ?>
                                     <span class="pull-right-container">
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </span>
                                 <?php } ?>
                             </a>
+                            <!-- Comienza el segundo nivel del menú -->
+                            <?php if (count($m1['submenu']) > 0) { ?>
+                                <ul class="treeview-menu">
+                                    <?php foreach ($m1['submenu'] as $m2) { ?>
+                                        <li class="<?= ($m2['active'] == 1) ? "active" : "" ?>">
+                                            <a href="<?= $m2['href'] ?>">
+                                                <i class="<?= $m2['icono'] ?>"></i> 
+                                                <span><?= $m2['titulo'] ?></span>
+                                                <?php if (count($m2['submenu']) > 0) { ?>
+                                                    <span class="pull-right-container">
+                                                        <i class="fa fa-angle-left pull-right"></i>
+                                                    </span>
+                                                <?php } ?>
+                                            </a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            <?php } ?>
                         </li>
                     <?php } ?>
                 </ul>

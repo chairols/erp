@@ -22,7 +22,8 @@ class Marcas extends CI_Controller {
         $data['title'] = 'Listado de Marcas';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = '';
+        $data['javascript'] = array();
+        
         
         $per_page = 10;
         $marca = '';
@@ -37,7 +38,7 @@ class Marcas extends CI_Controller {
         $config['base_url'] = '/marcas/listar/';
         $config['total_rows'] = $total_rows['cantidad'];
         $config['per_page'] = $per_page;
-        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['firsxt_link'] = '<i class="fa fa-angle-double-left"></i>';
         $config['first_tag_open'] = '<li>';
         $config['first_tag_close'] = '</li>';
         $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';

@@ -7,11 +7,11 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="/assets/skin/template/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/template/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="/assets/vendors/font-awesome-4.7.0/css/font-awesome.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/assets/skin/template/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="/assets/template/css/AdminLTE.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,18 +30,18 @@
 
     <form method="post">
       <div class="form-group has-feedback">
-          <input type="text" name="usuario" class="form-control" placeholder="Usuario" autofocus required>
+          <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Usuario" autofocus required>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" name="password" class="form-control" placeholder="Contraseña">
+        <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
           <div class="col-xs-4"></div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+            <button type="button" class="btn btn-primary btn-block btn-flat">Sign In</button>
         </div>
         <!-- /.col -->
       </div>
@@ -56,7 +56,7 @@
 <!-- jQuery 2.2.3 -->
 <script src="/assets/vendors/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="/assets/skin/template/js/bootstrap.min.js"></script>
+<script src="/assets/template/js/bootstrap.min.js"></script>
 
 </body>
 </html>

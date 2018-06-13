@@ -13,7 +13,7 @@ class Menu extends CI_Controller {
             'form_validation'
         ));
         $session = $this->session->all_userdata();
-        $this->r_session->check($session);
+        //$this->r_session->check($session);
     }
 
     function listar($pagina = 0) {
@@ -21,14 +21,14 @@ class Menu extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        
-        
+
+
         $per_page = 10;
         $titulo = '';
-        if($this->input->get('titulo') !== null) {
+        if ($this->input->get('titulo') !== null) {
             $titulo = $this->input->get('titulo');
         }
-        
+
         /*
          * inicio paginador
          */
@@ -56,27 +56,27 @@ class Menu extends CI_Controller {
         /*
          * fin paginador
          */
-        
+
         $data['total_rows'] = $total_rows['cantidad'];
-        
+
         $data['menues'] = $this->menu_model->gets_where_titulo_limit($titulo, $pagina, $per_page);
-        
-        foreach($data['menues'] as $key => $value) {
+
+        foreach ($data['menues'] as $key => $value) {
             $datos = array(
                 'idmenu' => $value['padre']
             );
             $data['menues'][$key]['padre'] = $this->menu_model->get_where($datos);
         }
         /*
-        $data['mmenu'] = $this->menu_model->gets();
-        foreach ($data['mmenu'] as $key => $value) {
-            $datos = array(
-                'idmenu' => $value['padre']
-            );
-            $data['mmenu'][$key]['padre'] = $this->menu_model->get_where($datos);
-        }*/
-        
-        
+          $data['mmenu'] = $this->menu_model->gets();
+          foreach ($data['mmenu'] as $key => $value) {
+          $datos = array(
+          'idmenu' => $value['padre']
+          );
+          $data['mmenu'][$key]['padre'] = $this->menu_model->get_where($datos);
+          } */
+
+
         $this->load->view('layout/header', $data);
         $this->load->view('layout/menu');
         $this->load->view('menu/listar');
@@ -90,19 +90,19 @@ class Menu extends CI_Controller {
         $data['javascript'] = array(
             '/assets/modulos/menu/js/agregar.js'
         );
-        
-        
+
+
         $this->form_validation->set_rules('icono', 'Ícono', 'required');
         $this->form_validation->set_rules('menu', 'Menu', 'required');
         $this->form_validation->set_rules('titulo', 'Título', 'required');
         $this->form_validation->set_rules('href', 'HREF', 'required');
         $this->form_validation->set_rules('orden', 'Orden', 'required');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             
         } else {
             $data['prueba'] = $this->input->post();
-            
+
             $datos = array(
                 'icono' => $this->input->post('icono'),
                 'menu' => $this->input->post('menu'),
@@ -111,23 +111,46 @@ class Menu extends CI_Controller {
                 'orden' => $this->input->post('orden'),
                 'padre' => $this->input->post('padre')
             );
-            if($this->input->post('visible') == 'on')
+            if ($this->input->post('visible') == 'on')
                 $datos['visible'] = '1';
-            
+
             $id = $this->menu_model->set($datos);
         }
-        
+
         $data['padres'] = $this->menu_model->gets_padres_ordenados(0);
         foreach ($data['padres'] as $key => $value) {
             $data['padres'][$key]['hijos'] = $this->menu_model->gets_padres_ordenados($value['idmenu']);
         }
-        
-        
+
+
         $this->load->view('layout/header', $data);
         $this->load->view('layout/menu');
         $this->load->view('menu/agregar');
         $this->load->view('layout/footer');
     }
+
+    public function agregar_ajax() {
+        $this->form_validation->set_rules('icono', 'Ícono', 'required');
+        $this->form_validation->set_rules('menu', 'Menú', 'required');
+        $this->form_validation->set_rules('href', 'Link', 'required');
+        $this->form_validation->set_rules('orden', 'Orden', 'required|integer');
+        $this->form_validation->set_rules('padre', 'Padre', 'required|integer');
+        
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $json = array(
+                'status' => 'ok'
+            );
+            echo json_encode($json);
+        }
+    }
+
 }
 
 ?>

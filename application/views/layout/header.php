@@ -16,7 +16,7 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="/assets/template/css/skin-blue.min.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="/assets/vendors/iCheck/flat/blue.css">
+  <link rel="stylesheet" href="/assets/vendors/iCheck/all.css">
   <!-- Date Picker -->
   <link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">
   <!-- Alertify -->

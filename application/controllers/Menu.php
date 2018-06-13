@@ -19,7 +19,7 @@ class Menu extends CI_Controller {
         ));
         
         $session = $this->session->all_userdata();
-        //$this->r_session->check($session);
+        $this->r_session->check($session);
     }
 
     function listar($pagina = 0) {

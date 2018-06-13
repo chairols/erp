@@ -223,10 +223,15 @@
 <script src="/assets/vendors/fastclick/fastclick.js"></script>
 <!-- Alertify -->
 <script src="/assets/vendors/alertifyjs/alertify.min.js"></script>
+<!-- Chosen JS -->
+<script src="/assets/vendors/chosen-js/chosen.jquery.js"></script>
 <!-- AdminLTE App -->
 <script src="/assets/template/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/assets/template/js/demo.js"></script>
+
+<!-- Scripts del sistema -->
+<script src="/assets/sistema/js/sistema.js"></script>
 <?php
 if (count($javascript) > 0) { ?>
 <!-- Carga de Scripts de la vista -->

@@ -9,7 +9,8 @@ class Menu extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'pagination'
+            'pagination',
+            'form_validation'
         ));
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
@@ -19,7 +20,7 @@ class Menu extends CI_Controller {
         $data['title'] = 'Listado de Menú';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = '';
+        $data['javascript'] = array();
         
         
         $per_page = 10;
@@ -82,6 +83,51 @@ class Menu extends CI_Controller {
         $this->load->view('layout/footer');
     }
 
+    public function agregar() {
+        $data['title'] = 'Agregar Menú';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/menu/js/agregar.js'
+        );
+        
+        
+        $this->form_validation->set_rules('icono', 'Ícono', 'required');
+        $this->form_validation->set_rules('menu', 'Menu', 'required');
+        $this->form_validation->set_rules('titulo', 'Título', 'required');
+        $this->form_validation->set_rules('href', 'HREF', 'required');
+        $this->form_validation->set_rules('orden', 'Orden', 'required');
+        
+        if($this->form_validation->run() == FALSE) {
+            
+        } else {
+            $data['prueba'] = $this->input->post();
+            
+            $datos = array(
+                'icono' => $this->input->post('icono'),
+                'menu' => $this->input->post('menu'),
+                'titulo' => $this->input->post('titulo'),
+                'href' => $this->input->post('href'),
+                'orden' => $this->input->post('orden'),
+                'padre' => $this->input->post('padre')
+            );
+            if($this->input->post('visible') == 'on')
+                $datos['visible'] = '1';
+            
+            $id = $this->menu_model->set($datos);
+        }
+        
+        $data['padres'] = $this->menu_model->gets_padres_ordenados(0);
+        foreach ($data['padres'] as $key => $value) {
+            $data['padres'][$key]['hijos'] = $this->menu_model->gets_padres_ordenados($value['idmenu']);
+        }
+        
+        
+        $this->load->view('layout/header', $data);
+        $this->load->view('layout/menu');
+        $this->load->view('menu/agregar');
+        $this->load->view('layout/footer');
+    }
 }
 
 ?>

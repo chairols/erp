@@ -22,6 +22,8 @@
   <!-- Alertify -->
   <link rel="stylesheet" href="/assets/vendors/alertifyjs/css/alertify.min.css">
   <link rel="stylesheet" href="/assets/vendors/alertifyjs/css/themes/bootstrap.min.css">
+  <!-- Chosen Js -->
+  <link rel="stylesheet" href="/assets/vendors/chosen-js/bootstrap-chosen.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

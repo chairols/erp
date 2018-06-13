@@ -21,11 +21,12 @@ $("#agregar").click(function () {
             function () {
                 datos = {
                     'icono': $("#icono").val(),
+                    'titulo': $("#titulo").val(),
                     'menu': $("#menu").val(),
                     'href': $("#href").val(),
                     'orden': $("#orden").val(),
                     'padre': $("#padre").val(),
-                    'visible': $("#visible").val()
+                    'visible': $("#visible").is(':checked')
                 };
                 $.ajax({
                     type: 'POST',
@@ -44,6 +45,7 @@ $("#agregar").click(function () {
                         } else if (resultado['status'] == 'ok') {
                             alertify.success("Se agregó correctamente");
                             document.getElementById("icono").value = "";
+                            document.getElementById("titulo").value = "";
                             document.getElementById("menu").value = "";
                             document.getElementById("href").value = "";
                             document.getElementById("orden").value = "";

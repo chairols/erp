@@ -10,8 +10,14 @@ class Menu extends CI_Controller {
             'session',
             'r_session',
             'pagination',
-            'form_validation'
+            'form_validation',
+            'table'
         ));
+        $this->load->model(array(
+            'menu_model',
+            'log_model'
+        ));
+        
         $session = $this->session->all_userdata();
         //$this->r_session->check($session);
     }
@@ -130,12 +136,13 @@ class Menu extends CI_Controller {
     }
 
     public function agregar_ajax() {
-        $this->form_validation->set_rules('icono', 'Ícono', 'required');
+        $session = $this->session->all_userdata();
+        
+        $this->form_validation->set_rules('titulo', 'Título', 'required');
         $this->form_validation->set_rules('menu', 'Menú', 'required');
         $this->form_validation->set_rules('href', 'Link', 'required');
         $this->form_validation->set_rules('orden', 'Orden', 'required|integer');
         $this->form_validation->set_rules('padre', 'Padre', 'required|integer');
-        
 
         if ($this->form_validation->run() == FALSE) {
             $json = array(
@@ -144,10 +151,65 @@ class Menu extends CI_Controller {
             );
             echo json_encode($json);
         } else {
-            $json = array(
-                'status' => 'ok'
+            $datos = array(
+                'href' => $this->input->post('href')
             );
-            echo json_encode($json);
+            $resultado = $this->menu_model->get_where($datos);
+
+            /*
+             * Compruebo si ya existe el link
+             */
+            if ($resultado) {
+                $json = array(
+                    'status' => 'error',
+                    'data' => '<p>El link ' . $resultado['href'] . ' ya se encuentra asociado al menú ' . $resultado['menu'] . '</p>'
+                );
+                echo json_encode($json);
+            } else {
+                $datos = array(
+                    'icono' => $this->input->post('icono'),
+                    'titulo' => $this->input->post('titulo'),
+                    'menu' => $this->input->post('menu'),
+                    'href' => $this->input->post('href'),
+                    'orden' => $this->input->post('orden'),
+                    'padre' => $this->input->post('padre')
+                );
+                
+                if($this->input->post('visible') == 'true') {
+                    $datos['visible'] = 1;
+                } else {
+                    $datos['visible'] = 0;
+                }
+
+                $id = $this->menu_model->set($datos);
+
+                /*
+                 * Compruebo si fue exitoso y agrego al log
+                 */
+                if ($id) {
+                    $log = array(
+                        'tabla' => 'menu',
+                        'idtabla' => $id,
+                        'texto' => $this->table->generate(array($datos)),
+                        'idusuario' => $session['SID'],
+                        'tipo' => 'add'
+                    );
+                    
+                    $this->log_model->set($log);
+                    
+                    $json = array(
+                        'status' => 'ok'
+                    );
+                    echo json_encode($json);
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => '<p>No se pudo agregar el menú.</p>'
+                    );
+                    echo json_encode($json);
+                }
+
+            }
         }
     }
 

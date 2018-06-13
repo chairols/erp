@@ -7,14 +7,14 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="/assets/skin/template/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/template/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="/assets/vendors/font-awesome-4.7.0/css/font-awesome.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/assets/skin/template/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="/assets/template/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="/assets/skin/template/css/skin-blue.min.css">
+  <link rel="stylesheet" href="/assets/template/css/skin-blue.min.css">
   <!-- iCheck -->
   <link rel="stylesheet" href="/assets/vendors/iCheck/flat/blue.css">
   <!-- Date Picker -->

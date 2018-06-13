@@ -214,7 +214,7 @@
     $.widget.bridge('uibutton', $.ui.button);
 </script>
 <!-- Bootstrap 3.3.6 -->
-<script src="/assets/skin/template/js/bootstrap.min.js"></script>
+<script src="/assets/template/js/bootstrap.min.js"></script>
 <!-- datepicker -->
 <script src="/assets/vendors/datepicker/bootstrap-datepicker.js"></script>
 <!-- Slimscroll -->
@@ -224,9 +224,9 @@
 <!-- Alertify -->
 <script src="/assets/vendors/alertifyjs/alertify.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/assets/skin/template/js/app.min.js"></script>
+<script src="/assets/template/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="/assets/skin/template/js/demo.js"></script>
+<script src="/assets/template/js/demo.js"></script>
 <?php
 if (count($javascript) > 0) { ?>
 <!-- Carga de Scripts de la vista -->

@@ -221,6 +221,8 @@
 <script src="/assets/vendors/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="/assets/vendors/fastclick/fastclick.js"></script>
+<!-- Alertify -->
+<script src="/assets/vendors/alertifyjs/alertify.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/assets/skin/template/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->

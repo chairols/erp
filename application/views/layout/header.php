@@ -19,6 +19,9 @@
   <link rel="stylesheet" href="/assets/vendors/iCheck/flat/blue.css">
   <!-- Date Picker -->
   <link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">
+  <!-- Alertify -->
+  <link rel="stylesheet" href="/assets/vendors/alertifyjs/css/alertify.min.css">
+  <link rel="stylesheet" href="/assets/vendors/alertifyjs/css/themes/bootstrap.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

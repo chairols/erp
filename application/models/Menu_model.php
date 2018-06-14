@@ -21,7 +21,8 @@ class Menu_model extends CI_Model {
                                         m.idmenu = pm.idmenu AND
                                         pm.idperfil = '$idperfil')
                                     WHERE
-                                        m.padre = '$idpadre'
+                                        m.padre = '$idpadre' AND
+                                        m.visible = '1'
                                     ORDER BY
                                         m.orden, m.menu" );
         return $query->result_array();

@@ -22,13 +22,13 @@
                         <th>Empresa</th>
                         <th>CUIT</th>
                         <th>Tipo</th>
-                        <th>Visible</th>
-                        <th>Padre</th>
+                        <th>Locación</th>
+                        <th>Actividad</th>
                         <th>Acciones</th>
                     </tr>
                     <?php foreach ($empresas as $empresa) { ?>
                         <tr>
-                            <td><strong><?=$empresa['idempresa']?> - <?= $empresa['empresa'] ?></strong></td>
+                            <td><strong><?= $empresa['idempresa'] ?> - <?= $empresa['empresa'] ?></strong></td>
                             <td><?= $empresa['cuit'] ?></td>
                             <td>
                                 <?php if ($empresa['cliente'] == 'Y') { ?>
@@ -39,8 +39,14 @@
                                 <?php } ?>
                             </td>
                             <td>
+                                <?php if ($empresa['internacional'] == 'Y') { ?>
+                                    <span class="label label-warning">Internacional</span>
+                                <?php } else { ?>
+                                    <span class="label label-info">Nacional</span>
+                                <?php } ?>
                             </td>
                             <td>
+                                <span class="label label-default"><?=$empresa['empresa_tipo']?></span>
                             </td>
                             <td>
                                 <a href="#" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">

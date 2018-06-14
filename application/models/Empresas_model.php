@@ -22,6 +22,7 @@ class Empresas_model extends CI_Model {
     public function get_cantidad_where_limit($where, $per_page, $pagina) {
         $this->db->select('*');
         $this->db->from('empresas');
+        $this->db->join('empresas_tipos', 'empresas.idempresa_tipo = empresas_tipos.idempresa_tipo');
         $this->db->like($where);
         $this->db->order_by('empresa');
         $this->db->limit($per_page, $pagina);

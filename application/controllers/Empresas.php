@@ -27,7 +27,7 @@ class Empresas extends CI_Controller {
         
         $per_page = 10;
         $where = $this->input->get();
-        $where['estado'] = 'A';
+        $where['empresas.estado'] = 'A';
         
         /*
          * inicio paginador

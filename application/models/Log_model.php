@@ -11,6 +11,9 @@ class Log_model extends CI_Model {
     
     /*
      *  Menu/agregar
+     * 
+     *  Parametros/agregar_ajax
+     * 
      */
     public function set($array) {
         $this->db->insert('log', $array);

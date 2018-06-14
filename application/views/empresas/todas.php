@@ -59,7 +59,6 @@
                     <?php } ?>
                 </tbody>
             </table>
-            <?php var_dump($empresas) ?>
         </div>
         <div class="box-footer clearfix">
             <div class="pull-left">

@@ -15,5 +15,12 @@ class Log_model extends CI_Model {
     public function set($array) {
         $this->db->insert('log', $array);
     }
+    
+    
+    public function get_where($where) {
+        $query = $this->db->get_where('log', $where);
+        
+        return $query->row_array();
+    }
 }
 ?>

@@ -44,7 +44,13 @@
                                     <span class="label label-danger">No tiene</span>
                                 <?php } ?>
                             </td>
-                            <td>&nbsp;</td>
+                            <td>
+                                <a href="/menu/modificar/<?=$m['idmenu'] ?>/" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">
+                                    <button class="btn btn-primary btn-xs">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                </a>
+                            </td>
                         </tr>
                     <?php } ?>
                 </tbody>

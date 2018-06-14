@@ -159,7 +159,7 @@ class Menu extends CI_Controller {
             /*
              * Compruebo si ya existe el link
              */
-            if ($resultado) {
+            if ($resultado && $datos['href'] != '#') {
                 $json = array(
                     'status' => 'error',
                     'data' => '<p>El link ' . $resultado['href'] . ' ya se encuentra asociado al menú ' . $resultado['menu'] . '</p>'

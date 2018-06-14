@@ -22,7 +22,7 @@ class Perfiles extends CI_Controller {
         $data['title'] = 'Listado de Perfiles';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = '';
+        $data['javascript'] = array();
         
         $per_page = 25;
         $perfil = '';

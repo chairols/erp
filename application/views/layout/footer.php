@@ -225,6 +225,8 @@
 <script src="/assets/vendors/alertifyjs/alertify.min.js"></script>
 <!-- Chosen JS -->
 <script src="/assets/vendors/chosen-js/chosen.jquery.js"></script>
+<!-- jsTree -->
+<script src="/assets/vendors/jstree-3.3.5/dist/jstree.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/assets/template/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->

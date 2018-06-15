@@ -107,6 +107,35 @@ class Parametros_model extends CI_Model {
         $this->db->insert('parametros_usuarios', $datos);
         return $this->db->insert_id();
     }
+    
+    
+    /*
+     *  Parametros/usuarios
+     */
+    public function update_parametros_usuarios($valor, $idparametro, $idusuario) {
+        $query = $this->db->query("UPDATE
+                                        parametros_usuarios
+                                    SET
+                                        valor = '$valor'
+                                    WHERE
+                                        idparametro = '$idparametro' AND
+                                        idusuario = '$idusuario'");
+        
+    }
+    
+    
+    public function get_valor_parametro_por_usuario($identificador, $idusuario) {
+        $query = $this->db->query("SELECT *
+                                    FROM
+                                        parametros_usuarios pu, 
+                                        parametros p
+                                    WHERE
+                                        p.idparametro = pu.idparametro AND
+                                        p.identificador = '$identificador' AND
+                                        pu.idusuario = '$idusuario'");
+        
+        return $query->row_array();
+    }
 }
 
 ?>

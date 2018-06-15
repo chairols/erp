@@ -12,7 +12,8 @@ class Empresas extends CI_Controller {
             'pagination'
         ));
         $this->load->model(array(
-            'empresas_model'
+            'empresas_model',
+            'parametros_model'
         ));
         
         $session = $this->session->all_userdata();
@@ -25,7 +26,10 @@ class Empresas extends CI_Controller {
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         
-        $per_page = 10;
+        
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+        
         $where = $this->input->get();
         $where['empresas.estado'] = 'A';
         

@@ -19,3 +19,4 @@ application/logs/*
 #ERP
 application/config/database.php
 application/config/config.php
+/nbproject/

@@ -3,20 +3,11 @@ if ($('#treeview-checkbox').length)
 {
     $('#treeview-checkbox').treeview();
     fillCheckboxTree();
-}
 
-
-    $(".tw-control").click(function () {
-        var selected = [];
-        $(".tw-control").each(function () {
-            if ($(this).is(":checked"))
-            {
-                selected.push($(this).parent().attr("data-value"));
-            }
-        });
-        $("#menues").val(selected.join());
-        console.log($("#menues").val());
+    $(".tw-control").click(function() {
+        modificarInputMenues();
     });
+}
 
 function fillCheckboxTree()
 {
@@ -24,8 +15,45 @@ function fillCheckboxTree()
     $(".tw-control").each(function (menu) {
         if (inArray($(this).parent().attr("data-value"), menues))
         {
-            //alert($(this).parent().attr("data-value"));
             $(this).click();
         }
     });
+}
+function modificarInputMenues()
+{
+  var selected = '';
+  $("#treeview-checkbox").children('ul').each(function () {
+    $(this).children('li').each(function(){
+      var valores = evaluarLista($(this));
+      if(valores && valores!=',')
+      {
+        if(selected!='')
+          valores = ',' + valores
+        selected = selected + valores;
+      }
+    })
+  });
+  $("#menues").val(selected);
+}
+
+function evaluarLista(li)
+{
+  var selected = '';
+  input = li.children('.tw-control');
+  if (input.is(":checked"))
+  {
+    selected = li.attr("data-value");
+    li.children('ul').each(function(){
+      $(this).children('li').each(function(){
+        var valores = evaluarLista($(this));
+        if(valores && valores!=',')
+        {
+          if(selected!='')
+            valores = ',' + valores
+          selected = selected + valores;
+        }
+      })
+    })
+  }
+  return selected;
 }

@@ -9,16 +9,21 @@ class Empresas_model extends CI_Model {
         //Codeigniter : Write Less Do More
     }
     
+    /*
+     *  Empresas/todas
+     */
     public function get_cantidad_where($where) {
         $this->db->select('*');
         $this->db->from('empresas');
         $this->db->like($where);
-        $this->db->order_by('empresa');
         
         $query = $this->db->count_all_results();
         return $query;
     }
 
+    /*
+     *  Empresas/todas
+     */
     public function get_cantidad_where_limit($where, $per_page, $pagina) {
         $this->db->select('*');
         $this->db->from('empresas');

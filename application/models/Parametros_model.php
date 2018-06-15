@@ -38,6 +38,73 @@ class Parametros_model extends CI_Model {
         $this->db->insert('parametros', $datos);
         return $this->db->insert_id();
     }
+    
+    
+    /*
+     *  Parametros/listar
+     */
+    public function get_cantidad_where($where) {
+        $this->db->select('*');
+        $this->db->from('parametros');
+        $this->db->like($where);
+        
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+    
+    /*
+     *  Parametros/listar
+     */
+    public function get_cantidad_where_limit($where, $per_page, $pagina) {
+        $this->db->select('*');
+        $this->db->from('parametros');
+        $this->db->join('parametros_tipos', 'parametros.idparametro_tipo = parametros_tipos.idparametro_tipo');
+        $this->db->like($where);
+        $this->db->order_by('parametros.parametro');
+        $this->db->limit($per_page, $pagina);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    
+    /*
+     *  Parametros/usuario
+     */
+    public function gets_parametros_por_usuario($SID) {
+        $query = $this->db->query("SELECT p.*, pu.valor
+                                    FROM
+                                        parametros p
+                                    LEFT JOIN
+                                        parametros_usuarios pu
+                                    ON
+                                        p.idparametro = pu.idparametro AND
+                                        pu.idusuario = '$SID' AND
+                                        p.estado = 'A'");
+        
+        return $query->result_array();
+    }
+    
+    /*
+     *  Parametros/usuarios
+     */
+    public function get_parametro_por_usuario($idparametro, $idusuario) {
+        $query = $this->db->query("SELECT *
+                                    FROM
+                                        parametros_usuarios
+                                    WHERE
+                                        idparametro = '$idparametro' AND
+                                        idusuario = '$idusuario'");
+        return $query->row_array();
+    }
+    
+    /*
+     *  Parametros/usuarios
+     */
+    public function set_parametros_usuarios($datos) {
+        $this->db->insert('parametros_usuarios', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

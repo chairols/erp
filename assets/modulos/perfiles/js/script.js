@@ -15,6 +15,7 @@ if ($('#treeview-checkbox').length)
             }
         });
         $("#menues").val(selected.join());
+        console.log($("#menues").val());
     });
 
 function fillCheckboxTree()

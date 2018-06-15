@@ -71,7 +71,7 @@ class Perfiles extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array(
-          '/assets/modulos/perfiles/js/agregar.js'
+          '/assets/modulos/perfiles/js/script.js'
         );
 
         $ids = $this->menu_model->gets_menu_por_perfil($data['session']['perfil']);

@@ -33,10 +33,14 @@ class Parametros extends CI_Controller {
             
             foreach($post as $key => $value) {
                 $id = explode("-", $key);
-                $resultado = $this->parametros_model->get_parametro_por_usuario($id[1], $data['session']['SID']);
+                $id = $id['1'];
+                
+                $resultado = $this->parametros_model->get_parametro_por_usuario($id, $data['session']['SID']);
                 
                 if($resultado) {
-                    echo "Existe";
+                    var_dump($id);
+                    var_dump($value);
+                    
                 } else {
                     $datos = array(
                         'idparametro' => $id[1],

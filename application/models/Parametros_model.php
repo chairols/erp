@@ -74,12 +74,14 @@ class Parametros_model extends CI_Model {
     public function gets_parametros_por_usuario($SID) {
         $query = $this->db->query("SELECT p.*, pu.valor
                                     FROM
-                                        parametros p
+                                        (parametros p
                                     LEFT JOIN
                                         parametros_usuarios pu
                                     ON
                                         p.idparametro = pu.idparametro AND
-                                        pu.idusuario = '$SID' AND
+                                        pu.idusuario = '$SID')
+                                    WHERE
+                                        p.idparametro_tipo = 1 AND
                                         p.estado = 'A'");
         
         return $query->result_array();

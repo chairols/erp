@@ -35,6 +35,24 @@ class Perfiles_model extends CI_Model {
                                     LIMIT $pagina, $cantidad");
         return $query->result_array();
     }
+    
+    /*
+     *  Perfiles/modificar
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('perfiles', $where);
+        return $query->row_array();
+    }
+    
+    
+    public function borrar_todos_los_accesos_por_perfil($idperfil) {
+        $this->db->delete('perfiles_menu', array('idperfil' => $idperfil));
+    }
+    
+    public function set_perfiles_menu($datos) {
+        $this->db->insert('perfiles_menu', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

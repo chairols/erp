@@ -9,7 +9,8 @@ class Perfiles extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'pagination'
+            'pagination',
+            'form_validation'
         ));
         $this->load->model(array(
             'perfiles_model'
@@ -71,20 +72,20 @@ class Perfiles extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array(
-          '/assets/modulos/perfiles/js/script.js'
+            '/assets/modulos/perfiles/js/script.js'
         );
 
         $ids = $this->menu_model->gets_menu_por_perfil($data['session']['perfil']);
         $data['ids'] = array();
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $data['ids'][] = $id['idmenu'];
         }
         $data['ids'] = implode(",", $data['ids']);
 
         $data['mmenu'] = $this->menu_model->obtener_menu_por_padre(0);
-        foreach($data['mmenu'] as $key => $value) {
+        foreach ($data['mmenu'] as $key => $value) {
             $data['mmenu'][$key]['submenu'] = $this->menu_model->obtener_menu_por_padre($value['idmenu']);
-            foreach($data['mmenu'][$key]['submenu'] as $k1 => $v1) {
+            foreach ($data['mmenu'][$key]['submenu'] as $k1 => $v1) {
                 $data['mmenu'][$key]['submenu'][$k1]['submenu'] = $this->menu_model->obtener_menu_por_padre($v1['idmenu']);
             }
         }
@@ -94,6 +95,80 @@ class Perfiles extends CI_Controller {
         $this->load->view('perfiles/agregar');
         $this->load->view('layout/footer');
     }
+
+    public function modificar($idperfil = null) {
+        $data['title'] = 'Modificar Perfil';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/perfiles/js/script.js',
+            '/assets/modulos/perfiles/js/modificar.js'
+        );
+
+        if ($idperfil == null) {
+            redirect('/perfiles/listar/', 'refresh');
+        }
+
+
+
+        $datos = array(
+            'idperfil' => $idperfil
+        );
+        $data['perfil'] = $this->perfiles_model->get_where($datos);
+
+        $ids = $this->menu_model->gets_menu_por_perfil($data['session']['perfil']);
+        $data['ids'] = array();
+        foreach ($ids as $id) {
+            $data['ids'][] = $id['idmenu'];
+        }
+        $data['ids'] = implode(",", $data['ids']);
+
+        $data['mmenu'] = $this->menu_model->obtener_menu_por_padre(0);
+        foreach ($data['mmenu'] as $key => $value) {
+            $data['mmenu'][$key]['submenu'] = $this->menu_model->obtener_menu_por_padre($value['idmenu']);
+            foreach ($data['mmenu'][$key]['submenu'] as $k1 => $v1) {
+                $data['mmenu'][$key]['submenu'][$k1]['submenu'] = $this->menu_model->obtener_menu_por_padre($v1['idmenu']);
+            }
+        }
+
+
+        $this->load->view('layout/header', $data);
+        $this->load->view('layout/menu');
+        $this->load->view('perfiles/modificar');
+        $this->load->view('layout/footer');
+    }
+
+    public function modificar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('perfil', 'Perfil', 'required');
+        $this->form_validation->set_rules('idperfil', 'Identificador del Perfil', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $this->perfiles_model->borrar_todos_los_accesos_por_perfil($this->input->post('idperfil'));
+
+            $menues = explode(",", $this->input->post('menues'));
+            foreach ($menues as $m) {
+                $datos = array(
+                    'idperfil' => $this->input->post('idperfil'),
+                    'idmenu' => $m
+                );
+
+                $this->perfiles_model->set_perfiles_menu($datos);
+            }
+            $json = array(
+                'status' => 'ok'
+            );
+            echo json_encode($json);
+        }
+    }
+
 }
 
 ?>

@@ -23,7 +23,7 @@ class Perfiles extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        
+
         $per_page = 25;
         $perfil = '';
         if ($this->input->post('perfil') !== null) {
@@ -57,9 +57,9 @@ class Perfiles extends CI_Controller {
         /*
          * fin paginador
          */
-        
+
         $data['perfiles'] = $this->perfiles_model->gets_limit($perfil, $pagina, $config['per_page'], 'A');
-        
+
         $this->load->view('layout/header', $data);
         $this->load->view('layout/menu');
         $this->load->view('perfiles/listar');
@@ -70,15 +70,17 @@ class Perfiles extends CI_Controller {
         $data['title'] = 'Agregar Perfil';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
-        
+        $data['javascript'] = array(
+          '/assets/modulos/perfiles/js/agregar.js'
+        );
+
         $ids = $this->menu_model->gets_menu_por_perfil($data['session']['perfil']);
         $data['ids'] = array();
         foreach($ids as $id) {
             $data['ids'][] = $id['idmenu'];
         }
         $data['ids'] = implode(",", $data['ids']);
-        
+
         $data['mmenu'] = $this->menu_model->obtener_menu_por_padre(0);
         foreach($data['mmenu'] as $key => $value) {
             $data['mmenu'][$key]['submenu'] = $this->menu_model->obtener_menu_por_padre($value['idmenu']);
@@ -86,7 +88,7 @@ class Perfiles extends CI_Controller {
                 $data['mmenu'][$key]['submenu'][$k1]['submenu'] = $this->menu_model->obtener_menu_por_padre($v1['idmenu']);
             }
         }
-        
+
         $this->load->view('layout/header', $data);
         $this->load->view('layout/menu');
         $this->load->view('perfiles/agregar');

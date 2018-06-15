@@ -12,6 +12,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label col-md-3">Identificador</label>
+                    <div class="col-md-6">
+                        <input type="text" maxlength="20" class="form-control" id="identificador" name="identificador" placeholder="Id en versión texto">
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="control-label col-md-3">Tipo de Parámetro</label>
                     <div class="col-md-6">
                         <select name="tipo" id="tipo" class="form-control chosenSelect">

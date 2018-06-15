@@ -79,6 +79,7 @@ class Parametros extends CI_Controller {
         $session = $this->session->all_userdata();
         
         $this->form_validation->set_rules('parametro', 'Parámetro', 'required');
+        $this->form_validation->set_rules('identificador', 'Identificador', 'required');
         $this->form_validation->set_rules('tipo', 'Tipo de Parámetro', 'required');
         
         if($this->form_validation->run() == FALSE) {
@@ -89,7 +90,7 @@ class Parametros extends CI_Controller {
             echo json_encode($json);
         } else {
             $datos = array(
-                'parametro' => $this->input->post('parametro'),
+                'identificador' => $this->input->post('identificador'),
                 'idparametro_tipo' => $this->input->post('tipo'),
                 'estado' => 'A'
             );
@@ -107,6 +108,7 @@ class Parametros extends CI_Controller {
             } else {
                 $datos = array(
                     'parametro' => $this->input->post('parametro'),
+                    'identificador' => $this->input->post('identificador'),
                     'idparametro_tipo' => $this->input->post('tipo')
                 );
                 

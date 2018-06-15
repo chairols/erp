@@ -19,13 +19,17 @@
             <table class="table table-bordered table-hover table-striped">
                 <tbody>
                     <tr>
+                        <th>#</th>
                         <th>Parámetro</th>
+                        <th>Identificador</th>
                         <th>Tipo de Parámetro</th>
                         <th>Acciones</th>
                     </tr>
                     <?php foreach ($parametros as $parametro) { ?>
                         <tr>
+                            <td><strong><?=$parametro['idparametro']?></strong></td>
                             <td><strong><?=$parametro['parametro']?></strong></td>
+                            <td><?=$parametro['identificador']?></td>
                             <td><span class="label label-success"><?=$parametro['parametro_tipo']?></span></td>
                             <td>&nbsp;</td>
                         </tr>

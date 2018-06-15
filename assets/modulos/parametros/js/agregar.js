@@ -21,6 +21,7 @@ $("#agregar").click(function () {
             function () {
                 datos = {
                     'parametro': $("#parametro").val(),
+                    'identificador': $("#identificador").val(),
                     'tipo': $("#tipo").val()
                 };
                 $.ajax({
@@ -40,6 +41,7 @@ $("#agregar").click(function () {
                         } else if (resultado['status'] == 'ok') {
                             alertify.success("Se agregó correctamente");
                             document.getElementById("parametro").value = "";
+                            document.getElementById("identificador").value = "";
                         }
                     }
                 });

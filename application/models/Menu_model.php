@@ -122,4 +122,30 @@ class Menu_model extends CI_Model {
         return $this->db->insert_id();
     }
 
+    /*
+     *  Perfiles/agregar
+     */
+    public function obtener_menu_por_padre($idpadre) {
+        $query = $this->db->query("SELECT * 
+                                    FROM
+                                        menu
+                                    WHERE
+                                        padre = '$idpadre'
+                                    ORDER BY
+                                        orden, menu" );
+        return $query->result_array();
+    }
+    
+    /*
+     *  Perfiles/agregar
+     */
+    public function gets_menu_por_perfil($idperfil) {
+        $query = $this->db->query("SELECT * 
+                                    FROM
+                                        perfiles_menu
+                                    WHERE
+                                        idperfil = '$idperfil'");
+        
+        return $query->result_array();
+    }
 }

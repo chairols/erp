@@ -5,7 +5,7 @@ if ($('#treeview-checkbox').length)
     fillCheckboxTree();
 }
 
-$(function () {
+
     $(".tw-control").click(function () {
         var selected = [];
         $(".tw-control").each(function () {
@@ -16,7 +16,7 @@ $(function () {
         });
         $("#menues").val(selected.join());
     });
-});
+
 function fillCheckboxTree()
 {
     var menues = $("#menues").val().split(',');

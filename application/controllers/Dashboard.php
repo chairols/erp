@@ -19,7 +19,7 @@ class Dashboard extends CI_Controller {
         $data['title'] = 'Dashboard';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = '';
+        $data['javascript'] = array();
         
         $this->load->view('layout/header', $data);
         $this->load->view('layout/menu');

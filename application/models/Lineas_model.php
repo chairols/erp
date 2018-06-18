@@ -34,6 +34,22 @@ class Lineas_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Lineas/agregar_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('lineas', $where);
+        return $query->row_array();
+    }
+    
+    /*
+     *  Lineas/agregar_ajax
+     */
+    public function set($datos) {
+        $this->db->insert('lineas', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

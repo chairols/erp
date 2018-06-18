@@ -9,11 +9,13 @@ class Lineas extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'pagination'
+            'pagination',
+            'form_validation'
         ));
         $this->load->model(array(
             'parametros_model',
-            'lineas_model'
+            'lineas_model',
+            'log_model'
         ));
         
         $session = $this->session->all_userdata();
@@ -69,6 +71,81 @@ class Lineas extends CI_Controller {
         $this->load->view('layout/footer');
     }
 
+    public function agregar() {
+        $data['title'] = 'Agregar Línea';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/lineas/js/agregar.js'
+        );
+
+
+        $this->load->view('layout/header', $data);
+        $this->load->view('layout/menu');
+        $this->load->view('lineas/agregar');
+        $this->load->view('layout/footer');
+    }
+    
+    public function agregar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('linea', 'Línea', 'required');
+        $this->form_validation->set_rules('nombre_corto', 'Nombre Corto', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'linea' => $this->input->post('linea')
+            );
+            $resultado = $this->lineas_model->get_where($where);
+
+            if ($resultado) { // Si ya existe la moneda
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'La línea <strong>' . $this->input->post('linea') . '</strong> ya existe.'
+                );
+                echo json_encode($json);
+            } else {  // Si no existe la moneda, la creo
+                $datos = array(
+                    'linea' => $this->input->post('linea'),
+                    'nombre_corto' => $this->input->post('nombre_corto'),
+                    'idcreador' => $session['SID'],
+                    'fecha_creacion' => date("Y-m-d H:i:s")
+                );
+
+                $id = $this->lineas_model->set($datos);
+
+                if ($id) {
+                    $log = array(
+                        'tabla' => 'lineas',
+                        'idtabla' => $id,
+                        'texto' => 'Se agregó la línea: ' . $this->input->post('linea') .
+                        '<br>Nombre Corto: ' . $this->input->post('nombre_corto'),
+                        'idusuario' => $session['SID'],
+                        'tipo' => 'add'
+                    );
+
+                    $this->log_model->set($log);
+
+                    $json = array(
+                        'status' => 'ok'
+                    );
+                    echo json_encode($json);
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => '<p>No se pudo agregar la línea.</p>'
+                    );
+                    echo json_encode($json);
+                }
+            }
+        }
+    }
 }
 
 ?>

@@ -97,32 +97,6 @@ class Menu extends CI_Controller {
             '/assets/modulos/menu/js/agregar.js'
         );
 
-
-        $this->form_validation->set_rules('icono', 'Ícono', 'required');
-        $this->form_validation->set_rules('menu', 'Menu', 'required');
-        $this->form_validation->set_rules('titulo', 'Título', 'required');
-        $this->form_validation->set_rules('href', 'HREF', 'required');
-        $this->form_validation->set_rules('orden', 'Orden', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            
-        } else {
-            $data['prueba'] = $this->input->post();
-
-            $datos = array(
-                'icono' => $this->input->post('icono'),
-                'menu' => $this->input->post('menu'),
-                'titulo' => $this->input->post('titulo'),
-                'href' => $this->input->post('href'),
-                'orden' => $this->input->post('orden'),
-                'padre' => $this->input->post('padre')
-            );
-            if ($this->input->post('visible') == 'on')
-                $datos['visible'] = '1';
-
-            $id = $this->menu_model->set($datos);
-        }
-
         $data['padres'] = $this->menu_model->gets_padres_ordenados(0);
         foreach ($data['padres'] as $key => $value) {
             $data['padres'][$key]['hijos'] = $this->menu_model->gets_padres_ordenados($value['idmenu']);

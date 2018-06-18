@@ -30,7 +30,7 @@
                             <td><?= $moneda['simbolo'] ?></td>
                             <td><?= $moneda['codigo_afip'] ?></td>
                             <td>
-                                <a href="/monedas/modificar/<?= $moneda['idmoneda'] ?>" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">
+                                <a href="/monedas/modificar/<?= $moneda['idmoneda'] ?>/" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">
                                     <button class="btn btn-primary btn-xs">
                                         <i class="fa fa-edit"></i>
                                     </button>

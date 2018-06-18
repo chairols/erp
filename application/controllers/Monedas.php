@@ -103,11 +103,11 @@ class Monedas extends CI_Controller {
                 'moneda' => $this->input->post('moneda')
             );
             $resultado = $this->monedas_model->get_where($where);
-            
+
             if ($resultado) { // Si ya existe la moneda
                 $json = array(
                     'status' => 'error',
-                    'data' => 'La moneda <strong>'.$this->input->post('moneda').'</strong> ya existe.'
+                    'data' => 'La moneda <strong>' . $this->input->post('moneda') . '</strong> ya existe.'
                 );
                 echo json_encode($json);
             } else {  // Si no existe la moneda, la creo
@@ -118,22 +118,22 @@ class Monedas extends CI_Controller {
                     'idcreador' => $session['SID'],
                     'fecha_creacion' => date("Y-m-d H:i:s")
                 );
-                
+
                 $id = $this->monedas_model->set($datos);
-                
-                if($id) {
+
+                if ($id) {
                     $log = array(
                         'tabla' => 'monedas',
                         'idtabla' => $id,
-                        'texto' => 'Se agregó la moneda: '.$this->input->post('moneda').
-                        '<br>Símbolo: '.$this->input->post('simbolo').
-                        '<br>Código de AFIP: '.$this->input->post('simbolo'),
+                        'texto' => 'Se agregó la moneda: ' . $this->input->post('moneda') .
+                        '<br>Símbolo: ' . $this->input->post('simbolo') .
+                        '<br>Código de AFIP: ' . $this->input->post('simbolo'),
                         'idusuario' => $session['SID'],
                         'tipo' => 'add'
                     );
-                    
+
                     $this->log_model->set($log);
-                    
+
                     $json = array(
                         'status' => 'ok'
                     );
@@ -145,6 +145,81 @@ class Monedas extends CI_Controller {
                     );
                     echo json_encode($json);
                 }
+            }
+        }
+    }
+
+    public function modificar($idmoneda = null) {
+        $data['title'] = 'Modificar Perfil';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/monedas/js/modificar.js'
+        );
+
+        if ($idmoneda == null) {
+            redirect('/monedas/listar/', 'refresh');
+        }
+
+        $datos = array(
+            'idmoneda' => $idmoneda
+        );
+        $data['moneda'] = $this->monedas_model->get_where($datos);
+
+        $this->load->view('layout/header', $data);
+        $this->load->view('layout/menu');
+        $this->load->view('monedas/modificar');
+        $this->load->view('layout/footer');
+    }
+
+    public function modificar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idmoneda', 'Identificador de Moneda', 'required|integer');
+        $this->form_validation->set_rules('moneda', 'Moneda', 'required');
+        $this->form_validation->set_rules('simbolo', 'Símbolo', 'required');
+        $this->form_validation->set_rules('codigo_afip', 'Código AFIP', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'moneda' => $this->input->post('moneda'),
+                'simbolo' => $this->input->post('simbolo'),
+                'codigo_afip' => $this->input->post('codigo_afip'),
+                'actualizado_por' => $session['SID'],
+                'fecha_modificacion' => date("Y-m-d H:i:s")
+            );
+
+            $afectado = $this->monedas_model->update($datos, $this->input->post('idmoneda'));
+
+            if ($afectado) {
+                $log = array(
+                    'tabla' => 'monedas',
+                    'idtabla' => $this->input->post('idmoneda'),
+                    'texto' => 'Se modificó la moneda: ' . $this->input->post('moneda') .
+                    '<br>Símbolo: ' . $this->input->post('simbolo') .
+                    '<br>Código de AFIP: ' . $this->input->post('simbolo'),
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'edit'
+                );
+
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => '<p>No se pudo actualizar la moneda.</p>'
+                );
+                echo json_encode($json);
             }
         }
     }

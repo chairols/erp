@@ -36,6 +36,7 @@ class Monedas_model extends CI_Model {
     
     /*
      *  Monedas/agregar_ajax
+     *  Monedas/modificar
      */
     public function get_where($where) {
         $query = $this->db->get_where('monedas', $where);
@@ -48,6 +49,14 @@ class Monedas_model extends CI_Model {
     public function set($datos) {
         $this->db->insert('monedas', $datos);
         return $this->db->insert_id();
+    }
+    
+    /*
+     *  Monedas/modificar_ajax
+     */
+    public function update($where, $idmoneda) {
+        $this->db->update('monedas', $where, array('idmoneda' => $idmoneda));
+        return $this->db->affected_rows();
     }
 }
 

@@ -33,6 +33,22 @@ class Monedas_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Monedas/agregar_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('monedas', $where);
+        return $query->row_array();
+    }
+    
+    /*
+     *  Monedas/agregar_ajax
+     */
+    public function set($datos) {
+        $this->db->insert('monedas', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

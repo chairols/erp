@@ -44,6 +44,7 @@ class Cotizaciones_model extends CI_Model {
     public function gets_items_where($where) {
         $this->db->select('*');
         $this->db->from('cotizaciones_items');
+        $this->db->join('articulos', 'cotizaciones_items.idarticulo = articulos.idarticulo');
         $this->db->like($where);
         
         $query = $this->db->get();

@@ -40,7 +40,50 @@ class Cotizaciones extends CI_Controller {
         $data['javascript'] = array();
         $data['view'] = 'cotizaciones/proveedores_nacionales';
         
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+
+        $where = $this->input->get();
+        $where['cotizaciones.estado'] = 'A';
+        $where['empresas.internacional'] = 'N';
+        $where['cotizaciones.idcliente'] = 0;
         
+        /*
+         * inicio paginador
+         */
+        $total_rows = $this->cotizaciones_model->get_cantidad_where($where);
+        $config['reuse_query_string'] = TRUE;
+        $config['base_url'] = '/cotizaciones/proveedores_nacionales/';
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        $data['links'] = $this->pagination->create_links();
+        $data['total_rows'] = $total_rows;
+        /*
+         * fin paginador
+         */
+
+        $data['cotizaciones'] = $this->cotizaciones_model->get_cantidad_where_limit($where, $per_page, $pagina);
+        foreach($data['cotizaciones'] as $key => $value) {
+            $where = array(
+                'idcotizacion' => $value['idcotizacion']
+            );
+            $data['cotizaciones'][$key]['items'] = $this->cotizaciones_model->gets_items_where($where);
+        }
         
         
         $this->load->view('layout/app', $data);
@@ -59,6 +102,7 @@ class Cotizaciones extends CI_Controller {
         $where = $this->input->get();
         $where['cotizaciones.estado'] = 'A';
         $where['empresas.internacional'] = 'Y';
+        $where['cotizaciones.idcliente'] = 0;
         
         /*
          * inicio paginador

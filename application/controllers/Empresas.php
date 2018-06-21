@@ -15,7 +15,7 @@ class Empresas extends CI_Controller {
             'empresas_model',
             'parametros_model'
         ));
-        
+
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
     }
@@ -25,14 +25,14 @@ class Empresas extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        
-        
+
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
-        
+
         $where = $this->input->get();
         $where['empresas.estado'] = 'A';
-        
+
         /*
          * inicio paginador
          */
@@ -61,14 +61,11 @@ class Empresas extends CI_Controller {
         /*
          * fin paginador
          */
-        
+
         $data['empresas'] = $this->empresas_model->get_cantidad_where_limit($where, $per_page, $pagina);
-        
-        
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('empresas/todas');
-        $this->load->view('layout/footer');
+
+        $data['view'] = 'empresas/todas';
+        $this->load->view('layout/app', $data);
     }
 
     function proveedores($pagina = 0) {
@@ -76,15 +73,15 @@ class Empresas extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        
-        
+
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
-        
+
         $where = $this->input->get();
         $where['empresas.estado'] = 'A';
         $where['empresas.proveedor'] = 'Y';
-        
+
         /*
          * inicio paginador
          */
@@ -113,30 +110,27 @@ class Empresas extends CI_Controller {
         /*
          * fin paginador
          */
-        
+
         $data['empresas'] = $this->empresas_model->get_cantidad_where_limit($where, $per_page, $pagina);
-        
-        
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('empresas/proveedores');
-        $this->load->view('layout/footer');
+
+        $data['view'] = 'empresas/proveedores';
+        $this->load->view('layout/app', $data);
     }
-    
+
     function clientes($pagina = 0) {
         $data['title'] = 'Listado de Clientes';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        
-        
+
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
-        
+
         $where = $this->input->get();
         $where['empresas.estado'] = 'A';
         $where['empresas.cliente'] = 'Y';
-        
+
         /*
          * inicio paginador
          */
@@ -165,14 +159,11 @@ class Empresas extends CI_Controller {
         /*
          * fin paginador
          */
-        
+
         $data['empresas'] = $this->empresas_model->get_cantidad_where_limit($where, $per_page, $pagina);
-        
-        
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('empresas/clientes');
-        $this->load->view('layout/footer');
+
+        $data['view'] = 'empresas/clientes';
+        $this->load->view('layout/app', $data);
     }
 }
 

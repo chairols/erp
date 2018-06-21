@@ -17,7 +17,7 @@ class Menu extends CI_Controller {
             'menu_model',
             'log_model'
         ));
-        
+
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
     }
@@ -82,11 +82,8 @@ class Menu extends CI_Controller {
           $data['mmenu'][$key]['padre'] = $this->menu_model->get_where($datos);
           } */
 
-
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('menu/listar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'menu/listar';
+        $this->load->view('layout/app', $data);
     }
 
     public function agregar() {
@@ -102,16 +99,13 @@ class Menu extends CI_Controller {
             $data['padres'][$key]['hijos'] = $this->menu_model->gets_padres_ordenados($value['idmenu']);
         }
 
-
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('menu/agregar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'menu/agregar';
+        $this->load->view('layout/app', $data);
     }
 
     public function agregar_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('titulo', 'Título', 'required');
         $this->form_validation->set_rules('menu', 'Menú', 'required');
         $this->form_validation->set_rules('href', 'Link', 'required');
@@ -148,7 +142,7 @@ class Menu extends CI_Controller {
                     'orden' => $this->input->post('orden'),
                     'padre' => $this->input->post('padre')
                 );
-                
+
                 if($this->input->post('visible') == 'true') {
                     $datos['visible'] = 1;
                 } else {
@@ -168,9 +162,9 @@ class Menu extends CI_Controller {
                         'idusuario' => $session['SID'],
                         'tipo' => 'add'
                     );
-                    
+
                     $this->log_model->set($log);
-                    
+
                     $json = array(
                         'status' => 'ok'
                     );

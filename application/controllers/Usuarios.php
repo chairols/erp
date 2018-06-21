@@ -31,7 +31,7 @@ class Usuarios extends CI_Controller{
             $usuario = $this->usuarios_model->get_usuario($this->input->post('usuario'), sha1($this->input->post('password')));
             if (!empty($usuario)) {
                 $perfil = $this->usuarios_model->get_perfil($usuario['idusuario']);
-                
+
                 $datos = array(
                     'SID' => $usuario['idusuario'],
                     'usuario' => $usuario['usuario'],
@@ -41,12 +41,12 @@ class Usuarios extends CI_Controller{
                     'perfil' => $perfil['idperfil']
                 );
                 $this->session->set_userdata($datos);
-                
+
                 $datos = array(
                     'ultimo_acceso' => date("Y-m-d H:i:s")
                 );
                 $this->usuarios_model->update($datos, $usuario['idusuario']);
-                
+
                 redirect('/dashboard/', 'refresh');
             }
         }
@@ -68,12 +68,12 @@ class Usuarios extends CI_Controller{
     public function listar($pagina = 0) {
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
-        
+
         $data['title'] = 'Listar Usuarios';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = '';
-        
+
         $per_page = 10;
         $codigo = '';
         if ($this->input->get('codigo') !== null) {
@@ -107,13 +107,10 @@ class Usuarios extends CI_Controller{
         /*
          * fin paginador
          */
-        
+
         $data['usuarios'] = $this->usuarios_model->gets_limit($codigo, $pagina, $config['per_page'], 'A');
-        
-        
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('usuarios/listar');
-        $this->load->view('layout/footer');
+
+        $data['view'] = 'usuarios/listar';
+        $this->load->view('layout/app', $data);
     }
 }

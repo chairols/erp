@@ -17,7 +17,7 @@ class Lineas extends CI_Controller {
             'lineas_model',
             'log_model'
         ));
-        
+
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
     }
@@ -30,10 +30,10 @@ class Lineas extends CI_Controller {
 
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
-        
+
         $where = $this->input->get();
         $where['estado'] = 'A';
-        
+
         /*
          * inicio paginador
          */
@@ -65,10 +65,8 @@ class Lineas extends CI_Controller {
 
         $data['lineas'] = $this->lineas_model->gets_where_limit($where, $per_page, $pagina);
 
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('lineas/listar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'lineas/listar';
+        $this->load->view('layout/app', $data);
     }
 
     public function agregar() {
@@ -79,13 +77,10 @@ class Lineas extends CI_Controller {
             '/assets/modulos/lineas/js/agregar.js'
         );
 
-
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('lineas/agregar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'lineas/agregar';
+        $this->load->view('layout/app', $data);
     }
-    
+
     public function agregar_ajax() {
         $session = $this->session->all_userdata();
 

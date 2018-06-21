@@ -23,8 +23,8 @@ class Marcas extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        
-        
+
+
         $per_page = 10;
         $marca = '';
         if ($this->input->get('marca') !== null) {
@@ -58,14 +58,11 @@ class Marcas extends CI_Controller {
         /*
          * fin paginador
          */
-        
+
         $data['marcas'] = $this->marcas_model->gets_limit($marca, $pagina, $config['per_page'], 'A');
-        
-        
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('marcas/listar');
-        $this->load->view('layout/footer');
+
+        $data['view'] = 'marcas/listar';
+        $this->load->view('layout/app', $data);
     }
 
 }

@@ -10,7 +10,7 @@ class Dashboard extends CI_Controller {
             'session',
             'r_session'
         ));
-        
+
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
     }
@@ -20,12 +20,9 @@ class Dashboard extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('dashboard/index');
-        $this->load->view('layout/footer');
-    }
 
+        $data['view'] = 'dashboard/index';
+        $this->load->view('layout/app', $data);
+    }
 }
 ?>

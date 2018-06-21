@@ -17,7 +17,7 @@ class Parametros extends CI_Controller {
             'parametros_model',
             'log_model'
         ));
-        
+
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
     }
@@ -27,16 +27,16 @@ class Parametros extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        
+
         if($this->input->post()) {
             $post = $this->input->post();
-            
+
             foreach($post as $key => $value) {
                 $id = explode("-", $key);
                 $idparametro = $id['1'];
-                
+
                 $resultado = $this->parametros_model->get_parametro_por_usuario($idparametro, $data['session']['SID']);
-                
+
                 if($resultado) {
                     $this->parametros_model->update_parametros_usuarios($value, $idparametro, $data['session']['SID']);
                 } else {
@@ -45,22 +45,20 @@ class Parametros extends CI_Controller {
                         'idusuario' => $data['session']['SID'],
                         'valor' => $value
                     );
-                    
+
                     $this->parametros_model->set_parametros_usuarios($datos);
                 }
             }
-            
-            
+
+
         }
-        
+
         $data['parametros'] = $this->parametros_model->gets_parametros_por_usuario($data['session']['SID']);
-        
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('parametros/usuario');
-        $this->load->view('layout/footer');
+
+        $data['view'] = 'parametros/usuario';
+        $this->load->view('layout/app', $data);
     }
-    
+
     public function agregar() {
         $data['title'] = 'Agregar Parámetro';
         $data['session'] = $this->session->all_userdata();
@@ -68,22 +66,20 @@ class Parametros extends CI_Controller {
         $data['javascript'] = array(
             '/assets/modulos/parametros/js/agregar.js'
         );
-        
+
         $data['tipos'] = $this->parametros_model->gets_tipos_parametros();
-        
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('parametros/agregar');
-        $this->load->view('layout/footer');
+
+        $data['view'] = 'parametros/agregar';
+        $this->load->view('layout/app', $data);
     }
- 
+
     public function agregar_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('parametro', 'Parámetro', 'required');
         $this->form_validation->set_rules('identificador', 'Identificador', 'required');
         $this->form_validation->set_rules('tipo', 'Tipo de Parámetro', 'required');
-        
+
         if($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
@@ -97,7 +93,7 @@ class Parametros extends CI_Controller {
                 'estado' => 'A'
             );
             $resultado = $this->parametros_model->get_where($datos);
-            
+
             /*
              * Compruebo si ya existe el link
              */
@@ -113,9 +109,9 @@ class Parametros extends CI_Controller {
                     'identificador' => $this->input->post('identificador'),
                     'idparametro_tipo' => $this->input->post('tipo')
                 );
-                
+
                 $id = $this->parametros_model->set($datos);
-                
+
                 /*
                  * Compruebo si fue exitoso y agrego al log
                  */
@@ -127,9 +123,9 @@ class Parametros extends CI_Controller {
                         'idusuario' => $session['SID'],
                         'tipo' => 'add'
                     );
-                    
+
                     $this->log_model->set($log);
-                    
+
                     $json = array(
                         'status' => 'ok'
                     );
@@ -142,21 +138,21 @@ class Parametros extends CI_Controller {
                     echo json_encode($json);
                 }
             }
-            
+
         }
     }
-    
+
     public function listar($pagina = 0) {
         $data['title'] = 'Listado de Parámetros';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        
-        
+
+
         $per_page = 10;
         $where = $this->input->get();
         $where['parametros.estado'] = 'A';
-        
+
         /*
          * inicio paginador
          */
@@ -185,14 +181,12 @@ class Parametros extends CI_Controller {
         /*
          * fin paginador
          */
-        
+
         $data['parametros'] = $this->parametros_model->get_cantidad_where_limit($where, $per_page, $pagina);
-        
-        
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('parametros/listar');
-        $this->load->view('layout/footer');
+
+
+        $data['view'] = 'parametros/listar';
+        $this->load->view('layout/app', $data);
     }
 }
 

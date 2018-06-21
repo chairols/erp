@@ -64,10 +64,8 @@ class Monedas extends CI_Controller {
 
         $data['monedas'] = $this->monedas_model->gets_where_limit($where, $per_page, $pagina);
 
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('monedas/listar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'monedas/listar';
+        $this->load->view('layout/app', $data);
     }
 
     public function agregar() {
@@ -78,11 +76,8 @@ class Monedas extends CI_Controller {
             '/assets/modulos/monedas/js/agregar.js'
         );
 
-
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('monedas/agregar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'monedas/agregar';
+        $this->load->view('layout/app', $data);
     }
 
     public function agregar_ajax() {
@@ -166,10 +161,8 @@ class Monedas extends CI_Controller {
         );
         $data['moneda'] = $this->monedas_model->get_where($datos);
 
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('monedas/modificar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'monedas/modificar';
+        $this->load->view('layout/app', $data);
     }
 
     public function modificar_ajax() {

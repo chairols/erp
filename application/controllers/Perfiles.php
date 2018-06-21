@@ -61,10 +61,8 @@ class Perfiles extends CI_Controller {
 
         $data['perfiles'] = $this->perfiles_model->gets_limit($perfil, $pagina, $config['per_page'], 'A');
 
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('perfiles/listar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'perfiles/listar';
+        $this->load->view('layout/app', $data);
     }
 
     public function agregar() {
@@ -90,10 +88,8 @@ class Perfiles extends CI_Controller {
             }
         }
 
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('perfiles/agregar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'perfiles/agregar';
+        $this->load->view('layout/app', $data);
     }
 
     public function modificar($idperfil = null) {
@@ -131,11 +127,8 @@ class Perfiles extends CI_Controller {
             }
         }
 
-
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('perfiles/modificar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'perfiles/modificar';
+        $this->load->view('layout/app', $data);
     }
 
     public function modificar_ajax() {

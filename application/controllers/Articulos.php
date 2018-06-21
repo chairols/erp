@@ -62,10 +62,8 @@ class Articulos extends CI_Controller {
 
         $data['articulos'] = $this->articulos_model->gets_where_limit($where, $per_page, $pagina);
 
-        $this->load->view('layout/header', $data);
-        $this->load->view('layout/menu');
-        $this->load->view('articulos/listar');
-        $this->load->view('layout/footer');
+        $data['view'] = 'articulos/listar';
+        $this->load->view('layout/app', $data);
     }
 
 }

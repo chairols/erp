@@ -15,7 +15,9 @@ class Parametros extends CI_Controller {
         ));
         $this->load->model(array(
             'parametros_model',
-            'log_model'
+            'log_model',
+            'provincias_model',
+            'tipos_responsables_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -186,6 +188,20 @@ class Parametros extends CI_Controller {
 
 
         $data['view'] = 'parametros/listar';
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function sistema() {
+        $data['title'] = 'Listado de Parámetros';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'parametros/sistema';
+        
+        $data['parametro'] = $this->parametros_model->get_parametros_sistema();
+        $data['provincias'] = $this->provincias_model->gets();
+        $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
+        
         $this->load->view('layout/app', $data);
     }
 }

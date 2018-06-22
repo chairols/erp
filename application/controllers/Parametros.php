@@ -30,16 +30,16 @@ class Parametros extends CI_Controller {
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
 
-        if($this->input->post()) {
+        if ($this->input->post()) {
             $post = $this->input->post();
 
-            foreach($post as $key => $value) {
+            foreach ($post as $key => $value) {
                 $id = explode("-", $key);
                 $idparametro = $id['1'];
 
                 $resultado = $this->parametros_model->get_parametro_por_usuario($idparametro, $data['session']['SID']);
 
-                if($resultado) {
+                if ($resultado) {
                     $this->parametros_model->update_parametros_usuarios($value, $idparametro, $data['session']['SID']);
                 } else {
                     $datos = array(
@@ -51,8 +51,6 @@ class Parametros extends CI_Controller {
                     $this->parametros_model->set_parametros_usuarios($datos);
                 }
             }
-
-
         }
 
         $data['parametros'] = $this->parametros_model->gets_parametros_por_usuario($data['session']['SID']);
@@ -82,7 +80,7 @@ class Parametros extends CI_Controller {
         $this->form_validation->set_rules('identificador', 'Identificador', 'required');
         $this->form_validation->set_rules('tipo', 'Tipo de Parámetro', 'required');
 
-        if($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
@@ -140,7 +138,6 @@ class Parametros extends CI_Controller {
                     echo json_encode($json);
                 }
             }
-
         }
     }
 
@@ -190,20 +187,65 @@ class Parametros extends CI_Controller {
         $data['view'] = 'parametros/listar';
         $this->load->view('layout/app', $data);
     }
-    
+
     public function sistema() {
         $data['title'] = 'Listado de Parámetros';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/parametros/js/sistema.js'
+        );
         $data['view'] = 'parametros/sistema';
-        
+
         $data['parametro'] = $this->parametros_model->get_parametros_sistema();
         $data['provincias'] = $this->provincias_model->gets();
         $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
-        
+
         $this->load->view('layout/app', $data);
     }
+
+    public function sistema_modificar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('empresa', 'Nombre de la Empresa', 'required');
+        $this->form_validation->set_rules('actividad', 'Actividad', 'required');
+        $this->form_validation->set_rules('direccion', 'Dirección', 'required');
+        $this->form_validation->set_rules('codigo_postal', 'Cógido Postal', 'required');
+        $this->form_validation->set_rules('idprovincia', 'Provincia', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('telefono', 'Teléfono', 'required');
+        $this->form_validation->set_rules('email', 'E-mail', 'required|valid_email');
+        $this->form_validation->set_rules('idtipo_responsable', 'Tipo de Responsable', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('cuit', 'CUIT', 'required');
+        $this->form_validation->set_rules('ingresos_brutos', 'Ingresos Brutos', 'required');
+        $this->form_validation->set_rules('numero_importador', 'Número de Importador', 'required');
+        $this->form_validation->set_rules('factor_correccion', 'Factor de Corrección', 'required|decimal');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = $this->input->post();
+
+            $id = $this->parametros_model->update_parametros_sistema($where);
+
+            if ($id) {
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => '<p>No se pudieron actualizar los datos.</p>'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
 }
 
 ?>

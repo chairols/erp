@@ -28,9 +28,10 @@
 <script src="/assets/template/js/demo.js"></script>
 
 <!-- Scripts del sistema -->
+<script src="/assets/sistema/js/validador.js"></script>
 <script src="/assets/sistema/js/sistema.js"></script>
 <?php
-if (count($javascript) > 0) { ?>
+if (isset($javascript) && count($javascript) > 0) { ?>
 <!-- Carga de Scripts de la vista -->
 <?php    foreach ($javascript as $j) { ?>
 <script type="text/javascript" src="<?=$j?>"></script>

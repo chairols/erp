@@ -18,3 +18,12 @@
 <link rel="stylesheet" href="/assets/vendors/jstree-3.3.5/dist/themes/default/style.min.css">
 <!-- Chosen Js -->
 <link rel="stylesheet" href="/assets/vendors/chosen-js/bootstrap-chosen.css">
+<?php
+if (isset($css) && count($css) > 0) { ?>
+<!-- Carga de Css de la vista -->
+<?php    foreach ($css as $css) { ?>
+  <link rel="stylesheet" href="<?=$css?>"></link>
+<?php
+    }
+}
+?>

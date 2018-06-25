@@ -45,12 +45,12 @@ function setDatePicker(element)
       titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
       weekStart: 1
     };
-    
+
     $(".datePicker").each(function(){
       datePicker(this);
     });
   }
-	
+
 }
 //////////////////////// AUTOCOMPLETE ///////////////////////
 function SetAutoComplete(selector,mode)
@@ -70,7 +70,7 @@ function SetAutoComplete(selector,mode)
 		     $(this).destroy();
 		  } catch (e) {}
 			var id = $(this).attr('id').split("TextAutoComplete");
-			
+
 			if($(this).attr("cacheauto"))
 			  var cache = ($(this).attr("cacheauto")=='true');
 			if($(this).attr("iconauto")) var icon = $(this).attr("iconauto");
@@ -101,9 +101,9 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
   }else{
   	icon = '';
   }
-  
+
   $("#TextAutoComplete"+inputID).on('focusin', function(e){ if (!e.minChars) { $("#TextAutoComplete"+inputID).last_val = '\n'; $("#TextAutoCompleteasoc").trigger('keyup.autocomplete'); } });
-  
+
 	$("#TextAutoComplete"+inputID).autoComplete({
     minChars: minChars,
     delay: 600,
@@ -128,14 +128,14 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
     				variables	= variables + "&" + properties[i] + "=" + $("#"+properties[i]).val();
     		}
   	  }
-			
+
       $("#"+inputID).val('');
       $("#"+inputID).change();
       try { xhr.abort(); } catch(e){}
       xhr = $.getJSON(target,variables, function(data){
         // console.log(data);
         response(data);
-        if (typeof autocompleteResponseFunction === "function") { 
+        if (typeof autocompleteResponseFunction === "function") {
             autocompleteResponseFunction();
         }
         $(".autocomplete-suggestion").click(function(){
@@ -157,11 +157,11 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
     },
     onSelect: function(e, term, item)
     {
-      if (typeof autocompleteOnSelectBeforeFunction === "function") { 
+      if (typeof autocompleteOnSelectBeforeFunction === "function") {
           autocompleteOnSelectBeforeFunction(e,term,item);
       }
-      
-      if (typeof autocompleteOnSelectReplaceFunction === "function") { 
+
+      if (typeof autocompleteOnSelectReplaceFunction === "function") {
           autocompleteOnSelectReplaceFunction(e,term,item);
       }else{
         var textval = item.data('key');
@@ -171,7 +171,7 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
         $("#"+inputID).val(item.data('id'));
         $("#"+inputID).change();
       }
-      if (typeof autocompleteOnSelectAfterFunction === "function") { 
+      if (typeof autocompleteOnSelectAfterFunction === "function") {
           autocompleteOnSelectAfterFunction(e,term,item);
       }
     }
@@ -181,7 +181,7 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
 	 // console.log($("#"+inputID).val());
     if(!$("#"+inputID).val())	$("#TextAutoComplete"+inputID).val('');
 	});
-	
+
 	return false;
 }
 
@@ -203,7 +203,7 @@ function inputMask()
 	  $(".inputMask").each(function(){
 	    if(!$(this).inputmask("hasMaskedValue"))
 	    {
-	      $(this).inputmask();  //static mask  
+	      $(this).inputmask();  //static mask
 	    }
 	  })
 	}
@@ -301,15 +301,15 @@ $(function(){
   });
 });
 /////////////////////////////////////////////////// iCheckbox /////////////////////////////////////////////
-$(function(){
-  $('.iCheckbox').iCheck({
-    inheritID: true,
-    cursor: true,
-    checkboxClass: 'iCheckbox_changeable icheckbox_'+iCheckSkin(),
-    radioClass: 'iRadio_changeable iradio_'+iCheckSkin()
-    //increaseArea: '10%' // optional
-  });
-});
+// $(function(){
+//   $('.iCheckbox').iCheck({
+//     inheritID: true,
+//     cursor: true,
+//     checkboxClass: 'iCheckbox_changeable icheckbox_'+iCheckSkin(),
+//     radioClass: 'iRadio_changeable iradio_'+iCheckSkin()
+//     //increaseArea: '10%' // optional
+//   });
+// });
 
 function iCheckSkin()
 {
@@ -883,17 +883,17 @@ $(function(){
 
 /////////////////////// MONEY FORMAT /////////////////
 Number.prototype.formatMoney = function(c, d, t){
-var n = this, 
-    c = isNaN(c = Math.abs(c)) ? 2 : c, 
-    d = d == undefined ? "." : d, 
-    t = t == undefined ? "," : t, 
-    s = n < 0 ? "-" : "", 
-    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+var n = this,
+    c = isNaN(c = Math.abs(c)) ? 2 : c,
+    d = d == undefined ? "." : d,
+    t = t == undefined ? "," : t,
+    s = n < 0 ? "-" : "",
+    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
     j = (j = i.length) > 3 ? j % 3 : 0;
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
  };
  ///(123456789.12345).formatMoney(2);
- 
+
  ////////////////////////////// ADD DAYS TO A DATE //////////////////////////////////////////////
 function AddDaysToDate(days,adate)
 {
@@ -938,27 +938,27 @@ function GetFileIcon(ext,size)
 {
   if(typeof(size)==="undefined")
     size = "small";
-  
+
   if(size=="big")
     var url = "../../../../skin/images/body/icons/big/";
   else
     var url = "../../../../skin/images/body/icons/";
-    
+
   switch (ext) {
     case 'pdf':
       return url+"pdf.png";
     break;
-    
+
     case 'avi':
     case 'mp4':
       return url+"avi.png";
     break;
-    
+
     case 'wav':
     case 'mp3':
       return url+"mp3.png";
     break;
-    
+
     case "doc":
 		case "dot":
 		case "docx":
@@ -967,7 +967,7 @@ function GetFileIcon(ext,size)
 		case "dotm":
       return url+"doc.png";
     break;
-    
+
     case "xls":
 		case "xlsx":
 		case "xlt":
@@ -975,29 +975,29 @@ function GetFileIcon(ext,size)
 		case "csv":
       return url+"xls.png";
     break;
-    
+
     case 'rar':
     case 'zip':
       return url+"rar.png";
     break;
-    
+
     case "ppt":
 		case "pot":
 		case "pps":
       return url+"ppt.png";
     break;
-    
+
     case "eml":
       return url+"eml.png";
     break;
-    
+
     case "bmp":
 		case "jpeg":
 		case "jpg":
 		case "png":
 		  return "self";
 		break;
-    
+
     default: return url+"txt.png";
   }
 }

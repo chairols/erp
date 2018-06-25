@@ -23,7 +23,7 @@ foreach ($menu['menu'] as $m1) {
     }
 }
 ?>
-    <section class="content-header">
+    <section class="content-header" style="background-color:#DDD;padding-bottom:20px;border-bottom:2px #AAA solid;">
         <h1>
             <?=$title?>
         </h1>

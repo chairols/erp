@@ -136,6 +136,27 @@ class Parametros_model extends CI_Model {
         
         return $query->row_array();
     }
+    
+    /*
+     *  Parametros/sistema
+     */
+    public function get_parametros_sistema() {
+        $query = $this->db->query("SELECT *
+                                    FROM
+                                        parametros_sistema
+                                    WHERE
+                                        idparametro_sistema = '1'");
+        return $query->row_array();
+    }
+    
+    /*
+     *  Parametros/sistema_modificar_ajax
+     */
+    public function update_parametros_sistema($where) {
+        $this->db->update('parametros_sistema', $where, array('idparametro_sistema' => 1));
+        
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

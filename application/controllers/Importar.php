@@ -67,7 +67,7 @@ class Importar extends CI_Controller {
             
             var_dump($cantidad);
             
-            $fp = fopen(base_url() . "/upload/importar/" . $this->input->post('archivo'), "r");
+            $fp = fopen("upload/importar/" . $this->input->post('archivo'), "r");
             $count = 0;
             $init = 0;
             $porcentaje = 0;

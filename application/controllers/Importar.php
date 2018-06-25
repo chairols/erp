@@ -49,25 +49,22 @@ class Importar extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
-    public function actualizar_articulos() {
+    public function actualizar_articulos($archivo = null) {
         $data['title'] = 'Listado de Artículos';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         $data['view'] = 'importar/actualizar_articulos';
 
-        $this->form_validation->set_rules('archivo', 'Archivo', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            
-        } else {
+        
+        if ($archivo) {
             $this->benchmark->mark('inicio');
             
             $cantidad = $this->articulos_model->get_cantidad_where(array());
             
             var_dump($cantidad);
             
-            $fp = fopen("upload/importar/" . $this->input->post('archivo'), "r");
+            $fp = fopen("upload/importar/".$archivo, "r");
             $count = 0;
             $init = 0;
             $porcentaje = 0;

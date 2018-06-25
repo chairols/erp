@@ -1,5 +1,3 @@
-
-    <pre>
-        <?php var_dump($session); ?>
-    </pre>
-    
+<pre>
+    <?php var_dump($session); ?>
+</pre>

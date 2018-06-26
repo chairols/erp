@@ -72,7 +72,7 @@ class Usuarios extends CI_Controller{
         $data['title'] = 'Listar Usuarios';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = '';
+        $data['javascript'] = array();
 
         $per_page = 10;
         $codigo = '';
@@ -111,6 +111,19 @@ class Usuarios extends CI_Controller{
         $data['usuarios'] = $this->usuarios_model->gets_limit($codigo, $pagina, $config['per_page'], 'A');
 
         $data['view'] = 'usuarios/listar';
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function agregar() {
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
+        $data['title'] = 'Agregar Usuario';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'usuarios/agregar';
+        
+        
         $this->load->view('layout/app', $data);
     }
 }

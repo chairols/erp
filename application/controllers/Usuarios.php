@@ -1,7 +1,8 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Usuarios extends CI_Controller{
+class Usuarios extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -12,7 +13,9 @@ class Usuarios extends CI_Controller{
             'pagination'
         ));
         $this->load->model(array(
-            'usuarios_model'
+            'usuarios_model',
+            'perfiles_model',
+            'log_model'
         ));
         $this->load->helper(array(
             'url'
@@ -26,7 +29,7 @@ class Usuarios extends CI_Controller{
 
 
         if ($this->form_validation->run() == FALSE) {
-
+            
         } else {
             $usuario = $this->usuarios_model->get_usuario($this->input->post('usuario'), sha1($this->input->post('password')));
             if (!empty($usuario)) {
@@ -72,7 +75,7 @@ class Usuarios extends CI_Controller{
         $data['title'] = 'Listar Usuarios';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = '';
+        $data['javascript'] = array();
 
         $per_page = 10;
         $codigo = '';
@@ -113,4 +116,103 @@ class Usuarios extends CI_Controller{
         $data['view'] = 'usuarios/listar';
         $this->load->view('layout/app', $data);
     }
+
+    public function agregar() {
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
+        $data['title'] = 'Agregar Usuario';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/usuarios/js/agregar.js'
+        );
+        $data['view'] = 'usuarios/agregar';
+
+        $data['perfiles'] = $this->perfiles_model->gets();
+
+        $this->load->view('layout/app', $data);
+    }
+
+    public function agregar_ajax() {
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
+
+        $this->form_validation->set_rules('usuario', 'Usuario', 'required');
+        $this->form_validation->set_rules('password', 'Contraseña', 'required|matches[password2]');
+        $this->form_validation->set_rules('password2', 'Repetir Contraseña', 'required');
+        $this->form_validation->set_rules('nombre', 'Nombre', 'required');
+        $this->form_validation->set_rules('apellido', 'Apellido', 'required');
+        $this->form_validation->set_rules('email', 'E-mail', 'required|valid_email');
+        $this->form_validation->set_rules('idperfil', 'Perfil', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'usuario' => $this->input->post('usuario')
+            );
+            $resultado = $this->usuarios_model->get_where($datos);
+
+            if ($resultado) {  //  Si el usuario ya existe
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'El usuario <strong>'.$this->input->post('usuario').'</strong> ya existe.'
+                );
+                echo json_encode($json);
+            } else {
+                $datos = $this->input->post();
+                unset($datos['password2']);
+                unset($datos['idperfil']);
+                $datos['password'] = sha1($datos['password']);
+                $datos['estado'] = 'A';
+                $datos['fecha_creacion'] = date("Y-m-d H:i:s");
+                $datos['idcreador'] = $session['SID'];
+                
+                $id = $this->usuarios_model->set($datos);
+                
+                /*
+                 * Compruebo si fue exitoso y agrego al log
+                 */
+                if($id) {
+                    $dat = array(
+                        'idusuario' => $id,
+                        'idperfil' => $this->input->post('idperfil')
+                    );
+                    $this->usuarios_model->set_perfil($dat);
+                    
+                    $log = array(
+                        'tabla' => 'usuarios',
+                        'idtabla' => $id,
+                        'texto' => 'Se agregó el usuario: '.$datos['usuario'].'<br>'.
+                        'Password: '.$this->input->post('password').'<br>'.
+                        'Nombre: '.$datos['nombre'].'<br>'.
+                        'Apellido: '.$datos['apellido'].'<br>'.
+                        'Email: '.$datos['email'].'<br>'.
+                        'Teléfono: '.$datos['telefono'].'<br>'.
+                        'ID de Perfil: '.$this->input->post('idperfil'),
+                        'idusuario' => $session['SID'],
+                        'tipo' => 'add'
+                    );
+
+                    $this->log_model->set($log);
+
+                    $json = array(
+                        'status' => 'ok'
+                    );
+                    echo json_encode($json);
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => '<p>No se pudo agregar el usuario.</p>'
+                    );
+                    echo json_encode($json);
+                }
+            }
+        }
+    }
+
 }

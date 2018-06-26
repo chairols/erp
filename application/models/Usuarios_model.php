@@ -90,4 +90,29 @@ class Usuarios_model extends CI_Model{
                                     LIMIT $pagina, $cantidad");
         return $query->result_array();
     }
+    
+    
+    /*
+     *  Usuarios/agregar_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('usuarios', $where);
+        return $query->row_array();
+    }
+    
+    /*
+     *  Usuarios/agregar_ajax
+     */
+    public function set($datos) {
+        $this->db->insert('usuarios', $datos);
+        return $this->db->insert_id();
+    }
+    
+    /*
+     *  Usuarios/agregar_ajax
+     */
+    public function set_perfil($datos) {
+        $this->db->insert('usuarios_perfiles', $datos);
+        return $this->db->insert_id();
+    }
 }

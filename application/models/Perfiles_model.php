@@ -53,6 +53,17 @@ class Perfiles_model extends CI_Model {
         $this->db->insert('perfiles_menu', $datos);
         return $this->db->insert_id();
     }
+    
+    public function gets() {
+        $query = $this->db->query("SELECT *
+                                    FROM
+                                        perfiles
+                                    WHERE
+                                        estado = 'A'
+                                    ORDER BY
+                                        perfil");
+        return $query->result_array();
+    }
 }
 
 ?>

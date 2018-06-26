@@ -1,5 +1,4 @@
-<div class="col-md-12">
-    <div class="box">
+<div class="box">
         <div class="box-header">
             <form method="GET" class="input-group input-group-sm col-md-3">
                 <input class="form-control pull-left" name="empresa" placeholder="Empresa" type="text">
@@ -29,7 +28,7 @@
                             <td><strong><?= $cotizacion['empresa'] ?></strong></td>
                             <td><?= $cotizacion['total_formateado'] ?></td>
                             <td><?= $cotizacion['fecha_entrega'] ?></td>
-                            
+
                             <td>&nbsp;</td>
                         </tr>
                     <?php } ?>
@@ -50,4 +49,3 @@
             <?php print_r($cotizaciones) ?>
         </pre>
     </div>
-</div>

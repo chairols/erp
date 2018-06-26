@@ -1,11 +1,11 @@
 <input type="hidden" id="idmoneda" value="<?=$moneda['idmoneda']?>">
 
-<div class="col-md-12">
+
     <div class="box">
         <div class="box-header">
 
         </div>
-        
+
         <div class="box-body no-padding">
             <div class="form-horizontal">
                 <div class="form-group">
@@ -36,4 +36,3 @@
             </div>
         </div>
     </div>
-</div>

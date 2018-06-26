@@ -1,4 +1,4 @@
-<div class="col-md-12">
+
     <div class="box">
         <div class="box-header">
             <form method="GET" class="input-group input-group-sm col-md-5">
@@ -44,4 +44,3 @@
             </div>
         </div>
     </div>
-</div>

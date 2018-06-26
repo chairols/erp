@@ -1,4 +1,4 @@
-<div class="col-md-12">
+
     <div class="box">
         <div class="box-header">
 
@@ -25,4 +25,3 @@
 
         </div>
     </div>
-</div>

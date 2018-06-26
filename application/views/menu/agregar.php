@@ -1,4 +1,4 @@
-<div class="col-md-12">
+
     <div class="box">
         <div class="box-header">
 
@@ -62,7 +62,6 @@
                         <button type="reset" class="btn btn-primary">Limpiar</button>
                     </div>
                 </div>
-            </form>  
+            </form>
         </div>
     </div>
-</div>

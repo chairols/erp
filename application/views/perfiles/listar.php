@@ -1,4 +1,4 @@
-<div class="col-md-12">
+
     <div class="box">
         <div class="box-header">
             <form method="POST" class="input-group input-group-sm col-md-5">
@@ -38,4 +38,3 @@
             </table>
         </div>
     </div>
-</div>

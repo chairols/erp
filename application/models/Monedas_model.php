@@ -15,11 +15,11 @@ class Monedas_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('monedas');
         $this->db->like($where);
-        
+
         $query = $this->db->count_all_results();
         return $query;
     }
-    
+
     /*
      *  Monedas/listar
      */
@@ -29,11 +29,11 @@ class Monedas_model extends CI_Model {
         $this->db->like($where);
         $this->db->order_by('moneda');
         $this->db->limit($per_page, $pagina);
-        
+
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
     /*
      *  Monedas/agregar_ajax
      *  Monedas/modificar
@@ -42,7 +42,15 @@ class Monedas_model extends CI_Model {
         $query = $this->db->get_where('monedas', $where);
         return $query->row_array();
     }
-    
+
+    /*
+    */
+    public function gets()
+    {
+      $query = $this->db->query("SELECT * FROM monedas WHERE estado='A' ORDER BY moneda");
+      return $query->result_array();
+    }
+
     /*
      *  Monedas/agregar_ajax
      */
@@ -50,7 +58,7 @@ class Monedas_model extends CI_Model {
         $this->db->insert('monedas', $datos);
         return $this->db->insert_id();
     }
-    
+
     /*
      *  Monedas/modificar_ajax
      */

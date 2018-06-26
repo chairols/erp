@@ -17,7 +17,7 @@ class Empresas extends CI_Controller {
         ));
 
         $session = $this->session->all_userdata();
-        $this->r_session->check($session);
+        // $this->r_session->check($session);
     }
 
     function todas($pagina = 0) {
@@ -164,6 +164,13 @@ class Empresas extends CI_Controller {
 
         $data['view'] = 'empresas/clientes';
         $this->load->view('layout/app', $data);
+    }
+
+    public function gets_empresas_ajax()
+    {
+      $where    = $this->input->post();
+      $empresa  = $this->empresas_model->gets_where($where);
+      echo json_encode($this->empresas_model->gets_where($where));
     }
 }
 

@@ -4,8 +4,8 @@
         <?php $this->view('layout/body/menu'); ?>
         <section class="content-wrapper">
           <?php $this->view('layout/body/breadcrumbs'); ?>
-          <div class="row">
-            <div class="col-xs-12 col-xs-offset-0 col-sm-11 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-xl-8 col-xl-offset-2">
+          <div class="row flex-justify-center">
+            <div class="col-xs-12 col-sm-11 col-md-11 col-lg-11 col-xl-10">
               <?php $this->view($view); ?>
             </div>
           </div>

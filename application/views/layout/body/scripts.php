@@ -19,6 +19,14 @@
 <script src="/assets/vendors/alertifyjs/alertify.min.js"></script>
 <!-- Chosen JS -->
 <script src="/assets/vendors/chosen-js/chosen.jquery.js"></script>
+<!-- Autocomplete -->
+<script src="/assets/vendors/autocomplete/jquery.auto-complete.min.js"></script>
+<!-- Input Mask -->
+<script src="/assets/vendors/jquery-mask/src/jquery.mask.js"></script>
+<script src="/assets/vendors/inputmask3/jquery.inputmask.bundle.min.js"></script>
+<!-- Dropzone -->
+<script src="/assets/vendors/dropzone/dropzone.min.js"></script>
+
 <!-- Treemultiselect -->
 <script src="/assets/vendors/treemultiselect/logger.min.js"></script>
 <script src="/assets/vendors/treemultiselect/treeview.min.js"></script>
@@ -26,7 +34,6 @@
 <script src="/assets/template/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/assets/template/js/demo.js"></script>
-
 <!-- Scripts del sistema -->
 <script src="/assets/sistema/js/validador.js"></script>
 <script src="/assets/sistema/js/sistema.js"></script>

@@ -8,7 +8,7 @@ class Empresas_model extends CI_Model {
         parent::__construct();
         //Codeigniter : Write Less Do More
     }
-    
+
     /*
      *  Empresas/todas
      */
@@ -16,7 +16,7 @@ class Empresas_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('empresas');
         $this->db->like($where);
-        
+
         $query = $this->db->count_all_results();
         return $query;
     }
@@ -31,9 +31,22 @@ class Empresas_model extends CI_Model {
         $this->db->like($where);
         $this->db->order_by('empresa');
         $this->db->limit($per_page, $pagina);
-        
+
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    /*
+    */
+    public function gets_where($where)
+    {
+      $this->db->select('idempresa as id, empresa as text');
+      $this->db->from('empresas');
+      $this->db->like($where);
+      $this->db->order_by('empresa');
+
+      $query = $this->db->get();
+      return $query->result_array();
     }
 }
 

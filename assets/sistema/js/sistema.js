@@ -111,10 +111,14 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
     // hideResults: false,
     source: function(term, response)
     {
-      var target = $("#TextAutoComplete"+inputID).attr("targetauto");
       var object = $("#TextAutoComplete"+inputID).attr("objectauto");
 			var action = $("#TextAutoComplete"+inputID).attr("actionauto");
-      var variables		= "text="+term+"&object="+object+"&action="+action;
+      var target = "/"+object+"/"+action;
+      var tableid = inputID;
+      if($("#TextAutoComplete"+inputID).attr("tableidauto"))
+        tableid = $("#TextAutoComplete"+inputID).attr("tableidauto");
+
+      var variables		= tableid+"="+term;
   	  var field;
       if($("#TextAutoComplete"+inputID).attr("varsauto")!=undefined)
   	  {
@@ -132,8 +136,11 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
       $("#"+inputID).val('');
       $("#"+inputID).change();
       try { xhr.abort(); } catch(e){}
-      xhr = $.getJSON(target,variables, function(data){
-        // console.log(data);
+      xhr = $.post(target,variables, function(data){
+        if(!data[0])
+        {
+          data = [{key:"",text:"no-result"}];
+        }
         response(data);
         if (typeof autocompleteResponseFunction === "function") {
             autocompleteResponseFunction();
@@ -141,7 +148,7 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
         $(".autocomplete-suggestion").click(function(){
           // console.log("entra");
         })
-      });
+      },'json');
     },
     renderItem: function (item, search)
     {
@@ -160,7 +167,6 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
       if (typeof autocompleteOnSelectBeforeFunction === "function") {
           autocompleteOnSelectBeforeFunction(e,term,item);
       }
-
       if (typeof autocompleteOnSelectReplaceFunction === "function") {
           autocompleteOnSelectReplaceFunction(e,term,item);
       }else{

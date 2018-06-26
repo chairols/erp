@@ -13,9 +13,10 @@ class Cotizaciones extends CI_Controller {
         ));
         $this->load->model(array(
             'parametros_model',
-            'cotizaciones_model'
+            'cotizaciones_model',
+            'monedas_model',
         ));
-        
+
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
     }
@@ -24,22 +25,29 @@ class Cotizaciones extends CI_Controller {
         $data['title'] = 'Agregar Cotización de Proveedor';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
-        $data['view'] = 'cotizaciones/agregar_proveedor';
-        
-        
-        
-        
+        $data['javascript'] = array(
+                                    '/assets/modulos/cotizaciones/js/agregar.js',
+                                    '/assets/modulos/cotizaciones/js/agregar_agente.js',
+                                    '/assets/modulos/cotizaciones/js/agregar_articulo.js',
+                                    '/assets/modulos/cotizaciones/js/agregar_dropzone.js',
+                                    '/assets/modulos/cotizaciones/js/agregar_trazabilidad.js',
+                                    '/assets/modulos/cotizaciones/js/agregar_email.js'
+                                  );
+        $data['view'] =              'cotizaciones/agregar_proveedor';
+
+        $data['fecha_vencimiento'] = strtotime("+10 day", strtotime(date('Y-m-d')));
+        $data['monedas'] = $this->monedas_model->gets();
+
         $this->load->view('layout/app', $data);
     }
-    
+
     public function proveedores_nacionales($pagina = 0) {
         $data['title'] = 'Listado de Cotizaciones de Proveedores Nacionales';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         $data['view'] = 'cotizaciones/proveedores_nacionales';
-        
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
 
@@ -47,7 +55,7 @@ class Cotizaciones extends CI_Controller {
         $where['cotizaciones.estado'] = 'A';
         $where['empresas.internacional'] = 'N';
         $where['cotizaciones.idcliente'] = 0;
-        
+
         /*
          * inicio paginador
          */
@@ -84,18 +92,18 @@ class Cotizaciones extends CI_Controller {
             );
             $data['cotizaciones'][$key]['items'] = $this->cotizaciones_model->gets_items_where($where);
         }
-        
-        
+
+
         $this->load->view('layout/app', $data);
     }
-    
+
     public function proveedores_internacionales($pagina = 0) {
         $data['title'] = 'Listado de Cotizaciones de Proveedores Internacionales';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         $data['view'] = 'cotizaciones/proveedores_internacionales';
-        
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
 
@@ -103,7 +111,7 @@ class Cotizaciones extends CI_Controller {
         $where['cotizaciones.estado'] = 'A';
         $where['empresas.internacional'] = 'Y';
         $where['cotizaciones.idcliente'] = 0;
-        
+
         /*
          * inicio paginador
          */
@@ -140,8 +148,8 @@ class Cotizaciones extends CI_Controller {
             );
             $data['cotizaciones'][$key]['items'] = $this->cotizaciones_model->gets_items_where($where);
         }
-        
-        
+
+
         $this->load->view('layout/app', $data);
     }
 

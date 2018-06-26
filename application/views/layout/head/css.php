@@ -18,6 +18,14 @@
 <link rel="stylesheet" href="/assets/vendors/jstree-3.3.5/dist/themes/default/style.min.css">
 <!-- Chosen Js -->
 <link rel="stylesheet" href="/assets/vendors/chosen-js/bootstrap-chosen.css">
+<!-- Autocomplete -->
+<link rel="stylesheet" href="/assets/vendors/autocomplete/jquery.auto-complete.css">
+<!-- DatePicker -->
+<link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">
+<!-- Dropzone -->
+<link rel="stylesheet" href="/assets/vendors/dropzone/dropzone.min.css">
+<!-- Sistema -->
+<link rel="stylesheet" href="/assets/sistema/css/sistema.css">
 <?php
 if (isset($css) && count($css) > 0) { ?>
 <!-- Carga de Css de la vista -->

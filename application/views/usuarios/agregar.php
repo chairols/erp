@@ -51,7 +51,9 @@
                     <label class="control-label col-md-3">Perfil</label>
                     <div class="col-md-6">
                         <select id="idperfil" class="chosenSelect">
-                            
+                            <?php foreach ($perfiles as $perfil) { ?>
+                                <option value="<?= $perfil['idperfil'] ?>"><?= $perfil['perfil'] ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>

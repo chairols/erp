@@ -4,7 +4,7 @@
         <div class="row form-group inline-form-custom">
             <div class="col-xs-12">
                 <!-- Autocomplete Empresas -->
-                <input type="text" id="TextAutoCompleteempresa" name="TextAutoCompleteempresa" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="Empresas" actionauto="gets_empresas_ajax" varsauto="proveedor:=Y" iconauto="ship">
+                <input type="text" id="TextAutoCompleteempresa" name="TextAutoCompleteempresa" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="Empresas" actionauto="gets_empresas_ajax" varsauto="proveedor:=Y///internacional:=Y" iconauto="ship">
                 <input type="hidden" id="empresa" name="empresa" value="">
             </div>
         </div>
@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="row txC">
-            <button type="submit" class="btn btn-success btnGreen" confirmacion="¿Desea crear la Importación?" id="BtnCreate"><i class="fa fa-plus"></i> Crear Cotizaci&oacute;n</button>
+            <button type="submit" class="btn btn-success btnGreen" confirmacion="¿Desea crear la Importación?" id="BtnCreate"><i class="fa fa-plus"></i> Crear Importación</button>
         </div>
     </form>
 </div>

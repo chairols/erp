@@ -56,6 +56,22 @@ class Articulos_model extends CI_Model {
     public function set($array) {
         $this->db->insert('articulos', $array);
     }
+    
+    
+    /*
+     *  Importaciones/agregar_items
+     */
+    public function gets_where_para_ajax($where, $limit)
+    {
+      $this->db->select('idarticulo as id, articulo as text, idmarca');
+      $this->db->from('articulos');
+      $this->db->like($where);
+      $this->db->order_by('articulo');
+      $this->db->limit($limit);
+
+      $query = $this->db->get();
+      return $query->result_array();
+    }
 }
 
 ?>

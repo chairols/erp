@@ -39,6 +39,15 @@ class Marcas_model extends CI_Model {
                                     LIMIT $pagina, $cantidad");
         return $query->result_array();
     }
+    
+    /*
+     *  Artículos/gets_articulos_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('marcas', $where);
+        
+        return $query->row_array();
+    }
 }
 
 ?>

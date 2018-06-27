@@ -48,6 +48,16 @@ class Empresas_model extends CI_Model {
       $query = $this->db->get();
       return $query->result_array();
     }
+    
+    
+    /*
+     *  Importaciones/agregar_items
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('empresas', $where);
+        
+        return $query->row_array();
+    }
 }
 
 ?>

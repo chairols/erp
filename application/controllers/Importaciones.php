@@ -12,24 +12,25 @@ class Importaciones extends CI_Controller {
             'form_validation'
         ));
         $this->load->model(array(
-            'importaciones_model'
+            'importaciones_model',
+            'log_model'
         ));
-        
+
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
     }
-    
+
     public function agregar() {
         $data['title'] = 'Agregar Importación';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         $data['view'] = 'importaciones/agregar';
-        
+
         $this->form_validation->set_rules('empresa', 'Empresa', 'required');
         $this->form_validation->set_rules('fecha_pedido', 'Fecha de Pedido', 'required');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             
         } else {
             $datos = array(
@@ -38,18 +39,28 @@ class Importaciones extends CI_Controller {
                 'fecha_creacion' => date("Y-m-d H:i:s"),
                 'idcreador' => $data['session']['SID']
             );
-            
+
             $id = $this->importaciones_model->set($datos);
-            
-            if($id) {
-                redirect('/importaciones/agregar_items/'.$id.'/', 'refresh');
+
+            if ($id) {
+                $log = array(
+                    'tabla' => 'importaciones',
+                    'idtabla' => $id,
+                    'texto' => 'Se agregó la importación '.$id.'<br>'.
+                    'Con número de Proveedor: '.$datos['idproveedor'],
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+
+                $this->log_model->set($log);
+                
+                redirect('/importaciones/agregar_items/' . $id . '/', 'refresh');
             }
         }
-        
+
         $this->load->view('layout/app', $data);
     }
-    
-    
+
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);
@@ -57,9 +68,10 @@ class Importaciones extends CI_Controller {
         $aux .= substr($fecha, 3, 2);
         $aux .= '-';
         $aux .= substr($fecha, 0, 2);
-        
+
         return $aux;
     }
+
 }
 
 ?>

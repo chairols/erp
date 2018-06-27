@@ -81,13 +81,13 @@
                 <input type="text" value="<?= $item['articulo'] ?> - <?= $item['marca'] ?>" class="form-control" disabled="">
             </div>
             <div class="col-xs-2 txC">
-                <input type="text" value="<?= $item['cantidad'] ?>" class="form-control" disabled="">
+                <input type="text" value="<?= $item['cantidad'] ?>" class="form-control txR" disabled="">
             </div> 
             <div class="col-xs-2 txC">
-                <input type="text" value="<?= $item['costo_fob'] ?>" class="form-control" disabled="">
+                <input type="text" value="<?= number_format($item['costo_fob'], 2) ?>" class="form-control txR" disabled="">
             </div> 
             <div class="col-xs-2 txC">
-                <input type="text" value="<?= ($item['cantidad'] * $item['costo_fob']) ?>" class="form-control" disabled="">
+                <input type="text" value="<?= number_format($item['cantidad'] * $item['costo_fob'], 2) ?>" class="form-control txR" disabled="">
             </div>
         </div>
     <?php } ?>
@@ -103,7 +103,7 @@
             <strong>&nbsp;</strong>
         </div>
         <div class="col-xs-2 txC">
-            <strong>Total: <?=$total?></strong>
+            <strong>Total: <?=number_format($total, 2)?></strong>
         </div>
     </div>
 

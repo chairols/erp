@@ -15,8 +15,7 @@
 <?php $this->view('/cotizaciones/ventanas/agente'); ?>
 <?php $this->view('/cotizaciones/ventanas/email'); ?>
 
-<div class="box animated fadeIn" style="min-width:99%">
-  <div class="box-header flex-justify-center">
+
     <div class="innerContainer main_form" style="min-width:100%">
       <form id="QuotationForm">
         <h4 class="subTitleB"><i class="fa fa-ship"></i> Proveedor</h4>
@@ -183,5 +182,3 @@
         </div>
       </form>
     </div>
-  </div><!-- box header -->
-</div><!-- box -->

@@ -1,8 +1,8 @@
-<body class="hold-transition skin-blue sidebar-mini fixed">
+<body class="hold-transition skin-blue <?php if(isset($_COOKIE['sidebarmenu'])) echo $_COOKIE['sidebarmenu'] ?> sidebar-mini fixed">
   <div class="wrapper">
         <?php $this->view('layout/body/header'); ?>
         <?php $this->view('layout/body/menu'); ?>
-        <section class="content-wrapper">
+        <section class="content-wrapper" style="background:#FDFDFD!important;">
           <?php $this->view('layout/body/breadcrumbs'); ?>
           <div class="row flex-justify-center">
             <div class="col-xs-12 col-sm-11 col-md-11 col-lg-11 col-xl-10">

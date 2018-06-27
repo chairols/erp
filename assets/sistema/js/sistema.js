@@ -1,5 +1,3 @@
-                                            ////// JavaScript Document //////
-
 ////////////////// INITIALIZATION ///////////////////////
 var process_url = "../../../core/resources/processes/proc.core.php";
 $(document).ready(function(){
@@ -13,6 +11,7 @@ $(document).ready(function(){
 	chosenSelect();
 	SetAutoComplete();
 	closeWindow();
+  SidebarMenu();
 	if($("input[type='file']").length>0)
 	{
 	  CustomizedFilefield();
@@ -296,7 +295,8 @@ function notifyMsg(typeMsg,msgNotify)
 }
 
 /////////////////////////////////////////////////// Menu Sidebar //////////////////////////////////////////
-$(function(){
+function SidebarMenu()
+{
   $('#SidebarToggle').click(function(){
     if($('body').hasClass('sidebar-collapse'))
     {
@@ -305,7 +305,7 @@ $(function(){
       setCookie("sidebarmenu",'sidebar-collapse', 365);
     }
   });
-});
+}
 /////////////////////////////////////////////////// iCheckbox /////////////////////////////////////////////
 // $(function(){
 //   $('.iCheckbox').iCheck({

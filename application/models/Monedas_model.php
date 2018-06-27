@@ -44,10 +44,16 @@ class Monedas_model extends CI_Model {
     }
 
     /*
-    */
-    public function gets()
-    {
-      $query = $this->db->query("SELECT * FROM monedas WHERE estado='A' ORDER BY moneda");
+     *  Importaciones/agregar
+     */
+    public function gets() {
+      $query = $this->db->query("SELECT * 
+                                    FROM 
+                                        monedas 
+                                    WHERE 
+                                        estado = 'A' 
+                                    ORDER BY 
+                                        moneda");
       return $query->result_array();
     }
 

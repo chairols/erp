@@ -9,12 +9,15 @@ class Importaciones extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'form_validation'
+            'form_validation',
+            'pagination'
         ));
         $this->load->model(array(
             'importaciones_model',
             'log_model',
-            'empresas_model'
+            'empresas_model',
+            'parametros_model',
+            'monedas_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -29,6 +32,7 @@ class Importaciones extends CI_Controller {
         $data['view'] = 'importaciones/agregar';
 
         $this->form_validation->set_rules('empresa', 'Empresa', 'required');
+        $this->form_validation->set_rules('moneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('fecha_pedido', 'Fecha de Pedido', 'required');
 
         if ($this->form_validation->run() == FALSE) {
@@ -36,6 +40,7 @@ class Importaciones extends CI_Controller {
         } else {
             $datos = array(
                 'idproveedor' => $this->input->post('empresa'),
+                'idmoneda' => $this->input->post('moneda'),
                 'fecha_pedido' => $this->formatear_fecha($this->input->post('fecha_pedido')),
                 'fecha_creacion' => date("Y-m-d H:i:s"),
                 'idcreador' => $data['session']['SID']
@@ -48,7 +53,8 @@ class Importaciones extends CI_Controller {
                     'tabla' => 'importaciones',
                     'idtabla' => $id,
                     'texto' => 'Se agregó la importación '.$id.'<br>'.
-                    'Con número de Proveedor: '.$datos['idproveedor'],
+                    'Con número de Proveedor: '.$datos['idproveedor'].'<br>'.
+                    'ID Moneda: '.$datos['idmoneda'],
                     'idusuario' => $data['session']['SID'],
                     'tipo' => 'add'
                 );
@@ -59,6 +65,8 @@ class Importaciones extends CI_Controller {
             }
         }
 
+        $data['monedas'] = $this->monedas_model->gets();
+        
         $this->load->view('layout/app', $data);
     }
     
@@ -114,6 +122,61 @@ class Importaciones extends CI_Controller {
         );
         $data['items'] = $this->importaciones_model->gets_items($datos);
                 
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function listar($pagina = 0) {
+        $data['title'] = 'Listado de Importaciones';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'importaciones/listar';
+        
+        
+        
+        
+        
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+
+        $where = $this->input->get();
+        $where['importaciones.estado'] = 'P';
+
+        /*
+         * inicio paginador
+         */
+        $total_rows = $this->importaciones_model->get_cantidad_where($where);
+        $config['reuse_query_string'] = TRUE;
+        $config['base_url'] = '/importaciones/listar/';
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        $data['links'] = $this->pagination->create_links();
+        $data['total_rows'] = $total_rows;
+        /*
+         * fin paginador
+         */
+
+        $data['importaciones'] = $this->importaciones_model->gets_where_limit($where, $per_page, $pagina);
+
+        
+        
+        
+        
         $this->load->view('layout/app', $data);
     }
 

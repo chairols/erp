@@ -16,7 +16,7 @@
 <!-- FastClick -->
 <script src="/assets/vendors/fastclick/fastclick.js"></script>
 <!-- Alertify -->
-<script src="/assets/vendors/alertify/alertify.js"></script>
+<script src="/assets/vendors/alertifyjs/alertify.min.js"></script>
 <!-- Notify -->
 <script src="/assets/vendors/bootstrap-notify/notify.js"></script>
 <!-- Chosen JS -->

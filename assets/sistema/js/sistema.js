@@ -58,7 +58,7 @@ function datePicker(element)
   });
 }
 
-function setDatePicker(element)
+function setDatePicker()
 {
   if($(".datePicker").length>0)
   {

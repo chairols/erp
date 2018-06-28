@@ -8,6 +8,16 @@
                 <input type="hidden" id="empresa" name="empresa" value="<?= $importacion['idproveedor'] ?>">
             </div>
         </div>
+        <h4 class="subTitleB"><i class="fa fa-money"></i> Moneda</h4>
+        <div class="row form-group inline-form-custom">
+            <div class="col-xs-12">
+                <select name="moneda" class="form-control chosenSelect">
+                    <?php foreach ($monedas as $moneda) { ?>
+                        <option value="<?= $moneda['idmoneda'] ?>"<?= ($moneda['idmoneda'] == $importacion['idmoneda']) ? " selected" : "" ?>><?= $moneda['moneda'] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
         <h4 class="subTitleB"><i class="fa fa-calendar"></i> Fecha de Pedido</h4>
         <div class="row form-group inline-form-custom">
             <div class="col-xs-12">
@@ -33,14 +43,14 @@
 
         <div class="row form-group inline-form-custom">
             <div class="col-xs-8 txC">
-                <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Artículo" placeholderauto="Artículo inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un artículo." objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="cube">
+                <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Artículo" placeholderauto="Artículo inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un artículo." objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="cube" required autofocus>
                 <input type="hidden" id="articulo" name="idarticulo" value="">
             </div>
             <div class="col-xs-2 txC">
-                <input type="text" name="cantidad" placeholder="Cantidad" class="form-control">
+                <input type="text" name="cantidad" placeholder="Cantidad" class="form-control" required>
             </div>
             <div class="col-xs-2 txC">
-                <input type="text" name="costo_fob" placeholder="Costo FOB" class="form-control">
+                <input type="text" name="costo_fob" placeholder="Costo FOB" class="form-control" required>
             </div>
         </div>
         <div class="row txC">
@@ -89,21 +99,26 @@
             <div class="col-xs-2 txC">
                 <input type="text" value="<?= number_format($item['cantidad'] * $item['costo_fob'], 2) ?>" class="form-control txR" disabled="">
             </div>
+            <div class="col-xs-2 txC">
+                <button onclick="borrar_item('<?=$item['articulo']?>','<?=$item['idimportacion_item']?>');" class="btn btn-danger btn-xs tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Eliminar <?=$item['articulo']?>">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
         </div>
     <?php } ?>
 
     <div class="row form-group inline-form-custom bg-brown">
         <div class="col-xs-4 txC">
-            <strong>Artículos Totales: <?=count($items)?></strong>
+            <strong>Artículos Totales: <?= count($items) ?></strong>
         </div>
         <div class="col-xs-2 txC">
-            <strong>Cantidad: <?=$cantidad?></strong>
+            <strong>Cantidad: <?= $cantidad ?></strong>
         </div>
         <div class="col-xs-2 txC">
             <strong>&nbsp;</strong>
         </div>
         <div class="col-xs-2 txC">
-            <strong>Total: <?=number_format($total, 2)?></strong>
+            <strong>Total: <?= number_format($total, 2) ?></strong>
         </div>
     </div>
 

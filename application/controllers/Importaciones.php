@@ -52,50 +52,54 @@ class Importaciones extends CI_Controller {
                 $log = array(
                     'tabla' => 'importaciones',
                     'idtabla' => $id,
-                    'texto' => 'Se agregó la importación '.$id.'<br>'.
-                    'Con número de Proveedor: '.$datos['idproveedor'].'<br>'.
-                    'ID Moneda: '.$datos['idmoneda'],
+                    'texto' => 'Se agregó la importación ' . $id . '<br>' .
+                    'Con número de Proveedor: ' . $datos['idproveedor'] . '<br>' .
+                    'ID Moneda: ' . $datos['idmoneda'],
                     'idusuario' => $data['session']['SID'],
                     'tipo' => 'add'
                 );
 
                 $this->log_model->set($log);
-                
+
                 redirect('/importaciones/agregar_items/' . $id . '/', 'refresh');
             }
         }
 
         $data['monedas'] = $this->monedas_model->gets();
-        
+
         $this->load->view('layout/app', $data);
     }
-    
+
     public function agregar_items($idimportacion = null) {
-        if(!$idimportacion) {
+        if (!$idimportacion) {
             redirect('/importaciones/listar/', 'refresh');
         }
-        $data['title'] = 'Agregar Importación';
+        $data['title'] = 'Modificar Importación';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/importaciones/js/agregar_items.js'
+        );
         $data['view'] = 'importaciones/agregar_items';
-        
+
         $this->form_validation->set_rules('empresa', 'Empresa', 'required|integer');
+        $this->form_validation->set_rules('moneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('fecha_pedido', 'Fecha de Pedido', 'required');
         $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
         $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
         $this->form_validation->set_rules('costo_fob', 'Costo FOB', 'required');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             
         } else {
             $datos = array(
                 'idproveedor' => $this->input->post('empresa'),
+                'idmoneda' => $this->input->post('moneda'),
                 'fecha_pedido' => $this->formatear_fecha($this->input->post('fecha_pedido')),
                 'actualizado_por' => $data['session']['SID']
             );
             $this->importaciones_model->update($datos, $idimportacion);
-            
+
             $datos = array(
                 'idimportacion' => $idimportacion,
                 'idarticulo' => $this->input->post('idarticulo'),
@@ -104,43 +108,40 @@ class Importaciones extends CI_Controller {
                 'costo_fob' => $this->input->post('costo_fob')
             );
             $this->importaciones_model->set_item($datos);
-            
-            
         }
-        
+
         $datos = array(
             'idimportacion' => $idimportacion
         );
         $data['importacion'] = $this->importaciones_model->get_where($datos);
         $data['importacion']['fecha_pedido'] = $this->formatear_fecha_para_mostrar($data['importacion']['fecha_pedido']);
-        
+
         $data['proveedor'] = $this->empresas_model->get_where(array('idempresa' => $data['importacion']['idproveedor']));
-        
+
         $datos = array(
             'importaciones_items.idimportacion' => $idimportacion,
             'importaciones_items.estado' => 'A'
         );
         $data['items'] = $this->importaciones_model->gets_items($datos);
-                
+
+        $data['monedas'] = $this->monedas_model->gets();
+
         $this->load->view('layout/app', $data);
     }
-    
+
     public function listar($pagina = 0) {
         $data['title'] = 'Listado de Importaciones';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         $data['view'] = 'importaciones/listar';
-        
-        
-        
-        
-        
+
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
 
         $where = $this->input->get();
-        $where['importaciones.estado'] = 'P';
+        //$where['importaciones.estado'] = 'P';
 
         /*
          * inicio paginador
@@ -172,12 +173,30 @@ class Importaciones extends CI_Controller {
          */
 
         $data['importaciones'] = $this->importaciones_model->gets_where_limit($where, $per_page, $pagina);
+        foreach ($data['importaciones'] as $key => $value) {
+            $data['importaciones'][$key]['cantidad_items'] = $this->importaciones_model->get_cantidad_items($value['idimportacion']);
+        }
 
-        
-        
-        
-        
         $this->load->view('layout/app', $data);
+    }
+
+    public function borrar_item($idimportacion_item) {
+        $datos = array(
+            'estado' => 'I'
+        );
+        $resultado = $this->importaciones_model->update_item($datos, $idimportacion_item);
+        if ($resultado) {
+            $json = array(
+                'status' => 'ok'
+            );
+            echo json_encode($json);
+        } else {
+            $json = array(
+                'status' => 'error',
+                'data' => '<p>No se pudo eliminar el item.</p>'
+            );
+            echo json_encode($json);
+        }
     }
 
     private function formatear_fecha($fecha) {
@@ -201,6 +220,7 @@ class Importaciones extends CI_Controller {
 
         return $aux;
     }
+
 }
 
 ?>

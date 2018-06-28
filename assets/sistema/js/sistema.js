@@ -12,6 +12,7 @@ $(document).ready(function(){
 	SetAutoComplete();
 	closeWindow();
   SidebarMenu();
+  validateOnSubmit();
 	if($("input[type='file']").length>0)
 	{
 	  CustomizedFilefield();
@@ -215,8 +216,11 @@ function inputMask()
 }
 
 //////////////////////////////////////////////////// Notify //////////////////////////////////////////////////////
-function notifyError(msgNotify)
+function notifyError(msgNotify,delay)
 {
+    if(typeof delay === "undefined") {
+        delay = 30000;
+    }
     $.notify({
         // options
         message: '<div class="txC"><i class="fa fa-exclamation-circle"></i> '+msgNotify+'</div>'
@@ -224,7 +228,7 @@ function notifyError(msgNotify)
         // settings
         type: 'danger',
         allow_dismiss: true,
-        delay: 30000,
+        delay: delay,
         placement: {
             from: "top",
             align: "center"
@@ -232,8 +236,11 @@ function notifyError(msgNotify)
     });
 }
 
-function notifySuccess(msgNotify)
+function notifySuccess(msgNotify,delay)
 {
+    if(typeof delay === "undefined") {
+        delay = 15000;
+    }
     $.notify({
         // options
         message: '<div class="txC"><i class="fa fa-check-circle"></i><br>'+msgNotify+'</div>'
@@ -241,7 +248,7 @@ function notifySuccess(msgNotify)
         // settings
         type: 'success',
         allow_dismiss: true,
-        delay: 15000,
+        delay: delay,
         placement: {
             from: "bottom",
             align: "left"
@@ -249,8 +256,11 @@ function notifySuccess(msgNotify)
     });
 }
 
-function notifyInfo(msgNotify)
+function notifyInfo(msgNotify,delay)
 {
+    if(typeof delay === "undefined") {
+        delay = 15000;
+    }
     $.notify({
         // options
         message: '<div class="txC"><i class="fa fa-info-circle"></i><br>'+msgNotify+'</div>'
@@ -258,7 +268,7 @@ function notifyInfo(msgNotify)
         // settings
         type: 'info',
         allow_dismiss: true,
-        delay: 15000,
+        delay: delay,
         placement: {
             from: "bottom",
             align: "left"
@@ -266,8 +276,11 @@ function notifyInfo(msgNotify)
     });
 }
 
-function notifyWarning(msgNotify)
+function notifyWarning(msgNotify,delay)
 {
+    if(typeof delay === "undefined") {
+        delay = 30000;
+    }
     $.notify({
         // options
         message: '<div class="txC"><i class="fa fa-warning"></i><br>'+msgNotify+'</div>'
@@ -275,7 +288,7 @@ function notifyWarning(msgNotify)
         // settings
         type: 'warning',
         allow_dismiss: true,
-        delay: 30000,
+        delay: delay,
         placement: {
             from: "bottom",
             align: "left"
@@ -431,6 +444,40 @@ function setup() {
 }
 
 //////////////////////////////////////////////////// Submit Data //////////////////////////////////////////////////////
+function validateOnSubmit()
+{
+  $("form").on("submit",function(evento){
+    evento.preventDefault();
+    var formulario = $(this);
+    var textoError = formulario.attr("error");
+    if(!textoError) textoError = "Compruebe que los datos ingresados sean correctos.";
+    var delay = 10000;
+    if(validador.validateFields(formulario))
+    {
+      askOnSubmit(formulario,evento)
+    }else{
+      notifyError(textoError,delay);
+    }
+  });
+}
+
+function askOnSubmit(formulario)
+{
+  var textoConfirmacion = formulario.attr("confirmacion");
+  if(textoConfirmacion)
+  {
+    alertify.confirm(textoConfirmacion, function(e){
+      if(e)
+      {
+        formulario.unbind('submit').submit();
+      }
+    });
+  }else{
+    formulario.unbind('submit').submit();
+  }
+}
+
+
 function submitData()
 {
     var formFiles;
@@ -514,7 +561,7 @@ function sumbitFields(process,haveData,noData){
 
 function askAndSubmit(target,object,qtext="¿Desea guardar la informaci&oacute;n?",etext="Ha ocurrido un error en el proceso de guardado.",form='*')
 {
-	if(validate.validateFields(form))
+	if(validador.validateFields(form))
 	{
 		alertify.confirm(qtext, function(e){
 			if(e)
@@ -569,15 +616,15 @@ $(function(){
 });
 
 //////////////////////////////////////////////////// Validation ///////////////////////////////////////////////////////////////
-var validate    = new ValidateFields();
+var validador    = new ValidateFields();
 $(function(){
     validateDivChange();
 });
 function validateDivChange()
 {
-  validate.createErrorDivs();
+  validador.createErrorDivs();
   $(validateElements).change(function(){
-        validate.validateOneField(this);
+        validador.validateOneField(this);
     });
 }
 //////////////////////////////////////////////////// Logout ////////////////////////////////////////////////////

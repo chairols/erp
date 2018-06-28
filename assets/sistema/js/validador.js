@@ -39,7 +39,7 @@ VALIDATION ATRIBUTES:
 	Declaration: 'mustBeChecked="3///Only 3 of the checkboxes can be checked///limited"'
 	Declaration: 'mustBeChecked="2///Only 2 of the checkboxes can be checked///strict"'
 	Data: Value///Text///(Mode)
-	
+
 9)	validateMaxValue: Checks if the field reaches a maximum numeric value.
 	Declaration: 'validateMaxValue="25.07///Please, enter a number lower than 25.07"'
 	Data: MaxVal///Text
@@ -100,7 +100,7 @@ VALIDATION ATRIBUTES:
 	ValidateFields.prototype.createErrorDivs = function()
 	{
 		$(validateTag+'[id$="ErrorDiv"]').remove();
-		
+
 		$(validateElements).each( function(){
 			$(this).parent().append('<'+validateTag+' id="'+$(this).attr("id")+'ErrorDiv" class="'+validateErrorClass+'"></'+validateTag+'>');
 		});
@@ -133,7 +133,7 @@ VALIDATION ATRIBUTES:
 		else
 			return false
 	}
-	
+
 	ValidateFields.prototype.minValue	= function(object)
 	{
 		var	minVal;
@@ -175,7 +175,7 @@ VALIDATION ATRIBUTES:
 		else
 			return false
 	}
-	
+
 	ValidateFields.prototype.maxValue	= function(object)
 	{
 		var	maxVal;
@@ -368,7 +368,7 @@ VALIDATION ATRIBUTES:
 			return false;
 		}
 	}
-	
+
 	ValidateFields.prototype.getLastValidation = function()
 	{
 		return validateErrorElements;
@@ -385,14 +385,21 @@ VALIDATION ATRIBUTES:
 		{
 			validateObject	= $(validateElements);
 		}else{
-			var elements = validateElements.split(',');
-			validateObject	= $('#'+Form+' '+elements.join(',#'+Form+' '));
-			//alert('#'+Form+' '+elements.join(',#'+Form+' '));
-			//validateObject	= $('#'+Form+' '+validateElements);
+			if(typeof Form === 'object')
+			{
+				var formid = Form.attr('id');
+				if(!formid)
+				{
+					Form.attr('id','unnamedform1234');
+					formid = Form.attr('id');
+				}
+				var elements = validateElements.split(',');
+				validateObject	= $('#'+formid+' '+elements.join(',#'+formid+' '));
+			}else{
+				var elements = validateElements.split(',');
+				validateObject	= $('#'+Form+' '+elements.join(',#'+Form+' '));
+			}
 		}
-			
-		//console.log($('#'+Form+' '+validateElements));
-		//validateObject	= $('#'+Form).find(validateElements);
 		if(!validateObject.attr('id')) validateValid	= false;
 
 
@@ -426,7 +433,7 @@ VALIDATION ATRIBUTES:
 				$("#"+$(object).attr("id")+"ErrorDiv").html($(object).attr("validateEmpty"));
 
 			}
-			
+
 			if(valid && ValidateFields.prototype.minValue(object))
 			{
 				valid	= false;
@@ -440,7 +447,7 @@ VALIDATION ATRIBUTES:
 				var text	= $(object).attr("validateMinLength").substring($(object).attr("validateMinLength").indexOf(validateDelimiter)+validateDelimiter.length);
 				$("#"+$(object).attr("id")+"ErrorDiv").html(text);
 			}
-			
+
 			if(valid && ValidateFields.prototype.maxValue(object))
 			{
 				valid	= false;

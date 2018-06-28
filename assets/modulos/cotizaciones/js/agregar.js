@@ -19,31 +19,21 @@ $(document).ready(function(){
 
 ///////////////////////// CREATE/EDIT ////////////////////////////////////
 $(function(){
-	var role = 'Quotation'
-	var msg = $("#action").val();
-	var params = '';
-	if(get['customer'])
-		params += '&customer='+get['customer'];
-	if(get['provider'])	
-		params += '&provider='+get['provider'];
-	if(get['international'])	
-		params += '&international='+get['international'];
-	$("#BtnCreate").click(function(){
-		var element = $('#company option:selected').html();
-		var target	= 'list.php?msg='+msg+params+'&element='+element;
-		askAndSubmit(target,role,'¿Desea crear la cotizaci&oacute;n de <b>'+element+'</b>?','','QuotationForm');
-	});
-	// $("#BtnCreateNext").click(function(){
-	// 	var element = $('#company option:selected').html();
-	// 	var target		= 'new.php?element='+element+'&msg='+msg+params;
-	// 	askAndSubmit(target,role,'¿Desea crear la cotizaci&oacute;n de <b>'+element+'</b>?','','QuotationForm');
+
+	// $("#BtnCreate").click(function(evento){
+	// 	evento.preventDefault();
+	// 	if(validador.validateFields("Crear"))
+	// 	{$("#Crear").submit();}
+	// 	else
+	// 	{notifyError('Compruebe los campos.');}
 	// });
+
 	$("#BtnEdit").click(function(){
 		var element = $('#company option:selected').html();
 		var target		= 'list.php?msg='+msg+params+'&element='+element;
 		askAndSubmit(target,role,'¿Desea modificar la cotizaci&oacute;n de <b>'+element+'</b>?','','QuotationForm');
 	});
-	
+
 	$("#SaveAndSend").click(function(){
 		if($("#action").val()=='insert')
 			var action = 'crear';
@@ -51,10 +41,10 @@ $(function(){
 			var action = 'editar';
 		var element = $('#company option:selected').html();
 		var target		= 'list.php?msg='+msg+params+'&emailsent='+$('#receiver').val()+'&element='+element;
-		askAndSubmit(target,role,'¿Desea '+action+' la cotizaci&oacute;n de <b>'+element+'</b> y enviarla por email al destinatario <b>'+$("#receiver").val()+'</b>?','','EmailWindowForm');	
+		askAndSubmit(target,role,'¿Desea '+action+' la cotizaci&oacute;n de <b>'+element+'</b> y enviarla por email al destinatario <b>'+$("#receiver").val()+'</b>?','','EmailWindowForm');
 	});
-	
-	
+
+
 });
 
 
@@ -122,14 +112,14 @@ function updateExpireDate()
 
 function priceImputMask(id)
 {
-	
+
 	$("#price_"+id).change(function(){
 		var decimal = $(this).val().split(".");
 		if(decimal[1]=="__")
 		{
 			$("#price_"+id).val(decimal[0]+".00");
 		}
-	});	
+	});
 }
 
 function showHistoryButtons()
@@ -138,7 +128,7 @@ function showHistoryButtons()
 		checkHistoryButtons();
 	});
 	// $("#company").change(function(){
-		
+
 	// });
 }
 
@@ -160,7 +150,7 @@ function checkHistoryButtons()
 			$("#HistoryItem"+itemid).addClass("Hidden");
 		}
 	})
-	
+
 }
 
 //////////////////////////// QUOTATION ITEMS //////////////////////////////////
@@ -301,8 +291,8 @@ function calculateRowPrice()
 		else
 			var total = 0.00;
 		$("#item_number_"+id).attr("total",total);
-		$("#item_number_"+id).html("$ "+total.formatMoney(2));	
-		
+		$("#item_number_"+id).html("$ "+total.formatMoney(2));
+
 		calculateTotalQuotationPrice();
 		calculateTotalQuotationQuantity();
 	});
@@ -316,7 +306,7 @@ function calculateTotalQuotationQuantity()
 		if(val>0)
 			total = total + val;
 	});
-	
+
 	$("#TotalQuantity").html(total);
 }
 
@@ -344,12 +334,12 @@ function changeDates()
 					$(this).val(days);
 					$(this).change();
 			});
-			
+
 			$(".OrderDay").each(function(){
 				if(!$(this).hasClass('Restricted'))
 					$(this).html(days);
 			});
-			
+
 			$(".OrderDate").each(function(){
 				if(!$(this).hasClass('Restricted'))
 				{
@@ -371,7 +361,7 @@ function showHistoryWindow()
 		$("#product").val($("#item_"+id).val());
 		$("#item").val(id);
 		FillTraceabilityWindow();
-	})	
+	})
 }
 
 /////////////////////////// LOAD AGENT SELECT ////////////////////////////////
@@ -399,10 +389,10 @@ function showHistoryWindow()
 //             if(data)
 //             {
 //                 $('#agent-wrapper').html(data);
-                
+
 //             }else{
 //                 $('#agent-wrapper').html('<select id="agents" class="form-control chosenSelect" disabled="disabled" ><option value="0">Sin Contacto</option</select>');
-                
+
 //             }
 //             chosenSelect();
 //         }

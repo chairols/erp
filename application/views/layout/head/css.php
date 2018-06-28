@@ -12,8 +12,8 @@
 <!-- Date Picker -->
 <link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">
 <!-- Alertify -->
-<link rel="stylesheet" href="/assets/vendors/alertifyjs/css/alertify.min.css">
-<link rel="stylesheet" href="/assets/vendors/alertifyjs/css/themes/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="/assets/vendors/alertifyjs/css/alertify.min.css"> -->
+<!-- <link rel="stylesheet" href="/assets/vendors/alertifyjs/css/themes/bootstrap.min.css"> -->
 <!-- jsTree -->
 <link rel="stylesheet" href="/assets/vendors/jstree-3.3.5/dist/themes/default/style.min.css">
 <!-- Chosen Js -->

@@ -1,4 +1,18 @@
-////////////////// INITIALIZATION ///////////////////////
+/*------------------------------------------------------------*\
+|*                                                            *|
+|*               Funciones generales del sistema              *|
+|*                                                            *|
+\*------------------------------------------------------------*/
+
+
+/*
+|--------------------------------------------------------------------------
+| Inicialización
+|--------------------------------------------------------------------------
+| En esta función se declaran todas las funciones que deben ser
+| inicializadas al cargar la página
+|
+*/
 var process_url = "../../../core/resources/processes/proc.core.php";
 $(document).ready(function(){
   // var sidebarMenu = getCookie("sidebarmenu");
@@ -19,7 +33,22 @@ $(document).ready(function(){
 	}
 });
 
-///////// DATE PICKER //////////////////////
+/*
+|--------------------------------------------------------------------------
+| DatePicker
+|--------------------------------------------------------------------------
+| DatePicker es un vendor de js que sirve para transformar inputs de texto
+| en inputs de fecha con un calendario desplegable.
+|
+| Consta de dos funciones:
+|
+| datePicker - Recibe un elemento del DOM y lo transforma en datePicker.
+|
+| setDatePicker - Establece los parámetros del calendario y busca todos
+| los inputs que tengan la clase "datePicker" y los pasa como argumento de
+| la función datePicker.
+|
+*/
 function datePicker(element)
 {
   $(element).datepicker({
@@ -52,7 +81,49 @@ function setDatePicker(element)
   }
 
 }
-//////////////////////// AUTOCOMPLETE ///////////////////////
+/*
+|--------------------------------------------------------------------------
+| AutoComplete
+|--------------------------------------------------------------------------
+| AutoComplete es un vendor de js que sirve para transformar inputs de texto
+| en inputs de busqueda con opciones desplegables, que pueden ser requeridas
+| mediante un ajax.
+|
+| Consta de dos funciones:
+|
+| SetAutoComplete - Recibe 2 parámetros: "selector" que es la clase con la que
+| buscará los inputs y "mode" que determina el modo en el que se visualizarán
+| los resultados de la búsqueda.
+| Esta función busca cada input que contenga la clase especificada
+| ("TextAutoComplete" por defecto) e indicará la configuración inicial
+| de acuerdo a los atributos del input. Luego invocará a la función
+| "AutoCompleteInput", pasando como parámetro la configuración del input.
+|
+| AutoCompleteInput - Recibe un ID y otros parámetros de configuración y
+| transforma el input en un AutoComplete.
+| Cuenta con la opción de modificar su comportamiento, declarando funciones
+| que reemplacen a las propias, o se ejecuten en otra instancia:
+|
+| "autocompleteResponseFunction":
+| En esta función, si se declara, se puede agregar comportamiento luego del
+| retorno de la llamada de AJAX.
+|
+| "autocompleteOnSelectBeforeFunction":
+| Obtiene un evento, el término de búsqueda y la opción selecionada como
+| parámetros. Si se declara, se puede manipular los parametros y agregar
+| funcionalidad previa a la perparación de los datos que se enviarán por AJAX.
+|
+| "autocompleteOnSelectReplaceFunction":
+| Obtiene un evento, el término de búsqueda y la opción selecionada como
+| parámetros. Si se declara, se puede manipular los parametros y agregar
+| funcionalidad reemplazando a la perparación de los datos que se enviarán por
+| AJAX.
+|
+| "autocompleteOnSelectAfterFunction":
+| Obtiene un evento, el término de búsqueda y la opción selecionada como
+| parámetros. Si se declara, se puede manipular los parametros y agregar
+| funcionalidad luego de la perparación de los datos que se enviarán por AJAX.
+*/
 function SetAutoComplete(selector,mode)
 {
   if(typeof selector==="undefined")

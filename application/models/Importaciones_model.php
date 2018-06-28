@@ -35,6 +35,14 @@ class Importaciones_model extends CI_Model {
     /*
      *  Importaciones/agregar_items
      */
+    public function update_item($where, $idimportacion) {
+        $this->db->update('importaciones_items', $where, array('idimportacion_item' => $idimportacion));
+        return $this->db->affected_rows();
+    }
+    
+    /*
+     *  Importaciones/agregar_items
+     */
     public function set_item($datos) {
         $this->db->insert('importaciones_items', $datos);
         return $this->db->insert_id();
@@ -62,6 +70,8 @@ class Importaciones_model extends CI_Model {
     public function get_cantidad_where($where) {
         $this->db->select('*');
         $this->db->from('importaciones');
+        $this->db->join('empresas', 'importaciones.idproveedor = empresas.idempresa');
+        $this->db->join('monedas', 'importaciones.idmoneda = monedas.idmoneda');
         $this->db->like($where);
         
         $query = $this->db->count_all_results();
@@ -72,15 +82,26 @@ class Importaciones_model extends CI_Model {
      *  Importaciones/listar
      */
     public function gets_where_limit($where, $per_page, $pagina) {
-        $this->db->select('*');
+        $this->db->select('importaciones.*, empresas.empresa, monedas.moneda');
         $this->db->from('importaciones');
-        
+        $this->db->join('empresas', 'importaciones.idproveedor = empresas.idempresa');
+        $this->db->join('monedas', 'importaciones.idmoneda = monedas.idmoneda');
         $this->db->like($where);
         $this->db->order_by('idimportacion DESC');
         $this->db->limit($per_page, $pagina);
         
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    
+    public function get_cantidad_items($idimportacion) {
+        $this->db->select('*');
+        $this->db->from('importaciones_items');
+        $this->db->like(array('idimportacion' => $idimportacion, 'estado' => 'A'));
+        
+        $query = $this->db->count_all_results();
+        return $query;
     }
 }
 

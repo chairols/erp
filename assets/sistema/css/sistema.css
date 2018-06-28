@@ -1417,7 +1417,7 @@ html {
   opacity: 0.8; }
 
 .alertify {
-  position: fixed;
+  
   z-index: 99999;
   top: 20%;
   left: 50%;
@@ -1469,7 +1469,7 @@ html {
   box-sizing: border-box;
   font-size: 100%; }
 
-/* line-height and font-size for input button */
+/* line-height and font-size for input button
  * line-height: 1.5
  * font-size: 100%
  * display: inline-block

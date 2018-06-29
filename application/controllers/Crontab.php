@@ -19,19 +19,13 @@ class Crontab extends CI_Controller {
         $certificado = 'upload/certificados/PCAFIP_12e5d279ba7d69a7.crt';
         $clave = "upload/certificados/privada";
         
-        $urlwsaaReal = "https://wsaa.afip.gov.ar/ws/services/LoginCms";
-        $urlwswReal = "https://servicios1.afip.gov.ar/wsfev1/service.asmx";
-        
-        $urlwsaaHomologacion = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
-        $urlwswHomologacion = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx";
-        
         // Configuración
         $CUIT = 33647656779;
-        $urlwsaa = $urlwsaaReal;
+        $urlwsaa = URLWSAA;
 
         $wsfe = new WsFE();
         $wsfe->CUIT = floatval($CUIT);
-        $wsfe->setURL($urlwswReal);
+        $wsfe->setURL(URLWSW);
 
         if ($wsfe->Login($certificado, $clave, $urlwsaa)) {
             

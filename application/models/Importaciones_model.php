@@ -26,6 +26,15 @@ class Importaciones_model extends CI_Model {
     }
     
     /*
+     *  Importaciones/modificar_item
+     */
+    public function get_where_item($where) {
+        $query = $this->db->get_where('importaciones_items', $where);
+        
+        return $query->row_array();
+    }
+    
+    /*
      *  Importaciones/agregar_items
      */
     public function update($where, $idimportacion) {
@@ -35,8 +44,8 @@ class Importaciones_model extends CI_Model {
     /*
      *  Importaciones/agregar_items
      */
-    public function update_item($where, $idimportacion) {
-        $this->db->update('importaciones_items', $where, array('idimportacion_item' => $idimportacion));
+    public function update_item($where, $idimportacion_item) {
+        $this->db->update('importaciones_items', $where, array('idimportacion_item' => $idimportacion_item));
         return $this->db->affected_rows();
     }
     

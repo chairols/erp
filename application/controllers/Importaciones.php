@@ -17,7 +17,9 @@ class Importaciones extends CI_Controller {
             'log_model',
             'empresas_model',
             'parametros_model',
-            'monedas_model'
+            'monedas_model',
+            'articulos_model',
+            'marcas_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -197,6 +199,51 @@ class Importaciones extends CI_Controller {
             );
             echo json_encode($json);
         }
+    }
+    
+    public function modificar_item($idimportacion_item = null) {
+        if (!$idimportacion_item) {
+            redirect('/importaciones/listar/', 'refresh');
+        }
+        $data['title'] = 'Modificar Item de Pedido de Importación';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'importaciones/modificar_item';
+        
+        $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
+        $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
+        $this->form_validation->set_rules('costo_fob', 'Costo FOB', 'required|numeric');
+        
+        if($this->form_validation->run() == FALSE) {
+            
+        } else {
+            $datos = array(
+                'idarticulo' => $this->input->post('idarticulo'),
+                'cantidad' => $this->input->post('cantidad'),
+                'cantidad_pendiente' => $this->input->post('cantidad'),
+                'costo_fob' => $this->input->post('costo_fob')
+            );
+            
+            $this->importaciones_model->update_item($datos, $idimportacion_item);
+        }
+        
+        $datos = array(
+            'idimportacion_item' => $idimportacion_item
+        );
+        $data['item'] = $this->importaciones_model->get_where_item($datos);
+        
+        $datos = array(
+            'idarticulo' => $data['item']['idarticulo']
+        );
+        $data['articulo'] = $this->articulos_model->get_where($datos);
+        
+        $datos = array(
+            'idmarca' => $data['articulo']['idmarca']
+        );
+        $data['articulo']['marca'] = $this->marcas_model->get_where($datos);
+        
+        $this->load->view('layout/app', $data);
     }
 
     private function formatear_fecha($fecha) {

@@ -42,6 +42,8 @@ class Articulos_model extends CI_Model {
     
     
     /*
+     *  Importaciones/modificar_item
+     * 
      *  Importar/actualizar_articulos
      */
     public function get_where($where) {

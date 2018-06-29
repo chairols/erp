@@ -100,7 +100,12 @@
                 <input type="text" value="<?= number_format($item['cantidad'] * $item['costo_fob'], 2) ?>" class="form-control txR" disabled="">
             </div>
             <div class="col-xs-2 txC">
-                <button onclick="borrar_item('<?=$item['articulo']?>','<?=$item['idimportacion_item']?>');" class="btn btn-danger btn-xs tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Eliminar <?=$item['articulo']?>">
+                <a href="/importaciones/modificar_item/<?= $item['idimportacion_item'] ?>/" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar <?= $item['articulo'] ?>" class="tooltips">
+                    <button class="btn btn-primary btn-xs">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </a>
+                <button onclick="borrar_item('<?= $item['articulo'] ?>', '<?= $item['idimportacion_item'] ?>');" class="btn btn-danger btn-xs tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Eliminar <?= $item['articulo'] ?>">
                     <i class="fa fa-trash"></i>
                 </button>
             </div>

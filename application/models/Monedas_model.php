@@ -72,6 +72,22 @@ class Monedas_model extends CI_Model {
         $this->db->update('monedas', $where, array('idmoneda' => $idmoneda));
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Crontab/monedas
+     */
+    public function get_where_monedas_historial($where) {
+        $query = $this->db->get_where('monedas_historial', $where);
+        return $query->row_array();
+    }
+    
+    /*
+     *  Crontab/monedas
+     */
+    public function set_monedas_historial($datos) {
+        $this->db->insert('monedas_historial', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

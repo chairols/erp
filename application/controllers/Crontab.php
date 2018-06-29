@@ -20,7 +20,8 @@ class Crontab extends CI_Controller {
         $clave = "upload/certificados/privada";
         
         // Configuración
-        
+        $CUIT = 33647656779;
+        $urlwsaa = URLWSAA;
 
         $wsfe = new WsFE();
         $wsfe->CUIT = floatval($CUIT);

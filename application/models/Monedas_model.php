@@ -88,6 +88,18 @@ class Monedas_model extends CI_Model {
         $this->db->insert('monedas_historial', $datos);
         return $this->db->insert_id();
     }
+    
+    public function get_ultima_cotizacion_por_monedas($idmoneda) {
+        $query = $this->db->query("SELECT * 
+                                    FROM 
+                                        monedas_historial mh, 
+                                        monedas m
+                                    WHERE 
+                                        mh.fecha = (SELECT MAX(fecha) FROM monedas_historial) AND
+                                        mh.idmoneda = '$idmoneda' AND
+                                        m.idmoneda = mh.idmoneda");
+        return $query->row_array();
+    }
 }
 
 ?>

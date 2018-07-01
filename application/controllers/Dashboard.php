@@ -10,6 +10,9 @@ class Dashboard extends CI_Controller {
             'session',
             'r_session'
         ));
+        $this->load->model(array(
+            'monedas_model'
+        ));
 
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
@@ -21,6 +24,8 @@ class Dashboard extends CI_Controller {
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
 
+        $data['dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1); // 1 es id del dolar
+        
         $data['view'] = 'dashboard/index';
         $this->load->view('layout/app', $data);
     }

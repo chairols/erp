@@ -69,7 +69,7 @@ class Monedas extends CI_Controller {
     }
 
     public function agregar() {
-        $data['title'] = 'Agregar Menú';
+        $data['title'] = 'Agregar Moneda';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array(
@@ -145,7 +145,7 @@ class Monedas extends CI_Controller {
     }
 
     public function modificar($idmoneda = null) {
-        $data['title'] = 'Modificar Perfil';
+        $data['title'] = 'Modificar Moneda';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array(
@@ -216,7 +216,20 @@ class Monedas extends CI_Controller {
             }
         }
     }
-
+    
+    public function historial() {
+        $data['title'] = 'Histórico de Monedas';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'monedas/historial';
+        
+        
+        
+        $data['monedas'] = $this->monedas_model->gets();
+        
+        $this->load->view('layout/app', $data);
+    }
 }
 
 ?>

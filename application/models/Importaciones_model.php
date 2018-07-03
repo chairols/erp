@@ -112,6 +112,21 @@ class Importaciones_model extends CI_Model {
         $query = $this->db->count_all_results();
         return $query;
     }
+    
+    /*
+     *  Embarques/confirmacion
+     */
+    public function gets_where_group_by($where) {
+        $this->db->select('importaciones.*, empresas.empresa');
+        $this->db->from('importaciones');
+        $this->db->join('empresas', 'importaciones.idproveedor = empresas.idempresa');
+        $this->db->like($where);
+        $this->db->order_by('empresas.empresa');
+        $this->db->group_by('empresas.empresa');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

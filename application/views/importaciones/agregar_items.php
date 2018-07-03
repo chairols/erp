@@ -43,14 +43,14 @@
 
         <div class="row form-group inline-form-custom">
             <div class="col-xs-8 txC">
-                <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Artículo" placeholderauto="Artículo inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un artículo." objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="cube" required autofocus>
+                <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Artículo" placeholderauto="Artículo inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un artículo." objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="cube" autofocus>
                 <input type="hidden" id="articulo" name="idarticulo" value="">
             </div>
             <div class="col-xs-2 txC">
-                <input type="text" name="cantidad" placeholder="Cantidad" class="form-control" required>
+                <input type="text" name="cantidad" placeholder="Cantidad" class="form-control" validateOnlyNumbers="asdasds">
             </div>
             <div class="col-xs-2 txC">
-                <input type="text" name="costo_fob" placeholder="Costo FOB" class="form-control" required>
+                <input type="text" name="costo_fob" placeholder="Costo FOB" class="form-control">
             </div>
         </div>
         <div class="row txC">

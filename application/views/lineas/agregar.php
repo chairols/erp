@@ -9,7 +9,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-3">Línea</label>
                     <div class="col-md-6">
-                        <input type="text" maxlength="100" class="form-control" id="linea" placeholder="RODAMIENTO" autofocus>
+                        <input type="text" maxlength="100" class="form-control" id="linea" placeholder="RODAMIENTO" validateEmpty="asdasdas" autofocus>
                     </div>
                 </div>
                 <div class="form-group">

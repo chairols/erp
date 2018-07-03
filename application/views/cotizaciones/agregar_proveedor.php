@@ -1,7 +1,7 @@
 <?php $this->view('/cotizaciones/ventanas/agente'); ?>
 
 <div class="innerContainer main_form">
-  <form id="Crear" enctype="multipart/form-data" method="POST" confirmacion="asdasdaddas">
+  <form id="Crear" enctype="multipart/form-data" method="POST" confirmacion="asdasdaddas" error="Verifique que el proveedor haya sido seleccionado.">
     <input type="hidden" name="creation_date" id="creation_date" value="<?=date("Y-m-d")?>">
     <h4 class="subTitleB"><i class="fa fa-ship"></i> Proveedor</h4>
     <div class="row form-group inline-form-custom">

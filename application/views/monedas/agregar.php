@@ -9,7 +9,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-3">Moneda</label>
                     <div class="col-md-6">
-                        <input type="text" maxlength="100" class="form-control" id="moneda" placeholder="Euro" autofocus>
+                        <input type="text" maxlength="100" class="form-control" id="moneda" placeholder="Euro" validateOnlyNumbers="asdasds" autofocus>
                     </div>
                 </div>
                 <div class="form-group">

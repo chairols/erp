@@ -701,6 +701,8 @@ function validateDivChange()
 //////////////////////////////////////////////////// Logout ////////////////////////////////////////////////////
 $(function(){
   $("#Logout").click(function(){
+      alertify.labels.ok = "Si";
+      alertify.labels.cancel = "No";
       alertify.confirm("¿Desea salir?", function(e){
             if(e){
               var target      = '/usuarios/logout/';
@@ -715,7 +717,7 @@ $(function(){
               //     }
               // });
           }
-      }).set('labels', {ok:'Si', cancel:'No'});
+      });
   });
 });
 
@@ -940,8 +942,6 @@ function getLocal(name) {
 //////////////////////////////////////// LOADER ////////////////////////////////////////
 $(document).ajaxStart(function(){
     $("#CloseAjaxLoader").addClass('Hidden');
-    // $(".loader").removeClass("Hidden");
-    // $('html').css({ 'overflow': 'hidden', 'height': '100%' });
     showLoader();
 });
 
@@ -956,17 +956,6 @@ $(document).ajaxComplete(function(){
 
 function toggleLoader()
 {
-  // $('.loader').toggleClass('Hidden');
-  // $("#CloseAjaxLoader").addClass('Hidden');
-  //   if (!$('.loader').hasClass('Hidden')) {
-  //     // This prevents scroll on loader
-  //     setTimeout(function() {
-  //       $("#CloseAjaxLoader").removeClass('Hidden');
-  //     },10000);
-  //     $('html').css({ 'overflow': 'hidden', 'height': '100%' });
-  //   } else {
-  //     $('html').css({ 'overflow-Y': 'scroll', 'height': '100%' });
-  //   }
   if($(".loader").hasClass('Hidden'))
   {
     showLoader();

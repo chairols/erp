@@ -630,14 +630,14 @@ function sumbitFields(process,haveData,noData){
     });
 }
 
-function askAndSubmit(target,object,qtext="¿Desea guardar la informaci&oacute;n?",etext="Ha ocurrido un error en el proceso de guardado.",form='*')
+function askAndSubmit(target,qtext="¿Desea guardar la informaci&oacute;n?",etext="Ha ocurrido un error en el proceso de guardado.",form='*')
 {
 	if(validador.validateFields(form))
 	{
 		alertify.confirm(qtext, function(e){
 			if(e)
 			{
-				var process		= process_url+'?object='+object;
+				var process		= process_url;
 				var haveData	= function(returningData)
 				{
 					$("input,select").blur();
@@ -703,16 +703,17 @@ $(function(){
   $("#Logout").click(function(){
       alertify.confirm("¿Desea salir?", function(e){
             if(e){
-              var target      = '../../../core/modules/login/login.php';
-              var process     = process_url+'?object=CoreLogin&action=logout';
-              $.ajax({
-                  type: "POST",
-                  url: process,
-                  cache: false,
-                  success: function(){
-                      document.location = target;
-                  }
-              });
+              var target      = '/usuarios/logout/';
+              document.location = target;
+              // var process     = process_url+'?object=CoreLogin&action=logout';
+              // $.ajax({
+              //     type: "POST",
+              //     url: process,
+              //     cache: false,
+              //     success: function(){
+              //         document.location = target;
+              //     }
+              // });
           }
       }).set('labels', {ok:'Si', cancel:'No'});
   });

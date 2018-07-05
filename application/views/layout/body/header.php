@@ -244,7 +244,7 @@
                                 <a href="#" class="btn btn-default btn-flat">Mi Perfil</a>
                             </div>
                             <div class="pull-right">
-                                <a href="/usuarios/logout/" class="btn btn-default btn-flat">Salir</a>
+                                <a href="#" id="Logout" class="btn btn-default btn-flat">Salir</a>
                             </div>
                         </li>
                     </ul>

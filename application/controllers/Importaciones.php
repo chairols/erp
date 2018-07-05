@@ -27,7 +27,7 @@ class Importaciones extends CI_Controller {
     }
 
     public function agregar() {
-        $data['title'] = 'Agregar Importación';
+        $data['title'] = 'Agregar Pedido de Importación';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
@@ -242,6 +242,36 @@ class Importaciones extends CI_Controller {
             'idmarca' => $data['articulo']['idmarca']
         );
         $data['articulo']['marca'] = $this->marcas_model->get_where($datos);
+        
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function confirmacion() {
+        $data['title'] = 'Confirmar Pedido de Importación';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'importaciones/confirmacion';
+        
+        $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|numeric');
+        $this->form_validation->set_rules('fecha_confirmacion', 'Fecha de Confirmación', 'required');
+        
+        if($this->form_validation->run() == FALSE) {
+            
+        } else {
+            $datos = array(
+                'idproveedor' => $this->input->post('idproveedor'),
+                'fecha_confirmacion' => $this->formatear_fecha($this->input->post('fecha_confirmacion')),
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'idcreador' => $data['session']['SID']
+            );
+            
+            $id = $this->importaciones_model->set_importacion_confirmacion($datos);
+            
+            redirect('/importaciones/confirmacion_items/'.$id.'/', 'refresh');
+        }
+        
+        $data['proveedores'] = $this->importaciones_model->gets_proveedores_con_items_pendientes();
         
         $this->load->view('layout/app', $data);
     }

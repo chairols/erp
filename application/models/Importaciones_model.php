@@ -127,6 +127,26 @@ class Importaciones_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    public function gets_proveedores_con_items_pendientes() {
+        $query = $this->db->query("SELECT *
+                                    FROM
+                                        importaciones i,
+                                        empresas e
+                                    WHERE
+                                        i.importaciones_estado = 'P' AND
+                                        e.idempresa = i.idproveedor
+                                    GROUP BY
+                                        e.empresa
+                                    ORDER BY
+                                        e.empresa");
+        return $query->result_array();
+    }
+    
+    public function set_importacion_confirmacion($datos) {
+        $this->db->insert('importaciones_confirmaciones', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

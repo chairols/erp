@@ -1,24 +1,10 @@
 
 $("#agregar").click(function () {
-
-    alertify.defaults.transition = "slide";
-    alertify.defaults.theme.ok = "btn btn-success";
-    alertify.defaults.theme.cancel = "btn btn-danger";
-    alertify.defaults.theme.input = "form-control";
-    alertify.defaults.notifier = {
-        delay: 3,
-        position: 'bottom-right',
-        closeButton: false
-    };
-    alertify.defaults.glossary = {
-        ok: "Agregar",
-        cancel: "Cancelar"
-    };
-
-    alertify.confirm(
-            "<strong>¿Desea confirmar?</strong>",
-            "Se agregará el menú "+$("#menu").val(),
-            function () {
+    if (validador.validateFields("*"))
+    {
+        alertify.confirm("Se agregará el menú <strong>" + $("#menu").val() + "</strong><br><strong>¿Desea confirmar?</strong>", function (e) {
+            if (e)
+            {
                 datos = {
                     'icono': $("#icono").val(),
                     'titulo': $("#titulo").val(),
@@ -36,14 +22,11 @@ $("#agregar").click(function () {
 
                     },
                     success: function (data) {
-                        alertify.defaults.glossary = {
-                            ok: "Aceptar",
-                        };
                         resultado = $.parseJSON(data);
                         if (resultado['status'] == 'error') {
-                            alertify.alert('<strong>ERROR</strong>', resultado['data']);
+                            notifyError(resultado['data']);
                         } else if (resultado['status'] == 'ok') {
-                            alertify.success("Se agregó correctamente");
+                            notifySuccess("Se agregó correctamente");
                             document.getElementById("icono").value = "";
                             document.getElementById("titulo").value = "";
                             document.getElementById("menu").value = "";
@@ -52,10 +35,10 @@ $("#agregar").click(function () {
                         }
                     }
                 });
-            },
-            function () {
-                alertify.error("Se canceló la operación");
-            }
-    );
 
+            }
+        });
+    }
 });
+
+

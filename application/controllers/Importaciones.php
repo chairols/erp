@@ -275,6 +275,41 @@ class Importaciones extends CI_Controller {
         
         $this->load->view('layout/app', $data);
     }
+    
+    public function confirmacion_items($idimportacion_confirmacion = null) {
+        if($idimportacion_confirmacion == null) {
+            redirect('/importaciones/listar/', 'refresh');
+        }
+        $data['title'] = 'Confirmar Items de Pedidos';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/importaciones/js/confirmacion_items.js'
+        );
+        $data['view'] = 'importaciones/confirmacion_items';
+        
+        
+        $datos = array(
+            'idimportacion_confirmacion' => $idimportacion_confirmacion
+        );
+        $data['confirmacion'] = $this->importaciones_model->get_confirmacion_where($datos);
+        
+        $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($data['confirmacion']['idempresa']);
+        
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function items_backorder_ajax() {
+        $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($this->input->post('idempresa'));
+        $this->load->view('importaciones/items_backorder_ajax', $data);
+    }
+    
+    public function confirmacion_items_ajax() {
+        
+        var_dump($this->input->post());
+        
+        
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';

@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="row txC">
-            <button type="submit" class="btn btn-success btnGreen" confirmacion="¿Desea crear la Importación?" id="BtnCreate"><i class="fa fa-plus"></i> Crear Importación</button>
+            <button type="submit" class="btn btn-success btnGreen" confirmacion="¿Desea crear la Importación?" id="BtnCreate"><i class="fa fa-plus"></i> Crear Confirmación</button>
         </div>
     </form>
 </div>

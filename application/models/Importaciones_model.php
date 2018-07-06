@@ -128,6 +128,9 @@ class Importaciones_model extends CI_Model {
         return $query->result_array();
     }
     
+    /*
+     *  Importaciones/confirmacion
+     */
     public function gets_proveedores_con_items_pendientes() {
         $query = $this->db->query("SELECT *
                                     FROM
@@ -143,9 +146,40 @@ class Importaciones_model extends CI_Model {
         return $query->result_array();
     }
     
+    /*
+     *  Importaciones/confirmacion
+     */
     public function set_importacion_confirmacion($datos) {
         $this->db->insert('importaciones_confirmaciones', $datos);
         return $this->db->insert_id();
+    }
+    
+    /*
+     *  Importaciones/confirmacion_items
+     */
+    public function get_confirmacion_where($where) {
+        $this->db->select('*');
+        $this->db->from('importaciones_confirmaciones');
+        $this->db->join('empresas', 'importaciones_confirmaciones.idproveedor = empresas.idempresa');
+        $this->db->like($where);
+        
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+    
+    public function gets_items_backorder($idproveedor) {
+        $this->db->select('importaciones_items.*, importaciones.*, articulos.articulo, marcas.marca');
+        $this->db->from('importaciones_items');
+        $this->db->join('importaciones', 'importaciones_items.idimportacion = importaciones.idimportacion');
+        $this->db->join('articulos', 'importaciones_items.idarticulo = articulos.idarticulo');
+        $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca');
+        $this->db->where('importaciones_items.estado', 'A');
+        $this->db->where('importaciones_items.cantidad_pendiente >', '0');
+        $this->db->where('importaciones.idproveedor', $idproveedor);
+        
+        
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }
 

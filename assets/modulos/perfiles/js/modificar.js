@@ -1,24 +1,10 @@
 
 $("#actualizar").click(function () {
-
-    alertify.defaults.transition = "slide";
-    alertify.defaults.theme.ok = "btn btn-success";
-    alertify.defaults.theme.cancel = "btn btn-danger";
-    alertify.defaults.theme.input = "form-control";
-    alertify.defaults.notifier = {
-        delay: 3,
-        position: 'bottom-right',
-        closeButton: false
-    };
-    alertify.defaults.glossary = {
-        ok: "Actualizar",
-        cancel: "Cancelar"
-    };
-
-    alertify.confirm(
-            "<strong>¿Desea confirmar?</strong>",
-            "Se actualizará el perfil <strong>"+$("#perfil").val()+"</strong>",
-            function () {
+    if (validador.validateFields("*"))
+    {
+        alertify.confirm("Se actualizará el perfil <strong>" + $("#perfil").val() + "</strong><br><strong>¿Desea confirmar?</strong>", function (e) {
+            if (e)
+            {
                 datos = {
                     'perfil': $("#perfil").val(),
                     'idperfil': $("#idperfil").val(),
@@ -32,21 +18,18 @@ $("#actualizar").click(function () {
 
                     },
                     success: function (data) {
-                        alertify.defaults.glossary = {
-                            ok: "Aceptar",
-                        };
                         resultado = $.parseJSON(data);
                         if (resultado['status'] == 'error') {
-                            alertify.alert('<strong>ERROR</strong>', resultado['data']);
+                            notifyError(resultado['data']);
                         } else if (resultado['status'] == 'ok') {
-                            alertify.success("Se actualizó correctamente");
+                            notifySuccess("Se actualizó correctamente");
                         }
                     }
                 });
-            },
-            function () {
-                alertify.error("Se canceló la operación");
-            }
-    );
 
+            }
+        });
+    }
 });
+
+

@@ -25,6 +25,9 @@ class Embarques extends CI_Controller {
         $data['javascript'] = array();
         $data['view'] = 'embarques/confirmacion';
         
+        
+        
+        
         $datos = array(
             'importaciones_estado' => 'P'
         );

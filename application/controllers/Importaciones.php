@@ -27,7 +27,7 @@ class Importaciones extends CI_Controller {
     }
 
     public function agregar() {
-        $data['title'] = 'Agregar Importación';
+        $data['title'] = 'Agregar Pedido de Importación';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
@@ -244,6 +244,71 @@ class Importaciones extends CI_Controller {
         $data['articulo']['marca'] = $this->marcas_model->get_where($datos);
         
         $this->load->view('layout/app', $data);
+    }
+    
+    public function confirmacion() {
+        $data['title'] = 'Confirmar Pedido de Importación';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'importaciones/confirmacion';
+        
+        $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|numeric');
+        $this->form_validation->set_rules('fecha_confirmacion', 'Fecha de Confirmación', 'required');
+        
+        if($this->form_validation->run() == FALSE) {
+            
+        } else {
+            $datos = array(
+                'idproveedor' => $this->input->post('idproveedor'),
+                'fecha_confirmacion' => $this->formatear_fecha($this->input->post('fecha_confirmacion')),
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'idcreador' => $data['session']['SID']
+            );
+            
+            $id = $this->importaciones_model->set_importacion_confirmacion($datos);
+            
+            redirect('/importaciones/confirmacion_items/'.$id.'/', 'refresh');
+        }
+        
+        $data['proveedores'] = $this->importaciones_model->gets_proveedores_con_items_pendientes();
+        
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function confirmacion_items($idimportacion_confirmacion = null) {
+        if($idimportacion_confirmacion == null) {
+            redirect('/importaciones/listar/', 'refresh');
+        }
+        $data['title'] = 'Confirmar Items de Pedidos';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/importaciones/js/confirmacion_items.js'
+        );
+        $data['view'] = 'importaciones/confirmacion_items';
+        
+        
+        $datos = array(
+            'idimportacion_confirmacion' => $idimportacion_confirmacion
+        );
+        $data['confirmacion'] = $this->importaciones_model->get_confirmacion_where($datos);
+        
+        $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($data['confirmacion']['idempresa']);
+        
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function items_backorder_ajax() {
+        $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($this->input->post('idempresa'));
+        $this->load->view('importaciones/items_backorder_ajax', $data);
+    }
+    
+    public function confirmacion_items_ajax() {
+        
+        var_dump($this->input->post());
+        
+        
     }
 
     private function formatear_fecha($fecha) {

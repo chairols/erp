@@ -47,10 +47,10 @@
                 <input type="hidden" id="articulo" name="idarticulo" value="">
             </div>
             <div class="col-xs-2 txC">
-                <input type="text" name="cantidad" placeholder="Cantidad" class="form-control" validateOnlyNumbers="asdasds">
+                <input type="text" name="cantidad" placeholder="Cantidad" id="cantidad" class="form-control" validateEmpty="Ingrese Cantidad" validateOnlyNumbers="El valor debe ser numérico entero">
             </div>
             <div class="col-xs-2 txC">
-                <input type="text" name="costo_fob" placeholder="Costo FOB" class="form-control">
+                <input type="text" name="costo_fob" placeholder="Costo FOB" id="costo_fob" class="form-control" validateEmpty="Ingrese Costo Fob" validateOnlyNumbers="El valor debe ser numérico">
             </div>
         </div>
         <div class="row txC">

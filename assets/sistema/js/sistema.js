@@ -704,18 +704,8 @@ $(function(){
       alertify.labels.ok = "Si";
       alertify.labels.cancel = "No";
       alertify.confirm("¿Desea salir?", function(e){
-            if(e){
-              var target      = '/usuarios/logout/';
-              document.location = target;
-              // var process     = process_url+'?object=CoreLogin&action=logout';
-              // $.ajax({
-              //     type: "POST",
-              //     url: process,
-              //     cache: false,
-              //     success: function(){
-              //         document.location = target;
-              //     }
-              // });
+          if(e){
+            document.location = '/usuarios/logout/';
           }
       });
   });

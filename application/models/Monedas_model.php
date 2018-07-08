@@ -100,6 +100,18 @@ class Monedas_model extends CI_Model {
                                         m.idmoneda = mh.idmoneda");
         return $query->row_array();
     }
+    
+    public function gets_historial($idmoneda, $desde, $hasta) {
+        $query = $this->db->query("SELECT mh.*, m.moneda
+                                    FROM
+                                        monedas_historial mh, 
+                                        monedas m 
+                                    WHERE
+                                        mh.idmoneda = m.idmoneda AND
+                                        m.idmoneda = '$idmoneda' AND
+                                        mh.fecha BETWEEN '$desde' AND '$hasta'");
+        return $query->result_array();
+    }
 }
 
 ?>

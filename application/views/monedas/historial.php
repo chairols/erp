@@ -28,10 +28,10 @@
 
 <div class="innerContainer">
     <div class="row">
-        <div class="col-xs-6">
+        <div class="col-md-6">
             <div id="grafico"></div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-md-6">
             <div id="tabla"></div>
         </div>
     </div>

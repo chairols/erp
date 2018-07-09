@@ -26,6 +26,21 @@
 
 
 <script type="text/javascript">
-    $(".datatable").DataTable();
+    $(".datatable").DataTable({
+        "language": {
+            "lengthMenu": "Mostrando _MENU_ registros",
+            "zeroRecords": "No hay registros",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search":         "Buscar:",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
 </script>
 

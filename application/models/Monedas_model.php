@@ -109,7 +109,9 @@ class Monedas_model extends CI_Model {
                                     WHERE
                                         mh.idmoneda = m.idmoneda AND
                                         m.idmoneda = '$idmoneda' AND
-                                        mh.fecha BETWEEN '$desde' AND '$hasta'");
+                                        mh.fecha BETWEEN '$desde' AND '$hasta'
+                                    ORDER BY
+                                        mh.fecha");
         return $query->result_array();
     }
 }

@@ -15,5 +15,19 @@ $("#buscar").click(function () {
             $("#grafico").html(data);
         }
     });
+    
+    $.ajax({
+        type: 'POST',
+        url: '/monedas/historial_ajax_datatable/',
+        data: datos,
+        beforeSend: function () {
+            $("#tabla").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+        },
+        success: function (data) {
+            $("#tabla").html(data);
+        }
+    });
 
 });
+
+$(".datatable").dataTable();

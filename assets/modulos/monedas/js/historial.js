@@ -9,7 +9,7 @@ $("#buscar").click(function () {
         url: '/monedas/historial_ajax_grafico/',
         data: datos,
         beforeSend: function () {
-            $("#grafico").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+            $("#grafico").html("<div class='overlay txC'><i class='fa fa-refresh fa-spin'></i></div>");
         },
         success: function (data) {
             $("#grafico").html(data);
@@ -21,7 +21,7 @@ $("#buscar").click(function () {
         url: '/monedas/historial_ajax_datatable/',
         data: datos,
         beforeSend: function () {
-            $("#tabla").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+            $("#tabla").html("<div class='overlay txC'><i class='fa fa-refresh fa-spin'></i></div>");
         },
         success: function (data) {
             $("#tabla").html(data);

@@ -200,7 +200,7 @@ class Importaciones extends CI_Controller {
             echo json_encode($json);
         }
     }
-    
+
     public function modificar_item($idimportacion_item = null) {
         if (!$idimportacion_item) {
             redirect('/importaciones/listar/', 'refresh');
@@ -210,12 +210,12 @@ class Importaciones extends CI_Controller {
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         $data['view'] = 'importaciones/modificar_item';
-        
+
         $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
         $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
         $this->form_validation->set_rules('costo_fob', 'Costo FOB', 'required|numeric');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             
         } else {
             $datos = array(
@@ -224,39 +224,39 @@ class Importaciones extends CI_Controller {
                 'cantidad_pendiente' => $this->input->post('cantidad'),
                 'costo_fob' => $this->input->post('costo_fob')
             );
-            
+
             $this->importaciones_model->update_item($datos, $idimportacion_item);
         }
-        
+
         $datos = array(
             'idimportacion_item' => $idimportacion_item
         );
         $data['item'] = $this->importaciones_model->get_where_item($datos);
-        
+
         $datos = array(
             'idarticulo' => $data['item']['idarticulo']
         );
         $data['articulo'] = $this->articulos_model->get_where($datos);
-        
+
         $datos = array(
             'idmarca' => $data['articulo']['idmarca']
         );
         $data['articulo']['marca'] = $this->marcas_model->get_where($datos);
-        
+
         $this->load->view('layout/app', $data);
     }
-    
+
     public function confirmacion() {
         $data['title'] = 'Confirmar Pedido de Importación';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         $data['view'] = 'importaciones/confirmacion';
-        
+
         $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|numeric');
         $this->form_validation->set_rules('fecha_confirmacion', 'Fecha de Confirmación', 'required');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             
         } else {
             $datos = array(
@@ -265,19 +265,19 @@ class Importaciones extends CI_Controller {
                 'fecha_creacion' => date("Y-m-d H:i:s"),
                 'idcreador' => $data['session']['SID']
             );
-            
+
             $id = $this->importaciones_model->set_importacion_confirmacion($datos);
-            
-            redirect('/importaciones/confirmacion_items/'.$id.'/', 'refresh');
+
+            redirect('/importaciones/confirmacion_items/' . $id . '/', 'refresh');
         }
-        
+
         $data['proveedores'] = $this->importaciones_model->gets_proveedores_con_items_pendientes();
-        
+
         $this->load->view('layout/app', $data);
     }
-    
+
     public function confirmacion_items($idimportacion_confirmacion = null) {
-        if($idimportacion_confirmacion == null) {
+        if ($idimportacion_confirmacion == null) {
             redirect('/importaciones/listar/', 'refresh');
         }
         $data['title'] = 'Confirmar Items de Pedidos';
@@ -287,28 +287,109 @@ class Importaciones extends CI_Controller {
             '/assets/modulos/importaciones/js/confirmacion_items.js'
         );
         $data['view'] = 'importaciones/confirmacion_items';
-        
-        
+
+
         $datos = array(
             'idimportacion_confirmacion' => $idimportacion_confirmacion
         );
         $data['confirmacion'] = $this->importaciones_model->get_confirmacion_where($datos);
-        
+
         $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($data['confirmacion']['idempresa']);
-        
+
         $this->load->view('layout/app', $data);
     }
-    
+
+    public function confirmar_item_de_pedido_ajax() {
+        $this->form_validation->set_rules('cantidad', 'Cantidad a confirmar', 'required|integer');
+        $this->form_validation->set_rules('idimportacion_confirmacion', 'Identificador de Confirmación', 'required|integer');
+        $this->form_validation->set_rules('idimportacion_item', 'Identificador del Item', 'required|integer');
+        $this->form_validation->set_rules('fecha_confirmacion', 'Fecha Prometida', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $flag = true;
+            $datos = array(
+                'idimportacion_item' => $this->input->post('idimportacion_item')
+            );
+            $item_pedido = $this->importaciones_model->get_where_item($datos);
+
+            if ($this->input->post('cantidad') <= 0 && $flag) {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'La cantidad a confirmar no puede ser un valor menor o igual a 0'
+                );
+                echo json_encode($json);
+                $flag = false;
+            }
+
+            if ($this->input->post('cantidad') > $item_pedido['cantidad_pendiente'] && $flag) {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se puede confirmar una cantidad superior a lo pendiente'
+                );
+                echo json_encode($json);
+                $flag = false;
+            }
+
+            if ($flag) {
+                $datos = array(
+                    'idimportacion_confirmacion' => $this->input->post('idimportacion_confirmacion'),
+                    'idimportacion_item' => $this->input->post('idimportacion_item'),
+                    'cantidad' => $this->input->post('cantidad'),
+                    'fecha_confirmacion' => $this->formatear_fecha($this->input->post('fecha_confirmacion'))
+                );
+
+                $idconfirmacion_item = $this->importaciones_model->set_confirmacion_item($datos);
+
+                if ($idconfirmacion_item) {
+                    $nueva_cantidad_pendiente = ($item_pedido['cantidad_pendiente'] - $this->input->post('cantidad'));
+
+                    $where = array(
+                        'cantidad_pendiente' => $nueva_cantidad_pendiente
+                    );
+                    $rows_afectadas = $this->importaciones_model->update_item($where, $this->input->post('idimportacion_item'));
+
+                    if ($rows_afectadas) {
+                        $json = array(
+                            'status' => 'ok'
+                        );
+                        echo json_encode($json);
+                    } else {
+                        $json = array(
+                            'status' => 'error',
+                            'data' => 'No se pudo actualizar la cantidad pendiente'
+                        );
+                        echo json_encode($json);
+                    }
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'No se pudo confirmar el item'
+                    );
+                    echo json_encode($json);
+                }
+            }
+        }
+    }
+
     public function items_backorder_ajax() {
         $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($this->input->post('idempresa'));
         $this->load->view('importaciones/items_backorder_ajax', $data);
     }
-    
+
     public function confirmacion_items_ajax() {
+        $data['items'] = $this->importaciones_model->gets_items_confirmados($this->input->post('idimportacion_confirmacion'));
         
-        var_dump($this->input->post());
+        foreach($data['items'] as $key => $value) {
+            $data['items'][$key]['fecha_confirmacion'] = $this->formatear_fecha_para_mostrar($value['fecha_confirmacion']);
+        }
         
-        
+        $this->load->view('importaciones/confirmacion_items_ajax', $data);
     }
 
     private function formatear_fecha($fecha) {

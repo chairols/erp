@@ -167,6 +167,9 @@ class Importaciones_model extends CI_Model {
         return $query->row_array();
     }
     
+    /*
+     *  Importaciones/items_backorder_ajax
+     */
     public function gets_items_backorder($idproveedor) {
         $this->db->select('importaciones_items.*, importaciones.*, articulos.articulo, marcas.marca');
         $this->db->from('importaciones_items');
@@ -177,6 +180,38 @@ class Importaciones_model extends CI_Model {
         $this->db->where('importaciones_items.cantidad_pendiente >', '0');
         $this->db->where('importaciones.idproveedor', $idproveedor);
         
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     *  Importaciones/confirmar_item_de_pedido_ajax
+     */
+    public function set_confirmacion_item($datos) {
+        $this->db->insert('importaciones_confirmaciones_items', $datos);
+        return $this->db->insert_id();
+    }
+    
+    
+    public function gets_items_confirmados($idimportacion_confirmacion) {
+        $this->db->select('importaciones_confirmaciones_items.*, articulos.articulo, marcas.marca');
+        $this->db->from('importaciones_confirmaciones_items');
+        $this->db->join('importaciones_items', 'importaciones_confirmaciones_items.idimportacion_item = importaciones_items.idimportacion_item');
+        $this->db->join('articulos', 'importaciones_items.idarticulo = articulos.idarticulo');
+        $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca');
+        $this->db->where('importaciones_confirmaciones_items.idimportacion_confirmacion', $idimportacion_confirmacion);
+        $this->db->where('importaciones_confirmaciones_items.estado', 'A');
+        
+        /*$this->db->select('importaciones_items.*, importaciones.*, articulos.articulo, marcas.marca');
+        $this->db->from('importaciones_items');
+        $this->db->join('importaciones', 'importaciones_items.idimportacion = importaciones.idimportacion');
+        $this->db->join('articulos', 'importaciones_items.idarticulo = articulos.idarticulo');
+        $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca');
+        $this->db->where('importaciones_items.estado', 'A');
+        $this->db->where('importaciones_items.cantidad_pendiente >', '0');
+        $this->db->where('importaciones.idproveedor', $idproveedor);
+        */
         
         $query = $this->db->get();
         return $query->result_array();

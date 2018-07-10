@@ -1,8 +1,8 @@
 <div class="box">
     <div class="box-header">
         <form method="GET" class="input-group input-group-sm col-md-3">
-            <input class="form-control pull-left" name="empresa" placeholder="Empresa" type="text" value="<?= $this->input->get('empresa') ?>">
-            <select class="form-control chosenSelect" name="importaciones_estado">
+            <input class="form-control pull-left" name="empresa" id="empresa" placeholder="Empresa" type="text" value="<?= $this->input->get('empresa') ?>">
+            <select class="form-control chosenSelect" id="importaciones_estado" name="importaciones_estado">
                 <option value="">Todas</option>
                 <option value="P"<?= ($this->input->get('importaciones_estado') == 'P') ? " selected" : "" ?>>Pedido</option>
                 <option value="C"<?= ($this->input->get('importaciones_estado') == 'C') ? " selected" : "" ?>>Confirmado</option>

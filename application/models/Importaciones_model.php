@@ -43,6 +43,7 @@ class Importaciones_model extends CI_Model {
     
     /*
      *  Importaciones/agregar_items
+     *  Importaciones/borrar_item_confirmado_ajax
      */
     public function update_item($where, $idimportacion_item) {
         $this->db->update('importaciones_items', $where, array('idimportacion_item' => $idimportacion_item));
@@ -216,6 +217,24 @@ class Importaciones_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Importaciones/borrar_item_confirmado_ajax
+     */
+    public function get_where_item_confirmado($where) {
+        $query = $this->db->get_where('importaciones_confirmaciones_items', $where);
+        
+        return $query->row_array();
+    }
+    
+    /*
+     *  Importaciones/borrar_item_confirmado_ajax
+     */
+    public function update_item_confirmado($where, $idimportacion_item) {
+        $this->db->update('importaciones_confirmaciones_items', $where, array('idimportacion_confirmacion_item' => $idimportacion_item));
+        return $this->db->affected_rows();
+    }
+    
 }
 
 ?>

@@ -66,5 +66,30 @@ function agregar(idimportacion_item) {
             }
         }
     });
+}
 
+function borrar_item_confirmado(idimportacion_confirmacion_item) {
+    datos = {
+        'idimportacion_confirmacion_item': idimportacion_confirmacion_item,
+    };
+    
+    $.ajax({
+
+        type: 'POST',
+        url: '/importaciones/borrar_item_confirmado_ajax/',
+        data: datos,
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                notifyError(resultado['data']);
+            } else if (resultado['status'] == 'ok') {
+                notifySuccess("Se agregó correctamente");
+                refrescar_items_backorder();
+                refrescar_items_confirmados();
+            }
+        }
+    });
 }

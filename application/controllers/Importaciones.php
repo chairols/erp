@@ -384,12 +384,65 @@ class Importaciones extends CI_Controller {
 
     public function confirmacion_items_ajax() {
         $data['items'] = $this->importaciones_model->gets_items_confirmados($this->input->post('idimportacion_confirmacion'));
-        
-        foreach($data['items'] as $key => $value) {
+
+        foreach ($data['items'] as $key => $value) {
             $data['items'][$key]['fecha_confirmacion'] = $this->formatear_fecha_para_mostrar($value['fecha_confirmacion']);
         }
-        
+
         $this->load->view('importaciones/confirmacion_items_ajax', $data);
+    }
+
+    public function borrar_item_confirmado_ajax() {
+        $this->form_validation->set_rules('idimportacion_confirmacion_item', 'Identificador de Item', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'idimportacion_confirmacion_item' => $this->input->post('idimportacion_confirmacion_item')
+            );
+            $item_confirmado = $this->importaciones_model->get_where_item_confirmado($datos);
+
+            $datos = array(
+                'idimportacion_item' => $item_confirmado['idimportacion_item']
+            );
+            $item_pedido = $this->importaciones_model->get_where_item($datos);
+
+            $nueva_cantidad_pendiente = ($item_pedido['cantidad_pendiente'] + $item_confirmado['cantidad']);
+
+            $datos = array(
+                'cantidad_pendiente' => $nueva_cantidad_pendiente
+            );
+            $filas_afectadas = $this->importaciones_model->update_item($datos, $item_pedido['idimportacion_item']);
+            if ($filas_afectadas) {
+                $datos = array(
+                    'estado' => 'I'
+                );
+                $filas_afectadas = $this->importaciones_model->update_item_confirmado($datos, $item_confirmado['idimportacion_confirmacion_item']);
+                if ($filas_afectadas) {
+                    $json = array(
+                        'status' => 'ok'
+                    );
+                    echo json_encode($json);
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'No se pudo actualizar el item en la confirmación'
+                    );
+                    echo json_encode($json);
+                }
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el item en el pedido'
+                );
+                echo json_encode($json);
+            }
+        }
     }
 
     private function formatear_fecha($fecha) {

@@ -300,6 +300,8 @@ class Importaciones extends CI_Controller {
     }
 
     public function confirmar_item_de_pedido_ajax() {
+        $session = $this->session->all_userdata();
+        
         $this->form_validation->set_rules('cantidad', 'Cantidad a confirmar', 'required|integer');
         $this->form_validation->set_rules('idimportacion_confirmacion', 'Identificador de Confirmación', 'required|integer');
         $this->form_validation->set_rules('idimportacion_item', 'Identificador del Item', 'required|integer');
@@ -341,7 +343,9 @@ class Importaciones extends CI_Controller {
                     'idimportacion_confirmacion' => $this->input->post('idimportacion_confirmacion'),
                     'idimportacion_item' => $this->input->post('idimportacion_item'),
                     'cantidad' => $this->input->post('cantidad'),
-                    'fecha_confirmacion' => $this->formatear_fecha($this->input->post('fecha_confirmacion'))
+                    'fecha_confirmacion' => $this->formatear_fecha($this->input->post('fecha_confirmacion')),
+                    'idcreador' => $session['SID'],
+                    'fecha_creacion' => date("Y-m-d H:i:s")
                 );
 
                 $idconfirmacion_item = $this->importaciones_model->set_confirmacion_item($datos);

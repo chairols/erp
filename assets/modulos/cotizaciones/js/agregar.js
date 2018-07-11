@@ -1,7 +1,5 @@
 ///////////////////////// ALERTS ////////////////////////////////////
 $(document).ready(function(){
-	//$("#prueba").keydown();
-	// $("#prueba").onfocus(function(){$(this).change(); alert('entra');});
 	if(get['msg']=='insert')
 		notifySuccess('La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido creada correctamente.');
 	if(get['msg']=='update')

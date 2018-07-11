@@ -15,11 +15,6 @@
 */
 var process_url = "../../../core/resources/processes/proc.core.php";
 $(document).ready(function(){
-  // var sidebarMenu = getCookie("sidebarmenu");
-  // if(sidebarMenu)
-  // {
-  //   $("body").addClass(sidebarMenu);
-  // }
   setDatePicker();
   inputMask();
 	chosenSelect();
@@ -123,6 +118,18 @@ function setDatePicker()
 | Obtiene un evento, el término de búsqueda y la opción selecionada como
 | parámetros. Si se declara, se puede manipular los parametros y agregar
 | funcionalidad luego de la perparación de los datos que se enviarán por AJAX.
+|
+| Ejemplo de uso:
+| <input type="text" id="TextAutoCompleteempresa" name="TextAutoCompleteempresa" placeholderauto="Proveedor inexistente" class="TextAutoComplete" objectauto="Empresas" actionauto="gets_empresas_ajax" varsauto="proveedor:=Y" iconauto="ship">
+| <input type="hidden" id="empresa" name="empresa">
+|
+| Atributos:
+| placeholderauto: Texto por defecto que se mostrará cuando no se encuentre un resultado.
+| objectauto: Controldor donde se ejecutará el AJAX que recarga los resultados.
+| actionauto: Método del controlador que procesará el AJAX y devolverá los resultados.
+| varsauto: Variables y valores que se pasan adicionalmente al AJAX, se separan por '///'.
+| iconauto: Icono que aparecera cuando se muestren las variables.
+|
 */
 function SetAutoComplete(selector,mode)
 {
@@ -262,7 +269,20 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
 	return false;
 }
 
-///////// CHOSEN FOR SELECT INPUTS ////////
+/*
+|--------------------------------------------------------------------------
+| Chosen Select
+|--------------------------------------------------------------------------
+| Chosen Select es un plugin de js que convierte un select ordinario en uno
+| que va mostrando las alternativas posibles a medida que se va escribiendo.
+|
+| Ejemplo de uso:
+| <select class="chosenSelect">
+|   <option value="1">Primera opción</option>
+|   <option value="2">Segunda opción</option>
+| </select>
+|
+*/
 function chosenSelect()
 {
   if($('.chosenSelect').length>0)
@@ -286,7 +306,17 @@ function inputMask()
 	}
 }
 
-//////////////////////////////////////////////////// Notify //////////////////////////////////////////////////////
+/*
+|--------------------------------------------------------------------------
+| Notify Error
+|--------------------------------------------------------------------------
+| Mensaje de error que se muestra de forma temporal.
+|
+| Ejemplos de uso:
+| notifyError('Hubo un error al ejecutar la función',5000);
+| notifyError('Hubo un error al ejecutar la función');
+|
+*/
 function notifyError(msgNotify,delay)
 {
     if(typeof delay === "undefined") {
@@ -307,6 +337,17 @@ function notifyError(msgNotify,delay)
     });
 }
 
+/*
+|--------------------------------------------------------------------------
+| Notify Success
+|--------------------------------------------------------------------------
+| Mensaje satisfactorio que se muestra de forma temporal.
+|
+| Ejemplos de uso:
+| notifySuccess('La función se ha ejecutado correctamente',5000);
+| notifySuccess('La función se ha ejecutado correctamente');
+|
+*/
 function notifySuccess(msgNotify,delay)
 {
     if(typeof delay === "undefined") {
@@ -327,6 +368,17 @@ function notifySuccess(msgNotify,delay)
     });
 }
 
+/*
+|--------------------------------------------------------------------------
+| Notify Info
+|--------------------------------------------------------------------------
+| Mensaje informativo que se muestra de forma temporal.
+|
+| Ejemplos de uso:
+| notifyInfo('La función puede ser ejecutada en cuando lo desee',5000);
+| notifyInfo('La función puede ser ejecutada en cuando lo desee');
+|
+*/
 function notifyInfo(msgNotify,delay)
 {
     if(typeof delay === "undefined") {
@@ -347,6 +399,17 @@ function notifyInfo(msgNotify,delay)
     });
 }
 
+/*
+|--------------------------------------------------------------------------
+| Notify Warning
+|--------------------------------------------------------------------------
+| Mensaje preventivo que se muestra de forma temporal.
+|
+| Ejemplos de uso:
+| notifyWarning('Si ejecuta la función ahora no podrá ver los resultados',5000);
+| notifyWarning('Si ejecuta la función ahora no podrá ver los resultados');
+|
+*/
 function notifyWarning(msgNotify,delay)
 {
     if(typeof delay === "undefined") {
@@ -378,7 +441,14 @@ function notifyMsg(typeMsg,msgNotify)
     });
 }
 
-/////////////////////////////////////////////////// Menu Sidebar //////////////////////////////////////////
+/*
+|--------------------------------------------------------------------------
+| Sidebar Menu
+|--------------------------------------------------------------------------
+| Función que sirve para setear un cookie que determinará si el sidebar
+| estará contraido o no.
+|
+*/
 function SidebarMenu()
 {
   $('#SidebarToggle').click(function(){
@@ -936,12 +1006,9 @@ $(document).ajaxStart(function(){
 });
 
 $(document).ajaxComplete(function(){
-    // $(".loader").addClass("Hidden");
-    // $('html').css({ 'overflow-Y': 'scroll', 'height': '100%' });
     chosenSelect();
     inputMask();
     hideLoader();
-    // $("#CloseAjaxLoader").addClass('Hidden');
 });
 
 function toggleLoader()

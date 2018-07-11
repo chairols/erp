@@ -14,8 +14,8 @@
     <div class="row form-group inline-form-custom">
       <div class="col-xs-12">
         <div id="agent-wrapper">
-          <input type="hidden" name="agent" id="agent" value="">
-          <strong><button type="button" class="btn btn-lg btn-warning" id="ShowAgentBtn"><i class="fa fa-times"></i> Seleccionar Contacto</button></strong>
+          <input type="hidden" name="agente" id="agente" value="">
+          <strong><button type="button" class="btn btn-lg btn-warning" id="MostrarAgenteBtn"><i class="fa fa-times"></i> Seleccionar Contacto</button></strong>
         </div>
       </div>
     </div>

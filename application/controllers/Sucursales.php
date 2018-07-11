@@ -23,16 +23,7 @@ class Sucursales extends CI_Controller{
 
   public function gets_sucusales_ajax() {
     $where = $this->input->post();
-    $sucursales = $this->sucursales_model->gets_where_para_ajax($where, 100);
-    // foreach($sucursales as $key => $value) {
-    //     $sucursales[$key]['text'] = $value['text']." - ";
-    //     $where = array(
-    //         'idmarca' => $value['idmarca']
-    //     );
-    //     $resultado = $this->marcas_model->get_where($where);
-    //
-    //     $sucursales[$key]['text'] .= $resultado['marca'];
-    // }
+    $sucursales = $this->sucursales_model->gets_where_para_ajax($where);
     echo json_encode($sucursales);
   }
 

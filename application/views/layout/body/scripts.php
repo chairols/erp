@@ -38,6 +38,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="/assets/template/js/demo.js"></script>
 <!-- Scripts del sistema -->
+<script src="/assets/sistema/js/listado.js"></script>
 <script src="/assets/sistema/js/validador.js"></script>
 <script src="/assets/sistema/js/sistema.js"></script>
 <?php

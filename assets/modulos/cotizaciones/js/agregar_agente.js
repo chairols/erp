@@ -50,21 +50,24 @@ function LlenarSucursales()
 	var empresa = $('#empresa').val();
 	if(empresa)
 	{
-		var process = process_url;
-		var string = 'id='+ empresa +'&action=fillsucursales&object=Company';
-    var data;
+		datos = {
+        'idempresa': empresa
+    };
+
     $.ajax({
         type: "POST",
-        url: process,
-        data: string,
-        cache: false,
+        url: '/sucursales/gets_sucusales_ajax/',
+        data: datos,
         success: function(data){
-            if(data)
+					var obj = JSON.parse(data)
+					console.log(obj); /// CONTINUAR DESDE ACA
+            if(data && data != "[]")
             {
                 $('#ContenedorSucursales').html(data);
+								console.log(data);
             }else{
+								console.log('vacio');
                 $('#ContenedorSucursales').html('<select id="sucursales_agente" class="form-control chosenSelect" disabled="disabled" ><option value="0">Sin Sucursales</option</select>');
-
             }
             chosenSelect();
             MostrarContenedorAgente();

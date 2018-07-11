@@ -12,7 +12,7 @@
   </div>
   <div class="window-body">
     <h4 class="subTitleB"><i class="fa fa-building"></i> Seleccionar sucursal</h4>
-    <div id="ContenedorSucursal">
+    <div id="ContenedorSucursales">
       <?php //echo Core::InsertElement('select','agent_branch','','form-control chosenSelect','data-placeholder="Seleccione una sucursal"',Core::Select(CompanyBranch::TABLE,CompanyBranch::TABLE_ID.','.$CompanyName,$Field."= 'Y' ".$FieldInternational." AND status='A' AND ".CoreOrganization::TABLE_ID."=".$_SESSION[CoreOrganization::TABLE_ID],'name'),' ',''); ?>
     </div>
     <div id="ContenedorAgente" class="info-card">

@@ -11,10 +11,10 @@ class sucursales_model extends CI_Model{
   /*
    *  Cotizaciones
    */
-  public function gets_where_para_ajax($where, $limit)
+  public function gets_where_para_ajax($where, $limit=100)
   {
-    $this->db->select('idsucursal as id, nombre as text');
-    $this->db->from('sucursales');
+    $this->db->select('idsucursal as id, sucursal as text');
+    $this->db->from('empresas_sucursales');
     $this->db->like($where);
     $this->db->order_by('sucursal');
     $this->db->limit($limit);

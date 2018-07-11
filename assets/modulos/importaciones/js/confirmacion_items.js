@@ -44,11 +44,52 @@ function agregar(idimportacion_item) {
     datos = {
         'idimportacion_item': idimportacion_item,
         'idimportacion_confirmacion': $("#idimportacion_confirmacion").val(),
-        'cantidad': $("#cantidad-"+idimportacion_item).val(),
-        'fecha_confirmacion': $("#fecha_confirmacion-"+idimportacion_item).val()
+        'cantidad': $("#cantidad-" + idimportacion_item).val(),
+        'fecha_confirmacion': $("#fecha_confirmacion-" + idimportacion_item).val()
     };
-    console.log(datos);
+
+    $.ajax({
+
+        type: 'POST',
+        url: '/importaciones/confirmar_item_de_pedido_ajax/',
+        data: datos,
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                notifyError(resultado['data']);
+            } else if (resultado['status'] == 'ok') {
+                refrescar_items_backorder();
+                refrescar_items_confirmados();
+            }
+        }
+    });
+}
+
+function borrar_item_confirmado(idimportacion_confirmacion_item) {
+    datos = {
+        'idimportacion_confirmacion_item': idimportacion_confirmacion_item,
+    };
     
-    refrescar_items_backorder();
-    refrescar_items_confirmados();
+    $.ajax({
+
+        type: 'POST',
+        url: '/importaciones/borrar_item_confirmado_ajax/',
+        data: datos,
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                notifyError(resultado['data']);
+            } else if (resultado['status'] == 'ok') {
+                notifySuccess("Se agregó correctamente");
+                refrescar_items_backorder();
+                refrescar_items_confirmados();
+            }
+        }
+    });
 }

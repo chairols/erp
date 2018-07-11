@@ -30,7 +30,7 @@
 if (isset($css) && count($css) > 0) { ?>
 <!-- Carga de Css de la vista -->
 <?php    foreach ($css as $css) { ?>
-  <link rel="stylesheet" href="<?=$css?>"></link>
+  <link rel="stylesheet" href="<?=$css?>">
 <?php
     }
 }

@@ -221,14 +221,94 @@ class Monedas extends CI_Controller {
         $data['title'] = 'Histórico de Monedas';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['css'] = array(
+            '/assets/vendors/datatables/dataTables.bootstrap.css'
+        );
+        $data['javascript'] = array(
+            '/assets/vendors/datatables/jquery.dataTables.min.js',
+            '/assets/vendors/datatables/dataTables.bootstrap.min.js',
+            'https://www.gstatic.com/charts/loader.js',
+            '/assets/modulos/monedas/js/historial.js'
+        );
         $data['view'] = 'monedas/historial';
         
         
+        $data['historial'] = array();
+        
+        $this->form_validation->set_rules('moneda', 'Moneda', 'required');
+        $this->form_validation->set_rules('desde', 'Fecha Desde', 'required');
+        $this->form_validation->set_rules('hasta', 'Fecha Hasta', 'required');
+        
+        if($this->form_validation->run() == FALSE) {
+
+        } else {
+            $data['historial'] = $this->monedas_model->gets_historial($this->input->post('moneda'), $this->formatear_fecha($this->input->post('desde')), $this->formatear_fecha($this->input->post('hasta')));
+        }
         
         $data['monedas'] = $this->monedas_model->gets();
         
+        
+        
         $this->load->view('layout/app', $data);
+    }
+    
+    public function historial_ajax_grafico() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('moneda', 'Moneda', 'required');
+        $this->form_validation->set_rules('desde', 'Fecha Desde', 'required');
+        $this->form_validation->set_rules('hasta', 'Fecha Hasta', 'required');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'idmoneda' => $this->input->post('moneda')
+            );
+            $data['moneda'] = $this->monedas_model->get_where($datos);
+            $data['historial'] = $this->monedas_model->gets_historial($this->input->post('moneda'), $this->formatear_fecha($this->input->post('desde')), $this->formatear_fecha($this->input->post('hasta')));
+            
+            
+            $this->load->view('monedas/historial_ajax_grafico', $data);
+        }
+    }
+    
+    public function historial_ajax_datatable() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('moneda', 'Moneda', 'required');
+        $this->form_validation->set_rules('desde', 'Fecha Desde', 'required');
+        $this->form_validation->set_rules('hasta', 'Fecha Hasta', 'required');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'idmoneda' => $this->input->post('moneda')
+            );
+            $data['moneda'] = $this->monedas_model->get_where($datos);
+            $data['historial'] = $this->monedas_model->gets_historial($this->input->post('moneda'), $this->formatear_fecha($this->input->post('desde')), $this->formatear_fecha($this->input->post('hasta')));
+            
+            $this->load->view('monedas/historial_ajax_datatable', $data);
+        }
+    }
+    private function formatear_fecha($fecha) {
+        $aux = '';
+        $aux .= substr($fecha, 6, 4);
+        $aux .= '-';
+        $aux .= substr($fecha, 3, 2);
+        $aux .= '-';
+        $aux .= substr($fecha, 0, 2);
+
+        return $aux;
     }
 }
 

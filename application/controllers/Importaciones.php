@@ -397,6 +397,8 @@ class Importaciones extends CI_Controller {
     }
 
     public function borrar_item_confirmado_ajax() {
+        $session = $this->session->all_userdata();
+        
         $this->form_validation->set_rules('idimportacion_confirmacion_item', 'Identificador de Item', 'required|integer');
 
         if ($this->form_validation->run() == FALSE) {
@@ -424,7 +426,9 @@ class Importaciones extends CI_Controller {
             $filas_afectadas = $this->importaciones_model->update_item($datos, $item_pedido['idimportacion_item']);
             if ($filas_afectadas) {
                 $datos = array(
-                    'estado' => 'I'
+                    'estado' => 'I',
+                    'actualizado_por' => $session['SID'],
+                    'fecha_modificacion' => date("Y-m-d H:i:s")
                 );
                 $filas_afectadas = $this->importaciones_model->update_item_confirmado($datos, $item_confirmado['idimportacion_confirmacion_item']);
                 if ($filas_afectadas) {

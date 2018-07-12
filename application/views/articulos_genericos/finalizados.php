@@ -62,6 +62,16 @@
         <div class="changeView">
             <button aria-label="Buscar" class="ShowFilters SearchElement btn hint--bottom hint--bounce"><i class="fa fa-search"></i></button>
         </div>
+        <br>
+        <div class="form-inline paginationLeft">
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-3 col-md-9">
+                    <ul class="paginationRight pagination no-margin pull-right">
+                        <?= $links ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- /.box-header -->
     <div class="box-body" id="CoreSearcherResults">
@@ -72,24 +82,38 @@
                     <!-- ////////////////////////////   Registros   //////////////////////////// -->
                     <?php foreach ($articulos as $articulo) { ?>
                         <div class="row listRow listRow2 " id="row_68">
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-7">
                                 <div class="listRowInner">
                                     <!--<img class="img-circle hideMobile990" src="../../../../skin/images/quotations/default/default.png" alt="ADOLFO FORTIER S.A.">-->
                                     <span class="listTextStrong"><?= $articulo['articulo_generico'] ?></span>
                                     <span class="smallTitle"><b>(ID: <?= $articulo['idarticulo_generico'] ?>)</b></span>
                                 </div>
                             </div>
-                            <div class="col-lg-1 col-md-2 col-sm-3 col-xs-3">
+                            <div class="col-lg-2 col-md-3 col-sm-4 hideMobile990">
                                 <div class="listRowInner">
                                     <span class="smallTitle">Línea</span>
                                     <span class="listTextStrong"><span class="label label-info"><?= $articulo['linea'] ?></span>
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12">
+                            <div class="col-lg-1 col-md-1 col-sm-1 hideMobile990">
+                                <div class="listRowInner">
+                                    <span class="smallTitle">Artículos</span>
+                                    <span class="listTextStrong">
+                                        <span class="label label-info">
+                                            <?=count($articulo['articulos'])?>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1 hideMobile990">
                                 <div class="listRowInner">
                                     <span class="smallTitle">Stock</span>
-                                    <span class="listTextStrong"><span class="label bg-navy"><?= $articulo['stock']['stock'] ?></span></span>
+                                    <span class="listTextStrong">
+                                        <span class="label <?=($articulo['stock']['stock'] > 0)?"label-primary":"label-danger"?>">
+                                            <?= $articulo['stock']['stock'] ?>
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-lg-1 col-md-1 col-sm-1 hideMobile990"></div>
@@ -97,31 +121,29 @@
                             <div class="animated DetailedInformation Hidden col-md-12">
                                 <div class="list-margin-top">
                                     <div class="row bg-gray" style="padding:5px;">
-                                        <div class="col-lg-4 col-sm-5 col-xs-12">
+                                        <?php foreach($articulo['articulos'] as $art) { ?>
+                                        <div class='col-lg-4 col-sm-5 col-xs-12'>
                                             <div class="listRowInner">
-                                                <img class=" hideMobile990" src="../../../../skin/images/products/default/default.jpg" alt="16011">
-                                                <span class="listTextStrong">Otros datos</span>
-                                                <span class="smallTitle hideMobile990"><b>Otros datos</b></span>
+                                                <!--<img class=" hideMobile990" src="../../../../skin/images/products/default/default.jpg" alt="16011">-->
+                                                <span class="listTextStrong"><?=$art['articulo']?></span>
+                                                <span class="smallTitle hideMobile990"><strong><?=$art['linea']?></strong></span>
                                             </div>
                                         </div>
                                         <div class="col-sm-2 col-xs-12">
                                             <div class="listRowInner">
                                                 <span class="smallTitle">Marca</span>
-                                                <span class="emailTextResp"><span class="label label-brown"><?= $articulo['marca'] ?></span></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 col-xs-12">
-                                            <div class="listRowInner">
-                                                <span class="smallTitle">Línea</span>
-                                                <span class="emailTextResp"><span class="label label-brown"><?= $articulo['linea'] ?></span></span>
+                                                <span class="emailTextResp">
+                                                    <span class="label label-primary"><?=$art['marca']?></span>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="col-sm-3 col-xs-12">
                                             <div class="listRowInner">
                                                 <span class="smallTitle">Stock</span>
-                                                <span class="listTextStrong"><span class="label bg-navy"><?= $articulo['stock'] ?></span></span>
+                                                <span class="listTextStrong"><span class="label bg-navy"><?= $art['stock'] ?></span></span>
                                             </div>
                                         </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>

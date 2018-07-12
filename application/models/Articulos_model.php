@@ -83,6 +83,22 @@ class Articulos_model extends CI_Model {
         $query = $this->db->get();
         return $query->row_array();
     } 
+    
+    /*
+     *  Articulos_genericos/finalizados
+     */
+    public function gets_where($where) {
+        $this->db->select('*');
+        $this->db->from('articulos');
+        $this->db->join('lineas', 'articulos.idlinea = lineas.idlinea');
+        $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca');
+        $this->db->join('articulos_genericos', 'articulos.idarticulo_generico = articulos_genericos.idarticulo_generico', 'left');
+        $this->db->like($where);
+        $this->db->order_by('articulo');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

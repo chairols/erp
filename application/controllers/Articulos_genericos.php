@@ -32,7 +32,7 @@ class Articulos_genericos extends CI_Controller {
         $per_page = $per_page['valor'];
 
         $where = $this->input->get();
-        //$where['estado'] = 'F';
+        $where['estado_relacion'] = 'F';
 
         /*
          * inicio paginador
@@ -66,6 +66,11 @@ class Articulos_genericos extends CI_Controller {
         $data['articulos'] = $this->articulos_genericos_model->get_cantidad_where_limit($where, $per_page, $pagina);
         foreach($data['articulos'] as $key => $value) {
             $data['articulos'][$key]['stock'] = $this->articulos_model->get_sum_stock_por_idarticulo_generico($value['idarticulo_generico']);
+            $datos = array(
+                'articulos.idarticulo_generico' => $value['idarticulo_generico'],
+                'articulos.estado' => 'A'
+            );
+            $data['articulos'][$key]['articulos'] = $this->articulos_model->gets_where($datos);
         }
 
         $data['view'] = 'articulos_genericos/finalizados';

@@ -2,7 +2,7 @@
     <div class="box">
         <div class="box-header">
             <form method="GET" class="input-group input-group-sm col-md-5">
-                <input class="form-control pull-left" name="titulo" placeholder="Buscar ..." type="text">
+                <input class="form-control pull-left" name="titulo" id="titulo" placeholder="Buscar ..." type="text">
                 <div class="input-group-btn">
                     <button class="btn btn-default" type="submit">
                         <i class="fa fa-search"></i>

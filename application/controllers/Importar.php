@@ -229,6 +229,35 @@ class Importar extends CI_Controller {
         );
         echo json_encode($json);
     }
+    
+    
+    public function migrar_product_abstract_articulos_genericos() {
+        $origen = 'product_abstract';
+        $destino = 'articulos_genericos';
+
+        $this->importar_model->borrar_tabla($destino);
+
+        $this->importar_model->crear_tabla($origen, $destino);
+
+        $this->importar_model->copiar_tabla_y_registros($origen, $destino);
+
+        $this->importar_model->alter_table($destino, 'abstract_id', 'idarticulo_generico', 'INT(11) NOT NULL AUTO_INCREMENT');
+        $this->importar_model->alter_table($destino, 'category_id', 'idlinea', 'INT(11) NOT NULL');
+        $this->importar_model->alter_table($destino, 'code', 'articulo_generico', 'VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL');
+        $this->importar_model->alter_table($destino, 'order_number', 'numero_orden', 'INT(11) NOT NULL');
+        $this->importar_model->alter_table($destino, 'status', 'estado', "CHAR(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A'");
+        $this->importar_model->alter_table($destino, 'relation_status', 'estado_relacion', "CHAR(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A'");
+        $this->importar_model->alter_table($destino, 'creation_date', 'fecha_creacion', "DATETIME NOT NULL");
+        $this->importar_model->alter_table($destino, 'created_by', 'idcreador', 'INT(11) NOT NULL');
+        $this->importar_model->alter_table($destino, 'modification_date', 'fecha_modificacion', 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
+        $this->importar_model->alter_table($destino, 'updated_by', 'actualizado_por', 'INT(11) NOT NULL');
+        $this->importar_model->borrar_campo($destino, 'organization_id');
+        
+        $json = array(
+            'status' => 'ok'
+        );
+        echo json_encode($json);
+    }
 
 }
 

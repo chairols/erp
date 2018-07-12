@@ -109,9 +109,15 @@
                             <div class="col-lg-1 col-md-1 col-sm-1 hideMobile990">
                                 <div class="listRowInner">
                                     <span class="smallTitle">Stock</span>
+                                    <?php 
+                                    $stock = 0;
+                                    foreach($articulo['articulos'] as $a) {
+                                        $stock += $a['stock'];
+                                    }
+                                    ?>
                                     <span class="listTextStrong">
-                                        <span class="label <?=($articulo['stock']['stock'] > 0)?"label-primary":"label-danger"?>">
-                                            <?= $articulo['stock']['stock'] ?>
+                                        <span class="label <?=($stock > 0)?"label-primary":"label-danger"?>">
+                                            <?= $stock ?>
                                         </span>
                                     </span>
                                 </div>

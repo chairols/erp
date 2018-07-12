@@ -81,7 +81,7 @@
                 <div class="container-fluid">
                     <!-- ////////////////////////////   Registros   //////////////////////////// -->
                     <?php foreach ($articulos as $articulo) { ?>
-                        <div class="row listRow listRow2 " id="row_68">
+                        <div class="row listRow listRow2 " id="row_<?=$articulo['idarticulo_generico']?>">
                             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-7">
                                 <div class="listRowInner">
                                     <!--<img class="img-circle hideMobile990" src="../../../../skin/images/quotations/default/default.png" alt="ADOLFO FORTIER S.A.">-->
@@ -151,9 +151,9 @@
                                 <div>
                                     <span class="roundItemActionsGroup">
                                         <a class="hint--bottom hint--bounce" aria-label="Más información">
-                                            <button type="button" class="btn bg-navy ExpandButton" id="expand_68"><i class="fa fa-plus"></i></button>
+                                            <button type="button" class="btn bg-navy ExpandButton" id="expand_<?=$articulo['idarticulo_generico']?>"><i class="fa fa-plus"></i></button>
                                         </a>
-                                        <a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="/articulos/modificar/<?= $articulo['idarticulo_generico'] ?>/" id="view_68">
+                                        <a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="/articulos/modificar/<?= $articulo['idarticulo_generico'] ?>/" id="view_<?=$articulo['idarticulo_generico']?>">
                                             <button type="button" class="btn btn-github"><i class="fa fa-eye"></i></button>
                                         </a>
                                         <!-- <a class="hint--bottom hint--bounce hint--success" aria-label="Crear Orden" process="../../../core/resources/processes/proc.core.php" id="purchase_<?= $articulo['idarticulo'] ?>" status="">

@@ -12,14 +12,15 @@ class Importar extends CI_Controller {
             'form_validation'
         ));
         $this->load->model(array(
-            'articulos_model'
+            'articulos_model',
+            'importar_model'
         ));
         $this->load->helper(array(
             'file'
         ));
 
         $session = $this->session->all_userdata();
-        $this->r_session->check($session);
+        //$this->r_session->check($session);
     }
 
     public function agregar() {
@@ -56,15 +57,15 @@ class Importar extends CI_Controller {
         $data['javascript'] = array();
         $data['view'] = 'importar/actualizar_articulos';
 
-        
+
         if ($archivo) {
             $this->benchmark->mark('inicio');
-            
+
             $cantidad = $this->articulos_model->get_cantidad_where(array());
-            
+
             var_dump($cantidad);
-            
-            $fp = fopen("upload/importar/".$archivo, "r");
+
+            $fp = fopen("upload/importar/" . $archivo, "r");
             $count = 0;
             $init = 0;
             $porcentaje = 0;
@@ -190,6 +191,43 @@ class Importar extends CI_Controller {
         $data['archivos'] = get_dir_file_info('upload/importar/');
 
         $this->load->view('layout/app', $data);
+    }
+
+    public function migrar() {
+        $data['title'] = 'Listado de Artículos';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/importar/js/migrar.js'
+        );
+
+        $data['view'] = 'importar/migrar';
+        $this->load->view('layout/app', $data);
+    }
+
+    public function migrar_product_articulos() {
+        $origen = 'product';
+        $destino = 'articulos';
+
+        $this->importar_model->borrar_tabla($destino);
+
+        $this->importar_model->crear_tabla($origen, $destino);
+
+        $this->importar_model->copiar_tabla_y_registros($origen, $destino);
+
+        $this->importar_model->alter_table($destino, 'product_id', 'idarticulo', 'INT(11) NOT NULL AUTO_INCREMENT');
+        $this->importar_model->alter_table($destino, 'abstract_id', 'idarticulo_generico', 'INT(11) NOT NULL');
+        $this->importar_model->borrar_campo($destino, 'organization_id');
+        $this->importar_model->alter_table($destino, 'category_id', 'idlinea', 'INT(11) NOT NULL');
+        $this->importar_model->alter_table($destino, 'brand_id', 'idmarca', 'INT(11) NOT NULL');
+        $this->importar_model->alter_table($destino, 'code', 'articulo', 'VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL');
+        $this->importar_model->alter_table($destino, 'price', 'precio', 'DECIMAL(10,2) NOT NULL');
+        $this->importar_model->alter_table($destino, 'status', 'estado', "CHAR(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A'");
+
+        $json = array(
+            'status' => 'ok'
+        );
+        echo json_encode($json);
     }
 
 }

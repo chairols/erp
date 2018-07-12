@@ -70,8 +70,10 @@
       <div class="row ListView ListElement animated fadeIn ">
         <div class="container-fluid">
 					<!-- ////////////////////////////   Registros   //////////////////////////// -->
+					<?php $color_fila = 'listRow2'; ?>
 					<?php foreach ($articulos as $articulo) { ?>
-          <div class="row listRow listRow2 " id="row_68">
+					<?php $color_fila = $color_fila == ' listRow2 '? '':' listRow2 '; ?>
+          <div class="row listRow <?= $color_fila ?> " id="row_68">
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
     					<div class="listRowInner">
     						<img class="img-circle hideMobile990" src="../../../../skin/images/quotations/default/default.png" alt="ADOLFO FORTIER S.A.">

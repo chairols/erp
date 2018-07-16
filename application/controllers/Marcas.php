@@ -65,6 +65,11 @@ class Marcas extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
+    public function gets_marcas_ajax()
+    {
+      $where    = $this->input->post();
+      echo json_encode($this->marcas_model->gets_where($where));
+    }
 }
 
 ?>

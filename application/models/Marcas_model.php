@@ -50,6 +50,20 @@ class Marcas_model extends CI_Model {
         
         return $query->row_array();
     }
+    
+    /*
+     *  Marcas/gets_marcas_ajax
+     */
+    public function gets_where($where)
+    {
+      $this->db->select('idmarca as id, marca as text');
+      $this->db->from('marcas');
+      $this->db->like($where);
+      $this->db->order_by('marca');
+
+      $query = $this->db->get();
+      return $query->result_array();
+    }
 }
 
 ?>

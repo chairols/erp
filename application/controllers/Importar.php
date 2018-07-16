@@ -51,12 +51,13 @@ class Importar extends CI_Controller {
     }
 
     public function actualizar_articulos($archivo = null) {
+        /*
         $data['title'] = 'Listado de Artículos';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         $data['view'] = 'importar/actualizar_articulos';
-
+        */
 
         if ($archivo) {
             $this->benchmark->mark('inicio');
@@ -188,14 +189,15 @@ class Importar extends CI_Controller {
             echo $this->benchmark->elapsed_time('inicio', 'fin');
         }
 
-        $data['archivos'] = get_dir_file_info('upload/importar/');
+        //$data['archivos'] = get_dir_file_info('upload/importar/');
 
-        $this->load->view('layout/app', $data);
+        //$this->load->view('layout/app', $data);
     }
 
     public function migrar() {
-        $data['title'] = 'Listado de Artículos';
         $data['session'] = $this->session->all_userdata();
+        $this->r_session->check($data['session']);
+        $data['title'] = 'Listado de Artículos';
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array(
             '/assets/modulos/importar/js/migrar.js'

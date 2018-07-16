@@ -10,25 +10,11 @@
                 <form id="CoreSearcherForm" name="CoreSearcherForm" method="GET">
                     <!-- ////////////////////////////   Formulario de Búsqueda //////////////////////////// -->
                     <div class="row">
-                        <div class="input-group col-lg-3 col-md-3 col-sm-5 col-xs-11" style="margin:2px;">
-                            <span class="input-group-addon order-arrows sort-activated" order="quotation_id" mode="desc"><i class="fa fa-sort-alpha-desc"></i></span>
-                            <input id="idarticulo" name="idarticulo" class="form-control" placeholder="ID de Artículo" type="text">
+                        <div class="input-group col-lg-5 col-md-6 col-sm-5 col-xs-11" style="margin:2px;">
+                            <input id="articulo_generico" name="articulo_generico" class="form-control" placeholder="Artículo" type="text">
                         </div>
-                        <div class="input-group col-lg-3 col-md-3 col-sm-5 col-xs-11" style="margin:2px;">
-                            <span class="input-group-addon order-arrows " order="code" mode="DESC"><i class="fa fa-sort-alpha-desc"></i></span>
-                            <input id="articulo" name="articulo" class="form-control inputMask" placeholder="Código" type="text">
-                        </div>
-                        <div class="input-group col-lg-3 col-md-3 col-sm-5 col-xs-11" style="margin:2px;">
-                            <span class="input-group-addon order-arrows " order="order_number" mode="DESC"><i class="fa fa-sort-alpha-desc"></i></span>
-                            <input id="order_number" name="order_number" class="form-control " placeholder="Número de Orden" validateonlynumbers="Ingrese únicamente números." type="text">
-                        </div>
-                        <div class="input-group col-lg-3 col-md-3 col-sm-5 col-xs-11" style="margin:2px;">
-                            <span class="input-group-addon order-arrows " order="company" mode="DESC"><i class="fa fa-sort-alpha-desc"></i></span>
-                            <input id="rack" name="rack" class="form-control" placeholder="Rack" type="text">
-                        </div>
-                        <div class="input-group col-lg-3 col-md-3 col-sm-5 col-xs-11" style="margin:2px;">
-                            <span class="input-group-addon order-arrows " order="quantity" mode="DESC"><i class="fa fa-sort-alpha-desc"></i></span>
-                            <input id="idmarca" name="idmarca" class="form-control" placeholder="ID Marca" type="text">
+                        <div class="input-group col-lg-5 col-md-6 col-sm-5 col-xs-11" style="margin:2px;">
+                            <input id="numero_orden" name="numero_orden" class="form-control " placeholder="Número de Orden" validateonlynumbers="Ingrese únicamente números." type="text">
                         </div>
                     </div>
                     <!-- Submit Button -->

@@ -169,7 +169,6 @@ class Empresas extends CI_Controller {
     public function gets_empresas_ajax()
     {
       $where    = $this->input->post();
-      $empresa  = $this->empresas_model->gets_where($where);
       echo json_encode($this->empresas_model->gets_where($where));
     }
 }

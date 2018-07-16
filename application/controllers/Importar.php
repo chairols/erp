@@ -52,12 +52,12 @@ class Importar extends CI_Controller {
 
     public function actualizar_articulos($archivo = null) {
         /*
-        $data['title'] = 'Listado de Artículos';
-        $data['session'] = $this->session->all_userdata();
-        $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
-        $data['view'] = 'importar/actualizar_articulos';
-        */
+          $data['title'] = 'Listado de Artículos';
+          $data['session'] = $this->session->all_userdata();
+          $data['menu'] = $this->r_session->get_menu();
+          $data['javascript'] = array();
+          $data['view'] = 'importar/actualizar_articulos';
+         */
 
         if ($archivo) {
             $this->benchmark->mark('inicio');
@@ -190,7 +190,6 @@ class Importar extends CI_Controller {
         }
 
         //$data['archivos'] = get_dir_file_info('upload/importar/');
-
         //$this->load->view('layout/app', $data);
     }
 
@@ -231,8 +230,7 @@ class Importar extends CI_Controller {
         );
         echo json_encode($json);
     }
-    
-    
+
     public function migrar_product_abstract_articulos_genericos() {
         $origen = 'product_abstract';
         $destino = 'articulos_genericos';
@@ -254,11 +252,62 @@ class Importar extends CI_Controller {
         $this->importar_model->alter_table($destino, 'modification_date', 'fecha_modificacion', 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
         $this->importar_model->alter_table($destino, 'updated_by', 'actualizado_por', 'INT(11) NOT NULL');
         $this->importar_model->borrar_campo($destino, 'organization_id');
-        
+
         $json = array(
             'status' => 'ok'
         );
         echo json_encode($json);
+    }
+
+    public function agregar_comprobantes_notas_varias_items($archivo = null) {
+        if ($archivo) {
+
+            $fp = fopen("upload/importar/" . $archivo, "r");
+
+            $this->importar_model->truncate('comprobantes_notas_varias_items');
+            
+            while (!feof($fp)) {
+                $linea = fgets($fp);
+                $array = preg_split('/;/', $linea);
+
+
+
+                //  CARACTERES AL FINAL DEL VALOR
+                //  { = POSITIVO
+                //  } = NEGATIVO
+                //  
+                //  [0] = tipo
+                //  [1] = letra
+                //  [2] = punto de venta
+                //  [3] = numero de comprobante
+                //  [4] = numero de orden
+                //  [5] = cantidad
+                //  [6] = descripcion
+                //  [7] = importe
+                //  [8] = total  
+
+                
+
+                $datos = array(
+                    'tipo' => trim($array[0]),
+                    'letra' => trim($array[1]),
+                    'punto_de_venta' => trim($array[2]),
+                    'numero_comprobante' => trim($array[3]),
+                    'numero_orden' => trim($array[4]),
+                    'cantidad' => trim($array[5]),
+                    'descripcion' => trim($array[6]),
+                    'importe' => trim($array[7]),
+                    'total' => trim($array[8])
+                );
+
+                $this->importar_model->set('comprobantes_notas_varias_items', $datos);
+            }
+
+            $json = array(
+                'status' => 'ok'
+            );
+            echo json_encode($json);
+        }
     }
 
 }

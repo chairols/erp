@@ -46,5 +46,21 @@
 
             </div>
         </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-8">
+                <strong>Actualizar tabla <label class="label label-success">comprobantes_notas_varias_items</label> mediante TXT de Sistema anterior. <br>
+                    php index.php migrar agregar_comprobantes_notas_varias_items ITEM-NOT.TXT <br>
+                    curl https://erp.rollerservice.com.ar/migrar/agregar_comprobantes_notas_varias_items/ITEM-NOT.TXT (ideal para evitar timeout) <br>
+                    Eliminar cabeceras del archivo TXT
+                </strong>
+            </div>
+            <div class="col-xs-2" id="boton-3">
+                <label class="label label-warning">Debe ejecutarse por consola</label>
+            </div>
+            <div class="col-xs-2" id="resultado-4">
+
+            </div>
+        </div>
     </div>
 </div>

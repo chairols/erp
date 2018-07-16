@@ -43,6 +43,15 @@ class Importar_model extends CI_Model {
                                     DROP
                                         $campo");
     }
+    
+    public function truncate($tabla) {
+        $query = $this->db->query("TRUNCATE TABLE $tabla");
+    }
+    
+    public function set($tabla, $datos) {
+        $this->db->insert($tabla, $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

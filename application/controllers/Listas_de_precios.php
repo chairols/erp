@@ -74,12 +74,18 @@ class Listas_de_precios extends CI_Controller {
                             'idmarca' => $this->input->post('marca'),
                             'articulo' => $fila[1],
                             'precio' => $fila[2],
-                            'stock' => $fila[3],
+                            //'stock' => $fila[3],  Ver debajo
                             'marca' => $fila[4],
                             'fecha_creacion' => date("Y-m-d H:i:s"),
                             'idcreador' => $data['session']['SID']
                         );
                         
+                        if(!isset($fila[3])) {
+                            $d['stock'] = 0;
+                        } else {
+                            $d['stock'] = $fila[3];
+                        }
+                            
                         $this->listas_de_precios_model->set_item($d);
                     }
                 }

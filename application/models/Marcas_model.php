@@ -64,6 +64,18 @@ class Marcas_model extends CI_Model {
       $query = $this->db->get();
       return $query->result_array();
     }
+    
+    /*
+     *  Listas_de_precios/asociar_marcas
+     */
+    public function gets() {
+      $this->db->select('*');
+      $this->db->from('marcas');
+      $this->db->order_by('marca');
+
+      $query = $this->db->get();
+      return $query->result_array();
+    }
 }
 
 ?>

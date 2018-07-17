@@ -14,7 +14,8 @@ class Listas_de_precios extends CI_Controller {
         ));
         $this->load->model(array(
             'monedas_model',
-            'listas_de_precios_model'
+            'listas_de_precios_model',
+            'marcas_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -70,7 +71,6 @@ class Listas_de_precios extends CI_Controller {
                     if($fila['1'] != 'Codigo' && $fila[2] != 'Precio') {
                         $d = array(
                             'idlista_de_precios' => $idlista_de_precio,
-                            // 'idarticulo'
                             'idmarca' => $this->input->post('marca'),
                             'articulo' => $fila[1],
                             'precio' => $fila[2],
@@ -92,7 +92,7 @@ class Listas_de_precios extends CI_Controller {
             }
 
             
-            
+            redirect('/listas_de_precios/asociar_marcas/'.$idlista_de_precio.'/', 'refresh');
 
         }
 
@@ -101,6 +101,35 @@ class Listas_de_precios extends CI_Controller {
         $data['monedas'] = $this->monedas_model->gets();
 
         $data['view'] = 'listas_de_precios/importar';
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function asociar_marcas($idlista_de_precios = null) {
+        $data['title'] = 'Asociar Marcas en Lista de Precios';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        
+        if(count($this->input->post())) {
+            $post = $this->input->post();
+            
+            foreach($post as $key => $value) {
+                $datos = array(
+                    'idmarca' => $value
+                );
+                $where = array(
+                    'idlista_de_precios' => $idlista_de_precios,
+                    'marca' => $key
+                );
+                
+                $this->listas_de_precios_model->update_items($datos, $where);
+            }
+        }
+        
+        $data['marcas_lista'] = $this->listas_de_precios_model->gets_marcas_por_idlista_de_precios($idlista_de_precios);
+        
+        $data['marcas'] = $this->marcas_model->gets();
+        
+        $data['view'] = 'listas_de_precios/asociar_marcas';
         $this->load->view('layout/app', $data);
     }
 

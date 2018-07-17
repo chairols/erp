@@ -4,7 +4,7 @@
             <i class="fa fa-hdd-o"></i> Importar Lista de Precios
         </h3>
         <div class="box-tools pull-right">
-            <a class="btn btn-sm btn-primary btn-flat" href="#">
+            <a class="btn btn-sm btn-primary btn-flat" href="/upload/plantillas/plantilla_importacion.xls">
                 <i class="fa fa-download"></i> Descargar Plantilla de Importación
             </a>
         </div>
@@ -31,15 +31,25 @@
                 </div>
             </div>
             <hr>
-            <div class="row form-group">
+            <div class="row">
                 <div class="col-xs-12 col-sm-5 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-                    <input id="exampleInputFile" readonly="readonly" name="archivo" placeholder="Seleccionar Archivo" validateEmpty="Seleccione un Archivo" type="file">
+                    <select name="moneda" id="moneda" class="form-control chosenSelect">
+                        <?php foreach($monedas as $moneda) { ?>
+                        <option value="<?=$moneda['idmoneda']?>"><?=$moneda['moneda']?></option>
+                        <?php } ?>
+                    </select>
                 </div>
             </div>
             <hr>
             <div class="row form-group">
                 <div class="col-xs-12 col-sm-5 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-                    <textarea id="descripcion" class="form-control" name="descripcion" placeholder="Notas y comentarios"></textarea>
+                    <input id="archivo" readonly="readonly" name="archivo" placeholder="Seleccionar Archivo" validateEmpty="Seleccione un Archivo" type="file">
+                </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+                <div class="col-xs-12 col-sm-5 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+                    <textarea id="comentarios" class="form-control" name="comentarios" placeholder="Notas y comentarios"></textarea>
                 </div>
             </div>
         </div>

@@ -40,10 +40,21 @@ class Listas_de_precios_model extends CI_Model {
         return $query->result_array();
     }
     
-    
+    /*
+     *  Listas_de_precios/asociar_marcas
+     */
     public function update_items($datos, $where) {
         $this->db->update('listas_de_precios_items', $datos, $where);
         return $this->db->affected_rows();
+    }
+    
+    /*
+     *  Listas_de_precios/asociar_marcas
+     */
+    public function get_where_item($where) {
+        $query = $this->db->get_where('listas_de_precios_items', $where);
+        
+        return $query->row_array();
     }
 }
 

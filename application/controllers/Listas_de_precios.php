@@ -136,6 +136,18 @@ class Listas_de_precios extends CI_Controller {
         }
         
         $data['marcas_lista'] = $this->listas_de_precios_model->gets_marcas_por_idlista_de_precios($idlista_de_precios);
+        foreach ($data['marcas_lista'] as $key => $value) {
+            $datos = array(
+                'marca' => $value['marca_lista'],
+                'idmarca >' => 0
+            );
+            $resultado = $this->listas_de_precios_model->get_where_item($datos);
+            
+            if($resultado) {
+                $data['marcas_lista'][$key]['idmarca'] = $resultado['idmarca'];
+            }
+        }
+        
         
         $data['marcas'] = $this->marcas_model->gets();
         

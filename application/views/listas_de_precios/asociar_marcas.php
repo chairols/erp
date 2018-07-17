@@ -15,7 +15,7 @@
                     <div class="col-xs-5 col-sm-3 text-left">
                         <select id="<?=$marca_lista['marca_lista']?>" name="<?= $marca_lista['marca_lista'] ?>" class="form-control chosenSelect">
                             <?php foreach ($marcas as $marca) { ?>
-                                <option value="<?= $marca['idmarca'] ?>"<?= ($marca_lista['marca_lista'] == $marca['marca']) ? " selected" : "" ?>><?= $marca['marca'] ?></option>
+                                <option value="<?= $marca['idmarca'] ?>"<?= ($marca_lista['idmarca'] == $marca['idmarca']) ? " selected" : "" ?>><?= $marca['marca'] ?></option>
                             <?php } ?>
                         </select>
                     </div>

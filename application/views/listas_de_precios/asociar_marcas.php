@@ -27,8 +27,4 @@
             <button class="btn btn-success" type="submit">Continuar <i class="fa fa-arrow-right"></i></button>
         </div>
     </form>
-    <pre>
-    <?php var_dump($this->input->post()); ?>
-    <?php var_dump(count($this->input->post())); ?>
-    </pre>
 </div>

@@ -75,7 +75,7 @@ class Listas_de_precios extends CI_Controller {
                             'articulo' => $fila[1],
                             'precio' => $fila[2],
                             //'stock' => $fila[3],  Ver debajo
-                            'marca' => $fila[4],
+                            //'marca' => $fila[4],
                             'fecha_creacion' => date("Y-m-d H:i:s"),
                             'idcreador' => $data['session']['SID']
                         );
@@ -85,6 +85,16 @@ class Listas_de_precios extends CI_Controller {
                         } else {
                             $d['stock'] = $fila[3];
                         }
+                        if(!isset($fila[4])) {
+                            if($this->input->post('TextAutoCompletemarca') != '') {
+                                $d['marca'] = $this->input->post('TextAutoCompletemarca');
+                            } else {
+                                $d['marca'] = '';
+                            }
+                        } else {
+                            $d['marca'] = $fila[4];
+                        }
+                        
                             
                         $this->listas_de_precios_model->set_item($d);
                     }

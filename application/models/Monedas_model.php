@@ -45,6 +45,8 @@ class Monedas_model extends CI_Model {
 
     /*
      *  Importaciones/agregar
+     * 
+     *  Listas_de_precios/asociar_generico
      */
     public function gets() {
       $query = $this->db->query("SELECT * 

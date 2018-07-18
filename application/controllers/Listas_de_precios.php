@@ -10,12 +10,15 @@ class Listas_de_precios extends CI_Controller {
             'session',
             'r_session',
             'form_validation',
+            'pagination',
             'Excel_reader/excel_reader'
         ));
         $this->load->model(array(
             'monedas_model',
             'listas_de_precios_model',
-            'marcas_model'
+            'marcas_model',
+            'empresas_model',
+            'parametros_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -133,6 +136,8 @@ class Listas_de_precios extends CI_Controller {
                 
                 $this->listas_de_precios_model->update_items($datos, $where);
             }
+            
+            redirect('/listas_de_precios/asociar_generico/'.$idlista_de_precios.'/', 'refresh');
         }
         
         $data['marcas_lista'] = $this->listas_de_precios_model->gets_marcas_por_idlista_de_precios($idlista_de_precios);
@@ -154,6 +159,70 @@ class Listas_de_precios extends CI_Controller {
         $data['view'] = 'listas_de_precios/asociar_marcas';
         $this->load->view('layout/app', $data);
     }
+    
+    public function asociar_generico($idlista_de_precios = null, $pagina = 0) {
+        $data['title'] = 'Asociar Artículos a Lista de Precios';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        
+        
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+
+        $where = $this->input->get();
+        $where['listas_de_precios_items.estado'] = 'A';
+        $where['listas_de_precios_items.idlista_de_precios'] = $idlista_de_precios;
+        
+        
+        /*
+         * inicio paginador
+         */
+        $total_rows = $this->listas_de_precios_model->get_cantidad_items_where($where);
+        $config['reuse_query_string'] = TRUE;
+        $config['base_url'] = '/listas_de_precios/asociar_generico/'.$idlista_de_precios.'/';
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        $data['links'] = $this->pagination->create_links();
+        $data['total_rows'] = $total_rows;
+        /*
+         * fin paginador
+         */
+        
+        $data['items'] = $this->listas_de_precios_model->get_cantidad_items_where_limit($where, $per_page, $pagina);
+        
+        
+        
+        $datos = array(
+            'idlista_de_precios' => $idlista_de_precios
+        );
+        $data['lista_de_precios'] = $this->listas_de_precios_model->get_where($datos);
+        $data['lista_de_precios']['fecha'] = $this->formatear_fecha_para_mostrar($data['lista_de_precios']['fecha']);
+        
+        $datos = array(
+            'idempresa' => $data['lista_de_precios']['idempresa']
+        );
+        $data['lista_de_precios']['empresa'] = $this->empresas_model->get_where($datos);
+        
+        $data['monedas'] = $this->monedas_model->gets();
+        
+        $data['view'] = 'listas_de_precios/asociar_generico';
+        $this->load->view('layout/app', $data);
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';
@@ -162,6 +231,17 @@ class Listas_de_precios extends CI_Controller {
         $aux .= substr($fecha, 3, 2);
         $aux .= '-';
         $aux .= substr($fecha, 0, 2);
+
+        return $aux;
+    }
+    
+    private function formatear_fecha_para_mostrar($fecha) {
+        $aux = '';
+        $aux .= substr($fecha, 8, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 5, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 0, 4);
 
         return $aux;
     }

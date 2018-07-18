@@ -52,6 +52,8 @@ class Empresas_model extends CI_Model {
     
     /*
      *  Importaciones/agregar_items
+     * 
+     *  Listas_de_precios/asociar_generico
      */
     public function get_where($where) {
         $query = $this->db->get_where('empresas', $where);

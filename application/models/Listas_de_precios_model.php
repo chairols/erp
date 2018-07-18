@@ -56,6 +56,42 @@ class Listas_de_precios_model extends CI_Model {
         
         return $query->row_array();
     }
+    
+    /*
+     *  Listas_de_precios/asociar_generico
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('listas_de_precios', $where);
+        
+        return $query->row_array();
+    }
+    
+    /*
+     *  Listas_de_precios/asociar_generico
+     */
+    public function get_cantidad_items_where($where) {
+        $this->db->select('*');
+        $this->db->from('listas_de_precios_items');
+        $this->db->like($where);
+
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+    
+    /*
+     *  Articulos_genericos/finalizados
+     */
+    public function get_cantidad_items_where_limit($where, $per_page, $pagina) {
+        $this->db->select('*');
+        $this->db->from('listas_de_precios_items');
+        $this->db->join('articulos', 'listas_de_precios_items.idarticulo = articulos.idarticulo', 'left');
+        $this->db->like($where);
+        $this->db->order_by('listas_de_precios_items.idlista_de_precios_item');
+        $this->db->limit($per_page, $pagina);
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

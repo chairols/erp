@@ -605,7 +605,7 @@ class WsFE
         } else {
             $alicuotas = new stdClass();
             $alicuotas->percepcion = floatval(str_replace(",", ".", $response->contribuyentes->contribuyente->alicuotaPercepcion));
-            $alicuotas->retencion = floatval(str_replace(",", ".", $response->contribuyentes->contribuyente->alicuotaRetencion.str_replace));
+            $alicuotas->retencion = floatval(str_replace(",", ".", $response->contribuyentes->contribuyente->alicuotaRetencion));
             return true;
         }
     }

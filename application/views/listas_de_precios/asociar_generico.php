@@ -121,11 +121,14 @@
                                     <div class="col-sm-5 col-xs-12">
                                         <div class="listRowInner">
                                             <span class="smallDetails">Marca</span>
-                                            <input type="text" identificador="<?=$item['idlista_de_precios_item']?>" id="TextAutoCompletemarca_<?=$item['idlista_de_precios_item']?>" name="TextAutoCompletemarca_<?=$item['idlista_de_precios_item']?>" placeholder="Seleccionar Marca" placeholderauto="Proveedor inexistente" class="form-control ac" objectauto="marcas" actionauto="gets_marcas_ajax" iconauto="ship">
-                                            <input type="hidden" identificador="<?=$item['idlista_de_precios_item']?>" id="marca_<?=$item['idlista_de_precios_item']?>" name="marca_<?=$item['idlista_de_precios_item']?>" value="">
+                                            <input type="text" identificador="<?=$item['idlista_de_precios_item']?>" id="TextAutoCompletemarca_<?=$item['idlista_de_precios_item']?>" name="TextAutoCompletemarca_<?=$item['idlista_de_precios_item']?>" placeholder="Seleccionar Marca" placeholderauto="Proveedor inexistente" class="form-control autocompletemarca" objectauto="marcas" actionauto="gets_marcas_ajax" iconauto="ship" idmarca="<?=$item['marcas_idmarca']?>" value="<?=$item['marcas_marca']?>">
+                                            <input type="hidden" identificador="<?=$item['idlista_de_precios_item']?>" id="marca_<?=$item['idlista_de_precios_item']?>" name="marca_<?=$item['idlista_de_precios_item']?>" value="<?=$item['marcas_idmarca']?>">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3 col-xs-12" style="height: 70px;">
+                                    <div class="col-sm-1 col-xs-12">
+                                        <div class="listRowInner" id="progressmarca_<?=$item['idlista_de_precios_item']?>"></div>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" style="height: 70px;">
                                         <div class="listRowInner"></div>
                                     </div>
                                     <div class="col-sm-2 col-xs-12">

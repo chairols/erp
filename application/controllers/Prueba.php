@@ -113,7 +113,43 @@ EOD;
 // END OF FILE
 //============================================================+
     }
+    
+    
+    public function arba($cuit = 0) {
+        require_once('assets/vendors/afip/wsfe-class-ci.php');
 
+        // Certificado REAL
+        $certificado = 'upload/certificados/PCAFIP_12e5d279ba7d69a7.crt';
+        $clave = "upload/certificados/privada";
+
+        // Configuración
+        $CUIT = 33647656779;
+        $urlwsaa = URLWSAA;
+        /*
+        $wsfe = new WsFE();
+        $wsfe->CUIT = floatval($CUIT);
+        $wsfe->setURL(URLWSW);
+        */
+        $fechadesde = date('Ym').'01';
+        
+        $mes = date('m');
+        $anio = date('Y');
+        $fechahasta = $anio.$mes.date("d",(mktime(0,0,0,$mes+1,1,$anio)-1));
+        
+        
+        $wsfe = new WsFE();
+        $wsfe->CUIT = floatval(30714016918);
+        $wsfe->PasswodArba = "252729";
+        if ($wsfe->ConsultaARBA(floatval($cuit), $fechadesde, $fechahasta, $alicuotas)) {
+            $percepcion = $alicuotas->percepcion;
+            $retencion = $alicuotas->retencion;
+            var_dump($alicuotas);
+        } else {
+            echo $wsfe->ErrorDesc;
+        }
+    }
+
+    
 }
 
 ?>

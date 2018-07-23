@@ -82,8 +82,9 @@ class Listas_de_precios_model extends CI_Model {
      *  Articulos_genericos/finalizados
      */
     public function get_cantidad_items_where_limit($where, $per_page, $pagina) {
-        $this->db->select('*');
+        $this->db->select('listas_de_precios_items.*, articulos.articulo as articulos_articulo, marcas.marca as marcas_marca');
         $this->db->from('listas_de_precios_items');
+        $this->db->join('marcas', 'listas_de_precios_items.idmarca = marcas.idmarca');
         $this->db->join('articulos', 'listas_de_precios_items.idarticulo = articulos.idarticulo', 'left');
         $this->db->like($where);
         $this->db->order_by('listas_de_precios_items.idlista_de_precios_item');

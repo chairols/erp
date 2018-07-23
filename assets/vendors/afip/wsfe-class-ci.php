@@ -379,6 +379,17 @@ class WsFE
         return $comprobante;
     }
     
+    function getCUIT($cuit) {
+        $results = $this->client->getParameterCollectionByName(
+                array('Auth' => array('Token' => $this->Token,
+                    'Sign' => $this->Sign,
+                    'Cuit' => $this->CUIT),
+                    'getParameterCollectionByName' => $this->CUIT)
+                );
+        
+                var_dump($results);
+    }
+    
     function getDatosFactura($TipoComp, $PtoVta, $nro) {   // Funcion agregada por Hernán
         $results = $this->client->FECompConsultar(
             array('Auth' => array('Token' => $this->Token,

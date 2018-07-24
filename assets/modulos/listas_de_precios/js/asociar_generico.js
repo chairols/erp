@@ -52,7 +52,7 @@ $(".autocompletemarca").focusout(function () {
         success: function (data) {
             resultado = $.parseJSON(data);
             if (resultado['status'] == 'error') {
-                notifyError('<strong>ERROR</strong>' + resultado['data']);
+                notifyError('<strong>ERROR</strong>' + resultado['data'], 5000);
                 $("#progressmarca_" + iditem).show();
                 $("#progressmarca_" + iditem).html("<br><i class='fa fa-warning text-red'></i>");
             } else if (resultado['status'] == 'ok') {

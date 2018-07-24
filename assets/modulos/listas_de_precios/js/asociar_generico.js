@@ -3,6 +3,7 @@ $(".autocompletemarca").on('focusin', function () {
     $(".autocompletemarca").autoComplete({
         minChars: 1,
         delay: 600,
+        cache: false,
         source: function (term, response) {
             try {
                 xhr.abort();

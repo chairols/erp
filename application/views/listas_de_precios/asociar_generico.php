@@ -125,7 +125,7 @@
                                     <div class="col-sm-5 col-xs-12">
                                         <div class="listRowInner">
                                             <span class="smallDetails">Marca</span>
-                                            <input type="text" identificador="<?= $item['idlista_de_precios_item'] ?>" id="TextAutoCompletemarca_<?= $item['idlista_de_precios_item'] ?>" name="TextAutoCompletemarca_<?= $item['idlista_de_precios_item'] ?>" placeholder="Seleccionar Marca" placeholderauto="Proveedor inexistente" class="form-control autocompletemarca" objectauto="marcas" actionauto="gets_marcas_ajax" iconauto="ship" idmarca="<?= $item['marcas_idmarca'] ?>" value="<?= $item['marcas_marca'] ?>">
+                                            <input type="text" identificador="<?= $item['idlista_de_precios_item'] ?>" id="TextAutoCompletemarca_<?= $item['idlista_de_precios_item'] ?>" name="TextAutoCompletemarca_<?= $item['idlista_de_precios_item'] ?>" placeholder="Seleccionar Marca" placeholderauto="Proveedor inexistente" class="form-control txC autocompletemarca" objectauto="marcas" actionauto="gets_marcas_ajax" iconauto="ship" idmarca="<?= $item['marcas_idmarca'] ?>" value="<?= $item['marcas_marca'] ?>">
                                             <input type="hidden" identificador="<?= $item['idlista_de_precios_item'] ?>" id="marca_<?= $item['idlista_de_precios_item'] ?>" name="marca_<?= $item['idlista_de_precios_item'] ?>" value="<?= $item['marcas_idmarca'] ?>">
                                         </div>
                                     </div>
@@ -150,7 +150,7 @@
                                     <div class="col-sm-5 col-xs-12">
                                         <div class="listRowInner">
                                             <span class="smallDetails">Código Genérico</span>
-                                            <input type="text" identificador="<?= $item['idlista_de_precios_item'] ?>" id="TextAutoCompletegenerico_<?= $item['idlista_de_precios_item'] ?>" name="TextAutoCompletemarca_<?= $item['idlista_de_precios_item'] ?>" placeholder="Seleccionar Artículo Genérico" placeholderauto="Artículo Genérico Inexistente" class="form-control autocompletegenerico" idarticulo_generico="<?= $item['articulos_genericos_idarticulo_generico'] ?>" value="<?= $item['articulos_genericos_articulo_generico'] ?>">
+                                            <input type="text" identificador="<?= $item['idlista_de_precios_item'] ?>" id="TextAutoCompletegenerico_<?= $item['idlista_de_precios_item'] ?>" name="TextAutoCompletemarca_<?= $item['idlista_de_precios_item'] ?>" placeholder="Seleccionar Artículo Genérico" placeholderauto="Artículo Genérico Inexistente" class="form-control txC autocompletegenerico" idarticulo_generico="<?= $item['articulos_genericos_idarticulo_generico'] ?>" value="<?= $item['articulos_genericos_articulo_generico'] ?>">
                                         </div>
                                     </div>
                                     <div class="col-sm-1 col-xs-12">

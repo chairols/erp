@@ -11,6 +11,10 @@ $(".autocompletemarca").on('focusin', function () {
             }
             xhr = $.post('/marcas/gets_marcas_ajax/', {marca: term}, function (data) {
                 data = JSON.parse(data);
+                if (!data[0])
+                {
+                    data = [{key: "", text: "Sin Resultados"}];
+                }
                 response(data);
             });
         },
@@ -73,6 +77,10 @@ $(".autocompletegenerico").on('focusin', function () {
             }
             xhr = $.post('/articulos_genericos/gets_articulos_ajax/', {articulo_generico: term}, function (data) {
                 data = JSON.parse(data);
+                if (!data[0])
+                {
+                    data = [{key: "", text: "Sin Resultados"}];
+                }
                 response(data);
             });
         },
@@ -132,8 +140,8 @@ $(".autocompletegenerico").focusout(function () {
 $(".borraritem").click(function () {
     url = this.baseURI;
     idlista_de_precios_item = this.attributes.iditem.value;
-    
-    alertify.confirm("Se borrará el artículo <strong>" + $("#codigo_"+idlista_de_precios_item).val() + "</strong><br><strong>¿Desea confirmar?</strong>", function (e) {
+
+    alertify.confirm("Se borrará el artículo <strong>" + $("#codigo_" + idlista_de_precios_item).val() + "</strong><br><strong>¿Desea confirmar?</strong>", function (e) {
         if (e)
         {
             var datos = {
@@ -149,7 +157,7 @@ $(".borraritem").click(function () {
                 success: function (data) {
                     resultado = $.parseJSON(data);
                     if (resultado['status'] == 'error') {
-                        notifyError('<strong>ERROR</strong>'+resultado['data']);
+                        notifyError('<strong>ERROR</strong>' + resultado['data']);
                     } else if (resultado['status'] == 'ok') {
                         location.reload();
                     }

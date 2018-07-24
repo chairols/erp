@@ -172,8 +172,21 @@ class Listas_de_precios extends CI_Controller {
         $per_page = $per_page['valor'];
 
         $where = array();
+        $like = array();
+        
         if($this->input->get('articulo'))
-            $where['listas_de_precios_items.articulo'] = $this->input->get('articulo');
+            $like['listas_de_precios_items.articulo'] = $this->input->get('articulo');
+        if($this->input->get('generico')) {
+            switch ($this->input->get('generico')) {
+                case 'P':
+                    $where['listas_de_precios_items.idarticulo_generico'] = 0;
+                    break;
+                case 'F':
+                    $where['listas_de_precios_items.idarticulo_generico >'] = 0;
+                default:
+                    break;
+            }
+        }
         $where['listas_de_precios_items.estado'] = 'A';
         $where['listas_de_precios_items.idlista_de_precios'] = $idlista_de_precios;
 
@@ -181,7 +194,7 @@ class Listas_de_precios extends CI_Controller {
         /*
          * inicio paginador
          */
-        $total_rows = $this->listas_de_precios_model->get_cantidad_items_where($where);
+        $total_rows = $this->listas_de_precios_model->get_cantidad_items_where($where, $like);
         $config['reuse_query_string'] = TRUE;
         $config['base_url'] = '/listas_de_precios/asociar_generico/' . $idlista_de_precios . '/';
         $config['total_rows'] = $total_rows;
@@ -207,7 +220,7 @@ class Listas_de_precios extends CI_Controller {
          * fin paginador
          */
 
-        $data['items'] = $this->listas_de_precios_model->get_cantidad_items_where_limit($where, $per_page, $pagina);
+        $data['items'] = $this->listas_de_precios_model->get_cantidad_items_where_limit($where, $like, $per_page, $pagina);
 
 
 
@@ -276,6 +289,40 @@ class Listas_de_precios extends CI_Controller {
         } else {
             $datos = array(
                 'idarticulo_generico' => $this->input->post('idarticulo_generico')
+            );
+            $where = array(
+                'idlista_de_precios_item' => $this->input->post('idlista_de_precios_item')
+            );
+
+            $resultado = $this->listas_de_precios_model->update_items($datos, $where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => '<br>Se produjo un error inesperado.'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+    
+    public function borrar_item_ajax() {
+        $this->form_validation->set_rules('idlista_de_precios_item', 'ID Item', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
             );
             $where = array(
                 'idlista_de_precios_item' => $this->input->post('idlista_de_precios_item')

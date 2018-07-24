@@ -54,7 +54,7 @@
                             <!-- ////////////////////////////   Formulario de Búsqueda //////////////////////////// -->
                             <div class="row">
                                 <div class="input-group col-lg-5 col-md-6 col-sm-5 col-xs-11" style="margin:2px;">
-                                    <input id="articulo_generico" name="articulo_generico" class="form-control" placeholder="Artículo" type="text">
+                                    <input id="articulo" name="articulo" class="form-control" placeholder="Artículo" type="text" value="<?=$this->input->get('articulo')?>">
                                 </div>
                                 <div class="input-group col-lg-5 col-md-6 col-sm-5 col-xs-11" style="margin:2px;">
                                     <input id="numero_orden" name="numero_orden" class="form-control " placeholder="Número de Orden" validateonlynumbers="Ingrese únicamente números." type="text">
@@ -146,8 +146,14 @@
                                     <div class="col-sm-5 col-xs-12">
                                         <div class="listRowInner">
                                             <span class="smallDetails">Código Genérico</span>
-
+                                            <input type="text" identificador="<?=$item['idlista_de_precios_item']?>" id="TextAutoCompletegenerico_<?=$item['idlista_de_precios_item']?>" name="TextAutoCompletemarca_<?=$item['idlista_de_precios_item']?>" placeholder="Seleccionar Artículo Genérico" placeholderauto="Artículo Genérico Inexistente" class="form-control autocompletegenerico" idarticulo_generico="<?=$item['articulos_genericos_idarticulo_generico']?>" value="<?=$item['articulos_genericos_articulo_generico']?>">
                                         </div>
+                                    </div>
+                                    <div class="col-sm-1 col-xs-12">
+                                        <div class="listRowInner" id="progressgenerico_<?=$item['idlista_de_precios_item']?>"></div>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" style="height: 70px;">
+                                        <div class="listRowInner"></div>
                                     </div>
                                 </div>
                             <?php } ?>

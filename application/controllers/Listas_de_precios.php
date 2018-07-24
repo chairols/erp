@@ -171,7 +171,9 @@ class Listas_de_precios extends CI_Controller {
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
 
-        $where = $this->input->get();
+        $where = array();
+        if($this->input->get('articulo'))
+            $where['listas_de_precios_items.articulo'] = $this->input->get('articulo');
         $where['listas_de_precios_items.estado'] = 'A';
         $where['listas_de_precios_items.idlista_de_precios'] = $idlista_de_precios;
 
@@ -261,6 +263,41 @@ class Listas_de_precios extends CI_Controller {
         }
     }
 
+    public function update_item_articulo_generico() {
+        $this->form_validation->set_rules('idarticulo_generico', 'Artículo Genérico', 'required|integer');
+        $this->form_validation->set_rules('idlista_de_precios_item', 'ID Item', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'idarticulo_generico' => $this->input->post('idarticulo_generico')
+            );
+            $where = array(
+                'idlista_de_precios_item' => $this->input->post('idlista_de_precios_item')
+            );
+
+            $resultado = $this->listas_de_precios_model->update_items($datos, $where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => '<br>Se produjo un error inesperado.'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+    
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);

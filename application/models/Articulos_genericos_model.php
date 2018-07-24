@@ -34,6 +34,20 @@ class Articulos_genericos_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Articulos_genericos/gets_articulos_ajax
+     */
+    public function gets_where($where)
+    {
+      $this->db->select('idarticulo_generico as id, articulo_generico as text');
+      $this->db->from('articulos_genericos');
+      $this->db->like($where);
+      $this->db->order_by('articulo_generico');
+
+      $query = $this->db->get();
+      return $query->result_array();
+    }
 }
 
 ?>

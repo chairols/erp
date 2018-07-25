@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Sucursales extends CI_Controller{
+class Agentes extends CI_Controller{
 
   public function __construct()
   {
@@ -15,18 +15,19 @@ class Sucursales extends CI_Controller{
         'parametros_model',
         'empresas_model',
         'sucursales_model',
+        'agentes_model',
     ));
 
     $session = $this->session->all_userdata();
     // $this->r_session->check($session);
   }
 
-  public function gets_sucursales_ajax() {
+  public function gets_agentes_tarjetas_ajax() {
     $where = $this->input->post();
-    $data['sucursales'] = $this->sucursales_model->gets_where_para_ajax($where);
-
+    $data['agentes'] = $this->agentes_model->gets_where_para_ajax($where);
+    $data['idsucursal'] = $_POST['idsucursal'];
     // $this->load->view('layout/app', $data);
-    $this->load->view('sucursales/gets_sucursales_ajax', $data);
+    $this->load->view('sucursales/gets_agentes_tarjetas_ajax', $data);
     //
     // echo json_encode($json['html']);
   }

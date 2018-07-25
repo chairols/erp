@@ -98,6 +98,22 @@
                                     </span>
                                 </div>
                             </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1 hideMobile990">
+                                <div class="listRowInner">
+                                    <span class="smallTitle">Asociados</span>
+                                    <span class="listTextStrong">
+                                        <span class="label label-warning"><?=$lista['asociados']?></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1 hideMobile990">
+                                <div class="listRowInner">
+                                    <span class="smallTitle">Pendientes</span>
+                                    <span class="listTextStrong">
+                                        <span class="label label-danger"><?=($lista['cantidad']-$lista['asociados'])?></span>
+                                    </span>
+                                </div>
+                            </div>
                             <div class="col-lg-1 col-md-1 col-sm-1 hideMobile990"></div>
                             <!-- ////////////////////////////   Información Detallada   //////////////////////////// -->
                             

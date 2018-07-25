@@ -414,6 +414,10 @@ class Listas_de_precios extends CI_Controller {
                 'idlista_de_precios' => $value['idlista_de_precios']
             );
             $data['listas'][$key]['cantidad'] = $this->listas_de_precios_model->get_cantidad_items_where($where, array());
+            
+            $where['idarticulo_generico >'] = 0;
+            $data['listas'][$key]['asociados'] = $this->listas_de_precios_model->get_cantidad_items_where($where, array());
+            
         }
         
         

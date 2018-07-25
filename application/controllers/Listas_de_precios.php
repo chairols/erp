@@ -407,6 +407,14 @@ class Listas_de_precios extends CI_Controller {
         $data['listas'] = $this->listas_de_precios_model->get_cantidad_where_limit($where, $like, $per_page, $pagina);
 
         
+        foreach ($data['listas'] as $key => $value) {
+            $data['listas'][$key]['fecha'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+            $where = array(
+                'estado' => 'A',
+                'idlista_de_precios' => $value['idlista_de_precios']
+            );
+            $data['listas'][$key]['cantidad'] = $this->listas_de_precios_model->get_cantidad_items_where($where, array());
+        }
         
         
         $data['view'] = 'listas_de_precios/ver_listas';

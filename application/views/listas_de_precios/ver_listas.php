@@ -94,7 +94,7 @@
                                 <div class="listRowInner">
                                     <span class="smallTitle">Artículos</span>
                                     <span class="listTextStrong">
-                                        
+                                        <span class="label label-info"><?=$lista['cantidad']?></span>
                                     </span>
                                 </div>
                             </div>

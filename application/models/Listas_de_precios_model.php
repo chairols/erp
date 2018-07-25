@@ -68,6 +68,7 @@ class Listas_de_precios_model extends CI_Model {
     
     /*
      *  Listas_de_precios/asociar_generico
+     *  Listas_de_precios/ver_listas
      */
     public function get_cantidad_items_where($where, $like) {
         $this->db->select('*');

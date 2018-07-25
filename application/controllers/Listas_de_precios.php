@@ -345,6 +345,74 @@ class Listas_de_precios extends CI_Controller {
         }
     }
     
+    public function ver_listas($pagina = 0) {
+        $data['title'] = 'Ver Listas de Precios';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        
+        
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+
+        $where = array();
+        $like = array();
+        /*
+        if($this->input->get('articulo'))
+            $like['listas_de_precios_items.articulo'] = $this->input->get('articulo');
+        if($this->input->get('generico')) {
+            switch ($this->input->get('generico')) {
+                case 'P':
+                    $where['listas_de_precios_items.idarticulo_generico'] = 0;
+                    break;
+                case 'F':
+                    $where['listas_de_precios_items.idarticulo_generico >'] = 0;
+                default:
+                    break;
+            }
+        }
+        */
+         
+        $where['listas_de_precios.estado'] = 'A';
+        
+
+        /*
+         * inicio paginador
+         */
+        $total_rows = $this->listas_de_precios_model->get_cantidad_where($where, $like);
+        $config['reuse_query_string'] = TRUE;
+        $config['base_url'] = '/listas_de_precios/ver_listas/';
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        $data['links'] = $this->pagination->create_links();
+        $data['total_rows'] = $total_rows;
+        /*
+         * fin paginador
+         */
+        
+        $data['listas'] = $this->listas_de_precios_model->get_cantidad_where_limit($where, $like, $per_page, $pagina);
+
+        
+        
+        
+        $data['view'] = 'listas_de_precios/ver_listas';
+        $this->load->view('layout/app', $data);
+    }
+    
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);

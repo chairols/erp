@@ -40,7 +40,9 @@
                 </strong>
             </div>
             <div class="col-xs-2" id="boton-3">
-                <label class="label label-warning">Debe ejecutarse por consola</label>
+                <button class="btn btn-xs btn-primary" onclick="procesar(3, '/importar/actualizar_articulos/ARCHIVO.TXT');">
+                    <i class="fa fa-database"></i> Comenzar >>
+                </button>
             </div>
             <div class="col-xs-2" id="resultado-3">
 
@@ -51,15 +53,17 @@
             <div class="col-xs-8">
                 <strong>Actualizar tabla <label class="label label-success">comprobantes_notas_varias_items</label> mediante TXT de Sistema anterior. <br>
                     php index.php migrar agregar_comprobantes_notas_varias_items ITEM-NOT.TXT <br>
-                    curl https://erp.rollerservice.com.ar/migrar/agregar_comprobantes_notas_varias_items/ITEM-NOT.TXT (ideal para evitar timeout) <br>
+                    curl https://erp.rollerservice.com.ar/importar/agregar_comprobantes_notas_varias_items/ITEM-NOT.TXT (ideal para evitar timeout) <br>
                     Eliminar cabeceras del archivo TXT
                 </strong>
             </div>
-            <div class="col-xs-2" id="boton-3">
-                <label class="label label-warning">Debe ejecutarse por consola</label>
+            <div class="col-xs-2" id="boton-4">
+                <button class="btn btn-xs btn-primary" onclick="procesar(4, '/importar/agregar_comprobantes_notas_varias_items/ITEM-NOT.TXT');">
+                    <i class="fa fa-database"></i> Comenzar >>
+                </button>
             </div>
             <div class="col-xs-2" id="resultado-4">
-
+                
             </div>
         </div>
     </div>

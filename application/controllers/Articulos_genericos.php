@@ -135,6 +135,7 @@ class Articulos_genericos extends CI_Controller {
 
     public function gets_articulos_ajax() {
         $where = $this->input->post();
+        $where['estado'] = 'A';
         echo json_encode($this->articulos_genericos_model->gets_where($where));
     }
 

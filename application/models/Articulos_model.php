@@ -45,6 +45,8 @@ class Articulos_model extends CI_Model {
      *  Importaciones/modificar_item
      * 
      *  Importar/actualizar_articulos
+     * 
+     *  Listas_de_precios/importar
      */
     public function get_where($where) {
         $query = $this->db->get_where('articulos', $where);

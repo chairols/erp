@@ -19,7 +19,8 @@ class Listas_de_precios extends CI_Controller {
             'marcas_model',
             'empresas_model',
             'parametros_model',
-            'articulos_genericos_model'
+            'articulos_genericos_model',
+            'articulos_model'
         ));
 
         $session = $this->session->all_userdata();

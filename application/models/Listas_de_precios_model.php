@@ -127,6 +127,64 @@ class Listas_de_precios_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    public function gets_empresas_con_lista() {
+        $this->db->select('*');
+        $this->db->from('listas_de_precios');
+        $this->db->join('empresas', 'listas_de_precios.idempresa = empresas.idempresa');
+        $this->db->order_by('empresas.empresa');
+        $this->db->group_by('empresa');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     *  Listas_de_precios/nueva_comparacion_ajax
+     */
+    public function set_comparacion($datos) {
+        $this->db->insert('listas_de_precios_comparaciones', $datos);
+        return $this->db->insert_id();
+    }
+    
+    /*
+     *  Listas_de_precios/nueva_comparacion_ajax
+     */
+    public function get_ultima_lista($where) {
+        $this->db->select_max("fecha");
+        $this->db->from("listas_de_precios");
+        $this->db->where($where);
+        $query = $this->db->get();
+        $fecha = $query->row_array();
+        
+        $where['fecha'] = $fecha['fecha'];
+        
+        $this->db->select("*");
+        $this->db->from("listas_de_precios");
+        $this->db->where($where);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+    
+    /*
+     *  Listas_de_precios/nueva_comparacion_ajax
+     */
+    public function gets_items($where) {
+        $this->db->select("*");
+        $this->db->from("listas_de_precios_items");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     *  Listas_de_precios/nueva_comparacion_ajax
+     */
+    public function set_comparacion_item($datos) {
+        $this->db->insert('listas_de_precios_comparaciones_items', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

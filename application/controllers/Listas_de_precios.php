@@ -137,14 +137,14 @@ class Listas_de_precios extends CI_Controller {
                         /*
                          *  Búsqueda en artículos 
                          */
-                        if($flag) {
+                        if ($flag) {
                             $datos = array(
                                 'articulo' => trim($fila[1]),
                                 'idarticulo_generico >' => 0,
                                 'estado' => 'A'
                             );
                             $resultado = $this->articulos_model->get_where($datos);
-                            if($resultado) {
+                            if ($resultado) {
                                 $d['idarticulo_generico'] = $resultado['idarticulo_generico'];
                             }
                         }
@@ -476,6 +476,111 @@ class Listas_de_precios extends CI_Controller {
 
         $data['view'] = 'listas_de_precios/ver_listas';
         $this->load->view('layout/app', $data);
+    }
+
+    public function nueva_comparacion() {
+        $data['title'] = 'Comparar Listas de Precios';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/listas_de_precios/js/nueva_comparacion.js'
+        );
+
+
+        $data['empresas'] = $this->listas_de_precios_model->gets_empresas_con_lista();
+        $data['marcas'] = $this->marcas_model->gets();
+
+        $data['view'] = 'listas_de_precios/nueva_comparacion';
+        $this->load->view('layout/app', $data);
+    }
+
+    public function nueva_comparacion_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('proveedores[]', 'Proveedores', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            if (count($this->input->post('proveedores')) > 1) {
+                $datos = array(
+                    'idcreador' => $session['SID']
+                );
+
+                $idcomparacion = $this->listas_de_precios_model->set_comparacion($datos);
+
+                foreach ($this->input->post('proveedores') as $proveedor) {
+                    //  Traer última lista
+                    $where = array(
+                        'idempresa' => $proveedor
+                    );
+                    $ultima_lista = $this->listas_de_precios_model->get_ultima_lista($where);
+
+                    
+                    // Traigo los items de la lista
+                    $where = array(
+                        'idlista_de_precios' => $ultima_lista['idlista_de_precios'],
+                        'estado' => 'A',
+                        'idarticulo_generico >' => 0
+                    );
+
+                    $items = $this->listas_de_precios_model->gets_items($where);
+
+
+                    foreach ($items as $item) {
+                        if ($this->input->post('marcas')) {  // Compruebo si se seleccionaron marcas
+                            foreach ($this->input->post('marcas') as $marca) {
+                                if ($marca == $item['idmarca']) {
+                                    $datos = array(
+                                        'idlista_de_precios_comparacion' => $idcomparacion,
+                                        'idlista_de_precios_item' => $item['idlista_de_precios_item'],
+                                        'idarticulo_generico' => $item['idarticulo_generico'],
+                                        'idmarca' => $item['idmarca'],
+                                        'articulo' => $item['articulo'],
+                                        'precio' => $item['precio'],
+                                        'stock' => $item['stock'],
+                                        'marca' => $item['marca'],
+                                        'idcreador' => $session['SID']
+                                    );
+
+                                    $this->listas_de_precios_model->set_comparacion_item($datos);
+                                }
+                            }
+                        } else {  // Si no se seleccionaron marcas
+                            $datos = array(
+                                'idlista_de_precios_comparacion' => $idcomparacion,
+                                'idlista_de_precios_item' => $item['idlista_de_precios_item'],
+                                'idarticulo_generico' => $item['idarticulo_generico'],
+                                'idmarca' => $item['idmarca'],
+                                'articulo' => $item['articulo'],
+                                'precio' => $item['precio'],
+                                'stock' => $item['stock'],
+                                'marca' => $item['marca'],
+                                'idcreador' => $session['SID']
+                            );
+
+                            $this->listas_de_precios_model->set_comparacion_item($datos);
+                        }
+                    }
+
+                }
+
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Debe seleccionar al menos 2 proveedores'
+                );
+                echo json_encode($json);
+            }
+        }
     }
 
     private function formatear_fecha($fecha) {

@@ -35,12 +35,12 @@
             <div class="col-xs-8">
                 <strong>Actualizar tabla <label class="label label-success">articulos</label> mediante TXT de Sistema anterior. <br>
                     php index.php migrar actualizar_articulos ARTICULO.TXT <br>
-                    curl https://erp.rollerservice.com.ar/migrar/actualizar_articulos/ARCHIVO.TXT (ideal para evitar timeout)
+                    curl https://erp.rollerservice.com.ar/migrar/actualizar_articulos/ARTICULO.TXT (ideal para evitar timeout)
                     Eliminar cabeceras del archivo TXT
                 </strong>
             </div>
             <div class="col-xs-2" id="boton-3">
-                <button class="btn btn-xs btn-primary" onclick="procesar(3, '/importar/actualizar_articulos/ARCHIVO.TXT');">
+                <button class="btn btn-xs btn-primary" onclick="procesar(3, '/importar/actualizar_articulos/ARTICULO.TXT');">
                     <i class="fa fa-database"></i> Comenzar >>
                 </button>
             </div>

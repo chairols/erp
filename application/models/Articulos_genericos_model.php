@@ -48,6 +48,16 @@ class Articulos_genericos_model extends CI_Model {
       $query = $this->db->get();
       return $query->result_array();
     }
+    
+    
+    /*
+     *  Listas_de_precios/asociar_importar
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('articulos_genericos', $where);
+        
+        return $query->row_array();
+    }
 }
 
 ?>

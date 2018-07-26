@@ -18,7 +18,8 @@ class Listas_de_precios extends CI_Controller {
             'listas_de_precios_model',
             'marcas_model',
             'empresas_model',
-            'parametros_model'
+            'parametros_model',
+            'articulos_genericos_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -98,6 +99,47 @@ class Listas_de_precios extends CI_Controller {
                             $d['marca'] = $fila[4];
                         }
 
+                        /*
+                         *  Comienzo de búsqueda automática de genéricos
+                         */
+                        /*
+                         *  Búsqueda en artículos genéricos
+                         */
+                        $flag = true;
+
+                        $datos = array(
+                            'articulo_generico' => trim($fila[1]),
+                            'estado' => 'A'
+                        );
+                        $resultado = $this->articulos_genericos_model->get_where($datos);
+                        if ($resultado) {
+                            $d['idarticulo_generico'] = $resultado['idarticulo_generico'];
+                            $flag = false;
+                        }
+
+                        /*
+                         *  Búsqueda en listas de precios anteriores
+                         */
+
+                        if ($flag) {
+                            $datos = array(
+                                'articulo' => trim($fila[1]),
+                                'idarticulo_generico >' => 0
+                            );
+                            $resultado = $this->listas_de_precios_model->get_where_item($datos);
+                            if ($resultado) {
+                                $d['idarticulo_generico'] = $resultado['idarticulo_generico'];
+                                $flag = false;
+                            }
+                        }
+
+                        /*
+                         *  Búsqueda en artículos 
+                         */
+
+                        /*
+                         *  Búsqueda en artículos genéricos
+                         */
 
                         $this->listas_de_precios_model->set_item($d);
                     }
@@ -173,10 +215,10 @@ class Listas_de_precios extends CI_Controller {
 
         $where = array();
         $like = array();
-        
-        if($this->input->get('articulo'))
+
+        if ($this->input->get('articulo'))
             $like['listas_de_precios_items.articulo'] = $this->input->get('articulo');
-        if($this->input->get('generico')) {
+        if ($this->input->get('generico')) {
             switch ($this->input->get('generico')) {
                 case 'P':
                     $where['listas_de_precios_items.idarticulo_generico'] = 0;
@@ -310,7 +352,7 @@ class Listas_de_precios extends CI_Controller {
             }
         }
     }
-    
+
     public function borrar_item_ajax() {
         $this->form_validation->set_rules('idlista_de_precios_item', 'ID Item', 'required|integer');
 
@@ -344,36 +386,36 @@ class Listas_de_precios extends CI_Controller {
             }
         }
     }
-    
+
     public function ver_listas($pagina = 0) {
         $data['title'] = 'Ver Listas de Precios';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        
-        
+
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
 
         $where = array();
         $like = array();
         /*
-        if($this->input->get('articulo'))
-            $like['listas_de_precios_items.articulo'] = $this->input->get('articulo');
-        if($this->input->get('generico')) {
-            switch ($this->input->get('generico')) {
-                case 'P':
-                    $where['listas_de_precios_items.idarticulo_generico'] = 0;
-                    break;
-                case 'F':
-                    $where['listas_de_precios_items.idarticulo_generico >'] = 0;
-                default:
-                    break;
-            }
-        }
-        */
-         
+          if($this->input->get('articulo'))
+          $like['listas_de_precios_items.articulo'] = $this->input->get('articulo');
+          if($this->input->get('generico')) {
+          switch ($this->input->get('generico')) {
+          case 'P':
+          $where['listas_de_precios_items.idarticulo_generico'] = 0;
+          break;
+          case 'F':
+          $where['listas_de_precios_items.idarticulo_generico >'] = 0;
+          default:
+          break;
+          }
+          }
+         */
+
         $where['listas_de_precios.estado'] = 'A';
-        
+
 
         /*
          * inicio paginador
@@ -403,10 +445,10 @@ class Listas_de_precios extends CI_Controller {
         /*
          * fin paginador
          */
-        
+
         $data['listas'] = $this->listas_de_precios_model->get_cantidad_where_limit($where, $like, $per_page, $pagina);
 
-        
+
         foreach ($data['listas'] as $key => $value) {
             $data['listas'][$key]['fecha'] = $this->formatear_fecha_para_mostrar($value['fecha']);
             $where = array(
@@ -414,17 +456,16 @@ class Listas_de_precios extends CI_Controller {
                 'idlista_de_precios' => $value['idlista_de_precios']
             );
             $data['listas'][$key]['cantidad'] = $this->listas_de_precios_model->get_cantidad_items_where($where, array());
-            
+
             $where['idarticulo_generico >'] = 0;
             $data['listas'][$key]['asociados'] = $this->listas_de_precios_model->get_cantidad_items_where($where, array());
-            
         }
-        
-        
+
+
         $data['view'] = 'listas_de_precios/ver_listas';
         $this->load->view('layout/app', $data);
     }
-    
+
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);

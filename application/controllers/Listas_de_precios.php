@@ -136,6 +136,17 @@ class Listas_de_precios extends CI_Controller {
                         /*
                          *  Búsqueda en artículos 
                          */
+                        if($flag) {
+                            $datos = array(
+                                'articulo' => trim($fila[1]),
+                                'idarticulo_generico >' => 0,
+                                'estado' => 'A'
+                            );
+                            $resultado = $this->articulos_model->get_where($datos);
+                            if($resultado) {
+                                $d['idarticulo_generico'] = $resultado['idarticulo_generico'];
+                            }
+                        }
 
                         /*
                          *  Búsqueda en artículos genéricos

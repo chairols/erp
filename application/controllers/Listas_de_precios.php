@@ -582,6 +582,61 @@ class Listas_de_precios extends CI_Controller {
             }
         }
     }
+    
+    public function comparaciones($pagina = 0) {
+        $data['title'] = 'Listado de Comparaciones';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+
+        $where = array();
+        $like = array();
+        $where['estado'] = 'A';
+
+
+        /*
+         * inicio paginador
+         */
+        $total_rows = $this->listas_de_precios_model->get_cantidad_comparaciones_where($where, $like);
+        $config['reuse_query_string'] = TRUE;
+        $config['base_url'] = '/listas_de_precios/ver_listas/';
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        $data['links'] = $this->pagination->create_links();
+        $data['total_rows'] = $total_rows;
+        /*
+         * fin paginador
+         */
+
+        $data['comparaciones'] = $this->listas_de_precios_model->get_cantidad_comparaciones_where_limit($where, $like, $per_page, $pagina);
+        foreach ($data['comparaciones'] as $key => $value) {
+            $where = array(
+                'listas_de_precios_comparaciones_items.idlista_de_precios_comparacion' => $value['idlista_de_precios_comparacion']
+            );
+            $data['comparaciones'][$key]['empresas'] = $this->listas_de_precios_model->gets_empresas_comparaciones($where);
+            $data['comparaciones'][$key]['marcas'] = $this->listas_de_precios_model->gets_marcas_comparaciones($where);
+        }
+        
+        $data['view'] = 'listas_de_precios/comparaciones';
+        $this->load->view('layout/app', $data);
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';

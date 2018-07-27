@@ -83,7 +83,7 @@ class Listas_de_precios_model extends CI_Model {
     /*
      *  Listas_de_precios/asociar_generico
      */
-    public function get_cantidad_items_where_limit($where, $like,$per_page, $pagina) {
+    public function get_cantidad_items_where_limit($where, $like, $per_page, $pagina) {
         $this->db->select('listas_de_precios_items.*, articulos_genericos.articulo_generico as articulos_genericos_articulo_generico, articulos_genericos.idarticulo_generico as articulos_genericos_idarticulo_generico, marcas.idmarca as marcas_idmarca, marcas.marca as marcas_marca');
         $this->db->from('listas_de_precios_items');
         $this->db->join('marcas', 'listas_de_precios_items.idmarca = marcas.idmarca');
@@ -184,6 +184,64 @@ class Listas_de_precios_model extends CI_Model {
     public function set_comparacion_item($datos) {
         $this->db->insert('listas_de_precios_comparaciones_items', $datos);
         return $this->db->insert_id();
+    }
+    
+    /*
+     *  Listas_de_precios/comparaciones
+     */
+    public function get_cantidad_comparaciones_where($where, $like) {
+        $this->db->select('*');
+        $this->db->from('listas_de_precios_comparaciones');
+        $this->db->where($where);
+        $this->db->like($like);
+
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+    
+    /*
+     *  Listas_de_precios/comparaciones
+     */
+    public function get_cantidad_comparaciones_where_limit($where, $like, $per_page, $pagina) {
+        $this->db->select('*');
+        $this->db->from('listas_de_precios_comparaciones');
+        $this->db->where($where);
+        $this->db->like($like);
+        $this->db->order_by('listas_de_precios_comparaciones.fecha_creacion DESC');
+        $this->db->limit($per_page, $pagina);
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     *  Listas_de_precios/comparaciones
+     */
+    public function gets_empresas_comparaciones($where) {
+        $this->db->select("empresas.empresa");
+        $this->db->from('listas_de_precios_comparaciones_items');
+        $this->db->join('listas_de_precios_items', 'listas_de_precios_comparaciones_items.idlista_de_precios_item = listas_de_precios_items.idlista_de_precios_item');
+        $this->db->join('listas_de_precios', 'listas_de_precios.idlista_de_precios = listas_de_precios_items.idlista_de_precios');
+        $this->db->join('empresas', 'listas_de_precios.idempresa = empresas.idempresa');
+        $this->db->where($where);
+        $this->db->group_by('empresas.idempresa');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     *  Listas_de_precios/comparaciones
+     */
+    public function gets_marcas_comparaciones($where) {
+        $this->db->select("marcas.marca");
+        $this->db->from('listas_de_precios_comparaciones_items');
+        $this->db->join('marcas', 'listas_de_precios_comparaciones_items.idmarca = marcas.idmarca');
+        $this->db->where($where);
+        $this->db->group_by('marcas.idmarca');
+        
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }
 

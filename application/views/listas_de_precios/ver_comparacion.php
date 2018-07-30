@@ -91,7 +91,7 @@
                                                 $stock_minimo += $articulo['stock_min'];
                                             }
                                             ?>
-    <?= $stock ?>
+                                            <?= $stock ?>
                                         </span>
                                     </span>
                                 </div>
@@ -101,7 +101,7 @@
                                     <span class="smallTitle">Stock Mínimo</span>
                                     <span class="listTextStrong">
                                         <span class="label bg-teal-active">
-    <?= $stock_minimo ?>
+                                            <?= $stock_minimo ?>
                                         </span>
                                     </span>
                                 </div>
@@ -110,12 +110,12 @@
                                 <div class="listRowInner">
                                     <span class="smallTitle">Balance Stock</span>
                                     <span class="listTextStrong">
-                                            <?php if (($stock - $stock_minimo) < 0) { ?>
+                                        <?php if (($stock - $stock_minimo) < 0) { ?>
                                             <span class="label label-danger">
-    <?php } else { ?>
+                                            <?php } else { ?>
                                                 <span class="label bg-olive">
                                                     <? } ?>
-        <?= ($stock - $stock_minimo) ?>
+                                                    <?= ($stock - $stock_minimo) ?>
                                                 </span>
                                             </span>
                                     </div>
@@ -145,7 +145,7 @@
                                     </div>
                                 </div>
 
-        <?php foreach ($item['items'] as $i) { ?>
+                                <?php foreach ($item['items'] as $i) { ?>
                                     <div class="animated DetailedInformation col-xs-12">
                                         <div class="row bg-gray" style="padding-top: 10px; padding-bottom: 10px;">
                                             <div class="col-xs-1">
@@ -184,17 +184,41 @@
                                             </div>
                                             <div class="col-xs-3">
                                                 <div class="listRowInner">
-                                                    <span class="label label-primary hint--bottom hint--bounce hint--info" aria-label="Stock del Proveedor">
+                                                    <span class="label label-primary hint--bottom hint--bounce hint--info" data-toggle="tooltip" data-original-title="Stock del Proveedor">
                                                         <?= $i['stock'] ?>
                                                     </span>
-                                                    /
-                                                    
+                                                    -
+                                                    <span class="label bg-teal-active hint--bottom hint--bounce hint--info" data-toggle="tooltip" data-original-title="Stock Mínimo">
+                                                        <?php
+                                                        if ($i['articulo_completo']) {
+                                                            echo $i['articulo_completo']['stock_min'];
+                                                        } else {
+                                                            echo "0";
+                                                        }
+                                                        ?>
+                                                    </span>
+                                                    -
+                                                    <span class="label label-default hint--bottom hint--bounce" data-toggle="tooltip" data-original-title="Stock Actual (Depósito + Importaciones)">
+                                                        <?php
+                                                        if ($i['articulo_completo']) {
+                                                            echo ($i['articulo_completo']['stock'] + $i['articulo_completo']['stock_pending']);
+                                                        } else {
+                                                            echo "0";
+                                                        }
+                                                        ?>
+                                                    </span>
+                                                    -
+                                                    <?php if (($i['articulo_completo']['stock'] + $i['articulo_completo']['stock_pending'] - $i['articulo_completo']['stock_min']) < 0) { ?>
+                                                        <span class="label label-danger hint--bottom hint--bounce" data-toggle="tooltip" data-original-title="Cantidad a Pedir"><?= ($i['articulo_completo']['stock'] + $i['articulo_completo']['stock_pending'] - $i['articulo_completo']['stock_min']) ?></span>
+            <?php } else { ?>
+                                                        <span class="label label-success hint--bottom hint--bounce" data-toggle="tooltip" data-original-title="Stock OK"><?= ($i['articulo_completo']['stock'] + $i['articulo_completo']['stock_pending'] - $i['articulo_completo']['stock_min']) ?></span>
+            <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
 
                                     </div>
-                            <?php } ?>
+        <?php } ?>
                             </div>
     <?php } ?>
                         <!-- ////////////////////////////   Registros   //////////////////////////// -->
@@ -210,21 +234,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-4 col-md-3">
                         <div class="row">
-                            <div class="col-xs-5 col-sm-3 col-md-4" style="margin:0px;padding:0px;margin-top:7px;">
-                                <span class="pull-right">Mostrando&nbsp;</span>
-                            </div>
-                            <div class="col-xs-3 col-sm-2 col-md-3 txC" style="margin:0px;padding:0px;">
-                                <select id="regsperview" name="regsperview" class="form-control chosenSelect txC" firstvalue="" firsttext="" style="display: none;">
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="25" selected="selected">25</option>
-                                    <option value="50">50</option><option value="100">100</option>
-                                </select>
-                            </div>
-                            <div class="col-xs-4 col-sm-7 col-md-5" style="margin:0px;padding:0px;margin-top:7px;">
-                                &nbsp;de
-                                <b><span id="TotalRegs"><?= $total_rows ?></span></b>
-                            </div>
+
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-9">

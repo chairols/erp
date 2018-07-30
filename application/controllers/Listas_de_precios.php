@@ -694,6 +694,13 @@ class Listas_de_precios extends CI_Controller {
                 'listas_de_precios_comparaciones_items.idarticulo_generico' => $value['idarticulo_generico']
             );
             $data['items'][$key]['items'] = $this->listas_de_precios_model->gets_comparaciones_items($where);
+            foreach($data['items'][$key]['items'] as $k1 => $v1) {
+                $where = array(
+                    'idarticulo_generico' => $value['idarticulo_generico'],
+                    'idmarca' => $v1['idmarca']
+                );
+                $data['items'][$key]['items'][$k1]['articulo_completo'] = $this->articulos_model->get_where($where);
+            }
         }
         
         $data['view'] = 'listas_de_precios/ver_comparacion';

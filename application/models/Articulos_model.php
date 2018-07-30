@@ -77,10 +77,13 @@ class Articulos_model extends CI_Model {
       return $query->result_array();
     }
     
+    /*
+     *  Listas_de_precios/ver_comparacion
+     */
     public function get_sum_stock_por_idarticulo_generico($idarticulo_generico) {
         $this->db->select_sum('stock');
         $this->db->from('articulos');
-        $this->db->like(array('idarticulo_generico' => $idarticulo_generico));
+        $this->db->where(array('idarticulo_generico' => $idarticulo_generico));
         
         $query = $this->db->get();
         return $query->row_array();

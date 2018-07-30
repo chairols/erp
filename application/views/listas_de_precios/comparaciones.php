@@ -117,7 +117,7 @@
                                         <a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" url="../../../core/resources/processes/proc.core.php" id="store_">
                                           <button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button>
                                         </a> -->
-                                        <a href="#" class="hint--bottom hint--bounce hint--info" aria-label="Analizar">
+                                        <a href="/listas_de_precios/ver_comparacion/<?=$comparacion['idlista_de_precios_comparacion']?>/" class="hint--bottom hint--bounce hint--info" aria-label="Ver Comparación">
                                             <button class="btn btnBlue" type="button">
                                                 <i class="fa fa-eye"></i>
                                             </button>

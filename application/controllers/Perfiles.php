@@ -92,7 +92,7 @@ class Perfiles extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
-    public function modificar($idperfil = null) {
+    private function modificar_anterior($idperfil = null) {
         $data['title'] = 'Modificar Perfil';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
@@ -131,6 +131,142 @@ class Perfiles extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
+    public function modificar($idperfil = null) {
+        if ($idperfil == null) {
+            redirect('/perfiles/listar/', 'refresh');
+        }
+        $data['title'] = 'Modificar Perfil';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['css'] = array(
+            '/assets/modulos/perfiles/css/modificar.css'
+        );
+        $data['javascript'] = array(
+            '/assets/vendors/Nestable-master/jquery.nestable.js',
+            '/assets/modulos/perfiles/js/modificar.js'
+        );
+
+        
+        $datos = array(
+            'idperfil' => $idperfil
+        );
+        $data['perfil'] = $this->perfiles_model->get_where($datos);
+
+        $ids = $this->menu_model->gets_menu_por_perfil($data['session']['perfil']);
+        $data['ids'] = array();
+        foreach ($ids as $id) {
+            $data['ids'][] = $id['idmenu'];
+        }
+        $data['ids'] = implode(",", $data['ids']);
+
+        $data['mmenu'] = $this->menu_model->obtener_menu_por_padre_con_accesos(0, $idperfil);
+        foreach ($data['mmenu'] as $key => $value) {
+            $data['mmenu'][$key]['submenu'] = $this->menu_model->obtener_menu_por_padre_con_accesos($value['idmenu'], $idperfil);
+            foreach ($data['mmenu'][$key]['submenu'] as $k1 => $v1) {
+                $data['mmenu'][$key]['submenu'][$k1]['submenu'] = $this->menu_model->obtener_menu_por_padre_con_accesos($v1['idmenu'], $idperfil);
+            }
+        }
+        
+        $data['view'] = 'perfiles/modificar';
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function actualizar_accesos() {
+        $this->form_validation->set_rules('idmenu', 'Menú', 'required|integer');
+        $this->form_validation->set_rules('idperfil', 'Perfil', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'idperfil' => $this->input->post('idperfil'),
+                'idmenu' => $this->input->post('idmenu')
+            );
+            $resultado = $this->perfiles_model->get_where_perfiles_menu($where);
+
+            if ($resultado) {
+                $this->perfiles_model->borrar_perfiles_menu($where);
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            } else {
+                $this->perfiles_model->set_perfiles_menu($where);
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+    
+    public function actualizar_orden() {
+        $this->form_validation->set_rules('orden', 'Orden', 'required');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $resultado = json_decode($this->input->post('orden'));
+
+            $contador1 = 1;
+            foreach ($resultado as $r1) {
+                $data = array(
+                    'orden' => $contador1
+                );
+                $where = array(
+                    'idmenu' => $r1->id
+                );
+                $this->menu_model->update_menu($data, $where);
+
+                if (isset($r1->children)) {
+                    $contador2 = 1;
+                    foreach ($r1->children as $r2) {
+                        $data = array(
+                            'orden' => $contador2
+                        );
+                        $where = array(
+                            'idmenu' => $r2->id
+                        );
+                        $this->menu_model->update_menu($data, $where);
+
+
+                        if (isset($r2->children)) {
+                            $contador3 = 1;
+                            foreach ($r2->children as $r3) {
+                                $data = array(
+                                    'orden' => $contador3
+                                );
+                                $where = array(
+                                    'idmenu' => $r3->id
+                                );
+                                $this->menu_model->update_menu($data, $where);
+
+                                $contador3++;
+                            }
+                        }
+                        $contador2++;
+                    }
+                }
+
+                $contador1++;
+            }
+
+            $json = array(
+                'status' => 'ok'
+            );
+            echo json_encode($json);
+        }
+        
+    }
+    
     public function modificar_ajax() {
         $session = $this->session->all_userdata();
 

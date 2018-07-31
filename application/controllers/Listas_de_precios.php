@@ -645,6 +645,9 @@ class Listas_de_precios extends CI_Controller {
         $data['title'] = 'Listado de Comparaciones';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/listas_de_precios/js/ver_comparacion.js'
+        );
         
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];

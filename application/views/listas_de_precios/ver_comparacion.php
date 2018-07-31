@@ -35,7 +35,8 @@
         <button type="button" aria-label="Deseleccionar todos" id="UnselectAll" class="btn animated fadeIn NewElementButton Hidden hint--bottom-right hint--bounce"><i class="fa fa-square"></i></button>
         <!--/Select All -->
         <!-- Remove All -->
-        <button type="button" aria-label="Eliminar Seleccionados" title="Borrar registros seleccionados" class="btn bg-red animated fadeIn NewElementButton Hidden DeleteSelectedElements hint--bottom hint--bounce hint--error"><i class="fa fa-trash-o"></i></button>
+        <!--<button type="button" aria-label="Eliminar Seleccionados" title="Borrar registros seleccionados" class="btn bg-red animated fadeIn NewElementButton Hidden DeleteSelectedElements hint--bottom hint--bounce hint--error"><i class="fa fa-trash-o"></i></button>-->
+        <button type="button" aria-label="Eliminar Seleccionados" title="Borrar registros seleccionados" class="borraritems btn bg-red animated fadeIn Hidden ExpandSelectedElements hint--bottom hint--bounce hint--error"><i class="fa fa-trash-o"></i></button>
         <!-- /Remove All -->
         <!-- Activate All -->
         <button type="button" aria-label="Activar Seleccionados" class="btn btnGreen animated fadeIn NewElementButton Hidden ActivateSelectedElements hint--bottom hint--bounce hint--success"><i class="fa fa-check-circle"></i></button>
@@ -114,12 +115,13 @@
                                             <span class="label label-danger">
                                             <?php } else { ?>
                                                 <span class="label bg-olive">
-                                                    <? } ?>
-                                                    <?= ($stock - $stock_minimo) ?>
+                                            <? } ?>
+                                                <?= ($stock - $stock_minimo) ?>
                                                 </span>
                                             </span>
-                                    </div>
+                                    </span>
                                 </div>
+                            </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
                                     <div class="listRowInner">
                                         <span class="smallTitle"></span>
@@ -144,13 +146,14 @@
                                         <div class="col-xs-1">Ordenar</div>
                                     </div>
                                 </div>
-
+                                <?php $contador = 1; ?>
                                 <?php foreach ($item['items'] as $i) { ?>
                                     <div class="animated DetailedInformation col-xs-12">
                                         <div class="row bg-gray" style="padding-top: 10px; padding-bottom: 10px;">
                                             <div class="col-xs-1">
                                                 <div class="listRowInner">
-                                                    <span class="label label-success">XXX</span>
+                                                    <span class="label label-success"><?= $contador ?></span>
+                                                    <?php $contador++; ?>
                                                 </div>
                                             </div>
                                             <div class="col-xs-2">
@@ -210,17 +213,17 @@
                                                     -
                                                     <?php if (($i['articulo_completo']['stock'] + $i['articulo_completo']['stock_pending'] - $i['articulo_completo']['stock_min']) < 0) { ?>
                                                         <span class="label label-danger hint--bottom hint--bounce" data-toggle="tooltip" data-original-title="Cantidad a Pedir"><?= ($i['articulo_completo']['stock'] + $i['articulo_completo']['stock_pending'] - $i['articulo_completo']['stock_min']) ?></span>
-            <?php } else { ?>
+                                                    <?php } else { ?>
                                                         <span class="label label-success hint--bottom hint--bounce" data-toggle="tooltip" data-original-title="Stock OK"><?= ($i['articulo_completo']['stock'] + $i['articulo_completo']['stock_pending'] - $i['articulo_completo']['stock_min']) ?></span>
-            <?php } ?>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
 
                                     </div>
-        <?php } ?>
+                                <?php } ?>
                             </div>
-    <?php } ?>
+                        <?php } ?>
                         <!-- ////////////////////////////   Registros   //////////////////////////// -->
                     </div> <!-- container-fluid -->
                 </div>
@@ -239,14 +242,11 @@
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-9">
                         <ul class="paginationRight pagination no-margin pull-right">
-    <?= $links ?>
-                        </ul>
-                    </div>
+                            <?= $links ?>
+                    </ul>
                 </div>
             </div>
-            <!-- Paginator -->
         </div>
-        <pre>
-    <?php print_r($items) ?>
-    </pre>
+        <!-- Paginator -->
+    </div>
 </div>

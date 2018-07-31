@@ -39,7 +39,7 @@ function actualizar(idmenu, idperfil) {
     };
     $.ajax({
         type: 'POST',
-        url: '/perfiles/actualizar_accesos/',
+        url: '/prueba/actualizar_accesos/',
         data: datos,
         beforeSend: function () {
             $("#checkbox-"+idmenu).attr("disabled", "disabled");
@@ -67,7 +67,7 @@ function actualizar_orden() {
     };
     $.ajax({
         type: 'POST',
-        url: '/perfiles/actualizar_orden/',
+        url: '/prueba/actualizar_orden/',
         data: datos,
         beforeSend: function () {
             

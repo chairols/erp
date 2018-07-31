@@ -1,13 +1,8 @@
-<input type="hidden" id="menues" value="<?= $ids ?>">
-<input type="hidden" id="idperfil" value="<?=$perfil['idperfil']?>">
-
 <div class="row">
-    <div class="col-md-5 col-md-offset-1">
-        <div class="box">
-            <div class="box-header">
-
-            </div>
-            <div class="box-body no-padding">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header"></div>
+            <div class="box-body">
                 <div class="form-horizontal">
                     <div class="form-group">
                         <label class="control-label col-md-3">Perfil</label>
@@ -26,42 +21,62 @@
         </div>
     </div>
 
-    <div class="col-md-5 ">
-        <div class="box">
+    <div class="col-xs-12">
+        <div class="box box-primary">
             <div class="box-header">
                 <h3>Accesos</h3>
             </div>
             <div class="box-body no-padding">
-                <div id="treeview-checkbox">
-                    <?php foreach ($mmenu as $m) { ?>
-                        <ul>
-                            <li data-value="<?= $m['idmenu'] ?>">
-                                <i class="<?= $m['icono'] ?>"></i> <?= $m['titulo'] ?> 
-                                <?= ($m['visible'] == 1) ? "<i class='text-green fa fa-eye'></i>" : "<i class='text-red fa fa-eye-slash'></i>" ?>
-                                <?php foreach ($m['submenu'] as $m1) { ?>
-                                    <ul>
-                                        <li data-value="<?= $m1['idmenu'] ?>">
-                                            <i class="<?= $m1['icono'] ?>"></i> <?= $m1['titulo'] ?> 
-                                            <?= ($m1['visible'] == 1) ? "<i class='text-green fa fa-eye'></i>" : "<i class='text-red fa fa-eye-slash'></i>" ?>
+                <div class="cf nestable-lists">
+                    <div class="dd" id="nestable">
+                        <ol class="dd-list">
+                            <?php foreach ($mmenu as $m1) { ?>
+                                <li class="dd-item dd3-item" data-id="<?= $m1['idmenu'] ?>">
+                                    <div class="dd-handle dd3-handle"></div>
+                                    <div class="dd3-content">
+                                        <input id="checkbox-<?= $m1['idmenu'] ?>" type="checkbox"<?= ($m1['idperfil']) ? " checked" : "" ?> onclick="actualizar(<?= $m1['idmenu'] ?>, <?= $perfil['idperfil'] ?>);"> <i class="<?= $m1['icono'] ?>"></i> <?= $m1['titulo'] ?> <?= ($m1['visible'] == 1) ? "<i class='text-green fa fa-eye'></i>" : "<i class='text-red fa fa-eye-slash'></i>" ?> 
+                                        <span id="progreso-<?= $m1['idmenu'] ?>" style="display: none;">
+                                            <i class="fa fa-refresh fa-spin"></i>
+                                        </span>
+                                    </div>
+                                    <?php if (count($m1['submenu'])) { ?>
+                                        <ol class="dd-list">
                                             <?php foreach ($m1['submenu'] as $m2) { ?>
-                                                <ul>
-                                                    <li data-value="<?= $m2['idmenu'] ?>">
-                                                        <i class="<?= $m2['icono'] ?>"></i> <?= $m2['titulo'] ?> 
-                                                        <?= ($m2['visible'] == 1) ? "<i class='text-green fa fa-eye'></i>" : "<i class='text-red fa fa-eye-slash'></i>" ?>
-                                                    </li>
-                                                </ul>
+                                                <li class="dd-item dd3-item" data-id="<?= $m2['idmenu'] ?>">
+                                                    <div class="dd-handle dd3-handle"></div>
+                                                    <div class="dd3-content">
+                                                        <input id="checkbox-<?= $m2['idmenu'] ?>" type="checkbox"<?= ($m2['idperfil']) ? " checked" : "" ?> onclick="actualizar(<?= $m2['idmenu'] ?>, <?= $perfil['idperfil'] ?>);"> <i class="<?= $m2['icono'] ?>"></i> <?= $m2['titulo'] ?> <?= ($m2['visible'] == 1) ? "<i class='text-green fa fa-eye'></i>" : "<i class='text-red fa fa-eye-slash'></i>" ?>
+                                                        <span id="progreso-<?= $m2['idmenu'] ?>" style="display: none;">
+                                                            <i class="fa fa-refresh fa-spin"></i>
+                                                        </span>
+                                                    </div>
+                                                    <?php if (count($m2['submenu'])) { ?>
+                                                        <ol class="dd-list">
+                                                            <?php foreach ($m2['submenu'] as $m3) { ?>
+                                                                <li class="dd-item dd3-item" data-id="<?= $m3['idmenu'] ?>">
+                                                                    <div class="dd-handle dd3-handle"></div>
+                                                                    <div class="dd3-content">
+                                                                        <input id="checkbox-<?= $m3['idmenu'] ?>" type="checkbox"<?= ($m3['idperfil']) ? " checked" : "" ?> onclick="actualizar(<?= $m3['idmenu'] ?>, <?= $perfil['idperfil'] ?>);"> <i class="<?= $m3['icono'] ?>"></i> <?= $m3['titulo'] ?> <?= ($m3['visible'] == 1) ? "<i class='text-green fa fa-eye'></i>" : "<i class='text-red fa fa-eye-slash'></i>" ?>
+                                                                        <span id="progreso-<?= $m3['idmenu'] ?>" style="display: none;">
+                                                                            <i class="fa fa-refresh fa-spin"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            <?php } ?>
+                                                        </ol>
+                                                    <?php } ?>
+                                                </li>
                                             <?php } ?>
-                                        </li>
-                                    </ul>
-                                <?php } ?>
-                            </li> 
-                        </ul>
-                    <?php } ?>
+                                        </ol>
+                                    <?php } ?>
+                                </li>
+                            <?php } ?>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
-
-
     </div>
-
 </div>
+
+<textarea style="display: none;" id="nestable-output"></textarea>

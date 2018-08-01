@@ -2,7 +2,7 @@ $(".autocompletemarca").on('focusin', function () {
     id = this.attributes.identificador.value;
     $(".autocompletemarca").autoComplete({
         minChars: 1,
-        delay: 300,
+        //delay: 300,
         cache: false,
         source: function (term, response) {
             try {
@@ -68,7 +68,7 @@ $(".autocompletegenerico").on('focusin', function () {
     id = this.attributes.identificador.value;
     $(".autocompletegenerico").autoComplete({
         minChars: 1,
-        delay: 300,
+        //delay: 300,
         cache: false,
         source: function (term, response) {
             try {

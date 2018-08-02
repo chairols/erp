@@ -520,7 +520,7 @@ class Listas_de_precios extends CI_Controller {
                     );
                     $ultima_lista = $this->listas_de_precios_model->get_ultima_lista($where);
 
-                    
+
                     // Traigo los items de la lista
                     $where = array(
                         'idlista_de_precios' => $ultima_lista['idlista_de_precios'],
@@ -566,7 +566,6 @@ class Listas_de_precios extends CI_Controller {
                             $this->listas_de_precios_model->set_comparacion_item($datos);
                         }
                     }
-
                 }
 
                 $json = array(
@@ -582,12 +581,12 @@ class Listas_de_precios extends CI_Controller {
             }
         }
     }
-    
+
     public function comparaciones($pagina = 0) {
         $data['title'] = 'Listado de Comparaciones';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
 
@@ -633,13 +632,13 @@ class Listas_de_precios extends CI_Controller {
             $data['comparaciones'][$key]['empresas'] = $this->listas_de_precios_model->gets_empresas_comparaciones($where);
             $data['comparaciones'][$key]['marcas'] = $this->listas_de_precios_model->gets_marcas_comparaciones($where);
         }
-        
+
         $data['view'] = 'listas_de_precios/comparaciones';
         $this->load->view('layout/app', $data);
     }
-    
+
     public function ver_comparacion($idlista_de_precios_comparacion = null, $pagina = 0) {
-        if($idlista_de_precios_comparacion == null) {
+        if ($idlista_de_precios_comparacion == null) {
             redirect('/listas_de_precios/comparaciones/', 'refresh');
         }
         $data['title'] = 'Listado de Comparaciones';
@@ -648,20 +647,20 @@ class Listas_de_precios extends CI_Controller {
         $data['javascript'] = array(
             '/assets/modulos/listas_de_precios/js/ver_comparacion.js'
         );
-        
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
-        
+
         $where = array();
         $like = array();
         $where['listas_de_precios_comparaciones_items.estado'] = 'A';
-        
+
         /*
          * inicio paginador
          */
         $total_rows = $this->listas_de_precios_model->get_cantidad_comparaciones_items_where($where, $like);
         $config['reuse_query_string'] = TRUE;
-        $config['base_url'] = '/listas_de_precios/ver_comparacion/'.$idlista_de_precios_comparacion.'/';
+        $config['base_url'] = '/listas_de_precios/ver_comparacion/' . $idlista_de_precios_comparacion . '/';
         $config['total_rows'] = $total_rows;
         $config['per_page'] = $per_page;
         $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
@@ -685,8 +684,8 @@ class Listas_de_precios extends CI_Controller {
          * fin paginador
          */
         $data['items'] = $this->listas_de_precios_model->get_cantidad_comparaciones_items_where_limit($where, $like, $per_page, $pagina);
-        
-        foreach($data['items'] as $key => $value) {
+
+        foreach ($data['items'] as $key => $value) {
             $where = array(
                 'articulos.idarticulo_generico' => $value['idarticulo_generico'],
                 'articulos.estado' => 'A'
@@ -697,7 +696,7 @@ class Listas_de_precios extends CI_Controller {
                 'listas_de_precios_comparaciones_items.idarticulo_generico' => $value['idarticulo_generico']
             );
             $data['items'][$key]['items'] = $this->listas_de_precios_model->gets_comparaciones_items($where);
-            foreach($data['items'][$key]['items'] as $k1 => $v1) {
+            foreach ($data['items'][$key]['items'] as $k1 => $v1) {
                 $where = array(
                     'idarticulo_generico' => $value['idarticulo_generico'],
                     'idmarca' => $v1['idmarca']
@@ -705,9 +704,37 @@ class Listas_de_precios extends CI_Controller {
                 $data['items'][$key]['items'][$k1]['articulo_completo'] = $this->articulos_model->get_where($where);
             }
         }
-        
+
         $data['view'] = 'listas_de_precios/ver_comparacion';
         $this->load->view('layout/app', $data);
+    }
+
+    public function borrar_items_lista_de_precios_ajax() {
+        $this->form_validation->set_rules('selected_ids', "Selected Ids", 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $selected_ids = explode(",", $this->input->post('selected_ids'));
+            foreach ($selected_ids as $id) {
+                $datos = array(
+                    'estado' => 'I'
+                );
+                $where = array(
+                    'idlista_de_precios_item' => $id
+                );
+
+                $resultado = $this->listas_de_precios_model->update_items($datos, $where);
+            }
+            $json = array(
+                'status' => 'ok'
+            );
+            echo json_encode($json);
+        }
     }
 
     private function formatear_fecha($fecha) {

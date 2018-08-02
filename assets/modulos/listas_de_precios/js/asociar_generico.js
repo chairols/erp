@@ -130,8 +130,10 @@ $(".autocompletegenerico").focusout(function () {
                 $("#progressgenerico_" + iditem).html("<br><i class='fa fa-warning text-red'></i>");
             } else if (resultado['status'] == 'ok') {
                 $("#progressgenerico_" + iditem).show();
-                $("#progressgenerico_" + iditem).html("<br><i class='fa fa-check text-green'></i>");
+                //$("#progressgenerico_" + iditem).html("<br><i class='fa fa-check text-green'></i>");
+                $("#progressgenerico_" + iditem).html($("#selected_ids").val());
                 $("#progressgenerico_" + iditem).fadeOut(3000);
+
             }
         }
     });
@@ -169,3 +171,29 @@ $(".borraritem").click(function () {
 
 
 });
+
+function borrarSeleccionados() {
+
+
+    datos = {
+        'selected_ids': $("#selected_ids").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/listas_de_precios/borrar_items_lista_de_precios_ajax/',
+        data: datos,
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                notifyError('<strong>ERROR</strong>' + resultado['data'], 5000);
+            } else if (resultado['status'] == 'ok') {
+                notifySuccess("OK", 1000);
+                location.reload();
+            }
+        }
+    });
+}
+

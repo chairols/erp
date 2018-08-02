@@ -42,6 +42,7 @@ class Listas_de_precios_model extends CI_Model {
     
     /*
      *  Listas_de_precios/asociar_marcas
+     *  Listas_de_precios/borrar_items_lista_de_precios_ajax
      */
     public function update_items($datos, $where) {
         $this->db->update('listas_de_precios_items', $datos, $where);

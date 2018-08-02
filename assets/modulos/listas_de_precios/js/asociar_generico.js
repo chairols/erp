@@ -130,8 +130,7 @@ $(".autocompletegenerico").focusout(function () {
                 $("#progressgenerico_" + iditem).html("<br><i class='fa fa-warning text-red'></i>");
             } else if (resultado['status'] == 'ok') {
                 $("#progressgenerico_" + iditem).show();
-                //$("#progressgenerico_" + iditem).html("<br><i class='fa fa-check text-green'></i>");
-                $("#progressgenerico_" + iditem).html($("#selected_ids").val());
+                $("#progressgenerico_" + iditem).html("<br><i class='fa fa-check text-green'></i>");
                 $("#progressgenerico_" + iditem).fadeOut(3000);
 
             }

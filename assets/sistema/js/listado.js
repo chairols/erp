@@ -58,15 +58,10 @@ function toggleRow(element)
     var actions = element.children('.listActions');
     actions.toggleClass('Hidden');
 
-
-
-	if(get['status'] && get['status'].toUpperCase()=='I')
-	{
-    showActivateButton();
-    }else{
+		showActivateButton();
 		showDeleteButton();
-    }
 		showExpandButton();
+		showContractButton();
 		showSelectAllButton();
 }
 
@@ -75,6 +70,8 @@ function toggleRowDetailedInformation()
 	$('.ExpandButton,ContractButton').on('click',function(event){
 		event.stopPropagation();
 		toggleExpandRow($(this));
+		showExpandButton();
+		showContractButton();
 	});
 }
 toggleRowDetailedInformation();
@@ -85,6 +82,7 @@ function toggleExpandRow(element)
 	var ID = ElementID.split('_');
 	var RowID = ID[1];
 	var InfoDetail = $("#row_"+RowID).children(".DetailedInformation");
+	console.log('entra');
 	element.toggleClass('ContractButton');
 	element.toggleClass('ExpandButton');
 	element.children('i').toggleClass('fa-plus');
@@ -114,11 +112,21 @@ function showActivateButton()
 
 function showExpandButton()
 {
-    if($('.SelectedRow').length>1)
+    if($('.SelectedRow').length > 1 && $('.SelectedRow').children('.listActions').children('div').children('.roundItemActionsGroup').children('a').children('.ExpandButton').length > 0)
     {
         $('.ExpandSelectedElements').removeClass('Hidden');
     }else{
         $('.ExpandSelectedElements').addClass('Hidden');
+    }
+}
+
+function showContractButton()
+{
+    if($('.SelectedRow').length > 1  && $('.SelectedRow').children('.listActions').children('div').children('.roundItemActionsGroup').children('a').children('.ContractButton').length > 0)
+    {
+        $('.ContractSelectedElements').removeClass('Hidden');
+    }else{
+        $('.ContractSelectedElements').addClass('Hidden');
     }
 }
 
@@ -190,35 +198,31 @@ function deleteElement(element)
 function activateElement(element)
 {
 	var elementID	= element.attr('id').split("_");
-	var id			= elementID[1];
-	var row			= $("#row_"+id);
-	var process 	= element.attr('process');
-	var object		= $("#SearchResult").attr("object");
-	var string      = 'id='+ id + '&action=activate&object='+object;
+	var id				= elementID[1];
+	var row				= $("#row_"+id);
+	var url 			= element.attr('url');
+	var campo 		= element.attr('campo');
+	var datos   	= element.attr('campo')+'='+id;
 	var result;
 
     $.ajax({
         type: "POST",
-        url: process,
-        data: string,
+        url: url,
+        data: datos,
         cache: false,
         async: false,
         success: function(data){
-            if(data)
-            {
-                console.log(data);
-                result = false;
-            }else{
-			    		row.remove();
-            	result = true;
-            }
-        }
+            row.remove();
+	        	result = true;
+        },
+				error: function(data){
+					result = false;
+					console.log(data);
+				}
     });
     //console.log(result);
     return result;
 }
-
-
 
 
 function deleteListElement()
@@ -327,10 +331,27 @@ function massiveRowExpand()
 		$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('a').children('.ExpandButton').each(function(){
 			toggleExpandRow($(this));
 		});
+		$(this).addClass('Hidden');
+		$('.ContractSelectedElements').removeClass('Hidden');
 		unselectAll();
 	})
 }
 massiveRowExpand();
+
+function massiveRowContract()
+{
+	$('.ContractSelectedElements').click(function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('a').children('.ContractButton').each(function(){
+			toggleExpandRow($(this));
+		});
+		$(this).addClass('Hidden');
+		$('.ExpandSelectedElements').removeClass('Hidden');
+		unselectAll();
+	})
+}
+massiveRowContract();
 
 function massiveElementDelete()
 {
@@ -379,23 +400,24 @@ function massiveElementActivate()
 		e.stopPropagation();
 		var delBtn = $(this)
 		alertify.confirm(utf8_decode('¿Desea activar los registros seleccionados?'), function(e){
-	        if(e){
-	        	var result;
-	        	$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('.activateElement').each(function(){
-	        		result = activateElement($(this));
-	        	});
+      if(e)
+			{
+      	var result;
+      	$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('.activateElement').each(function(){
+      		result = activateElement($(this));
+      	});
 				unselectAll();
-	        	if(result)
-	        	{
-	        		delBtn.addClass('Hidden');
-	        		notifySuccess(utf8_decode('Los registros seleccionados han sido activados.'));
-	        		submitSearch();
-	        	}else{
-	        		notifyError('Hubo un problema al intentar activar los registros.');
-	        	}
-	        }
-	    });
-	    return false;
+      	if(result)
+      	{
+      		delBtn.addClass('Hidden');
+      		notifySuccess(utf8_decode('Los registros seleccionados han sido activados.'));
+      		submitSearch();
+      	}else{
+      		notifyError('Hubo un problema al intentar activar los registros.');
+      	}
+      }
+    });
+	  return false;
 	});
 }
 massiveElementActivate();

@@ -30,7 +30,7 @@ class Articulos extends CI_Controller {
         $per_page = $per_page['valor'];
 
         $where = $this->input->get();
-        $where['articulos.estado'] = 'A';
+        $where['articulos.estado'] = 'I';
 
         /*
          * inicio paginador
@@ -87,6 +87,12 @@ class Articulos extends CI_Controller {
     {
       $where = $this->input->post();
       $this->articulos_model->update(array('estado'=>'I'),$where['idarticulo']);
+    }
+
+    public function activar_ajax()
+    {
+      $where = $this->input->post();
+      $this->articulos_model->update(array('estado'=>'A'),$where['idarticulo']);
     }
 
 }

@@ -44,20 +44,21 @@
       </div>
     </div>
     <!-- /Search Filters -->
-		<!-- Select All -->
+		<!-- Seleccionar Todos -->
   	<button aria-label="Seleccionar todos" type="button" id="SelectAll" class="btn animated fadeIn NewElementButton hint--bottom-right hint--bounce"><i class="fa fa-square-o"></i></button>
+		<!-- Deseleccionar Todos -->
   	<button type="button" aria-label="Deseleccionar todos" id="UnselectAll" class="btn animated fadeIn NewElementButton Hidden hint--bottom-right hint--bounce"><i class="fa fa-square"></i></button>
-  	<!--/Select All -->
-  	<!-- Remove All -->
+  	<!-- Borrar Seleccionados -->
   	<button type="button" aria-label="Eliminar Seleccionados" title="Borrar registros seleccionados" class="btn bg-red animated fadeIn NewElementButton Hidden DeleteSelectedElements hint--bottom hint--bounce hint--error"><i class="fa fa-trash-o"></i></button>
-  	<!-- /Remove All -->
-  	<!-- Activate All -->
+  	<!-- Activar Seleccionados -->
   	<button type="button" aria-label="Activar Seleccionados" class="btn btnGreen animated fadeIn NewElementButton Hidden ActivateSelectedElements hint--bottom hint--bounce hint--success"><i class="fa fa-check-circle"></i></button>
-  	<!-- /Activate All -->
-  	<!-- Expand All -->
-  	<button type="button" aria-label="Expandir Seleccionados" title="Expandir registros seleccionados" class="btn bg-blue animated fadeIn NewElementButton Hidden ExpandSelectedElements hint--bottom hint--bounce hint--primary"><i class="fa fa-list-alt"></i></button>
-  	<!-- /Expand All -->
-  	<a href="new.php?&amp;provider=N&amp;customer=Y&amp;international=N" class="hint--bottom hint--bounce hint--success" aria-label="Nueva Cotización"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>
+  	<!-- Expandir Seleccionados -->
+  	<button type="button" aria-label="Expandir Seleccionados" title="Expandir registros seleccionados" class="btn bg-navy animated fadeIn NewElementButton Hidden ExpandSelectedElements hint--bottom hint--bounce hint--primary"><i class="fa fa-plus"></i></button>
+		<!-- Contraer Seleccionados -->
+		<button type="button" aria-label="Contraer Seleccionados" title="Contraer registros seleccionados" class="btn bg-navy animated fadeIn NewElementButton Hidden ContractSelectedElements hint--bottom hint--bounce hint--primary"><i class="fa fa-minus"></i></button>
+  	<!-- Ir a pantalla de creación -->
+  	<a href="/articulos/crear/" class="hint--bottom hint--bounce hint--success" aria-label="Nueva Cotización"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>
+
     <input id="selected_ids" name="selected_ids" value="" type="hidden">
     <div class="changeView">
       <button aria-label="Buscar" class="ShowFilters SearchElement btn hint--bottom hint--bounce"><i class="fa fa-search"></i></button>
@@ -139,7 +140,7 @@
 	  					<div>
 	              <span class="roundItemActionsGroup">
 	                <a class="hint--bottom hint--bounce" aria-label="Más información">
-	                  <button type="button" class="btn bg-navy ExpandButton" id="expand_68"><i class="fa fa-plus"></i></button>
+	                  <button type="button" class="btn bg-navy ExpandButton" id="expand_<?=$articulo['idarticulo']?>"><i class="fa fa-plus"></i></button>
 	                </a>
 	                <a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="/articulos/modificar/<?= $articulo['idarticulo'] ?>/" id="view_68">
 	                  <button type="button" class="btn btn-github"><i class="fa fa-eye"></i></button>
@@ -150,15 +151,27 @@
 	                <a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" url="../../../core/resources/processes/proc.core.php" id="store_<?= $articulo['idarticulo'] ?>">
 	                  <button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button>
 	                </a> -->
+									<!-- Editar -->
 	                <a href="/articulos/modificar/<?= $articulo['idarticulo'] ?>/" class="hint--bottom hint--bounce hint--info" aria-label="Editar">
 	                  <button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button>
 	                </a>
-	                <a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" url="/articulos/borrar_ajax/" campo="idarticulo" success="" error="" id="delete_<?= $articulo['idarticulo'] ?>">
+
+									<!-- Borrar -->
+									<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" url="/articulos/borrar_ajax/" campo="idarticulo" success="" error="" id="delete_<?= $articulo['idarticulo'] ?>">
 	                  <button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button>
 	                </a>
 	                <input id="delete_question_<?= $articulo['idarticulo'] ?>" value="¿Desea eliminar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>?" type="hidden">
 	                <input id="delete_text_ok_<?= $articulo['idarticulo'] ?>" value="El artículo <b><?= htmlspecialchars($articulo['articulo'])?></b> ha sido eliminado." type="hidden">
 	                <input id="delete_text_error_<?= $articulo['idarticulo'] ?>" value="Hubo un error al intentar eliminar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>." type="hidden">
+
+									<!-- Activar -->
+	                <!-- <a class="activateElement hint--bottom hint--bounce hint--error" aria-label="Activar" url="/articulos/activar_ajax/" campo="idarticulo" success="" error="" id="activate_<?= $articulo['idarticulo'] ?>">
+	                  <button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button>
+	                </a>
+	                <input id="activate_question_<?= $articulo['idarticulo'] ?>" value="¿Desea activar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>?" type="hidden">
+	                <input id="activate_text_ok_<?= $articulo['idarticulo'] ?>" value="El artículo <b><?= htmlspecialchars($articulo['articulo'])?></b> ha sido activado." type="hidden">
+	                <input id="activate_text_error_<?= $articulo['idarticulo'] ?>" value="Hubo un error al intentar activar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>." type="hidden"> -->
+
 	              </span>
 	            </div>
 						</div>

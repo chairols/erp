@@ -73,7 +73,7 @@
 					<?php $color_fila = 'listRow2'; ?>
 					<?php foreach ($articulos as $articulo) { ?>
 					<?php $color_fila = $color_fila == ' listRow2 '? '':' listRow2 '; ?>
-          <div class="row listRow <?= $color_fila ?> " id="row_68">
+          <div class="row listRow <?= $color_fila ?> " id="row_<?= $articulo['idarticulo'] ?>">
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
     					<div class="listRowInner">
     						<img class="img-circle hideMobile990" src="../../../../skin/images/quotations/default/default.png" alt="ADOLFO FORTIER S.A.">
@@ -153,7 +153,7 @@
 	                <a href="/articulos/modificar/<?= $articulo['idarticulo'] ?>/" class="hint--bottom hint--bounce hint--info" aria-label="Editar">
 	                  <button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button>
 	                </a>
-	                <a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" url="/sucursales/gets_sucusales_ajax/" campo="idsucursal" success="" error="" id="delete_<?= $articulo['idarticulo'] ?>">
+	                <a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" url="/articulos/borrar_ajax/" campo="idarticulo" success="" error="" id="delete_<?= $articulo['idarticulo'] ?>">
 	                  <button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button>
 	                </a>
 	                <input id="delete_question_<?= $articulo['idarticulo'] ?>" value="¿Desea eliminar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>?" type="hidden">

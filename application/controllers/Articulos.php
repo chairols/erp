@@ -70,17 +70,23 @@ class Articulos extends CI_Controller {
     public function gets_articulos_ajax() {
         $where = $this->input->post();
         $articulos = $this->articulos_model->gets_where_para_ajax($where, 100);
-        
+
         foreach($articulos as $key => $value) {
             $articulos[$key]['text'] = $value['text']." - ";
             $where = array(
                 'idmarca' => $value['idmarca']
             );
             $resultado = $this->marcas_model->get_where($where);
-            
+
             $articulos[$key]['text'] .= $resultado['marca'];
         }
         echo json_encode($articulos);
+    }
+
+    public function borrar_ajax()
+    {
+      $where = $this->input->post();
+      $this->articulos_model->update(array('estado'=>'I'),$where['idarticulo']);
     }
 
 }

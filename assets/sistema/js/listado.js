@@ -1,4 +1,4 @@
-ShowList///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// LIST & GRID ////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -168,7 +168,7 @@ function deleteElement(element)
 	var datos   = element.attr('campo')+'='+id;
 	// var datos   = {:id};
 	var result;
-	console.log(datos);
+	// console.log(datos);
     $.ajax({
         type: "POST",
         url: url,
@@ -341,32 +341,33 @@ function massiveElementDelete()
 		// var elements	= "";
 		// var id;
 		alertify.confirm(utf8_decode('¿Desea eliminar los registros seleccionados?'), function(e){
-	        if(e){
+      if(e)
+			{
 
-	        	var result;
-	        	$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('.deleteElement').each(function(){
-	        		result	= deleteElement($(this));
-	        		// id		= $(this).attr("id").split("_")
-	        		// if(elements!="")
-	        		// {
-	        		// 	elements = elements + "," + id[1];
-	        		// }else{
-	        		// 	elements = id[1];
-	        		// }
-	        	});
+      	var result;
+      	$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('.deleteElement').each(function(){
+      		result	= deleteElement($(this));
+      		// id		= $(this).attr("id").split("_")
+      		// if(elements!="")
+      		// {
+      		// 	elements = elements + "," + id[1];
+      		// }else{
+      		// 	elements = id[1];
+      		// }
+      	});
 				unselectAll();
-	        	if(result)
-	        	{
-	        		delBtn.addClass('Hidden');
-	        		notifySuccess(utf8_decode('Los registros seleccionados han sido eliminados.'));
-	        		submitSearch();
-	        		var selectedIDS = $("#selected_ids").val().split(",");
-	        	}else{
-	        		notifyError('Hubo un problema al intentar eliminar los registros.');
-	        	}
-	        }
-	    });
-	    return false;
+      	if(result)
+      	{
+      		delBtn.addClass('Hidden');
+      		notifySuccess(utf8_decode('Los registros seleccionados han sido eliminados.'));
+      		submitSearch();
+      		var selectedIDS = $("#selected_ids").val().split(",");
+      	}else{
+      		notifyError('Hubo un problema al intentar eliminar los registros.');
+      	}
+      }
+    });
+	  return false;
 	});
 }
 massiveElementDelete();

@@ -30,7 +30,7 @@ class Articulos extends CI_Controller {
         $per_page = $per_page['valor'];
 
         $where = $this->input->get();
-        $where['articulos.estado'] = 'I';
+        $where['articulos.estado'] = 'A';
 
         /*
          * inicio paginador

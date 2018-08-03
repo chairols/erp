@@ -82,7 +82,6 @@ function toggleExpandRow(element)
 	var ID = ElementID.split('_');
 	var RowID = ID[1];
 	var InfoDetail = $("#row_"+RowID).children(".DetailedInformation");
-	console.log('entra');
 	element.toggleClass('ContractButton');
 	element.toggleClass('ExpandButton');
 	element.children('i').toggleClass('fa-plus');
@@ -233,24 +232,27 @@ function deleteListElement()
 		var elementID	= $(this).attr("id").split("_");
 		var id			= elementID[1];
 		var row			= $("#row_"+id);
-		var question	= "";
-		var text_ok		= "";
-		var text_error	= "";
+		var question	= $(this).attr('msjpregunta');
+		var text_ok		= $(this).attr('msjok');
+		var text_error	= $(this).attr('msjerror');
 
 		if($("#delete_question_"+id).length>0)
 			question = $("#delete_question_"+id).val();
 		else
-			question = utf8_decode('Está a punto de eliminar un registro ¿Desea continuar?');
+			if(!question || question=="" || question=="undefined" )
+				question = 'Está a punto de eliminar un registro ¿Desea continuar?';
 
 		if($("#delete_text_ok_"+id).length>0)
 			text_ok = $("#delete_text_ok_"+id).val();
 		else
-			text_ok = "El registro ha sido eliminado.";
+			if(!text_ok || text_ok=="" || text_ok=="undefined" )
+				text_ok = "El registro ha sido eliminado.";
 
 		if($("#delete_text_error_"+id).length>0)
 			text_error = $("#delete_text_error_"+id).val();
 		else
-			text_error = "Hubo un problema. El registro no pudo ser eliminado.";
+			if(!text_error || text_error=="" || text_error=="undefined" )
+				text_error = "Hubo un problema. El registro no pudo ser eliminado.";
 
 		alertify.confirm(question, function(e){
 			if(e)
@@ -281,23 +283,26 @@ function activateListElement()
 		var elementID	= $(this).attr("id").split("_");
 		var id			= elementID[1];
 		var row			= $("#row_"+id);
-		var question	= "";
-		var text_ok		= "";
-		var text_error	= "";
+		var question	= $(this).attr('msjpregunta');
+		var text_ok		= $(this).attr('msjok');
+		var text_error	= $(this).attr('msjerror');
 
 		if($("#activate_question_"+id).length>0)
 			question = $("#activate_question_"+id).val();
 		else
-			question = utf8_decode('Está a punto de activar un registro ¿Desea continuar?');
+			if(!question || question=="" || question=="undefined" )
+				question = utf8_decode('Está a punto de activar un registro ¿Desea continuar?');
 
 		if($("#activate_text_ok_"+id).length>0)
 			text_ok = $("#activate_text_ok_"+id).val();
 		else
-			text_ok = "El registro ha sido activado.";
+			if(!text_ok || text_ok=="" || text_ok=="undefined" )
+				text_ok = "El registro ha sido activado.";
 
 		if($("#activate_text_error_"+id).length>0)
 			text_error = $("#activate_text_error_"+id).val();
 		else
+			if(!text_error || text_error=="" || text_error=="undefined" )
 			text_error = "Hubo un problema. El registro no pudo ser activado.";
 
 		alertify.confirm(question, function(e){
@@ -361,7 +366,21 @@ function massiveElementDelete()
 		var delBtn		= $(this);
 		// var elements	= "";
 		// var id;
-		alertify.confirm(utf8_decode('¿Desea eliminar los registros seleccionados?'), function(e){
+
+		var msjok 			= $(this).attr('msjok');
+		var msjerror 		= $(this).attr('msjerror');
+		var msjpregunta = $(this).attr('msjpregunta');
+
+		if(!msjok || msjok=="" || msjok=="undefined")
+			msjok = 'Los registros seleccionados han sido eliminados.';
+
+		if(!msjerror || msjerror=="" || msjerror=="undefined")
+			msjerror = 'Hubo un problema al intentar eliminar los registros.';
+
+		if(!msjpregunta || msjpregunta=="" || msjpregunta=="undefined")
+			msjpregunta = '¿Desea eliminar los registros seleccionados?';
+
+		alertify.confirm(msjpregunta, function(e){
       if(e)
 			{
 
@@ -380,11 +399,11 @@ function massiveElementDelete()
       	if(result)
       	{
       		delBtn.addClass('Hidden');
-      		notifySuccess(utf8_decode('Los registros seleccionados han sido eliminados.'));
+      		notifySuccess(msjok);
       		submitSearch();
       		var selectedIDS = $("#selected_ids").val().split(",");
       	}else{
-      		notifyError('Hubo un problema al intentar eliminar los registros.');
+      		notifyError(msjerror);
       	}
       }
     });
@@ -398,8 +417,21 @@ function massiveElementActivate()
 	$(".ActivateSelectedElements").click(function(e){
 		e.preventDefault();
 		e.stopPropagation();
+		var msjok 			= $(this).attr('msjok');
+		var msjerror 		= $(this).attr('msjerror');
+		var msjpregunta = $(this).attr('msjpregunta');
+
+		if(!msjok || msjok=="" || msjok=="undefined")
+			msjok = 'Los registros seleccionados han sido activados.';
+
+		if(!msjerror || msjerror=="" || msjerror=="undefined")
+			msjerror = 'Hubo un problema al intentar activar los registros.';
+
+		if(!msjpregunta || msjpregunta=="" || msjpregunta=="undefined")
+			msjpregunta = '¿Desea activar los registros seleccionados?';
+
 		var delBtn = $(this)
-		alertify.confirm(utf8_decode('¿Desea activar los registros seleccionados?'), function(e){
+		alertify.confirm(msjpregunta, function(e){
       if(e)
 			{
       	var result;
@@ -410,10 +442,10 @@ function massiveElementActivate()
       	if(result)
       	{
       		delBtn.addClass('Hidden');
-      		notifySuccess(utf8_decode('Los registros seleccionados han sido activados.'));
+      		notifySuccess(msjok);
       		submitSearch();
       	}else{
-      		notifyError('Hubo un problema al intentar activar los registros.');
+      		notifyError(msjerror);
       	}
       }
     });

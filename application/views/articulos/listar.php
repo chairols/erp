@@ -49,9 +49,9 @@
 		<!-- Deseleccionar Todos -->
   	<button type="button" aria-label="Deseleccionar todos" id="UnselectAll" class="btn animated fadeIn NewElementButton Hidden hint--bottom-right hint--bounce"><i class="fa fa-square"></i></button>
   	<!-- Borrar Seleccionados -->
-  	<button type="button" aria-label="Eliminar Seleccionados" title="Borrar registros seleccionados" class="btn bg-red animated fadeIn NewElementButton Hidden DeleteSelectedElements hint--bottom hint--bounce hint--error"><i class="fa fa-trash-o"></i></button>
+  	<button type="button" aria-label="Eliminar Seleccionados" msjok="¡Los artículos han sido eliminados con éxito!" msjerror="Hubo un error al intentar eliminar los artículos." msjpregunta="¿Desea eliminar los artículos seleccionados?" title="Borrar registros seleccionados" class="btn bg-red animated fadeIn NewElementButton Hidden DeleteSelectedElements hint--bottom hint--bounce hint--error"><i class="fa fa-trash-o"></i></button>
   	<!-- Activar Seleccionados -->
-  	<button type="button" aria-label="Activar Seleccionados" class="btn btnGreen animated fadeIn NewElementButton Hidden ActivateSelectedElements hint--bottom hint--bounce hint--success"><i class="fa fa-check-circle"></i></button>
+  	<button type="button" aria-label="Activar Seleccionados" msjok="¡Los artículos han sido activados con éxito!" msjerror="Hubo un error al intentar activar los artículos." msjpregunta="¿Desea activar los artículos seleccionados?" class="btn btnGreen animated fadeIn NewElementButton Hidden ActivateSelectedElements hint--bottom hint--bounce hint--success"><i class="fa fa-check-circle"></i></button>
   	<!-- Expandir Seleccionados -->
   	<button type="button" aria-label="Expandir Seleccionados" title="Expandir registros seleccionados" class="btn bg-navy animated fadeIn NewElementButton Hidden ExpandSelectedElements hint--bottom hint--bounce hint--primary"><i class="fa fa-plus"></i></button>
 		<!-- Contraer Seleccionados -->
@@ -77,7 +77,7 @@
           <div class="row listRow <?= $color_fila ?> " id="row_<?= $articulo['idarticulo'] ?>">
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
     					<div class="listRowInner">
-    						<img class="img-circle hideMobile990" src="../../../../skin/images/quotations/default/default.png" alt="ADOLFO FORTIER S.A.">
+    						<img class="img-circle hideMobile990" src="/assets/sistema/imagenes/default/producto.jpg" alt="<?= $articulo['articulo'] ?>">
     						<span class="listTextStrong"><?= $articulo['articulo'] ?></span>
     						<span class="smallTitle"><b>(ID: <?= $articulo['idarticulo'] ?>)</b></span>
     					</div>
@@ -110,7 +110,7 @@
 							  <div class="row bg-gray" style="padding:5px;">
 								  <div class="col-lg-4 col-sm-5 col-xs-12">
 									  <div class="listRowInner">
-										  <img class=" hideMobile990" src="../../../../skin/images/products/default/default.jpg" alt="16011">
+										  <img class=" hideMobile990" src="/assets/sistema/imagenes/default/categoria.png" alt="<?= $articulo['articulo'] ?>">
 										  <span class="listTextStrong">Otros datos</span>
 										  <span class="smallTitle hideMobile990"><b>Otros datos</b></span>
 									  </div>
@@ -155,23 +155,17 @@
 	                <a href="/articulos/modificar/<?= $articulo['idarticulo'] ?>/" class="hint--bottom hint--bounce hint--info" aria-label="Editar">
 	                  <button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button>
 	                </a>
-
+									<?php //if($articulo['estado']=='A'){?>
 									<!-- Borrar -->
-									<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" url="/articulos/borrar_ajax/" campo="idarticulo" success="" error="" id="delete_<?= $articulo['idarticulo'] ?>">
+									<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" url="/articulos/borrar_ajax/" campo="idarticulo" msjok="El artículo <b><?= htmlspecialchars($articulo['articulo'])?></b> ha sido eliminado." msjerror="Hubo un error al intentar eliminar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>." msjpregunta="¿Desea eliminar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>?" id="delete_<?= $articulo['idarticulo'] ?>">
 	                  <button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button>
 	                </a>
-	                <input id="delete_question_<?= $articulo['idarticulo'] ?>" value="¿Desea eliminar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>?" type="hidden">
-	                <input id="delete_text_ok_<?= $articulo['idarticulo'] ?>" value="El artículo <b><?= htmlspecialchars($articulo['articulo'])?></b> ha sido eliminado." type="hidden">
-	                <input id="delete_text_error_<?= $articulo['idarticulo'] ?>" value="Hubo un error al intentar eliminar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>." type="hidden">
-
+								<?php //} if($articulo['estado']=='I'){?>
 									<!-- Activar -->
-	                <!-- <a class="activateElement hint--bottom hint--bounce hint--error" aria-label="Activar" url="/articulos/activar_ajax/" campo="idarticulo" success="" error="" id="activate_<?= $articulo['idarticulo'] ?>">
+	                <!-- <a class="activateElement hint--bottom hint--bounce hint--success" aria-label="Activar" url="/articulos/activar_ajax/" campo="idarticulo" msjok="El artículo <b><?= htmlspecialchars($articulo['articulo'])?></b> ha sido activado." msjerror="Hubo un error al intentar activar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>." msjpregunta="¿Desea activar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>?" id="activate_<?= $articulo['idarticulo'] ?>">
 	                  <button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button>
-	                </a>
-	                <input id="activate_question_<?= $articulo['idarticulo'] ?>" value="¿Desea activar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>?" type="hidden">
-	                <input id="activate_text_ok_<?= $articulo['idarticulo'] ?>" value="El artículo <b><?= htmlspecialchars($articulo['articulo'])?></b> ha sido activado." type="hidden">
-	                <input id="activate_text_error_<?= $articulo['idarticulo'] ?>" value="Hubo un error al intentar activar el artículo <b><?= htmlspecialchars($articulo['articulo'])?></b>." type="hidden"> -->
-
+	                </a> -->
+								<?php //}?>
 	              </span>
 	            </div>
 						</div>

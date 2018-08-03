@@ -137,6 +137,20 @@ class Menu_model extends CI_Model {
     }
     
     /*
+     *  Perfiles/modificar
+     */
+    public function obtener_menu_por_padre_con_accesos($idpadre, $idperfil) {
+        $this->db->select("menu.*, perfiles_menu.idperfil");
+        $this->db->from("menu");
+        $this->db->join("perfiles_menu", "menu.idmenu = perfiles_menu.idmenu AND perfiles_menu.idperfil = '$idperfil'", "left");
+        $this->db->where(array("menu.padre" => $idpadre));
+        $this->db->order_by("menu.orden, menu.menu");
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
      *  Perfiles/agregar
      */
     public function gets_menu_por_perfil($idperfil) {
@@ -147,5 +161,12 @@ class Menu_model extends CI_Model {
                                         idperfil = '$idperfil'");
         
         return $query->result_array();
+    }
+    
+    /*
+     *  Perfiles/modificar
+     */
+    public function update_menu($data, $where) {
+        $this->db->update('menu', $data, $where);
     }
 }

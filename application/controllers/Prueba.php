@@ -83,22 +83,22 @@ class Prueba extends CI_Controller {
 <p style="color:#CC0000;">TO IMPROVE AND EXPAND TCPDF I NEED YOUR SUPPORT, PLEASE <a href="http://sourceforge.net/donate/index.php?group_id=128076">MAKE A DONATION!</a></p>
 EOD;
         $html = "<table>"
-                    . "<thead>"
-                        . "<tr>"
-                            . "<th>Item</th>"
-                            . "<th>Cantidad</th>"
-                            . "<th>Precio Unitario</th>"
-                        . "</tr>"
-                    . "</thead>"
-                    . "<tbody>";
-                        foreach ($items as $item) {
-                            $html .= "<tr>"
-                                    . "<td>" . $item['articulo'] . "</td>"
-                                    . "<td>" . $item['cantidad'] . "</td>"
-                                    . "<td>" . $item['costo_fob'] . "</td>"
-                                    . "</tr>";
-                        }
-                    $html .= "</tbody>"
+                . "<thead>"
+                . "<tr>"
+                . "<th>Item</th>"
+                . "<th>Cantidad</th>"
+                . "<th>Precio Unitario</th>"
+                . "</tr>"
+                . "</thead>"
+                . "<tbody>";
+        foreach ($items as $item) {
+            $html .= "<tr>"
+                    . "<td>" . $item['articulo'] . "</td>"
+                    . "<td>" . $item['cantidad'] . "</td>"
+                    . "<td>" . $item['costo_fob'] . "</td>"
+                    . "</tr>";
+        }
+        $html .= "</tbody>"
                 . "</table>";
 
 // Print text using writeHTMLCell()
@@ -113,8 +113,7 @@ EOD;
 // END OF FILE
 //============================================================+
     }
-    
-    
+
     public function arba($cuit = 0) {
         require_once('assets/vendors/afip/wsfe-class-ci.php');
 
@@ -126,17 +125,17 @@ EOD;
         $CUIT = 33647656779;
         $urlwsaa = URLWSAA;
         /*
-        $wsfe = new WsFE();
-        $wsfe->CUIT = floatval($CUIT);
-        $wsfe->setURL(URLWSW);
-        */
-        $fechadesde = date('Ym').'01';
-        
+          $wsfe = new WsFE();
+          $wsfe->CUIT = floatval($CUIT);
+          $wsfe->setURL(URLWSW);
+         */
+        $fechadesde = date('Ym') . '01';
+
         $mes = date('m');
         $anio = date('Y');
-        $fechahasta = $anio.$mes.date("d",(mktime(0,0,0,$mes+1,1,$anio)-1));
-        
-        
+        $fechahasta = $anio . $mes . date("d", (mktime(0, 0, 0, $mes + 1, 1, $anio) - 1));
+
+
         $wsfe = new WsFE();
         $wsfe->CUIT = floatval(30714016918);
         $wsfe->PasswodArba = "252729";
@@ -149,7 +148,146 @@ EOD;
         }
     }
 
+    public function nestable($idperfil) {
+        $this->load->library(array(
+            'session',
+            'r_session'
+        ));
+        $this->load->model(array(
+            'perfiles_model',
+            'prueba_model'
+        ));
+        $data['title'] = 'Listado de Artículos';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['css'] = array(
+            '/assets/modulos/prueba/css/nestable.css'
+        );
+        $data['javascript'] = array(
+            '/assets/vendors/Nestable-master/jquery.nestable.js',
+            '/assets/modulos/prueba/js/nestable.js'
+        );
+
+        $datos = array(
+            'idperfil' => $idperfil
+        );
+        $data['perfil'] = $this->perfiles_model->get_where($datos);
+
+        $ids = $this->menu_model->gets_menu_por_perfil($data['session']['perfil']);
+        $data['ids'] = array();
+        foreach ($ids as $id) {
+            $data['ids'][] = $id['idmenu'];
+        }
+        $data['ids'] = implode(",", $data['ids']);
+
+        $data['mmenu'] = $this->prueba_model->obtener_menu_por_padre(0, $idperfil);
+        foreach ($data['mmenu'] as $key => $value) {
+            $data['mmenu'][$key]['submenu'] = $this->prueba_model->obtener_menu_por_padre($value['idmenu'], $idperfil);
+            foreach ($data['mmenu'][$key]['submenu'] as $k1 => $v1) {
+                $data['mmenu'][$key]['submenu'][$k1]['submenu'] = $this->prueba_model->obtener_menu_por_padre($v1['idmenu'], $idperfil);
+            }
+        }
+
+
+        $data['view'] = 'prueba/nestable';
+        $this->load->view('layout/app', $data);
+    }
+
+    public function actualizar_accesos() {
+        $this->load->library(array(
+            'form_validation'
+        ));
+        $this->load->model(array(
+            'prueba_model',
+            'perfiles_model'
+        ));
+
+        $this->form_validation->set_rules('idmenu', 'Menú', 'required|integer');
+        $this->form_validation->set_rules('idperfil', 'Perfil', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'idperfil' => $this->input->post('idperfil'),
+                'idmenu' => $this->input->post('idmenu')
+            );
+            $resultado = $this->prueba_model->get_where_perfiles_menu($where);
+
+            if ($resultado) {
+                $this->prueba_model->borrar_perfiles_menu($where);
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            } else {
+                $this->perfiles_model->set_perfiles_menu($where);
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
     
+    public function actualizar_orden() {
+        $this->load->model(array(
+            'prueba_model'
+        ));
+        $resultado = json_decode($this->input->post('orden'));
+        
+        $contador1 = 1;
+        foreach($resultado as $r1) {
+            $data = array(
+                'orden' => $contador1
+            );
+            $where = array(
+                'idmenu' => $r1->id
+            );
+            $this->prueba_model->update_menu($data, $where);
+            
+            if(isset($r1->children)) {
+                $contador2 = 1;
+                foreach($r1->children as $r2) {
+                    $data = array(
+                        'orden' => $contador2
+                    );
+                    $where = array(
+                        'idmenu' => $r2->id
+                    );
+                    $this->prueba_model->update_menu($data, $where);
+                    
+                    
+                    if(isset($r2->children)) {
+                        $contador3 = 1;
+                        foreach($r2->children as $r3) {
+                            $data = array(
+                                'orden' => $contador3
+                            );
+                            $where = array(
+                                'idmenu' => $r3->id
+                            );
+                            $this->prueba_model->update_menu($data, $where);
+                            
+                            $contador3++;
+                        }
+                    }
+                    $contador2++;
+                }
+            }
+            
+            $contador1++;
+        }
+        
+        $json = array(
+            'status' => 'ok'
+        );
+        echo json_encode($json);
+    }
 }
 
 ?>

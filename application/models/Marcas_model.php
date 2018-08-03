@@ -67,6 +67,7 @@ class Marcas_model extends CI_Model {
     
     /*
      *  Listas_de_precios/asociar_marcas
+     *  Listas_de_precios/nueva_comparacion
      */
     public function gets() {
       $this->db->select('*');

@@ -54,10 +54,14 @@
                             <!-- ////////////////////////////   Formulario de Búsqueda //////////////////////////// -->
                             <div class="row">
                                 <div class="input-group col-lg-5 col-md-6 col-sm-5 col-xs-11" style="margin:2px;">
-                                    <input id="articulo_generico" name="articulo_generico" class="form-control" placeholder="Artículo" type="text">
+                                    <input id="articulo" name="articulo" class="form-control" placeholder="Artículo" type="text" value="<?= $this->input->get('articulo') ?>">
                                 </div>
                                 <div class="input-group col-lg-5 col-md-6 col-sm-5 col-xs-11" style="margin:2px;">
-                                    <input id="numero_orden" name="numero_orden" class="form-control " placeholder="Número de Orden" validateonlynumbers="Ingrese únicamente números." type="text">
+                                    <select name="generico" class="form-control chosenSelect">
+                                        <option value="T"<?= ($this->input->get('generico') == "T") ? " selected" : "" ?>>Todos</option>
+                                        <option value="P"<?= ($this->input->get('generico') == "P") ? " selected" : "" ?>>Pendientes</option>
+                                        <option value="F"<?= ($this->input->get('generico') == "F") ? " selected" : "" ?>>Finalizados</option>
+                                    </select>
                                 </div>
                             </div>
                             <!-- Submit Button -->
@@ -78,13 +82,13 @@
                 <button type="button" aria-label="Deseleccionar todos" id="UnselectAll" class="btn animated fadeIn NewElementButton Hidden hint--bottom-right hint--bounce"><i class="fa fa-square"></i></button>
                 <!--/Select All -->
                 <!-- Remove All -->
-                <button type="button" aria-label="Eliminar Seleccionados" title="Borrar registros seleccionados" class="btn bg-red animated fadeIn NewElementButton Hidden DeleteSelectedElements hint--bottom hint--bounce hint--error"><i class="fa fa-trash-o"></i></button>
+                <button type="button" aria-label="Eliminar Seleccionados" title="Borrar registros seleccionados" class="btn bg-red animated fadeIn NewElementButton Hidden ExpandSelectedElements hint--bottom hint--bounce hint--error" onclick="borrarSeleccionados();"><i class="fa fa-trash-o"></i></button>
                 <!-- /Remove All -->
                 <!-- Activate All -->
                 <button type="button" aria-label="Activar Seleccionados" class="btn btnGreen animated fadeIn NewElementButton Hidden ActivateSelectedElements hint--bottom hint--bounce hint--success"><i class="fa fa-check-circle"></i></button>
                 <!-- /Activate All -->
                 <!-- Expand All -->
-                <button type="button" aria-label="Expandir Seleccionados" title="Expandir registros seleccionados" class="btn bg-blue animated fadeIn NewElementButton Hidden ExpandSelectedElements hint--bottom hint--bounce hint--primary"><i class="fa fa-list-alt"></i></button>
+                <!--<button type="button" aria-label="Expandir Seleccionados" title="Expandir registros seleccionados" class="btn bg-blue animated fadeIn NewElementButton Hidden ExpandSelectedElements hint--bottom hint--bounce hint--primary"><i class="fa fa-list-alt"></i></button>-->
                 <!-- /Expand All -->
                 <a href="new.php?&amp;provider=N&amp;customer=Y&amp;international=N" class="hint--bottom hint--bounce hint--success" aria-label="Nueva Cotización"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>
                 <input id="selected_ids" name="selected_ids" value="" type="hidden">
@@ -121,12 +125,12 @@
                                     <div class="col-sm-5 col-xs-12">
                                         <div class="listRowInner">
                                             <span class="smallDetails">Marca</span>
-                                            <input type="text" identificador="<?=$item['idlista_de_precios_item']?>" id="TextAutoCompletemarca_<?=$item['idlista_de_precios_item']?>" name="TextAutoCompletemarca_<?=$item['idlista_de_precios_item']?>" placeholder="Seleccionar Marca" placeholderauto="Proveedor inexistente" class="form-control autocompletemarca" objectauto="marcas" actionauto="gets_marcas_ajax" iconauto="ship" idmarca="<?=$item['marcas_idmarca']?>" value="<?=$item['marcas_marca']?>">
-                                            <input type="hidden" identificador="<?=$item['idlista_de_precios_item']?>" id="marca_<?=$item['idlista_de_precios_item']?>" name="marca_<?=$item['idlista_de_precios_item']?>" value="<?=$item['marcas_idmarca']?>">
+                                            <input type="text" identificador="<?= $item['idlista_de_precios_item'] ?>" id="TextAutoCompletemarca_<?= $item['idlista_de_precios_item'] ?>" name="TextAutoCompletemarca_<?= $item['idlista_de_precios_item'] ?>" placeholder="Seleccionar Marca" placeholderauto="Proveedor inexistente" class="form-control txC autocompletemarca" objectauto="marcas" actionauto="gets_marcas_ajax" iconauto="ship" idmarca="<?= $item['marcas_idmarca'] ?>" value="<?= $item['marcas_marca'] ?>">
+                                            <input type="hidden" identificador="<?= $item['idlista_de_precios_item'] ?>" id="marca_<?= $item['idlista_de_precios_item'] ?>" name="marca_<?= $item['idlista_de_precios_item'] ?>" value="<?= $item['marcas_idmarca'] ?>">
                                         </div>
                                     </div>
                                     <div class="col-sm-1 col-xs-12">
-                                        <div class="listRowInner" id="progressmarca_<?=$item['idlista_de_precios_item']?>"></div>
+                                        <div class="listRowInner" id="progressmarca_<?= $item['idlista_de_precios_item'] ?>"></div>
                                     </div>
                                     <div class="col-sm-2 col-xs-12" style="height: 70px;">
                                         <div class="listRowInner"></div>
@@ -146,10 +150,28 @@
                                     <div class="col-sm-5 col-xs-12">
                                         <div class="listRowInner">
                                             <span class="smallDetails">Código Genérico</span>
-
+                                            <input type="text" identificador="<?= $item['idlista_de_precios_item'] ?>" id="TextAutoCompletegenerico_<?= $item['idlista_de_precios_item'] ?>" name="TextAutoCompletemarca_<?= $item['idlista_de_precios_item'] ?>" placeholder="Seleccionar Artículo Genérico" placeholderauto="Artículo Genérico Inexistente" class="form-control txC autocompletegenerico" idarticulo_generico="<?= $item['articulos_genericos_idarticulo_generico'] ?>" value="<?= $item['articulos_genericos_articulo_generico'] ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-xs-12">
+                                        <div class="listRowInner" id="progressgenerico_<?= $item['idlista_de_precios_item'] ?>"></div>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" style="height: 70px;">
+                                        <div class="listRowInner"></div>
+                                    </div>
+                                    <div class="listActions flex-justify-center Hidden">
+                                        <div>
+                                            <span class="roundItemActionsGroup">
+                                                <a iditem="<?=$item['idlista_de_precios_item']?>" class="borraritem hint--bottom hint--bounce hint--error" aria-label="Descartar">
+                                                    <button class="btn btnRed" type="button">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </a>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
+
                             <?php } ?>
                             <!-- ////////////////////////////   Registros   //////////////////////////// -->
                         </div> <!-- container-fluid -->
@@ -158,11 +180,17 @@
                 </div>
                 <!-- /Content Container -->
             </div><!-- /.box-body -->
-
+            <div class="box-footer">
+                <div class="form-inline paginationLeft">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-sm-offset-3 col-md-9">
+                            <ul class="paginationRight pagination no-margin pull-right">
+                                <?= $links ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <pre>
-        <?php print_r($lista_de_precios); ?>
-        <?php print_r($items); ?>
-    </pre>
 </div>

@@ -64,6 +64,25 @@ class Perfiles_model extends CI_Model {
                                         perfil");
         return $query->result_array();
     }
+    
+    /*
+     * Perfiles/actualizar_accesos
+     */
+    public function get_where_perfiles_menu($where) {
+        $this->db->select("*");
+        $this->db->from("perfiles_menu");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     * Perfiles/actualizar_accesos
+     */
+    public function borrar_perfiles_menu($where) {
+        $this->db->delete('perfiles_menu', $where);
+    }
 }
 
 ?>

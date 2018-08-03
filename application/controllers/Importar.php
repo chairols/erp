@@ -64,7 +64,7 @@ class Importar extends CI_Controller {
 
             $cantidad = $this->articulos_model->get_cantidad_where(array());
 
-            var_dump($cantidad);
+            //var_dump($cantidad);
 
             $fp = fopen("upload/importar/" . $archivo, "r");
             $count = 0;
@@ -77,11 +77,12 @@ class Importar extends CI_Controller {
                 $count++;
                 $init++;
 
+                
                 if (round(($count * 100 / $cantidad)) > $porcentaje) {
                     $porcentaje = round(($count * 100 / $cantidad), 0, PHP_ROUND_HALF_DOWN);
-                    echo $porcentaje . " %\n";
+                    //echo $porcentaje . " %\n";
                 }
-
+                
 
                 //  CARACTERES AL FINAL DEL VALOR
                 //  { = POSITIVO
@@ -182,11 +183,15 @@ class Importar extends CI_Controller {
                 //}
             }
 
-            var_dump($count);
+            //var_dump($count);
 
             $this->benchmark->mark('fin');
 
-            echo $this->benchmark->elapsed_time('inicio', 'fin');
+            $array = array(
+                'status' => 'ok'
+            );
+            echo json_encode($array);
+            //echo $this->benchmark->elapsed_time('inicio', 'fin');
         }
 
         //$data['archivos'] = get_dir_file_info('upload/importar/');

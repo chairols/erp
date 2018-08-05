@@ -515,15 +515,28 @@ $(function(){
 		$('.SearchFilters').toggleClass('Hidden');
 	});
 
-	// $(".searchButton").click(function(){
-	// 	multipleInputTransform();
-	// 	submitSearch();
-	// 	unselectAll();
-	// });
+	$(".searchButton").click(function(){
+		multipleInputTransform();
+		submitSearch();
+		// unselectAll();
+	});
 
-	// $("#regsperview").change(function(){
-	// 	$(".searchButton").click();
-	// });
+	$("#regsperview").change(function(){
+		$.ajax({
+        type: "POST",
+        url: '/parametros/usuario/',
+        data: "id-1="+$("#regsperview").val(),
+        async: false,
+        success: function()
+				{
+	    		submitSearch();
+      	},
+				error: function(data){
+					result = false;
+					console.log(data);
+				}
+    });
+	});
 
 	$("#CoreSearcherForm input").keypress(function(e){
 		if(e.which==13){
@@ -535,7 +548,7 @@ $(function(){
 		$("#SearchFieldsForm").children('.row').children('#CoreSearcherForm').children('.input-group').children('input,select,textarea').val('');
 		$("#SearchFieldsForm").children('.row').children('#CoreSearcherForm').children('.input-group').children('.chosenSelect').chosen();
 		// $("#SearchFieldsForm").children('.row').children('#CoreSearcherForm').children('.input-group').children('select').chosen();
-	})
+	});
 });
 
 function multipleInputTransform()
@@ -549,48 +562,56 @@ function multipleInputTransform()
 function submitSearch()
 {
 
-// 	if(validador.validateFields('CoreSearcherForm'))
-// 	{
-// 		var loc = document.location.href;
-//   	var getString = loc.split('?');
-//   	var getVars = '';
-//   	if(getString[1])
-//   		getVars = '&'+getString[1];
-// 		var object		= $("#SearchResult").attr("object");
-// 		var process		= process_url+'?action=search&object='+object+getVars;
-// 		var haveData	= function(returningData)
-// 		{
-// 			$("input,select").blur();
-// 			$("#SearchResult").remove();
-// 			$("#CoreSearcherResults").append(returningData);
-// 			rowElementSelected();
-// 			showDeleteButton();
-// 			showExpandButton();
-// 			deleteListElement();
-// 			// massiveElementDelete();
-// 			activateListElement();
-// 			toggleRowDetailedInformation();
-// 			toggleSelectedRows();
-// 			selectAllRows();
-// 			unselectAllRows();
-// 			showSelectAllButton();
-// 			chosenSelect();
-// 			SetAutoComplete();
-// 			validateDivChange();
-// 			if (typeof AdditionalSearchFunctions == 'function') {
-// 			    AdditionalSearchFunctions();
-// 			}
-// 			$("#TotalRegs").html($("#totalregs").val());
-// 			var page = $("#view_page").val();
-// 			appendPager();
-// 		}
-// 		var noData		= function()
-// 		{
-// 			//Empty action
-// 		}
-// 		sumbitFields(process,haveData,noData);
-// 		return false;
-// 	}
+	if(validador.validateFields('CoreSearcherForm'))
+	{
+
+		var loc = document.location.href;
+  	var getString = loc.split('?');
+		var target = getString[0];
+		var data = GetDataFromForm('CoreSearcherForm');
+		if(data)
+			window.location = target + '?' + data;
+		else
+			window.location = target;
+
+  	// var getVars = '';
+  	// if(getString[1])
+  	// 	getVars = '&'+getString[1];
+		// var object		= $("#SearchResult").attr("object");
+		// var process		= process_url+'?action=search&object='+object+getVars;
+		// var haveData	= function(returningData)
+		// {
+		// 	$("input,select").blur();
+		// 	$("#SearchResult").remove();
+		// 	$("#CoreSearcherResults").append(returningData);
+		// 	rowElementSelected();
+		// 	showDeleteButton();
+		// 	showExpandButton();
+		// 	deleteListElement();
+		// 	// massiveElementDelete();
+		// 	activateListElement();
+		// 	toggleRowDetailedInformation();
+		// 	toggleSelectedRows();
+		// 	selectAllRows();
+		// 	unselectAllRows();
+		// 	showSelectAllButton();
+		// 	chosenSelect();
+		// 	SetAutoComplete();
+		// 	validateDivChange();
+		// 	if (typeof AdditionalSearchFunctions == 'function') {
+		// 	    AdditionalSearchFunctions();
+		// 	}
+		// 	$("#TotalRegs").html($("#totalregs").val());
+		// 	var page = $("#view_page").val();
+		// 	appendPager();
+		// }
+		// var noData		= function()
+		// {
+		// 	//Empty action
+		// }
+		// sumbitFields(process,haveData,noData);
+		// return false;
+	}
 }
 
 $(document).ready(function(){
@@ -621,6 +642,40 @@ $(function(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// PAGER //////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$(document).ready(function(){
+	IrAPagina();
+	IrAPaginaApretarEnter();
+});
+
+function IrAPagina()
+{
+		$("#ir_a_pagina_button").on("click",function(){
+			var pagina = $("#ir_a_pagina_input").val();
+			var url = $(this).attr("url");
+			if(!isNaN(pagina) && pagina>0)
+			{
+				// var url = $('a[data-ci-pagination-page="'+pagina+'"]').first().attr("href");
+				window.location = url + ((pagina-1)*10);
+				// window.location = url;
+				// console.log($('a[data-ci-pagination-page="'+pagina+'"]'));
+			}else{
+				if(pagina && pagina!=undefined)
+					notifyError('Ingrese un número de página.');
+			}
+		});
+}
+
+function IrAPaginaApretarEnter()
+{
+	$("#ir_a_pagina_input").keypress(function(evento)
+	{
+	  if (evento.which == 13)
+		{
+	     $("#ir_a_pagina_button").click();
+  	}
+	});
+}
+
 // function appendPager()
 // {
 // 	var page = parseInt($("#view_page").val());
@@ -806,7 +861,3 @@ $(function(){
 // 	var regsperview = $("#regsperview").val();
 // 	return Math.ceil(totalregs/regsperview);
 // }
-
-$(document).ready(function(){
-	// appendPager();
-});

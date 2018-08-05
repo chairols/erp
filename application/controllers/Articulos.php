@@ -28,6 +28,7 @@ class Articulos extends CI_Controller {
 
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
+        $data['per_page'] = $per_page;
 
         $where = $this->input->get();
         $where['articulos.estado'] = 'A';
@@ -57,6 +58,7 @@ class Articulos extends CI_Controller {
         $this->pagination->initialize($config);
         $data['links'] = $this->pagination->create_links();
         $data['total_rows'] = $total_rows;
+        $data['base_url'] = $config['base_url'];
         /*
          * fin paginador
          */

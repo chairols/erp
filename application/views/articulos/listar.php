@@ -11,12 +11,12 @@
 					<!-- ////////////////////////////   Formulario de Búsqueda //////////////////////////// -->
       		<div class="row">
             <div class="input-group col-lg-3 col-md-3 col-sm-5 col-xs-11" style="margin:2px;">
-				      <span class="input-group-addon order-arrows sort-activated" order="quotation_id" mode="desc"><i class="fa fa-sort-alpha-desc"></i></span>
-				      <input id="idarticulo" name="idarticulo" class="form-control" placeholder="ID de Artículo" type="text">
+				      <span class="input-group-addon order-arrows sort-activated" order="idarticulo" mode="desc"><i class="fa fa-sort-alpha-desc"></i></span>
+				      <input id="idarticulo" name="idarticulo" class="form-control" validateonlynumbers="Ingrese únicamente números." placeholder="ID de Artículo" type="text">
             </div>
             <div class="input-group col-lg-3 col-md-3 col-sm-5 col-xs-11" style="margin:2px;">
 				      <span class="input-group-addon order-arrows " order="code" mode="DESC"><i class="fa fa-sort-alpha-desc"></i></span>
-			        <input id="articulo" name="articulo" class="form-control inputMask" placeholder="Código" type="text">
+			        <input id="articulo" name="articulo" value="" class="form-control inputMask" placeholder="Código" type="text">
             </div>
             <div class="input-group col-lg-3 col-md-3 col-sm-5 col-xs-11" style="margin:2px;">
 				      <span class="input-group-addon order-arrows " order="order_number" mode="DESC"><i class="fa fa-sort-alpha-desc"></i></span>
@@ -32,7 +32,7 @@
             </div>
         	</div>
 	        <!-- Submit Button -->
-	        <button type="submit" class="btn btnGreen searchButton">Buscar</button>
+	        <button type="button" class="btn btnGreen searchButton">Buscar</button>
 	        <button type="button" class="btn btnGrey" id="ClearSearchFields">Limpiar</button>
 					<!-- ////////////////////////////   Formulario de Búsqueda //////////////////////////// -->
 				</form>
@@ -57,7 +57,7 @@
 		<!-- Contraer Seleccionados -->
 		<button type="button" aria-label="Contraer Seleccionados" title="Contraer registros seleccionados" class="btn bg-navy animated fadeIn NewElementButton Hidden ContractSelectedElements hint--bottom hint--bounce hint--primary"><i class="fa fa-minus"></i></button>
   	<!-- Ir a pantalla de creación -->
-  	<a href="/articulos/crear/" class="hint--bottom hint--bounce hint--success" aria-label="Nueva Cotización"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>
+  	<a href="/articulos/crear/" class="hint--bottom hint--bounce hint--success" aria-label="Nuevo Artículo"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square-o"></i></button></a>
 
     <input id="selected_ids" name="selected_ids" value="" type="hidden">
     <div class="changeView">
@@ -174,7 +174,7 @@
 					<!-- ////////////////////////////   Registros   //////////////////////////// -->
 				</div> <!-- container-fluid -->
       </div>
-      <input id="totalregs" name="totalregs" value="43" type="hidden">
+      <input id="totalregs" name="totalregs" value="<?= $total_rows	?>" type="hidden">
     </div>
     <!-- /Content Container -->
   </div><!-- /.box-body -->
@@ -182,26 +182,44 @@
 		<!-- Paginator -->
 		<div class="form-inline paginationLeft">
 			<div class="row">
-			  <div class="col-xs-12 col-sm-4 col-md-3">
+			  <div class="col-xs-12 col-sm-3 col-md-4">
 					<div class="row">
 					  <div class="col-xs-5 col-sm-3 col-md-4" style="margin:0px;padding:0px;margin-top:7px;">
 					    <span class="pull-right">Mostrando&nbsp;</span>
 					  </div>
-					  <div class="col-xs-3 col-sm-2 col-md-3 txC" style="margin:0px;padding:0px;">
+					  <div class="col-xs-12 col-sm-3 col-md-3 txC" style="margin:0px;padding:0px;">
 					    <select id="regsperview" name="regsperview" class="form-control chosenSelect txC" firstvalue="" firsttext="" style="display: none;">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="25" selected="selected">25</option>
-                <option value="50">50</option><option value="100">100</option>
+
+								<option value="5" <?php if($per_page == 5){echo 'selected="selected"';}?>>5</option>
+                <option value="10" <?php if($per_page == 10){echo 'selected="selected"';}?>>10</option>
+                <option value="25" <?php if($per_page == 25){echo 'selected="selected"';}?>>25</option>
+                <option value="50" <?php if($per_page == 50){echo 'selected="selected"';}?>>50</option>
+								<option value="100" <?php if($per_page == 100){echo 'selected="selected"';}?>>100</option>
               </select>
             </div>
-					  <div class="col-xs-4 col-sm-7 col-md-5" style="margin:0px;padding:0px;margin-top:7px;">
+					  <div class="col-xs-12 col-sm-5 col-md-5" style="margin:0px;padding:0px;margin-top:7px;">
 					    &nbsp;de
               <b><span id="TotalRegs"><?= $total_rows ?></span></b>
 					  </div>
 					</div>
 				</div>
-				<div class="col-xs-12 col-sm-8 col-md-9">
+				<div class="col-xs-12 col-sm-3 col-md-3 txC">
+					<div class="row">
+				    <div class="col-xs-4 txR" style="margin-right:0px;padding-right:2px;margin-top:6px;">
+				      Página N°
+				    </div>
+				    <div class="col-xs-4" style="margin:0px;padding:0px;">
+				      <input type="text" id="ir_a_pagina_input" class="input-sm form-control" placeholder="0" style="width:100%;" />
+				    </div>
+						<div class="col-xs-4 txL" style="margin-left:0px;padding-left:2px;">
+				      <button type="button" url="<?= $base_url?>" id="ir_a_pagina_button" id="ir_a_pagina" name="button" class="btn btn-sm btn-default" style="margin:0px;">Ir</button>
+				    </div>
+				  </div>
+
+
+						<!--  <button type="button" class="btn btn-primary" name="button">Ir</button>	</button> -->
+				</div>
+				<div class="col-xs-12 col-sm-5 col-md-5">
 				  <ul class="paginationRight pagination no-margin pull-right">
             <?= $links ?>
           </ul>
@@ -211,69 +229,3 @@
     <!-- Paginator -->
 	</div>
 </div>
-
-
-
-  <div class="box">
-      <div class="box-header">
-          <form method="GET" class="input-group input-group-sm col-md-5">
-              <input class="form-control pull-left" name="articulo" placeholder="Artículo" type="text">
-              <div class="input-group-btn">
-                  <button class="btn btn-default" type="submit">
-                      <i class="fa fa-search"></i>
-                  </button>
-              </div>
-          </form>
-          <div class="box-tools">
-              <ul class="pagination pagination-sm no-margin pull-right">
-                  <?= $links ?>
-              </ul>
-          </div>
-      </div>
-      <div class="box-body no-padding">
-          <table class="table table-bordered table-hover table-striped">
-              <tbody>
-                  <tr>
-                      <th>Artículo</th>
-                      <th>Marca</th>
-                      <th>Línea</th>
-                      <th>Stock</th>
-                      <th>Genérico</th>
-                      <th>Acciones</th>
-                  </tr>
-                  <?php foreach ($articulos as $articulo) { ?>
-                      <tr>
-                          <td><?= $articulo['articulo'] ?></td>
-                          <td><?= $articulo['marca'] ?></td>
-                          <td><?= $articulo['linea'] ?></td>
-                          <td>
-                          <?php if ($articulo['stock'] > 0) { ?>
-                              <span class="label label-success"><?= $articulo['stock'] ?></span>
-                          <?php } else { ?>
-                              <span class="label label-danger"><?= $articulo['stock'] ?></span>
-                              <? } ?>
-                              </td>
-                              <td><?= $articulo['articulo_generico'] ?></td>
-                              <td>
-                                  <a href="/articulos/modificar/<?= $articulo['idarticulo'] ?>/" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">
-                                      <button class="btn btn-primary btn-xs">
-                                          <i class="fa fa-edit"></i>
-                                      </button>
-                                  </a>
-                              </td>
-                          </tr>
-                      <?php } ?>
-                  </tbody>
-              </table>
-          </div>
-          <div class="box-footer clearfix">
-              <div class="pull-left">
-                  <strong>Total <?= $total_rows ?> registros.</strong>
-              </div>
-              <div class="box-tools">
-                  <ul class="pagination pagination-sm no-margin pull-right">
-                      <?= $links ?>
-              </ul>
-          </div>
-      </div>
-  </div>

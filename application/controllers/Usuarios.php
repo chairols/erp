@@ -41,6 +41,7 @@ class Usuarios extends CI_Controller {
                     'nombre' => $usuario['nombre'],
                     'apellido' => $usuario['apellido'],
                     'correo' => $usuario['email'],
+                    'imagen' => $usuario['imagen'],
                     'perfil' => $perfil['idperfil']
                 );
                 $this->session->set_userdata($datos);
@@ -215,4 +216,52 @@ class Usuarios extends CI_Controller {
         }
     }
 
+    public function perfil() {
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
+        $data['title'] = 'Mi Perfil';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/usuarios/js/perfil.js'
+        );
+        
+        $datos = array(
+            'idusuario' => $session['SID']
+        );
+        $data['perfil'] = $this->usuarios_model->get_where($datos);
+        
+        $data['view'] = 'usuarios/perfil';
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function perfil_ajax() {
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
+        
+        $this->form_validation->set_rules('nombre', 'Nombre', 'required');
+        $this->form_validation->set_rules('apellido', 'Apellido', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+        $this->form_validation->set_rules('telefono', 'Teléfono', 'required');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'nombre' => $this->input->post('nombre'),
+                'apellido' => $this->input->post('apellido'),
+                'email' => $this->input->post('email'),
+                'telefono' => $this->input->post('telefono')
+            );
+            
+            $json = array(
+                'status' => 'ok'
+            );
+            echo json_encode($json);
+        }
+    }
 }

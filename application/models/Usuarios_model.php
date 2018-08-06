@@ -16,12 +16,14 @@ class Usuarios_model extends CI_Model{
                                         usuario,
                                         nombre,
                                         apellido,
-                                        email
+                                        email,
+                                        imagen
                                     FROM
                                         usuarios
                                     WHERE
                                         usuario = '$usuario' AND
-                                        password = '$password'");
+                                        password = '$password' AND
+                                        estado = 'A'");
         return $query->row_array();
     }
     

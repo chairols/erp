@@ -24,6 +24,8 @@
 <link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">
 <!-- Dropzone -->
 <link rel="stylesheet" href="/assets/vendors/dropzone/dropzone.min.css">
+<!-- Hint -->
+<link rel="stylesheet" href="/assets/vendors/hint/hint.min.css">
 <!-- Sistema -->
 <link rel="stylesheet" href="/assets/sistema/css/sistema.css">
 <?php

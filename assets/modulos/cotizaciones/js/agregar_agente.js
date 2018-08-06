@@ -56,23 +56,17 @@ function LlenarSucursales()
 
     $.ajax({
         type: "POST",
-        url: '/sucursales/gets_sucusales_ajax/',
+        url: '/sucursales/gets_sucursales_ajax/',
         data: datos,
         success: function(data){
-					var obj = JSON.parse(data)
-					console.log(obj); /// CONTINUAR DESDE ACA
-            if(data && data != "[]")
-            {
-                $('#ContenedorSucursales').html(data);
-								console.log(data);
-            }else{
-								console.log('vacio');
-                $('#ContenedorSucursales').html('<select id="sucursales_agente" class="form-control chosenSelect" disabled="disabled" ><option value="0">Sin Sucursales</option</select>');
-            }
-            chosenSelect();
-            MostrarContenedorAgente();
-            BorrarAgente();
-        }
+					$('#ContenedorSucursales').html(data);
+          chosenSelect();
+          MostrarContenedorAgente();
+          BorrarAgente();
+        },
+				error: function(error){
+					console.log(error);
+				}
     });
 	}
 }
@@ -98,30 +92,24 @@ function LLenarAgentes()
 	var sucursal = $('#sucursales_agente').val();
 	if(sucursal)
 	{
-		var process = process_url;
-		var string      = 'id='+ sucursal +'&action=fillagents&object=CompanyAgent';
-	    var data;
-	    $.ajax({
-	        type: "POST",
-	        url: process,
-	        data: string,
-	        cache: false,
-	        success: function(data){
-	            if(data)
-	            {
-	            	$('#ContenedorAgentes').removeClass('Hidden');
-	                $('#ContenedorAgentes').html(data);
-	                BorrarAgente();
-	                MostrarFormularioAgenteNuevo();
-	                OcultarFormularioAgenteNuevo();
-	                CrearAgenteNuevo();
-	                SeleccionarAgente();
-	            }else{
-	                $('#ContenedorAgentes').html('<span class="text-center">Sin Contacto</span>');
-
-	            }
-	        }
-	    });
+		datos = {
+        'idempresa': empresa,
+				'idsucursal': sucursal
+    };
+    $.ajax({
+        type: "POST",
+        url: '/agentes/gets_agentes_tarjetas_ajax/',
+        data: datos,
+        success: function(data){
+        	$('#ContenedorAgentes').removeClass('Hidden');
+          $('#ContenedorAgentes').html(data);
+          BorrarAgente();
+          MostrarFormularioAgenteNuevo();
+          OcultarFormularioAgenteNuevo();
+          CrearAgenteNuevo();
+          SeleccionarAgente();
+        }
+    });
 	}
 	return false;
 }

@@ -43,6 +43,9 @@ $(document).ready(function(){
 | los inputs que tengan la clase "datePicker" y los pasa como argumento de
 | la función datePicker.
 |
+| Ejemplo de uso:
+| <input type="text" class="datePicker">
+|
 */
 function datePicker(element)
 {
@@ -292,7 +295,29 @@ function chosenSelect()
   }
 }
 
-///////// INPUT MASK FOR TEXT INPUTS /////////
+/*
+|--------------------------------------------------------------------------
+| Input Mask
+|--------------------------------------------------------------------------
+| Input Mask es un vendor de js que convierte un input del tipo "text" o
+| "textarea" en un input con una máscara para ingresar datos formateados.
+|
+| Definiciones de la máscara:
+| 9 : numérico
+| a : alfabético
+| * : alfanumérico
+| []: valor opcional
+| {}: repetición de un valor
+|
+| Ejemplos de uso:
+| <input type="text" class="inputMask" data-inputmask="'mask': '**-9999999-aaa'">
+| <input type="text" class="inputMask" data-inputmask="'mask': '**-9{7}[-aaa]'">
+| Ambos ejemplos generan la misma máscara con la excepción que en el segundo, las
+| tres letras que están encerradas entre corchetes son opcionales.
+|
+| Documentación: https://github.com/RobinHerbots/Inputmask
+|
+*/
 function inputMask()
 {
 	if($(".inputMask").length>0)
@@ -448,6 +473,8 @@ function notifyMsg(typeMsg,msgNotify)
 | Función que sirve para setear un cookie que determinará si el sidebar
 | estará contraido o no.
 |
+| Se ejecuta al hacer click en el ícono que contrae la barra del menú.
+|
 */
 function SidebarMenu()
 {
@@ -582,6 +609,40 @@ function setup() {
     change_skin($(this).data('skin'));
     //changeiCheckboxesSkin($(this).data('skin'));
   });
+}
+
+/*
+|--------------------------------------------------------------------------
+| GetDataFromForm
+|--------------------------------------------------------------------------
+| Función que sirve para obtener los valores de los campos de un formulario.
+| Devuelve una cadena con los campos del formulario y sus valores, pero solo
+| de los campos que tengan un valor. Si el campo está vació, lo omite.
+|
+*/
+function GetDataFromForm(formid)
+{
+    var data = "";
+    $("form#"+formid+" input, form#"+formid+" select").each(function(){
+      if($(this).attr("type")=="checkbox")
+      {
+          notifyWarning("Función de javascript GetDataFromForm() no está preparada para procesar campos del tipo checkbox. Hay que desarrollarlo.");
+          return false;
+      }else{
+        var input = $(this).attr("id");
+        if(input==undefined)
+          input = $(this).attr("name");
+
+        var value = $(this).val();
+
+        if(value)
+        {
+          if(data=="") data = input + "=" + value;
+          else  data = data + "&" + input + "=" + value;
+        }
+      }
+    });
+    return data;
 }
 
 //////////////////////////////////////////////////// Submit Data //////////////////////////////////////////////////////

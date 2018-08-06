@@ -1,4 +1,4 @@
-ShowList///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// LIST & GRID ////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,15 +58,10 @@ function toggleRow(element)
     var actions = element.children('.listActions');
     actions.toggleClass('Hidden');
 
-
-
-	if(get['status'] && get['status'].toUpperCase()=='I')
-	{
-    showActivateButton();
-    }else{
+		showActivateButton();
 		showDeleteButton();
-    }
 		showExpandButton();
+		showContractButton();
 		showSelectAllButton();
 }
 
@@ -75,6 +70,8 @@ function toggleRowDetailedInformation()
 	$('.ExpandButton,ContractButton').on('click',function(event){
 		event.stopPropagation();
 		toggleExpandRow($(this));
+		showExpandButton();
+		showContractButton();
 	});
 }
 toggleRowDetailedInformation();
@@ -114,11 +111,21 @@ function showActivateButton()
 
 function showExpandButton()
 {
-    if($('.SelectedRow').length>1)
+    if($('.SelectedRow').length > 1 && $('.SelectedRow').children('.listActions').children('div').children('.roundItemActionsGroup').children('a').children('.ExpandButton').length > 0)
     {
         $('.ExpandSelectedElements').removeClass('Hidden');
     }else{
         $('.ExpandSelectedElements').addClass('Hidden');
+    }
+}
+
+function showContractButton()
+{
+    if($('.SelectedRow').length > 1  && $('.SelectedRow').children('.listActions').children('div').children('.roundItemActionsGroup').children('a').children('.ContractButton').length > 0)
+    {
+        $('.ContractSelectedElements').removeClass('Hidden');
+    }else{
+        $('.ContractSelectedElements').addClass('Hidden');
     }
 }
 
@@ -168,7 +175,7 @@ function deleteElement(element)
 	var datos   = element.attr('campo')+'='+id;
 	// var datos   = {:id};
 	var result;
-	console.log(datos);
+	// console.log(datos);
     $.ajax({
         type: "POST",
         url: url,
@@ -190,35 +197,31 @@ function deleteElement(element)
 function activateElement(element)
 {
 	var elementID	= element.attr('id').split("_");
-	var id			= elementID[1];
-	var row			= $("#row_"+id);
-	var process 	= element.attr('process');
-	var object		= $("#SearchResult").attr("object");
-	var string      = 'id='+ id + '&action=activate&object='+object;
+	var id				= elementID[1];
+	var row				= $("#row_"+id);
+	var url 			= element.attr('url');
+	var campo 		= element.attr('campo');
+	var datos   	= element.attr('campo')+'='+id;
 	var result;
 
     $.ajax({
         type: "POST",
-        url: process,
-        data: string,
+        url: url,
+        data: datos,
         cache: false,
         async: false,
         success: function(data){
-            if(data)
-            {
-                console.log(data);
-                result = false;
-            }else{
-			    		row.remove();
-            	result = true;
-            }
-        }
+            row.remove();
+	        	result = true;
+        },
+				error: function(data){
+					result = false;
+					console.log(data);
+				}
     });
     //console.log(result);
     return result;
 }
-
-
 
 
 function deleteListElement()
@@ -229,24 +232,27 @@ function deleteListElement()
 		var elementID	= $(this).attr("id").split("_");
 		var id			= elementID[1];
 		var row			= $("#row_"+id);
-		var question	= "";
-		var text_ok		= "";
-		var text_error	= "";
+		var question	= $(this).attr('msjpregunta');
+		var text_ok		= $(this).attr('msjok');
+		var text_error	= $(this).attr('msjerror');
 
 		if($("#delete_question_"+id).length>0)
 			question = $("#delete_question_"+id).val();
 		else
-			question = utf8_decode('Está a punto de eliminar un registro ¿Desea continuar?');
+			if(!question || question=="" || question=="undefined" )
+				question = 'Está a punto de eliminar un registro ¿Desea continuar?';
 
 		if($("#delete_text_ok_"+id).length>0)
 			text_ok = $("#delete_text_ok_"+id).val();
 		else
-			text_ok = "El registro ha sido eliminado.";
+			if(!text_ok || text_ok=="" || text_ok=="undefined" )
+				text_ok = "El registro ha sido eliminado.";
 
 		if($("#delete_text_error_"+id).length>0)
 			text_error = $("#delete_text_error_"+id).val();
 		else
-			text_error = "Hubo un problema. El registro no pudo ser eliminado.";
+			if(!text_error || text_error=="" || text_error=="undefined" )
+				text_error = "Hubo un problema. El registro no pudo ser eliminado.";
 
 		alertify.confirm(question, function(e){
 			if(e)
@@ -277,23 +283,26 @@ function activateListElement()
 		var elementID	= $(this).attr("id").split("_");
 		var id			= elementID[1];
 		var row			= $("#row_"+id);
-		var question	= "";
-		var text_ok		= "";
-		var text_error	= "";
+		var question	= $(this).attr('msjpregunta');
+		var text_ok		= $(this).attr('msjok');
+		var text_error	= $(this).attr('msjerror');
 
 		if($("#activate_question_"+id).length>0)
 			question = $("#activate_question_"+id).val();
 		else
-			question = utf8_decode('Está a punto de activar un registro ¿Desea continuar?');
+			if(!question || question=="" || question=="undefined" )
+				question = utf8_decode('Está a punto de activar un registro ¿Desea continuar?');
 
 		if($("#activate_text_ok_"+id).length>0)
 			text_ok = $("#activate_text_ok_"+id).val();
 		else
-			text_ok = "El registro ha sido activado.";
+			if(!text_ok || text_ok=="" || text_ok=="undefined" )
+				text_ok = "El registro ha sido activado.";
 
 		if($("#activate_text_error_"+id).length>0)
 			text_error = $("#activate_text_error_"+id).val();
 		else
+			if(!text_error || text_error=="" || text_error=="undefined" )
 			text_error = "Hubo un problema. El registro no pudo ser activado.";
 
 		alertify.confirm(question, function(e){
@@ -327,10 +336,27 @@ function massiveRowExpand()
 		$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('a').children('.ExpandButton').each(function(){
 			toggleExpandRow($(this));
 		});
+		$(this).addClass('Hidden');
+		$('.ContractSelectedElements').removeClass('Hidden');
 		unselectAll();
 	})
 }
 massiveRowExpand();
+
+function massiveRowContract()
+{
+	$('.ContractSelectedElements').click(function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('a').children('.ContractButton').each(function(){
+			toggleExpandRow($(this));
+		});
+		$(this).addClass('Hidden');
+		$('.ExpandSelectedElements').removeClass('Hidden');
+		unselectAll();
+	})
+}
+massiveRowContract();
 
 function massiveElementDelete()
 {
@@ -340,33 +366,48 @@ function massiveElementDelete()
 		var delBtn		= $(this);
 		// var elements	= "";
 		// var id;
-		alertify.confirm(utf8_decode('¿Desea eliminar los registros seleccionados?'), function(e){
-	        if(e){
 
-	        	var result;
-	        	$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('.deleteElement').each(function(){
-	        		result	= deleteElement($(this));
-	        		// id		= $(this).attr("id").split("_")
-	        		// if(elements!="")
-	        		// {
-	        		// 	elements = elements + "," + id[1];
-	        		// }else{
-	        		// 	elements = id[1];
-	        		// }
-	        	});
+		var msjok 			= $(this).attr('msjok');
+		var msjerror 		= $(this).attr('msjerror');
+		var msjpregunta = $(this).attr('msjpregunta');
+
+		if(!msjok || msjok=="" || msjok=="undefined")
+			msjok = 'Los registros seleccionados han sido eliminados.';
+
+		if(!msjerror || msjerror=="" || msjerror=="undefined")
+			msjerror = 'Hubo un problema al intentar eliminar los registros.';
+
+		if(!msjpregunta || msjpregunta=="" || msjpregunta=="undefined")
+			msjpregunta = '¿Desea eliminar los registros seleccionados?';
+
+		alertify.confirm(msjpregunta, function(e){
+      if(e)
+			{
+
+      	var result;
+      	$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('.deleteElement').each(function(){
+      		result	= deleteElement($(this));
+      		// id		= $(this).attr("id").split("_")
+      		// if(elements!="")
+      		// {
+      		// 	elements = elements + "," + id[1];
+      		// }else{
+      		// 	elements = id[1];
+      		// }
+      	});
 				unselectAll();
-	        	if(result)
-	        	{
-	        		delBtn.addClass('Hidden');
-	        		notifySuccess(utf8_decode('Los registros seleccionados han sido eliminados.'));
-	        		submitSearch();
-	        		var selectedIDS = $("#selected_ids").val().split(",");
-	        	}else{
-	        		notifyError('Hubo un problema al intentar eliminar los registros.');
-	        	}
-	        }
-	    });
-	    return false;
+      	if(result)
+      	{
+      		delBtn.addClass('Hidden');
+      		notifySuccess(msjok);
+      		submitSearch();
+      		var selectedIDS = $("#selected_ids").val().split(",");
+      	}else{
+      		notifyError(msjerror);
+      	}
+      }
+    });
+	  return false;
 	});
 }
 massiveElementDelete();
@@ -376,25 +417,39 @@ function massiveElementActivate()
 	$(".ActivateSelectedElements").click(function(e){
 		e.preventDefault();
 		e.stopPropagation();
+		var msjok 			= $(this).attr('msjok');
+		var msjerror 		= $(this).attr('msjerror');
+		var msjpregunta = $(this).attr('msjpregunta');
+
+		if(!msjok || msjok=="" || msjok=="undefined")
+			msjok = 'Los registros seleccionados han sido activados.';
+
+		if(!msjerror || msjerror=="" || msjerror=="undefined")
+			msjerror = 'Hubo un problema al intentar activar los registros.';
+
+		if(!msjpregunta || msjpregunta=="" || msjpregunta=="undefined")
+			msjpregunta = '¿Desea activar los registros seleccionados?';
+
 		var delBtn = $(this)
-		alertify.confirm(utf8_decode('¿Desea activar los registros seleccionados?'), function(e){
-	        if(e){
-	        	var result;
-	        	$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('.activateElement').each(function(){
-	        		result = activateElement($(this));
-	        	});
+		alertify.confirm(msjpregunta, function(e){
+      if(e)
+			{
+      	var result;
+      	$(".SelectedRow").children('.listActions').children('div').children('.roundItemActionsGroup').children('.activateElement').each(function(){
+      		result = activateElement($(this));
+      	});
 				unselectAll();
-	        	if(result)
-	        	{
-	        		delBtn.addClass('Hidden');
-	        		notifySuccess(utf8_decode('Los registros seleccionados han sido activados.'));
-	        		submitSearch();
-	        	}else{
-	        		notifyError('Hubo un problema al intentar activar los registros.');
-	        	}
-	        }
-	    });
-	    return false;
+      	if(result)
+      	{
+      		delBtn.addClass('Hidden');
+      		notifySuccess(msjok);
+      		submitSearch();
+      	}else{
+      		notifyError(msjerror);
+      	}
+      }
+    });
+	  return false;
 	});
 }
 massiveElementActivate();
@@ -460,15 +515,28 @@ $(function(){
 		$('.SearchFilters').toggleClass('Hidden');
 	});
 
-	// $(".searchButton").click(function(){
-	// 	multipleInputTransform();
-	// 	submitSearch();
-	// 	unselectAll();
-	// });
+	$(".searchButton").click(function(){
+		multipleInputTransform();
+		submitSearch();
+		// unselectAll();
+	});
 
-	// $("#regsperview").change(function(){
-	// 	$(".searchButton").click();
-	// });
+	$("#regsperview").change(function(){
+		$.ajax({
+        type: "POST",
+        url: '/parametros/usuario/',
+        data: "id-1="+$("#regsperview").val(),
+        async: false,
+        success: function()
+				{
+	    		submitSearch();
+      	},
+				error: function(data){
+					result = false;
+					console.log(data);
+				}
+    });
+	});
 
 	$("#CoreSearcherForm input").keypress(function(e){
 		if(e.which==13){
@@ -480,7 +548,7 @@ $(function(){
 		$("#SearchFieldsForm").children('.row').children('#CoreSearcherForm').children('.input-group').children('input,select,textarea').val('');
 		$("#SearchFieldsForm").children('.row').children('#CoreSearcherForm').children('.input-group').children('.chosenSelect').chosen();
 		// $("#SearchFieldsForm").children('.row').children('#CoreSearcherForm').children('.input-group').children('select').chosen();
-	})
+	});
 });
 
 function multipleInputTransform()
@@ -494,48 +562,56 @@ function multipleInputTransform()
 function submitSearch()
 {
 
-// 	if(validador.validateFields('CoreSearcherForm'))
-// 	{
-// 		var loc = document.location.href;
-//   	var getString = loc.split('?');
-//   	var getVars = '';
-//   	if(getString[1])
-//   		getVars = '&'+getString[1];
-// 		var object		= $("#SearchResult").attr("object");
-// 		var process		= process_url+'?action=search&object='+object+getVars;
-// 		var haveData	= function(returningData)
-// 		{
-// 			$("input,select").blur();
-// 			$("#SearchResult").remove();
-// 			$("#CoreSearcherResults").append(returningData);
-// 			rowElementSelected();
-// 			showDeleteButton();
-// 			showExpandButton();
-// 			deleteListElement();
-// 			// massiveElementDelete();
-// 			activateListElement();
-// 			toggleRowDetailedInformation();
-// 			toggleSelectedRows();
-// 			selectAllRows();
-// 			unselectAllRows();
-// 			showSelectAllButton();
-// 			chosenSelect();
-// 			SetAutoComplete();
-// 			validateDivChange();
-// 			if (typeof AdditionalSearchFunctions == 'function') {
-// 			    AdditionalSearchFunctions();
-// 			}
-// 			$("#TotalRegs").html($("#totalregs").val());
-// 			var page = $("#view_page").val();
-// 			appendPager();
-// 		}
-// 		var noData		= function()
-// 		{
-// 			//Empty action
-// 		}
-// 		sumbitFields(process,haveData,noData);
-// 		return false;
-// 	}
+	if(validador.validateFields('CoreSearcherForm'))
+	{
+
+		var loc = document.location.href;
+  	var getString = loc.split('?');
+		var target = getString[0];
+		var data = GetDataFromForm('CoreSearcherForm');
+		if(data)
+			window.location = target + '?' + data;
+		else
+			window.location = target;
+
+  	// var getVars = '';
+  	// if(getString[1])
+  	// 	getVars = '&'+getString[1];
+		// var object		= $("#SearchResult").attr("object");
+		// var process		= process_url+'?action=search&object='+object+getVars;
+		// var haveData	= function(returningData)
+		// {
+		// 	$("input,select").blur();
+		// 	$("#SearchResult").remove();
+		// 	$("#CoreSearcherResults").append(returningData);
+		// 	rowElementSelected();
+		// 	showDeleteButton();
+		// 	showExpandButton();
+		// 	deleteListElement();
+		// 	// massiveElementDelete();
+		// 	activateListElement();
+		// 	toggleRowDetailedInformation();
+		// 	toggleSelectedRows();
+		// 	selectAllRows();
+		// 	unselectAllRows();
+		// 	showSelectAllButton();
+		// 	chosenSelect();
+		// 	SetAutoComplete();
+		// 	validateDivChange();
+		// 	if (typeof AdditionalSearchFunctions == 'function') {
+		// 	    AdditionalSearchFunctions();
+		// 	}
+		// 	$("#TotalRegs").html($("#totalregs").val());
+		// 	var page = $("#view_page").val();
+		// 	appendPager();
+		// }
+		// var noData		= function()
+		// {
+		// 	//Empty action
+		// }
+		// sumbitFields(process,haveData,noData);
+		// return false;
+	}
 }
 
 $(document).ready(function(){
@@ -566,6 +642,40 @@ $(function(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// PAGER //////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$(document).ready(function(){
+	IrAPagina();
+	IrAPaginaApretarEnter();
+});
+
+function IrAPagina()
+{
+		$("#ir_a_pagina_button").on("click",function(){
+			var pagina = $("#ir_a_pagina_input").val();
+			var url = $(this).attr("url");
+			if(!isNaN(pagina) && pagina>0)
+			{
+				// var url = $('a[data-ci-pagination-page="'+pagina+'"]').first().attr("href");
+				window.location = url + ((pagina-1)*10);
+				// window.location = url;
+				// console.log($('a[data-ci-pagination-page="'+pagina+'"]'));
+			}else{
+				if(pagina && pagina!=undefined)
+					notifyError('Ingrese un número de página.');
+			}
+		});
+}
+
+function IrAPaginaApretarEnter()
+{
+	$("#ir_a_pagina_input").keypress(function(evento)
+	{
+	  if (evento.which == 13)
+		{
+	     $("#ir_a_pagina_button").click();
+  	}
+	});
+}
+
 // function appendPager()
 // {
 // 	var page = parseInt($("#view_page").val());
@@ -751,7 +861,3 @@ $(function(){
 // 	var regsperview = $("#regsperview").val();
 // 	return Math.ceil(totalregs/regsperview);
 // }
-
-$(document).ready(function(){
-	// appendPager();
-});

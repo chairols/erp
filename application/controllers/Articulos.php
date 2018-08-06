@@ -28,6 +28,7 @@ class Articulos extends CI_Controller {
 
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
+        $data['per_page'] = $per_page;
 
         $where = $this->input->get();
         $where['articulos.estado'] = 'A';
@@ -57,6 +58,7 @@ class Articulos extends CI_Controller {
         $this->pagination->initialize($config);
         $data['links'] = $this->pagination->create_links();
         $data['total_rows'] = $total_rows;
+        $data['base_url'] = $config['base_url'];
         /*
          * fin paginador
          */
@@ -70,17 +72,29 @@ class Articulos extends CI_Controller {
     public function gets_articulos_ajax() {
         $where = $this->input->post();
         $articulos = $this->articulos_model->gets_where_para_ajax($where, 100);
-        
+
         foreach($articulos as $key => $value) {
             $articulos[$key]['text'] = $value['text']." - ";
             $where = array(
                 'idmarca' => $value['idmarca']
             );
             $resultado = $this->marcas_model->get_where($where);
-            
+
             $articulos[$key]['text'] .= $resultado['marca'];
         }
         echo json_encode($articulos);
+    }
+
+    public function borrar_ajax()
+    {
+      $where = $this->input->post();
+      $this->articulos_model->update(array('estado'=>'I'),$where['idarticulo']);
+    }
+
+    public function activar_ajax()
+    {
+      $where = $this->input->post();
+      $this->articulos_model->update(array('estado'=>'A'),$where['idarticulo']);
     }
 
 }

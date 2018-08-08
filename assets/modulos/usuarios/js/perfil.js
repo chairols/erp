@@ -30,3 +30,18 @@ $("#modificar").click(function () {
         }
     });
 });
+
+$(document).ready(function () {
+    var myDropzone = new Dropzone("#dropzone");
+    myDropzone.on("success", function (file) {
+        console.log(file);
+
+        notifySuccess("Se actualizó la foto de perfil", 1000);
+
+    });
+
+    myDropzone.on("error", function (file) {
+        console.log(file);
+        notifyError("No se pudo actualizar la foto de perfil", 1000);
+    });
+});

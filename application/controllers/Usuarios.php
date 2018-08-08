@@ -307,7 +307,8 @@ class Usuarios extends CI_Controller {
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('file')) {
             $error = array('error' => $this->upload->display_errors());
-            var_dump($error);
+            //var_dump($error);
+            show_404();
         } else {
             $data = $this->upload->data();
             $datos = array(

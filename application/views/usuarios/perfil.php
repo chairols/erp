@@ -55,7 +55,7 @@
             <div class="form-group">
                 <label class="control-label col-xs-3">Imagen</label>
                 <div class="col-xs-6">
-                    <form action="/usuarios/actualizar_foto/" class="dropzone">
+                    <form action="/usuarios/actualizar_foto/" class="dropzone" id="dropzone">
                         <div class="fallback">
                             <input name="file" type="file" accept="image/*">
                         </div>

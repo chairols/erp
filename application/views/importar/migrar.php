@@ -52,7 +52,7 @@
         <div class="row">
             <div class="col-xs-8">
                 <strong>Actualizar tabla <label class="label label-success">comprobantes_notas_varias_items</label> mediante TXT de Sistema anterior. <br>
-                    php index.php migrar agregar_comprobantes_notas_varias_items ITEM-NOT.TXT <br>
+                    php index.php importar agregar_comprobantes_notas_varias_items ITEM-NOT.TXT <br>
                     curl https://erp.rollerservice.com.ar/importar/agregar_comprobantes_notas_varias_items/ITEM-NOT.TXT (ideal para evitar timeout) <br>
                     Eliminar cabeceras del archivo TXT
                 </strong>
@@ -63,6 +63,24 @@
                 </button>
             </div>
             <div class="col-xs-2" id="resultado-4">
+                
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-8">
+                <strong>Actualizar tabla <label class="label label-success">comprobantes</label> mediante TXT de Sistema anterior. <br>
+                    php index.php importar migrar_comprobantes FACTURAS.TXT <br>
+                    curl https://erp.rollerservice.com.ar/importar/migrar_comprobantes/FACTURAS.TXT <br>
+                    Eliminar cabeceras del archivo TXT
+                </strong>
+            </div>
+            <div class="col-xs-2" id="boton-5">
+                <button class="btn btn-xs btn-primary" onclick="procesar(5, '/importar/migrar_comprobantes/FACTURAS.TXT')">
+                    <i class="fa fa-database"></i> Comenzar >>
+                </button>
+            </div>
+            <div class="col-xs-2" id="resultado-5">
                 
             </div>
         </div>

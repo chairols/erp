@@ -161,7 +161,7 @@ class Usuarios extends CI_Controller {
             if ($resultado) {  //  Si el usuario ya existe
                 $json = array(
                     'status' => 'error',
-                    'data' => 'El usuario <strong>'.$this->input->post('usuario').'</strong> ya existe.'
+                    'data' => 'El usuario <strong>' . $this->input->post('usuario') . '</strong> ya existe.'
                 );
                 echo json_encode($json);
             } else {
@@ -172,29 +172,29 @@ class Usuarios extends CI_Controller {
                 $datos['estado'] = 'A';
                 $datos['fecha_creacion'] = date("Y-m-d H:i:s");
                 $datos['idcreador'] = $session['SID'];
-                
+
                 $id = $this->usuarios_model->set($datos);
-                
+
                 /*
                  * Compruebo si fue exitoso y agrego al log
                  */
-                if($id) {
+                if ($id) {
                     $dat = array(
                         'idusuario' => $id,
                         'idperfil' => $this->input->post('idperfil')
                     );
                     $this->usuarios_model->set_perfil($dat);
-                    
+
                     $log = array(
                         'tabla' => 'usuarios',
                         'idtabla' => $id,
-                        'texto' => 'Se agregó el usuario: '.$datos['usuario'].'<br>'.
-                        'Password: '.$this->input->post('password').'<br>'.
-                        'Nombre: '.$datos['nombre'].'<br>'.
-                        'Apellido: '.$datos['apellido'].'<br>'.
-                        'Email: '.$datos['email'].'<br>'.
-                        'Teléfono: '.$datos['telefono'].'<br>'.
-                        'ID de Perfil: '.$this->input->post('idperfil'),
+                        'texto' => 'Se agregó el usuario: ' . $datos['usuario'] . '<br>' .
+                        'Password: ' . $this->input->post('password') . '<br>' .
+                        'Nombre: ' . $datos['nombre'] . '<br>' .
+                        'Apellido: ' . $datos['apellido'] . '<br>' .
+                        'Email: ' . $datos['email'] . '<br>' .
+                        'Teléfono: ' . $datos['telefono'] . '<br>' .
+                        'ID de Perfil: ' . $this->input->post('idperfil'),
                         'idusuario' => $session['SID'],
                         'tipo' => 'add'
                     );
@@ -225,26 +225,26 @@ class Usuarios extends CI_Controller {
         $data['javascript'] = array(
             '/assets/modulos/usuarios/js/perfil.js'
         );
-        
+
         $datos = array(
             'idusuario' => $session['SID']
         );
         $data['perfil'] = $this->usuarios_model->get_where($datos);
-        
+
         $data['view'] = 'usuarios/perfil';
         $this->load->view('layout/app', $data);
     }
-    
+
     public function perfil_ajax() {
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
-        
+
         $this->form_validation->set_rules('nombre', 'Nombre', 'required');
         $this->form_validation->set_rules('apellido', 'Apellido', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('telefono', 'Teléfono', 'required');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
@@ -257,11 +257,64 @@ class Usuarios extends CI_Controller {
                 'email' => $this->input->post('email'),
                 'telefono' => $this->input->post('telefono')
             );
-            
-            $json = array(
-                'status' => 'ok'
+
+            $password = $this->input->post('password');
+            $nuevopass = $this->input->post('nuevopass');
+            $nuevopassconf = $this->input->post('nuevopassconf');
+
+            if (strlen($nuevopass) > 0 && $nuevopass == $nuevopassconf) {
+                $usuario = $this->usuarios_model->get_usuario($this->input->post('usuario'), sha1($this->input->post('password')));
+                $perfil = $this->usuarios_model->get_perfil($usuario['idusuario']);
+                if ($usuario) {
+                    $datos['password'] = sha1($nuevopass);
+
+                    $this->usuarios_model->update($datos, $session['SID']);
+
+                    $json = array(
+                        'status' => 'ok'
+                    );
+                    echo json_encode($json);
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'La contraseña ingresada es incorrecta'
+                    );
+                    echo json_encode($json);
+                }
+            } else {
+                $this->usuarios_model->update($datos, $session['SID']);
+
+                $usuario = $this->usuarios_model->get_usuario($this->input->post('usuario'), sha1($this->input->post('password')));
+                $perfil = $this->usuarios_model->get_perfil($usuario['idusuario']);
+
+                $json = array(
+                    'status' => 'ok'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
+    public function actualizar_foto() {
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
+        
+        $config['upload_path'] = './upload/usuarios/perfil/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = '100';
+        $config['max_width'] = '1024';
+        $config['max_height'] = '768';
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('file')) {
+            $error = array('error' => $this->upload->display_errors());
+            var_dump($error);
+        } else {
+            $data = $this->upload->data();
+            $datos = array(
+                'imagen' => '/upload/usuarios/perfil/'.$data['file_name']
             );
-            echo json_encode($json);
+            $this->usuarios_model->update($datos, $session['SID']);
         }
     }
 }
+?>

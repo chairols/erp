@@ -2,6 +2,7 @@ $("#modificar").click(function () {
     alertify.confirm("Se actualizará el usuario <strong>" + $("#usuario").val() + "</strong><br><strong>¿Desea confirmar?</strong>", function (e) {
         if (e) {
             datos = {
+                'usuario': $("#usuario").val(),
                 'nombre': $("#nombre").val(),
                 'apellido': $("#apellido").val(),
                 'email': $("#email").val(),

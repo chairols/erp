@@ -57,7 +57,7 @@
                 <div class="col-xs-6">
                     <form action="/usuarios/actualizar_foto/" class="dropzone">
                         <div class="fallback">
-                            <input name="file" type="file"/>
+                            <input name="file" type="file" accept="image/*">
                         </div>
                     </form>
                 </div>
@@ -71,7 +71,3 @@
         </div>
     </div>
 </div>
-
-<pre>
-    <?php print_r($perfil); ?>
-</pre>

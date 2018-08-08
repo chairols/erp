@@ -13,7 +13,8 @@ class Importar extends CI_Controller {
         ));
         $this->load->model(array(
             'articulos_model',
-            'importar_model'
+            'importar_model',
+            'comprobantes_model'
         ));
         $this->load->helper(array(
             'file'
@@ -315,6 +316,85 @@ class Importar extends CI_Controller {
         }
     }
 
+    public function migrar_comprobantes($archivo = null) {
+        if ($archivo) {
+            
+            $fp = fopen("upload/importar/" . $archivo, "r");
+            
+            $this->importar_model->truncate('comprobantes');
+            while (!feof($fp)) {
+            //for($i = 0; $i < 10; $i++) {
+                $linea = fgets($fp);
+                $array = preg_split('/;/', $linea);
+                
+
+                //  CARACTERES AL FINAL DEL VALOR
+                //  { = POSITIVO
+                //  } = NEGATIVO
+                //  
+                //  [0] = TIPO COMPROBANTE
+                //  [1] = LETRA
+                //  [2] = PUNTO DE VENTA
+                //  [3] = NUMERO DE COMPROBANTE
+                //  [4] = NUMERO DE CLIENTE
+                //  [5] = FECHA DEL COMPROBANTE
+                //  [6] = CORREDOR
+                //  [7] = ESTADO DEL COMPROBANTE
+                //  [8] = PRECIO NETO EXPRESADO EN PESOS
+                //  [9] = PRECIO NETO EXPRESADO EN DOLARES
+                //  [10] = PRECIO EXENTO EXPRESADO EN PESOS
+                //  [11] = PRECIO EXENTO EXPRESADO EN DOLARES
+                //  [14] = BONIFICACION EXPRESADA EN PESOS
+                //  [15] = BONIFICACION EXPRESADA EN DOLARES
+                //  [16] = IIBB EN PESOS => AHORA IMPUESTOS EN PESOS
+                //  [17] = IIBB EN DOLARES => AHORA IMPUESTOS EN DOLARES
+                //  [18] = IVA EN PESOS
+                //  [19] = IVA EN DOLARES
+                //  [22] = MONTO PAGADO
+                
+                $fecha = substr(trim($array[5]), -2, 2);
+                if($fecha > '70') {
+                    $fecha = '19'.$fecha.'-';
+                } else {
+                    $fecha = '20'.$fecha.'-';
+                }
+                $fecha .= substr(trim($array[5]), -4, 2);
+                $fecha .= '-';
+                $fecha .= substr(trim($array[5]), -6, 2);
+                
+                $insert = array(
+                    'tipo_comprobante' => trim($array[0]),
+                    'letra' => trim($array[1]),
+                    'punto_de_venta' => trim($array[2]),
+                    'numero_comprobante' => trim($array[3]),
+                    'idempresa' => trim($array[4]),
+                    'fecha' => $fecha,
+                    'estado' => trim($array[7]),
+                    'precio_neto_pesos' => trim($array[8]),
+                    'precio_neto_dolares' => trim($array[9]),
+                    'precio_exento_pesos' => trim($array[10]),
+                    'precio_exento_dolares' => trim($array[11]),
+                    'bonificacion_pesos' => trim($array[14]),
+                    'bonificacion_dolares' => trim($array[15]),
+                    'impuestos_pesos' => trim($array[16]),
+                    'impuestos_dolares' => trim($array[17]),
+                    'iva_pesos' => trim($array[18]),
+                    'iva_dolares' => trim($array[19]),
+                    'monto_pagado' => trim($array[22])
+                );
+                
+                
+                $this->comprobantes_model->set($insert);
+                
+            }
+
+            $array = array(
+                'status' => 'ok'
+            );
+            echo json_encode($array);
+            
+        }
+    }
 }
 
 ?>

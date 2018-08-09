@@ -82,7 +82,8 @@
                 <button type="button" aria-label="Deseleccionar todos" id="UnselectAll" class="btn animated fadeIn NewElementButton Hidden hint--bottom-right hint--bounce"><i class="fa fa-square"></i></button>
                 <!--/Select All -->
                 <!-- Remove All -->
-                <button type="button" aria-label="Eliminar Seleccionados" title="Borrar registros seleccionados" class="btn bg-red animated fadeIn NewElementButton Hidden ExpandSelectedElements hint--bottom hint--bounce hint--error" onclick="borrarSeleccionados();"><i class="fa fa-trash-o"></i></button>
+                <button type="button" onclick="borrarSeleccionados();" class="btn bg-red animated fadeIn Hidden DeleteSelectedElements hint--bottom hint--bounce hint--error"><i class="fa fa-trash-o"></i></button>
+                <!--<button type="button" aria-label="Eliminar Seleccionados" title="Borrar registros seleccionados" class="btn bg-red animated fadeIn NewElementButton Hidden ExpandSelectedElements hint--bottom hint--bounce hint--error" onclick="borrarSeleccionados();"><i class="fa fa-trash-o"></i></button>-->
                 <!-- /Remove All -->
                 <!-- Activate All -->
                 <button type="button" aria-label="Activar Seleccionados" class="btn btnGreen animated fadeIn NewElementButton Hidden ActivateSelectedElements hint--bottom hint--bounce hint--success"><i class="fa fa-check-circle"></i></button>
@@ -162,7 +163,7 @@
                                     <div class="listActions flex-justify-center Hidden">
                                         <div>
                                             <span class="roundItemActionsGroup">
-                                                <a iditem="<?=$item['idlista_de_precios_item']?>" class="borraritem hint--bottom hint--bounce hint--error" aria-label="Descartar">
+                                                <a iditem="<?=$item['idlista_de_precios_item']?>" class="borraritem hint--bottom hint--bounce hint--error" aria-label="Descartar" id="delete_<?=$item['idlista_de_precios_item']?>">
                                                     <button class="btn btnRed" type="button">
                                                         <i class="fa fa-trash"></i>
                                                     </button>

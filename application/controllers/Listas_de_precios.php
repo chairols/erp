@@ -270,6 +270,7 @@ class Listas_de_precios extends CI_Controller {
         $this->pagination->initialize($config);
         $data['links'] = $this->pagination->create_links();
         $data['total_rows'] = $total_rows;
+        $data['base_url'] = $config['base_url'];
         /*
          * fin paginador
          */

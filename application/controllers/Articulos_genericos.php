@@ -173,7 +173,7 @@ class Articulos_genericos extends CI_Controller {
             if ($resultado) {
                 $json = array(
                     'status' => 'error',
-                    'data' => 'El artículo genérico ' . $resultado['articulo_generico'] . ' ya existe.'
+                    'data' => '<p>El artículo genérico ' . $resultado['articulo_generico'] . ' ya existe.</p>'
                 );
                 echo json_encode($json);
             } else {
@@ -189,13 +189,13 @@ class Articulos_genericos extends CI_Controller {
                 if ($id) {
                     $json = array(
                         'status' => 'ok',
-                        'data' => 'Se creó el genérico ' . $datos['articulo_generico']
+                        'data' => '<p>Se creó el genérico ' . $datos['articulo_generico'].'</p>'
                     );
                     echo json_encode($json);
                 } else {
                     $json = array(
                         'status' => 'error',
-                        'data' => 'No se pudo crear el genérico ' . $datos['articulo_generico']
+                        'data' => '<p>No se pudo crear el genérico ' . $datos['articulo_generico'].'</p>'
                     );
                     echo json_encode($json);
                 }

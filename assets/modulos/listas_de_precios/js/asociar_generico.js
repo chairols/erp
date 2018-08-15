@@ -196,7 +196,7 @@ function borrarSeleccionados() {
     });
 }
 
-$("#creargenerico").click(function() {
+$("#creargenerico").click(function () {
     datos = {
         'idlinea': $("#linea").val(),
         'articulo_generico': $("#codigo").val(),
@@ -223,34 +223,40 @@ $("#creargenerico").click(function() {
             }
         }
     });
-    
+
 });
 
 function notificarErrorEnModal(mensaje) {
     $("#notificaciones").show();
-    $("#notificaciones").html("<div class='alert alert-danger'>"+mensaje+"</div>");
+    $("#notificaciones").html("<div class='alert alert-danger'>" + mensaje + "</div>");
     $("#notificaciones").fadeOut(5000);
 }
 
 function notificarOKEnModal(mensaje) {
     $("#notificaciones").show();
-    $("#notificaciones").html("<div class='alert alert-success'>"+mensaje+"</div>");
+    $("#notificaciones").html("<div class='alert alert-success'>" + mensaje + "</div>");
     $("#notificaciones").fadeOut(5000);
 }
 
-$("#buscador").keyup(function() {
-    datos = {
-        'articulo_generico': $("#buscador").val()
-    };
-    $.ajax({
-        type: 'POST',
-        url: '/articulos_genericos/gets_articulos_tabla_ajax/',
-        data: datos,
-        beforeSend: function () {
-            $("#resultadobusqueda").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
-        },
-        success: function (data) {
-            $("#resultadobusqueda").html(data);
-        }
-    }); 
+$("#buscador").keyup(function () {
+    buscador = $("#buscador").val();
+    if (buscador.length > 0) {
+        datos = {
+            'articulo_generico': buscador
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/articulos_genericos/gets_articulos_tabla_ajax/',
+            data: datos,
+            beforeSend: function () {
+                $("#resultadobusqueda").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+            },
+            success: function (data) {
+                $("#resultadobusqueda").html(data);
+            }
+        });
+    } else {
+        $("#resultadobusqueda").html("");
+    }
+
 });

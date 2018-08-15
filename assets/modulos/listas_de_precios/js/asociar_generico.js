@@ -196,3 +196,44 @@ function borrarSeleccionados() {
     });
 }
 
+$("#creargenerico").click(function() {
+    datos = {
+        'idlinea': $("#linea").val(),
+        'articulo_generico': $("#codigo").val(),
+        'numero_orden': $("#numero_orden").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/articulos_genericos/agregar_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#creargenerico").attr('disabled', 'disabled');
+        },
+        success: function (data) {
+            $("#creargenerico").removeAttr('disabled');
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                notificarErrorEnModal(resultado['data']);
+            } else if (resultado['status'] == 'ok') {
+                notificarOKEnModal(resultado['data']);
+                $("#TextAutoCompletelinea").val("");
+                $("#linea").val("");
+                $("#codigo").val("");
+                $("#numero_orden").val("");
+            }
+        }
+    });
+    
+});
+
+function notificarErrorEnModal(mensaje) {
+    $("#notificaciones").show();
+    $("#notificaciones").html("<div class='alert alert-danger'>"+mensaje+"</div>");
+    $("#notificaciones").fadeOut(5000);
+}
+
+function notificarOKEnModal(mensaje) {
+    $("#notificaciones").show();
+    $("#notificaciones").html("<div class='alert alert-success'>"+mensaje+"</div>");
+    $("#notificaciones").fadeOut(5000);
+}

@@ -9,7 +9,8 @@ class Articulos_genericos extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'pagination'
+            'pagination',
+            'form_validation'
         ));
         $this->load->model(array(
             'parametros_model',
@@ -137,6 +138,69 @@ class Articulos_genericos extends CI_Controller {
         $where = $this->input->post();
         $where['estado'] = 'A';
         echo json_encode($this->articulos_genericos_model->gets_where($where));
+    }
+
+    public function agregar() {
+        $data['title'] = 'Agregar Artículo Genérico';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+
+        $data['view'] = 'articulos_genericos/agregar';
+        $this->load->view('layout/app', $data);
+    }
+
+    public function agregar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idlinea', 'Línea', 'required|integer');
+        $this->form_validation->set_rules('articulo_generico', 'Artículo Genérico', 'required');
+        $this->form_validation->set_rules('numero_orden', 'Número de Orden', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            // Comprobar si el genérico ya existe
+            $datos = array(
+                'idlinea' => $this->input->post('idlinea'),
+                'articulo_generico' => $this->input->post('articulo_generico')
+            );
+
+            $resultado = $this->articulos_genericos_model->get_where($datos);
+            if ($resultado) {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'El artículo genérico ' . $resultado['articulo_generico'] . ' ya existe.'
+                );
+                echo json_encode($json);
+            } else {
+                $datos = array(
+                    'idlinea' => $this->input->post('idlinea'),
+                    'articulo_generico' => $this->input->post('articulo_generico'),
+                    'numero_orden' => $this->input->post('numero_orden'),
+                    'fecha_creacion' => date("Y-m-d H:i:s"),
+                    'idcreador' => $session['SID'],
+                    'actualizado_por' => $session['SID']
+                );
+                $id = $this->articulos_genericos_model->set($datos);
+                if ($id) {
+                    $json = array(
+                        'status' => 'ok',
+                        'data' => 'Se creó el genérico ' . $datos['articulo_generico']
+                    );
+                    echo json_encode($json);
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'No se pudo crear el genérico ' . $datos['articulo_generico']
+                    );
+                    echo json_encode($json);
+                }
+            }
+        }
     }
 
 }

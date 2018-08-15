@@ -163,7 +163,10 @@
                                     <div class="listActions flex-justify-center Hidden">
                                         <div>
                                             <span class="roundItemActionsGroup">
-                                                <a iditem="<?=$item['idlista_de_precios_item']?>" class="borraritem hint--bottom hint--bounce hint--error" aria-label="Descartar" id="delete_<?=$item['idlista_de_precios_item']?>">
+                                                <button type="button" class="btn btn-primary hint--bottom hint--bounce hint--info" data-toggle="modal" data-target=".bs-example-modal-lg" aria-label="Genérico" id="botongenerico_<?= $item['idlista_de_precios_item'] ?>">
+                                                    <i class="fa fa-certificate"></i>
+                                                </button>
+                                                <a iditem="<?= $item['idlista_de_precios_item'] ?>" class="borraritem hint--bottom hint--bounce hint--error" aria-label="Descartar" id="delete_<?= $item['idlista_de_precios_item'] ?>">
                                                     <button class="btn btnRed" type="button">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
@@ -191,6 +194,56 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Large modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <i class="fa fa-certificate"></i> Administrar Artículos Genéricos
+                    </h3>
+                    <div class="row">
+                        <div id="notificaciones" class="col-md-offset-2 col-md-8">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+
+                            <div class="box-title"><strong><h4>Crear Artículo Genérico</h4></strong></div>
+                            <div class="form-group">
+                                <strong>Línea</strong>
+                                <input type="text" id="TextAutoCompletelinea" name="TextAutoCompletelinea" placeholder="Seleccionar Línea" placeholderauto="Línea inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione una línea" objectauto="Lineas" actionauto="gets_lineas_ajax" varsauto="estado:=A" iconauto="ship">
+                                <input type="hidden" id="linea" name="linea" value="">
+                            </div>
+                            <div class="form-group">
+                                <strong>Código</strong>
+                                <input type="text" id="codigo" maxlength="255" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <strong>Número de Orden</strong>
+                                <input type="text" id="numero_orden" maxlength="9" class="form-control">
+                            </div>
+                            <div class="box-footer txC">
+                                <button class="btn btn-sm btn-success" id="creargenerico" type="button">
+                                    Crear Genérico <i class="fa fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

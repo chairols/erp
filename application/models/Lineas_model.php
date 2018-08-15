@@ -50,6 +50,21 @@ class Lineas_model extends CI_Model {
         $this->db->insert('lineas', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Lineas/gets_lineas_ajax
+     */
+    public function gets_where_para_ajax($where, $limit)
+    {
+      $this->db->select('idlinea as id, linea as text');
+      $this->db->from('lineas');
+      $this->db->like($where);
+      $this->db->order_by('linea');
+      $this->db->limit($limit);
+
+      $query = $this->db->get();
+      return $query->result_array();
+    }
 }
 
 ?>

@@ -58,6 +58,14 @@ class Articulos_genericos_model extends CI_Model {
         
         return $query->row_array();
     }
+    
+    /*
+     *  Articulos_genericos/agregar_ajax
+     */
+    public function set($datos) {
+        $this->db->insert('articulos_genericos', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

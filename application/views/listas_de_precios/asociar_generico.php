@@ -220,7 +220,6 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-6 col-xs-12">
-
                             <div class="box-title"><strong><h4>Crear Artículo Genérico</h4></strong></div>
                             <div class="form-group">
                                 <strong>Línea</strong>
@@ -228,7 +227,7 @@
                                 <input type="hidden" id="linea" name="linea" value="">
                             </div>
                             <div class="form-group">
-                                <strong>Código</strong>
+                                <strong>Artículo Genérico</strong>
                                 <input type="text" id="codigo" maxlength="255" class="form-control">
                             </div>
                             <div class="form-group">
@@ -239,6 +238,16 @@
                                 <button class="btn btn-sm btn-success" id="creargenerico" type="button">
                                     Crear Genérico <i class="fa fa-arrow-right"></i>
                                 </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="box-title"><strong><h4>Administrar Artículos Genéricos</h4></strong></div>
+                            <div class="form-group">
+                                <strong>Artículo Genérico</strong>
+                                <input type="text" id="buscador" maxlength="255" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <div id="resultadobusqueda"></div>
                             </div>
                         </div>
                     </div>

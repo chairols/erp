@@ -66,6 +66,14 @@ class Articulos_genericos_model extends CI_Model {
         $this->db->insert('articulos_genericos', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Articulos_genericos/borrar_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('articulos_genericos', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

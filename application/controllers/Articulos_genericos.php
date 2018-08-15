@@ -139,6 +139,14 @@ class Articulos_genericos extends CI_Controller {
         $where['estado'] = 'A';
         echo json_encode($this->articulos_genericos_model->gets_where($where));
     }
+    
+    public function gets_articulos_tabla_ajax() {
+        $where = $this->input->post();
+        $where['estado'] = 'A';
+        $data['articulos'] = $this->articulos_genericos_model->gets_where($where);
+        
+        $this->load->view('articulos_genericos/gets_articulos_tabla_ajax', $data);
+    }
 
     public function agregar() {
         $data['title'] = 'Agregar Artículo Genérico';
@@ -199,6 +207,40 @@ class Articulos_genericos extends CI_Controller {
                     );
                     echo json_encode($json);
                 }
+            }
+        }
+    }
+    
+    public function borrar_ajax() {
+        $this->form_validation->set_rules('idarticulo_generico', 'Artículo Genérico', 'required|integer');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idarticulo_generico' => $this->input->post('idarticulo_generico')
+            );
+            
+            $resultado = $this->articulos_genericos_model->update($datos, $where);
+            if($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se eliminó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo eliminar'
+                );
+                echo json_encode($json);
             }
         }
     }

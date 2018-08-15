@@ -237,3 +237,20 @@ function notificarOKEnModal(mensaje) {
     $("#notificaciones").html("<div class='alert alert-success'>"+mensaje+"</div>");
     $("#notificaciones").fadeOut(5000);
 }
+
+$("#buscador").keyup(function() {
+    datos = {
+        'articulo_generico': $("#buscador").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/articulos_genericos/gets_articulos_tabla_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#resultadobusqueda").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+        },
+        success: function (data) {
+            $("#resultadobusqueda").html(data);
+        }
+    }); 
+});

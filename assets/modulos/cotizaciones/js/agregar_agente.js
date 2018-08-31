@@ -1,302 +1,663 @@
-$(document).ready(function(){
-	AgenteCerrarVentana();
-	DeseleccionarAgenteBtn();
-	CambioValorEmpresa();
-	Deseleccionar();
-	$("#MostrarAgenteBtn").click(function(){
-		MostrarVentanaAgente();
-	});
-	if($("#empresa").val())
-		LlenarSucursales();
+
+$( document ).ready( function()
+{
+
+		CambiaEmpresa();
+
+		ComprobarBotonSeleccionarContacto();
+
+		FuncionesDeVentanaAgente()
+
 });
 
-function MostrarVentanaAgente()
+function CambiaEmpresa()
 {
-	$("#VentanaAgente").removeClass('Hidden');
-	$("#AgenteEmpresa").html($('#TextAutoCompleteempresa').val());
+
+		$( '#empresa' ).change( function ()
+		{
+
+				VaciarAgentes();
+
+				ResetearBotonSeleccionarContacto();
+
+				ComprobarBotonSeleccionarContacto();
+
+		});
+
 }
 
-function DeseleccionarAgenteBtn()
+function ComprobarBotonSeleccionarContacto()
 {
-	if($("#empresa").val())
-	{
-		$("#MostrarAgenteBtn").prop("disabled",false);
-	}else{
-		$("#MostrarAgenteBtn").prop("disabled",true);
-	}
+
+		if( $( '#empresa' ).val() )
+		{
+
+				$( '#MostrarAgenteBtn' ).attr( 'disabled', false );
+
+		}else{
+
+				$( '#MostrarAgenteBtn' ).attr( 'disabled', true );
+
+		}
+
 }
 
-function CambioValorEmpresa()
+function ResetearBotonSeleccionarContacto()
 {
-	$("#empresa").change(function(){
-		DeseleccionarAgenteBtn();
-		OcultarContenedorAgentes();
-		DeseleccionarAgente();
-		LlenarSucursales();
-	});
+
+		$( '#MostrarAgenteBtn' ).html( '<i class="fa fa-times"></i> Seleccionar Contacto' );
+
+		$( '#MostrarAgenteBtn' ).addClass( 'btn-warning' );
+
+		$( '#MostrarAgenteBtn' ).removeClass( 'btn-success' );
+
+		$( '#agente' ).val( '' );
+
+}
+
+function FuncionesDeVentanaAgente()
+{
+
+		AgenteAbrirVentana();
+
+		AgenteCerrarVentana();
+
+		DejarSinContacto();
+
+}
+
+function DejarSinContacto()
+{
+
+		$( '#Deseleccionar' ).click( function()
+		{
+
+				ResetearBotonSeleccionarContacto();
+
+				$( '#AgenteCerrarVentana' ).click();
+
+		});
+
+}
+
+function AgenteAbrirVentana()
+{
+
+		$( '#MostrarAgenteBtn' ).click( function()
+		{
+
+				AgenteCambiarNombreVentana();
+
+				AgenteLlenarSucursales();
+
+				$( '#VentanaAgente' ).removeClass( 'Hidden' );
+
+		});
+
 }
 
 function AgenteCerrarVentana()
 {
-	$(".AgenteCerrarVentana").click(function(){
-		$("#VentanaAgente").addClass('Hidden');
-		$(".cancelar_agente").click();
-	});
-}
 
-//////////////// BRANCHES ///////////////////
-function LlenarSucursales()
-{
-	var empresa = $('#empresa').val();
-	if(empresa)
-	{
-		datos = {
-        'idempresa': empresa
-    };
-
-    $.ajax({
-        type: "POST",
-        url: '/sucursales/gets_sucursales_ajax/',
-        data: datos,
-        success: function(data){
-					$('#ContenedorSucursales').html(data);
-          chosenSelect();
-          MostrarContenedorAgente();
-          BorrarAgente();
-        },
-				error: function(error){
-					console.log(error);
-				}
-    });
-	}
-}
-
-function MostrarContenedorAgente()
-{
-	$("#sucursales_agente").change(function(){
-		if($(this).val())
+		$( '.AgenteCerrarVentana' ).click( function()
 		{
-			LLenarAgentes();
-		}
-	})
-}
 
-function OcultarContenedorAgentes()
-{
-	$('#ContenedorAgentes').addClass('Hidden');
-}
+				$( '#VentanaAgente' ).addClass( 'Hidden' );
 
-/////////////// AGENTS ////////////////////////
-function LLenarAgentes()
-{
-	var sucursal = $('#sucursales_agente').val();
-	if(sucursal)
-	{
-		datos = {
-        'idempresa': empresa,
-				'idsucursal': sucursal
-    };
-    $.ajax({
-        type: "POST",
-        url: '/agentes/gets_agentes_tarjetas_ajax/',
-        data: datos,
-        success: function(data){
-        	$('#ContenedorAgentes').removeClass('Hidden');
-          $('#ContenedorAgentes').html(data);
-          BorrarAgente();
-          MostrarFormularioAgenteNuevo();
-          OcultarFormularioAgenteNuevo();
-          CrearAgenteNuevo();
-          SeleccionarAgente();
-        }
-    });
-	}
-	return false;
-}
-
-
-////////// DELETE
-
-function BorrarAgente()
-{
-	$(".BorrarAgente").click(function(e){
-		e.preventDefault();
-		e.stopPropagation();
-		var sucursal	= $("#sucursales_agente").val();
-		var card	= $(this).attr("agent");
-		var name	= $("#agent_name_"+card+"_"+sucursal).val();
-		var id		= $("#agent_id_"+card+"_"+sucursal).val();
-		alertify.confirm(utf8_decode('¿Desea eliminar el contacto <strong>'+name+'</strong>?'), function(e){
-			if(e)
-			{
-				RemoveAgent(id,card);
-				return false;
-			}
 		});
-		return false;
-	});
+
 }
 
-function RemoveAgent(id,card)
+function AgenteCambiarNombreVentana()
 {
-	var process = process_url;
-	var string      = 'id='+ id +'&action=removeagent&object=CompanyAgent';
-    var data;
-    $.ajax({
-        type: "POST",
-        url: process,
-        data: string,
-        cache: false,
-        success: function(data){
-            if(data)
-            {
-                console.log(data);
-                return false;
-            }else{
-            	$("#ficha_agente_"+card).remove();
-            	if($("#agent").val() && $("#agent").val()==id)
-                {
-                	DeseleccionarAgente();
-                }
-                return false;
-            }
-        }
-    });
-    return false;
+
+		$( '#AgenteEmpresa' ).html( $( '#TextAutoCompleteempresa' ).val() );
+
 }
 
-/////////// CREATE
-
-function MostrarFormularioAgenteNuevo()
+function AgenteLlenarSucursales()
 {
-	$(".agent_new").click(function(e){
-		e.stopPropagation();
-		var sucursal = $(this).attr('sucursal');
-		$("#formulario_agente_"+sucursal).removeClass('Hidden');
-		return false;
-	});
-}
 
-function OcultarFormularioAgenteNuevo()
-{
-	$(".cancelar_agente").click(function(e){
-		e.stopPropagation();
-		var sucursal = $(this).attr('sucursal');
-		$("#formulario_agente_"+sucursal).addClass('Hidden');
-	});
-}
+		var empresa = $( '#empresa' ).val();
 
-function CrearAgenteNuevo()
-{
-	$(".agent_add").click(function(e){
-		e.stopPropagation();
-		var sucursal = $(this).attr('sucursal');
-		if(validate.validateFields("formulario_agente_"+sucursal))
+		if( empresa )
 		{
-			var empresa = $("#empresa").val();
-			var name = $('#agentname_'+sucursal).val();
-			var charge = $('#agentcharge_'+sucursal).val();
-			var email = $('#agentemail_'+sucursal).val();
-			var phone = $('#agentphone_'+sucursal).val();
-			var extra = $('#agentextra_'+sucursal).val();
 
-			var process = process_url;
-			var string  = 'sucursal='+ sucursal + '&empresa=' + empresa + '&name=' + name + '&charge=' + charge + '&email=' + email + '&phone=' + phone + '&extra=' + extra + '&action=addagent&object=CompanyAgent';
-		    var data;
-		    $.ajax({
-		        type: "POST",
-		        url: process,
-		        data: string,
-		        cache: false,
-		        success: function(data){
-		            if(data)
-		            {
-						if(isNaN(data))
+				datos = { 'idempresa': empresa };
+
+		    $.ajax(
+				{
+		        type: 'POST',
+
+		        url: '/sucursales/gets_sucursales_ajax/',
+
+		        data: datos,
+
+		        success: function( data )
 						{
-							notifyError("Ha ocurrido un error al intentar crear el contacto.");
-							console.log(data);
-							return false;
-						}else{
-							var ID = sucursal;
-							var A = parseInt($("#sucursal_agentes_totales_"+ID).val())+1;
-							var chargeHTML ='';
-							var emailHTML ='';
-							var phoneHTML ='';
-							var extraHTML ='';
-							if(charge && charge!=undefined)
-								chargeHTML = '<br><span><i class="fa fa-briefcase"></i> '+charge+'</span>';
-							if(email && email!=undefined)
-								emailHTML = '<br><span><i class="fa fa-envelope"></i> '+email+'</span>';
-							if(phone && phone!=undefined)
-								phoneHTML = '<br><span><i class="fa fa-phone"></i> '+phone+'</span>';
-							if(extra && extra!=undefined)
-								extraHTML = '<br><span><i class="fa fa-info-circle"></i> '+extra+'</span>';
-							var HTML = '<div class="col-md-6 col-sm-6 col-xs-12 AgentCard" id="ficha_agente_'+A+'">'+
-                                '<div class="info-card-item">'+
-                                    '<input type="hidden" id="agent_id_'+A+'_'+ID+'" value="'+data+'" />'+
-                                    '<input type="hidden" id="agent_name_'+A+'_'+ID+'" value="'+name+'" />'+
-                                    '<input type="hidden" id="agent_charge_'+A+'_'+ID+'" value="'+charge+'" />'+
-                                    '<input type="hidden" id="agent_email_'+A+'_'+ID+'" value="'+email+'" />'+
-                                    '<input type="hidden" id="agent_phone_'+A+'_'+ID+'" value="'+phone+'" />'+
-                                    '<input type="hidden" id="agent_extra_'+A+'_'+ID+'" value="'+extra+'" />'+
-                                    '<div class="close-btn BorrarAgente" agent="'+A+'"><i class="fa fa-times"></i></div>'+
-                                    '<span><i class="fa fa-user"></i> <b>'+name+'</b></span>'+
-                                    chargeHTML+phoneHTML+emailHTML+extraHTML+
-                                    '<div class="text-center">'+
-                                        '<button type="button" class="btn btn-sm btn-success SeleccionarAgenteBtn" id="select_'+A+'" sucursal="'+ID+'" agent="'+A+'" ><i class="fa fa-check"></i> Seleccionar</button>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>';
-                            $("#sucursal_agentes_totales_"+ID).val(A);
-                            $("#agents_row").append(HTML);
-                            BorrarAgente();
-                            SeleccionarAgente();
-                        	$(".cancelar_agente").click();
-                            $('#agentname_'+sucursal).val('');
-							$('#agentcharge_'+sucursal).val('');
-							$('#agentemail_'+sucursal).val('');
-							$('#agentphone_'+sucursal).val('');
-							$('#agentextra_'+sucursal).val('');
+
+								$( '#ContenedorSucursales' ).html( data );
+
+								if( $( '#sucursales_agente' ).val() > 0 )
+								{
+
+										AgenteLlenarAgentes();
+
+										CambiaSucursal();
+
+								}
+
+		        },
+
+						error: function( error )
+						{
+
+								console.log( error );
+
 						}
-					}else{
-						notifyError("Ha ocurrido un error al intentar crear el contacto.");
-						console.log("No data returned.");
-						return false;
-		            }
-		        }
+
 		    });
+
+		}else{
+
+				VaciarAgentes();
+
 		}
-	});
+
+}
+
+function VaciarAgentes()
+{
+
+		$( '#ContenedorAgente' ).html( '' );
+
+}
+
+function CambiaSucursal()
+{
+
+		$( '#sucursales_agente' ).change( function()
+		{
+
+				AgenteLlenarAgentes();
+
+		});
+
+}
+
+function AgenteLlenarAgentes()
+{
+
+		var empresa 	= $( '#empresa' ).val();
+
+		var sucursal 	= $( '#sucursales_agente' ).val();
+
+		if( sucursal )
+		{
+
+				datos =
+				{
+		        'idempresa': empresa,
+
+						'idsucursal': sucursal,
+
+						'estado': 'A'
+
+		    };
+
+		    $.ajax(
+				{
+		        type: 'POST',
+
+		        url: '/agentes/gets_agentes_tarjetas_ajax/',
+
+		        data: datos,
+
+		        success: function( data )
+						{
+
+			        	$( '#ContenedorAgente' ).removeClass( 'Hidden' );
+
+			          $( '#ContenedorAgente' ).html( data );
+
+			          BorrarAgente();
+
+			          MostrarFormularioAgenteNuevo();
+
+			          OcultarFormularioAgenteNuevo();
+
+			          CrearAgenteNuevo();
+
+			          SeleccionarAgente();
+
+		        }
+
+		    });
+
+		}
+
+		return false;
+
 }
 
 function SeleccionarAgente()
 {
-	$(".SeleccionarAgenteBtn").click(function(e){
-		e.stopPropagation();
-		var sucursal = $(this).attr("sucursal");
-		var agent = $(this).attr("agent");
-		$("#agent").val($("#agent_id_"+agent+"_"+sucursal).val());
-		$(".AgenteCerrarVentana").click();
-		$("#ShowAgentBtn").html('<i class="fa fa-male"></i> '+$("#agent_name_"+agent+"_"+sucursal).val());
-		$("#ShowAgentBtn").removeClass("btn-warning");
-		$("#ShowAgentBtn").addClass("btn-success");
-		return false;
-	});
+
+		$( ".SeleccionarAgenteBoton" ).click( function( e )
+		{
+
+				e.stopPropagation();
+
+				var sucursal = $( this ).attr( 'sucursal' );
+
+				var agente = $( this ).attr( 'agente' );
+
+				$( '#agente' ).val( $( '#agente_id_' + agente + '_' + sucursal ).val() );
+
+				$( '.AgenteCerrarVentana' ).click();
+
+				$( '#MostrarAgenteBtn' ).html( '<i class="fa fa-male"></i> ' + $( '#agente_nombre_' + agente + '_' + sucursal ).val() );
+
+				$( '#MostrarAgenteBtn' ).removeClass( 'btn-warning' );
+
+				$( '#MostrarAgenteBtn' ).addClass( 'btn-success' );
+
+				return false;
+
+		});
+
 }
 
-function DeseleccionarAgente()
+////////// BORRADO DE AGENTES
+
+function BorrarAgente()
 {
-	$("#agent").val('');
-	$("#ShowAgentBtn").html('<i class="fa fa-times"></i> Sin Contacto');
-	$("#ShowAgentBtn").removeClass("btn-success");
-	$("#ShowAgentBtn").addClass("btn-warning");
+
+		$( '.BorrarAgente' ).click( function( e )
+		{
+
+				e.preventDefault();
+
+				e.stopPropagation();
+
+				var sucursal	= $( '#sucursales_agente' ).val();
+
+				var agente	= $( this ).attr( 'agente' );
+
+				var nombre	= $( '#agente_nombre_' + agente + '_' + sucursal ).val();
+
+				var id		= $( '#agente_id_' + agente + '_' + sucursal ).val();
+
+				alertify.confirm( utf8_decode( '¿Desea eliminar el contacto <strong>' + nombre + '</strong>?' ), function( e )
+				{
+
+						if( e )
+						{
+
+								EliminarFichaAgente( id, agente );
+
+								return false;
+
+						}
+
+				});
+
+				return false;
+
+		});
+
 }
 
-function Deseleccionar()
+function EliminarFichaAgente( id, agente )
 {
-	$("#Deseleccionar").click(function(e){
-		e.stopPropagation();
-		DeseleccionarAgente();
-		$(".AgenteCerrarVentana").click();
-	})
+
+		datos =
+		{
+
+				'idagente': id
+
+		};
+
+	  $.ajax(
+		{
+
+	        type: 'POST',
+
+	        url: '/agentes/borrar_ajax/',
+
+	        data: datos,
+
+	        cache: false,
+
+	        success: function( respuesta )
+					{
+
+	            if( respuesta )
+	            {
+
+	                console.log( respuesta );
+
+	                return false;
+
+	            }else{
+
+		            	$( '#ficha_agente_' + agente ).remove();
+
+		            	if( $( '#agente' ).val() && $( '#agente' ).val() == id )
+	                {
+
+	                		ResetearBotonSeleccionarContacto();
+
+	                }
+
+									return false;
+
+	            }
+
+	        },
+
+					error: function( respuesta )
+					{
+
+							notifyError( 'Ha ocurrido un error al intentar borrar el contacto.' );
+
+							console.log( respuesta );
+
+					}
+
+	    });
+
+	    return false;
+
 }
+
+/////////// CREATE
+function MostrarFormularioAgenteNuevo()
+{
+
+		$( '.agente_nuevo' ).click( function( e )
+		{
+
+				e.stopPropagation();
+
+				var sucursal = $( this ).attr( 'sucursal' );
+
+				$( '#ficha_formulario_agente_' + sucursal ).removeClass( 'Hidden' );
+
+				return false;
+
+		});
+
+}
+
+function OcultarFormularioAgenteNuevo()
+{
+
+		$( '.agente_cancelar' ).click( function( e )
+		{
+
+				e.stopPropagation();
+
+				var sucursal = $( this ).attr( 'sucursal' );
+
+				$( '#ficha_formulario_agente_' + sucursal ).addClass( 'Hidden' );
+
+		});
+
+}
+
+function CrearAgenteNuevo()
+{
+
+		$( '.agente_agregar' ).click( function( e )
+		{
+
+				e.preventDefault();
+
+				e.stopPropagation();
+
+				var sucursal = $( this ).attr( 'sucursal' );
+
+				if( validador.validateFields( 'formulario_agente_' + sucursal ) )
+				{
+
+						var empresa 	= $( '#empresa' ).val();
+
+						var nombre 		= $( '#agentenombre_' + sucursal ).val();
+
+						var cargo 		= $( '#agentecargo_' + sucursal ).val();
+
+						var email 		= $( '#agenteemail_' + sucursal ).val();
+
+						var telefono	= $( '#agentetelefono_' + sucursal ).val();
+
+						var extra 		= $( '#agenteextra_' + sucursal ).val();
+
+						var datos 		=
+						{
+
+								'idsucursal' : sucursal,
+
+								'idempresa' : empresa,
+
+								'agente' : nombre,
+
+								'cargo' : cargo,
+
+								'email' : email,
+
+								'telefono' : telefono,
+
+								'extra' : extra
+
+						}
+
+				    $.ajax(
+						{
+
+				        type: 'POST',
+
+				        url: '/agentes/crear_ajax/',
+
+				        data: datos,
+
+				        cache: false,
+
+				        success: function( respuesta )
+								{
+
+				            if( respuesta )
+				            {
+
+												if( isNaN( respuesta ) )
+												{
+
+														notifyError( 'Ha ocurrido un error al intentar crear el contacto.');
+
+														console.log( respuesta );
+
+														return false;
+
+												}else{
+
+														var ID = sucursal;
+
+														var A = parseInt( $( '#total_agentes_sucursal_' + ID ).val() ) + 1;
+
+														var cargoHTML ='';
+
+														var emailHTML ='';
+
+														var telefonoHTML ='';
+
+														var extraHTML ='';
+
+														if( cargo && cargo != undefined )
+														{
+
+																cargoHTML = '<br><span><i class="fa fa-briefcase"></i> ' + cargo + '</span>';
+
+														}
+
+														if( email && email != undefined )
+														{
+
+																emailHTML = '<br><span><i class="fa fa-envelope"></i> ' + email + '</span>';
+
+														}
+
+														if( telefono && telefono != undefined )
+														{
+
+																telefonoHTML = '<br><span><i class="fa fa-phone"></i> ' + telefono + '</span>';
+
+														}
+
+														if( extra && extra != undefined )
+														{
+
+																extraHTML = '<br><span><i class="fa fa-info-circle"></i> ' + extra + '</span>';
+
+														}
+
+														var HTML = 	'<div class="col-md-4 col-sm-4 col-xs-12 AgentCard" id="ficha_agente_' + A + '">' +
+
+		                                				'<div class="info-card-item">'+
+
+		                                    				'<input type="hidden" id="agente_id_' + A + '_' + ID + '" value="' + respuesta + '" />' +
+
+		                                    				'<input type="hidden" id="agente_nombre_' + A + '_' + ID + '" value="' + nombre + '" />' +
+
+		                                    				'<input type="hidden" id="agente_cargo_' + A + '_' + ID + '" value="' + cargo + '" />' +
+
+		                                    				'<input type="hidden" id="agente_email_' + A + '_' + ID + '" value="' + email + '" />' +
+
+		                                    				'<input type="hidden" id="agente_telefono_' + A + '_' + ID + '" value="' + telefono + '" />' +
+
+		                                    				'<input type="hidden" id="agente_extra_' + A + '_' + ID + '" value="' + extra + '" />' +
+
+		                                    				'<div class="close-btn BorrarAgente" agente="' + A + '" sucursal="' + ID + '"><i class="fa fa-times"></i></div>' +
+
+		                                    						'<span><i class="fa fa-user"></i> <b>' + nombre + '</b></span>' +
+
+		                                    						cargoHTML + telefonoHTML + emailHTML + extraHTML +
+
+		                                    						'<div class="text-center">' +
+
+		                                        				'<button type="button" class="btn btn-sm btn-success SeleccionarAgenteBoton" id="agente_' + A + '" sucursal="' + ID + '" agente="' + A + '" ><i class="fa fa-check"></i> Seleccionar</button>' +
+
+		                                    				'</div>' +
+
+		                                				'</div>' +
+
+		                            				'</div>';
+
+		                        $( '#total_agentes_sucursal_' + ID ).val( A );
+
+		                        $( '#fila_agentes' ).append( HTML );
+
+		                        BorrarAgente();
+
+		                        SeleccionarAgente();
+
+		                        $( '.agente_cancelar' ).click();
+
+		                        $( '#agentenombre_' + sucursal ).val( '' );
+
+														$( '#agentecargo_' + sucursal ).val( '' );
+
+														$( '#agenteemail_' + sucursal ).val( '' );
+
+														$( '#agentetelefono_' + sucursal ).val( '' );
+
+														$( '#agenteextra_' + sucursal ).val( '' );
+
+												}
+
+										}else{
+
+												notifyError( 'Ha ocurrido un error al intentar crear el contacto.' );
+
+												console.log( 'No devolvió un id.' );
+
+												return false;
+
+				            }
+
+				        },
+
+								error: function( respuesta )
+								{
+
+										notifyError( 'Ha ocurrido un error al intentar crear el contacto.' );
+
+										console.log( respuesta );
+
+								}
+
+				    });
+
+				}
+
+				return false;
+
+		});
+
+}
+//
+// function SeleccionarAgente()
+// {
+//
+// 		$( '.SeleccionarAgenteBtn' ).click( function( e )
+// 		{
+//
+// 				e.stopPropagation();
+//
+// 				var sucursal = $( this ).attr( 'sucursal' );
+//
+// 				var agent = $( this ).attr( 'agent' );
+//
+// 				$( '#agent' ).val( $( '#agent_id_' + agent + '_' + sucursal ).val() );
+//
+// 				$( '.AgenteCerrarVentana' ).click();
+//
+// 				$( '#ShowAgentBtn' ).html( '<i class="fa fa-male"></i> ' + $( '#agent_name_' + agent + '_' + sucursal ).val() );
+//
+// 				$( '#ShowAgentBtn' ).removeClass( 'btn-warning' );
+//
+// 				$( '#ShowAgentBtn' ).addClass( 'btn-success' );
+//
+// 				return false;
+//
+// 		});
+//
+// }
+//
+// function DeseleccionarAgente()
+// {
+//
+// 		$( '#agent' ).val( '' );
+//
+// 		$( '#ShowAgentBtn' ).html( '<i class="fa fa-times"></i> Sin Contacto' );
+//
+// 		$( '#ShowAgentBtn' ).removeClass( 'btn-success' );
+//
+// 		$( '#ShowAgentBtn' ).addClass( 'btn-warning' );
+//
+// }
+//
+// function Deseleccionar()
+// {
+//
+// 		$( '#Deseleccionar' ).click( function( e )
+// 		{
+//
+// 				e.stopPropagation();
+//
+// 				DeseleccionarAgente();
+//
+// 				$( '.AgenteCerrarVentana' ).click();
+//
+// 		});
+//
+// }

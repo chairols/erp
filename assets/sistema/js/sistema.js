@@ -185,6 +185,7 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
 
   $("#TextAutoComplete"+inputID).on('focusin', function(e){ if (!e.minChars) { $("#TextAutoComplete"+inputID).last_val = '\n'; $("#TextAutoCompleteasoc").trigger('keyup.autocomplete'); } });
 
+
 	$("#TextAutoComplete"+inputID).autoComplete({
     minChars: minChars,
     delay: 600,
@@ -255,7 +256,16 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
         if(mode=="notags")
           textval = textval.replace(/(<([^>]+)>)/ig,"");
         $("#TextAutoComplete"+inputID).val(textval);
-        $("#"+inputID).val(item.data('id'));
+        if( $("#TextAutoComplete"+inputID).val() )
+        {
+
+            $("#"+inputID).val(item.data('id'));
+
+        }else{
+
+            $("#"+inputID).val('');
+
+        }
         $("#"+inputID).change();
       }
       if (typeof autocompleteOnSelectAfterFunction === "function") {
@@ -264,10 +274,29 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
     }
   });
 	$("#TextAutoComplete"+inputID).focusout(function(){
-	 // console.log(inputID);
-	 // console.log($("#"+inputID).val());
-    if(!$("#"+inputID).val())	$("#TextAutoComplete"+inputID).val('');
+
+	 // console.log( 'ID:' + $("#"+inputID).val() );
+   // console.log( 'Input:' + $( this ).val() );
+
+    if( !$( this ).val() || $( this ).val() == '' || $( this ).val() == undefined )
+
+        $( "#TextAutoComplete" + inputID ).val( '' );
+
 	});
+
+  $( '#TextAutoComplete' + inputID ).change( function()
+  {
+
+      if( !$( this ).val() || $( this ).val() == undefined )
+      {
+
+          $( '#' + inputID ).val( '' );
+
+          $( '#' + inputID ).change();
+
+      }
+
+  });
 
 	return false;
 }
@@ -819,15 +848,26 @@ $(function(){
 
 //////////////////////////////////////////////////// Validation ///////////////////////////////////////////////////////////////
 var validador    = new ValidateFields();
-$(function(){
+
+$( function()
+{
+
     validateDivChange();
+
 });
+
 function validateDivChange()
 {
-  validador.createErrorDivs();
-  $(validateElements).change(function(){
-        validador.validateOneField(this);
+
+    validador.createErrorDivs();
+
+    $( validateElements ).change( function()
+    {
+
+        validador.validateOneField( this );
+
     });
+
 }
 //////////////////////////////////////////////////// Logout ////////////////////////////////////////////////////
 $(function(){
@@ -1066,10 +1106,17 @@ $(document).ajaxStart(function(){
     showLoader();
 });
 
-$(document).ajaxComplete(function(){
+$( document ).ajaxComplete( function()
+{
+
+    validateDivChange();
+
     chosenSelect();
+
     inputMask();
+
     hideLoader();
+
 });
 
 function toggleLoader()

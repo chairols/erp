@@ -23,4 +23,31 @@ class agentes_model extends CI_Model{
     return $query->result_array();
   }
 
+  public function delete( $where )
+  {
+
+      $this->db->delete( 'empresas_agentes', $where );
+
+  }
+
+  public function update( $datos, $idagente )
+  {
+
+      $id = array( 'idagente' => $idagente);
+
+      $this->db->update( 'empresas_agentes', $datos, $id );
+
+  }
+
+  public function insert( $datos )
+  {
+
+      $this->db->insert( 'empresas_agentes', $datos );
+
+      $insert_id = $this->db->insert_id();
+
+      return $insert_id;
+
+  }
+
 }

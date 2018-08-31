@@ -18,11 +18,11 @@ class Articulos_model extends CI_Model {
         $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca');
         $this->db->join('articulos_genericos', 'articulos.idarticulo_generico = articulos_genericos.idarticulo_generico', 'left');
         $this->db->like($where);
-        
+
         $query = $this->db->count_all_results();
         return $query;
     }
-    
+
     /*
      *  Articulos/listar
      */
@@ -35,22 +35,22 @@ class Articulos_model extends CI_Model {
         $this->db->like($where);
         $this->db->order_by('articulo');
         $this->db->limit($per_page, $pagina);
-        
+
         $query = $this->db->get();
         return $query->result_array();
     }
-    
-    
+
+
     /*
      *  Importaciones/modificar_item
-     * 
+     *
      *  Importar/actualizar_articulos
-     * 
+     *
      *  Listas_de_precios/importar
      */
     public function get_where($where) {
         $query = $this->db->get_where('articulos', $where);
-        
+
         return $query->row_array();
     }
     public function update($datos, $idarticulo) {
@@ -60,8 +60,8 @@ class Articulos_model extends CI_Model {
     public function set($array) {
         $this->db->insert('articulos', $array);
     }
-    
-    
+
+
     /*
      *  Importaciones/agregar_items
      */
@@ -76,7 +76,7 @@ class Articulos_model extends CI_Model {
       $query = $this->db->get();
       return $query->result_array();
     }
-    
+
     /*
      *  Listas_de_precios/ver_comparacion
      */
@@ -84,11 +84,11 @@ class Articulos_model extends CI_Model {
         $this->db->select_sum('stock');
         $this->db->from('articulos');
         $this->db->where(array('idarticulo_generico' => $idarticulo_generico));
-        
+
         $query = $this->db->get();
         return $query->row_array();
-    } 
-    
+    }
+
     /*
      *  Articulos_genericos/finalizados
      */
@@ -100,7 +100,7 @@ class Articulos_model extends CI_Model {
         $this->db->join('articulos_genericos', 'articulos.idarticulo_generico = articulos_genericos.idarticulo_generico', 'left');
         $this->db->where($where);
         $this->db->order_by('articulo');
-        
+
         $query = $this->db->get();
         return $query->result_array();
     }

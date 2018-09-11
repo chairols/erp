@@ -44,7 +44,42 @@ class Prueba_model extends CI_Model {
     public function update_menu($data, $where) {
         $this->db->update('menu', $data, $where);
     }
-
+    
+    /*
+     *  Chat Push
+     */
+    public function get_ultimo_timestamp() {
+        $query = $this->db->query("SELECT max(timestamp) as maximo
+                                    FROM
+                                        mensajes");
+        return $query->row_array();
+    }
+    
+    public function set_chat($datos) {
+        $this->db->insert('mensajes', $datos);
+    }
+    
+    public function gets_mensajes_chat() {
+        $this->db->select("*");
+        $this->db->from("mensajes");
+        $this->db->order_by("timestamp DESC");
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    public function set_cheques($datos) {
+        $this->db->insert('cheques', $datos);
+    }
+    
+    public function cheques_gets_where($where) {
+        $this->db->select("*");
+        $this->db->from("cheques");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

@@ -83,22 +83,22 @@ class Prueba extends CI_Controller {
 <p style="color:#CC0000;">TO IMPROVE AND EXPAND TCPDF I NEED YOUR SUPPORT, PLEASE <a href="http://sourceforge.net/donate/index.php?group_id=128076">MAKE A DONATION!</a></p>
 EOD;
         $html = "<table>"
-                . "<thead>"
-                . "<tr>"
-                . "<th>Item</th>"
-                . "<th>Cantidad</th>"
-                . "<th>Precio Unitario</th>"
-                . "</tr>"
-                . "</thead>"
-                . "<tbody>";
-        foreach ($items as $item) {
-            $html .= "<tr>"
-                    . "<td>" . $item['articulo'] . "</td>"
-                    . "<td>" . $item['cantidad'] . "</td>"
-                    . "<td>" . $item['costo_fob'] . "</td>"
-                    . "</tr>";
-        }
-        $html .= "</tbody>"
+                    . "<thead>"
+                        . "<tr>"
+                            . "<th>Item</th>"
+                            . "<th>Cantidad</th>"
+                            . "<th>Precio Unitario</th>"
+                        . "</tr>"
+                    . "</thead>"
+                    . "<tbody>";
+                        foreach ($items as $item) {
+                            $html .= "<tr>"
+                                    . "<td>" . $item['articulo'] . "</td>"
+                                    . "<td>" . $item['cantidad'] . "</td>"
+                                    . "<td>" . $item['costo_fob'] . "</td>"
+                                    . "</tr>";
+                        }
+                    $html .= "</tbody>"
                 . "</table>";
 
 // Print text using writeHTMLCell()
@@ -114,7 +114,7 @@ EOD;
 //============================================================+
     }
 
-    public function arba($cuit = 0) {
+    public function arba($cuit = 0, $fechadesde = null, $fechahasta = null) {
         require_once('assets/vendors/afip/wsfe-class-ci.php');
 
         // Certificado REAL
@@ -129,12 +129,15 @@ EOD;
           $wsfe->CUIT = floatval($CUIT);
           $wsfe->setURL(URLWSW);
          */
-        $fechadesde = date('Ym') . '01';
+        if ($fechadesde == null) {
+            $fechadesde = date('Ym') . '01';
+        }
 
-        $mes = date('m');
-        $anio = date('Y');
-        $fechahasta = $anio . $mes . date("d", (mktime(0, 0, 0, $mes + 1, 1, $anio) - 1));
-
+        if ($fechahasta == null) {
+            $mes = date('m');
+            $anio = date('Y');
+            $fechahasta = $anio . $mes . date("d", (mktime(0, 0, 0, $mes + 1, 1, $anio) - 1));
+        }
 
         $wsfe = new WsFE();
         $wsfe->CUIT = floatval(30714016918);
@@ -142,10 +145,29 @@ EOD;
         if ($wsfe->ConsultaARBA(floatval($cuit), $fechadesde, $fechahasta, $alicuotas)) {
             $percepcion = $alicuotas->percepcion;
             $retencion = $alicuotas->retencion;
-            var_dump($alicuotas);
+            $alicuotas->rand = rand(1, 99999);
+            echo "<pre>";
+            print_r($alicuotas);
+            print_r(rand(1, 10000));
+            echo "</pre>";
         } else {
             echo $wsfe->ErrorDesc;
         }
+    }
+
+    public function padron($cuit = 0) {
+        //require_once('assets/vendors/afip/wsfe-class-ci.php');
+        // Certificado REAL
+        $certificado = 'upload/certificados/PCAFIP_12e5d279ba7d69a7.crt';
+        $clave = "upload/certificados/privada";
+
+        // Configuración
+        $CUIT = 33647656779;
+        $urlwsaa = URLWSAA;
+
+        $wsfe = new WsFE();
+        $wsfe->CUIT = floatval($CUIT);
+        $wsfe->setURL(URLWSW);
     }
 
     public function nestable($idperfil) {
@@ -233,15 +255,15 @@ EOD;
             }
         }
     }
-    
+
     public function actualizar_orden() {
         $this->load->model(array(
             'prueba_model'
         ));
         $resultado = json_decode($this->input->post('orden'));
-        
+
         $contador1 = 1;
-        foreach($resultado as $r1) {
+        foreach ($resultado as $r1) {
             $data = array(
                 'orden' => $contador1
             );
@@ -249,10 +271,10 @@ EOD;
                 'idmenu' => $r1->id
             );
             $this->prueba_model->update_menu($data, $where);
-            
-            if(isset($r1->children)) {
+
+            if (isset($r1->children)) {
                 $contador2 = 1;
-                foreach($r1->children as $r2) {
+                foreach ($r1->children as $r2) {
                     $data = array(
                         'orden' => $contador2
                     );
@@ -260,11 +282,11 @@ EOD;
                         'idmenu' => $r2->id
                     );
                     $this->prueba_model->update_menu($data, $where);
-                    
-                    
-                    if(isset($r2->children)) {
+
+
+                    if (isset($r2->children)) {
                         $contador3 = 1;
-                        foreach($r2->children as $r3) {
+                        foreach ($r2->children as $r3) {
                             $data = array(
                                 'orden' => $contador3
                             );
@@ -272,22 +294,191 @@ EOD;
                                 'idmenu' => $r3->id
                             );
                             $this->prueba_model->update_menu($data, $where);
-                            
+
                             $contador3++;
                         }
                     }
                     $contador2++;
                 }
             }
-            
+
             $contador1++;
         }
-        
+
         $json = array(
             'status' => 'ok'
         );
         echo json_encode($json);
     }
+
+    public function chat() {
+        $this->load->view('prueba/chat');
+    }
+
+    public function httpush() {
+        //set_time_limit(0); //Establece el número de segundos que se permite la ejecución de un script.
+        /*
+         *  Muy importante tener en el index.php del raíz el comando ini_set('max_execution_time', 0);
+         */
+        $this->load->model(array(
+            'prueba_model'
+        ));
+        $fecha_ac = isset($_POST['timestamp']) ? $_POST['timestamp'] : 0;
+        $fecha_ac = strtotime(date("Y-m-d H:i:s"));
+
+        //$fecha_bd = $row['timestamp'];
+        $fecha = $this->prueba_model->get_ultimo_timestamp();
+        $fecha_bd = strtotime($fecha['maximo']);
+
+        while ($fecha_bd <= $fecha_ac) {
+            $fecha = $this->prueba_model->get_ultimo_timestamp();
+
+            usleep(100000); //anteriormente 10000
+            clearstatcache();
+            $fecha_bd = strtotime($fecha['maximo']);
+        }
+
+        /*
+          $query = "SELECT * FROM mensajes ORDER BY timestamp DESC LIMIT 1";
+          $datos_query = mysql_query($query);
+          while ($row = mysql_fetch_array($datos_query)) {
+          $ar["timestamp"] = strtotime($row['timestamp']);
+          $ar["mensaje"] = $row['mensaje'];
+          $ar["id"] = $row['id'];
+          $ar["status"] = $row['status'];
+          $ar["tipo"] = $row['tipo'];
+          } */
+        $ar = $this->prueba_model->gets_mensajes_chat();
+        $dato_json = json_encode($ar);
+        echo $dato_json;
+    }
+
+    public function insertar_chat() {
+        $this->load->library(array(
+            'form_validation'
+        ));
+        $this->load->model(array(
+            'prueba_model'
+        ));
+
+        $this->form_validation->set_rules('mensaje', 'Mensaje', 'required');
+        $this->form_validation->set_rules('tipo', 'Tipo', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            
+        } else {
+            $datos = array(
+                'mensaje' => $this->input->post('mensaje'),
+                'timestamp' => date("Y-m-d H:i:s"),
+                'tipo' => $this->input->post('tipo')
+            );
+
+            $this->prueba_model->set_chat($datos);
+        }
+        $this->load->view('prueba/insertar_chat');
+    }
+
+    public function ventana_chat() {
+        $this->load->library(array(
+            'session',
+            'r_session'
+        ));
+        $data['title'] = 'Listado de Monedas';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+
+        $data['view'] = 'prueba/ventana_chat';
+        $this->load->view('layout/app', $data);
+    }
+
+    public function posibilidades() {
+        $this->load->model(array(
+            'prueba_model'
+        ));
+        
+        $where = array(
+            'estado' => 'A'
+        );
+        $res = $this->prueba_model->cheques_gets_where($where);
+        echo "<pre>";
+        print_r($res);
+        echo "</pre>";
+        
+        $array = array('Alpha', 'Beta', 'Gamma', 'Sigma');
+
+        function depth_picker($arr, $temp_string, &$collect) {
+            if ($temp_string != "")
+                $collect [] = $temp_string;
+
+            for ($i = 0; $i < sizeof($arr); $i++) {
+                $arrcopy = $arr;
+                $elem = array_splice($arrcopy, $i, 1); // removes and returns the i'th element
+                if (sizeof($arrcopy) > 0) {
+                    depth_picker($arrcopy, $temp_string . " " . $elem[0], $collect);
+                } else {
+                    $collect [] = $temp_string . " " . $elem[0];
+                }
+            }
+        }
+
+        $collect = array();
+        depth_picker($array, "", $collect);
+        echo "<pre>";
+        print_r($collect);
+        echo "</pre>";
+    }
+
+    public function importar_cheques() {
+        $this->load->model(array(
+            'prueba_model'
+        ));
+        
+        $fp = fopen("upload/importar/CHEQUES.TXT", "r");
+
+        $i = 0;
+        while (!feof($fp)) {
+            $linea = fgets($fp);
+            $array = preg_split('/;/', $linea);
+
+            $fecha = substr(trim($array[2]), -2, 2);
+            if ($fecha > '70') {
+                $fecha = '19' . $fecha . '-';
+            } else {
+                $fecha = '20' . $fecha . '-';
+            }
+            $fecha .= substr(trim($array[2]), -4, 2);
+            $fecha .= '-';
+            $fecha .= substr(trim($array[2]), -6, 2);
+
+            
+            $fecha_deposito = substr(trim($array[3]), -2, 2);
+            if ($fecha_deposito > '70') {
+                $fecha_deposito = '19' . $fecha_deposito . '-';
+            } else {
+                $fecha_deposito = '20' . $fecha_deposito . '-';
+            }
+            $fecha_deposito .= substr(trim($array[3]), -4, 2);
+            $fecha_deposito .= '-';
+            $fecha_deposito .= substr(trim($array[3]), -6, 2);
+            
+            
+            $datos = array(
+                'idcheque' => $array[0],
+                'fecha' => $fecha,
+                'estado' => $array[3],
+                'fecha_deposito' => $fecha_deposito,
+                'banco' => trim($array[12]),
+                'importe' => $array[13]
+            );
+            $this->prueba_model->set_cheques($datos);
+            
+            if(($array[0] % 1000) == 0) {
+                var_dump($datos);
+            }
+        }
+    }
+
 }
 
 ?>

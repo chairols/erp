@@ -24,6 +24,14 @@ class Provincias_model extends CI_Model {
         $query = $this->db->get_where('provincias', $where);
         return $query->row_array();
     }
+    
+    /*
+     *  Jurisdicciones/actualizar_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('provincias', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

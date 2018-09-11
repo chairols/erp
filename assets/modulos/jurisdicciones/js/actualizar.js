@@ -27,7 +27,7 @@ function actualizar(idprovincia) {
                     allow_dismiss: false
                 });
             } else if (resultado['status'] == 'ok') {
-                document.getElementById("idjurisdiccion").value = resultado['idjurisdiccion_afip'];
+                $("#idjurisdiccion").val(resultado['idjurisdiccion_afip']);
             }
         },
         error: function (xhr) { // if error occured
@@ -42,12 +42,12 @@ function actualizar(idprovincia) {
 
 $("#agregar").click(function () {
     datos = {
-        'idjurisdiccion': $("#idjurisdiccion").val(),
-        'jurisdiccion': $("#jurisdiccion").val()
+        'idprovincia': $("#provincia").val(),
+        'idjurisdiccion': $("#idjurisdiccion").val()
     };
     $.ajax({
         type: 'POST',
-        url: '/jurisdicciones/agregar_ajax/',
+        url: '/jurisdicciones/actualizar_ajax/',
         data: datos,
         beforeSend: function () {
 
@@ -65,9 +65,6 @@ $("#agregar").click(function () {
                 {   type: 'success',
                     allow_dismiss: false
                 });
-                document.getElementById("codigo").value = "";
-                document.getElementById("comunidad").value = "";
-                document.getElementById("direccion").value = "";
             }
         },
         error: function (xhr) { // if error occured

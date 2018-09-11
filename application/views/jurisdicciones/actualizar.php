@@ -16,6 +16,6 @@
         </div>
     </div>
     <div class="row txC">
-        <button type="button" class="btn btn-success btnGreen" id="agregar"><i class="fa fa-plus"></i> Agregar Jurisdicción</button>
+        <button type="button" class="btn btn-success btnGreen" id="agregar"><i class="fa fa-plus"></i> Actualizar Jurisdicción</button>
     </div>
 </div>

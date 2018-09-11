@@ -1,17 +1,29 @@
 <div class="innerContainer">
-    
-</div>
-
-<div class="form-group">
-    <label>US phone mask:</label>
-
-    <div class="input-group">
-        <div class="input-group-addon">
-            <i class="fa fa-user"></i>
+    <h4 class="subTitleB"><i class="fa fa-building"></i> Proveedor</h4>
+    <div class="row form-group inline-form-custom">
+        <div class="col-xs-12">
+            <!-- Autocomplete Empresas -->
+            <input type="text" id="TextAutoCompleteempresa" name="TextAutoCompleteempresa" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" objectauto="Empresas" actionauto="gets_empresas_ajax" varsauto="proveedor:=Y///internacional:=N" iconauto="ship">
+            <input type="hidden" id="empresa" name="empresa" value="">
         </div>
-        <input type="text" class="form-control inputMask" data-inputmask="'mask': '99-99999999-9'" autofocus>
-        
     </div>
-    <!-- /.input group -->
+    <h4 class="subTitleB"><i class="fa fa-map-signs"></i> Jurisdicción</h4>
+    <div class="row form-group inline-form-custom">
+        <div class="col-xs-12">
+            <select name="jurisdiccion" class="form-control chosenSelect">
+                <?php foreach ($jurisdicciones as $jurisdiccion) { ?>
+                    <option value="<?= $jurisdiccion['idprovincia'] ?>"><?= $jurisdiccion['idjurisdiccion_afip'] ?> - <?= $jurisdiccion['provincia'] ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+    <h4 class="subTitleB"><i class="fa fa-calendar"></i> Fecha</h4>
+    <div class="row form-group inline-form-custom">
+        <div class="col-xs-12">
+            <input type="text" name="fecha" value="<?= date('d/m/Y') ?>" class="form-control datePicker" placeholder="Seleccione una fecha">
+        </div>
+    </div>
+    <div class="row txC">
+        <button type="submit" class="btn btn-success btnGreen" id="agregar"><i class="fa fa-plus"></i> Crear Retención</button>
+    </div>
 </div>
-

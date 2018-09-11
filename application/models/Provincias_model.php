@@ -16,6 +16,14 @@ class Provincias_model extends CI_Model {
                                         provincia");
         return $query->result_array();
     }
+    
+    /*
+     *  Provincias/get_provincia_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('provincias', $where);
+        return $query->row_array();
+    }
 }
 
 ?>

@@ -70,6 +70,7 @@ switch (ENVIRONMENT)
 		error_reporting(-1);
 		ini_set('display_errors', 1);
                 ini_set('max_execution_time', 0);
+                ini_set("allow_url_fopen", 1);
 	break;
 
 	case 'testing':

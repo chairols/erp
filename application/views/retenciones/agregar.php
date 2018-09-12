@@ -12,7 +12,7 @@
         <div class="col-xs-12">
             <select id="idjurisdiccion" class="form-control chosenSelect">
                 <?php foreach ($jurisdicciones as $jurisdiccion) { ?>
-                    <option value="<?= $jurisdiccion['idprovincia'] ?>"><?= $jurisdiccion['idjurisdiccion_afip'] ?> - <?= $jurisdiccion['provincia'] ?></option>
+                    <option value="<?= $jurisdiccion['idjurisdiccion_afip'] ?>"><?= $jurisdiccion['idjurisdiccion_afip'] ?> - <?= $jurisdiccion['provincia'] ?></option>
                 <?php } ?>
             </select>
         </div>

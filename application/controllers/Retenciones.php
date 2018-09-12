@@ -15,7 +15,8 @@ class Retenciones extends CI_Controller {
             'provincias_model',
             'empresas_model',
             'parametros_model',
-            'retenciones_model'
+            'retenciones_model',
+            'tipos_responsables_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -58,6 +59,10 @@ class Retenciones extends CI_Controller {
             );
             $url_api = $this->parametros_model->get_where($where);
             $contenido = json_decode(file_get_contents($url_api['valor_sistema'] . $empresa['cuit']));
+            // Se trae de nuevo para evitar errores, suele fallar en la primera consulta
+            $contenido = json_decode(file_get_contents($url_api['valor_sistema'] . $empresa['cuit']));
+            
+
 
             $where = array(
                 'identificador' => 'punto_retencion'
@@ -88,7 +93,7 @@ class Retenciones extends CI_Controller {
                 'idtipo_responsable' => $empresa['iva_id'],
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
                 'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
-                    //'porcentaje' =>
+                'porcentaje' => 0
             );
 
             if (!$contenido->errorGetData) {
@@ -102,6 +107,7 @@ class Retenciones extends CI_Controller {
                 $set['idprovincia'] = $contenido->Contribuyente->domicilioFiscal->idProvincia;
                 $set['provincia'] = $contenido->Contribuyente->domicilioFiscal->nombreProvincia;
             }
+
 
             $id = $this->retenciones_model->set($set);
             if ($id) {
@@ -119,6 +125,44 @@ class Retenciones extends CI_Controller {
             }
         }
     }
+    
+    public function modificar($idretencion = null) {
+        if($idretencion == null) {
+            show_404();
+        }
+        $data['title'] = 'Modificar Retención';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['view'] = 'retenciones/modificar';
+        
+        // Retención
+        $where = array(
+            'idretencion' => $idretencion
+        );
+        $data['retencion'] = $this->retenciones_model->get_where($where);
+        $data['retencion']['fecha'] = $this->formatear_fecha_para_mostrar($data['retencion']['fecha']);
+        $where = array(
+            'idtipo_responsable' => $data['retencion']['idtipo_responsable']
+        );
+        $data['retencion']['iva'] = $this->tipos_responsables_model->get_where($where);
+        $where = array(
+            'idjurisdiccion_afip' => $data['retencion']['idjurisdiccion_afip']
+        );
+        $data['retencion']['jurisdiccion'] = $this->provincias_model->get_where($where);
+        
+        // Empresa emisora
+        $data['parametro'] = $this->parametros_model->get_parametros_empresa();
+        $where = array(
+            'idprovincia' => $data['parametro']['idprovincia']
+        );
+        $data['parametro']['provincia'] = $this->provincias_model->get_where($where);
+        $where = array(
+            'idtipo_responsable' => $data['parametro']['idtipo_responsable']
+        );
+        $data['parametro']['iva'] = $this->tipos_responsables_model->get_where($where);
+        
+        $this->load->view('layout/app', $data);
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';
@@ -131,6 +175,16 @@ class Retenciones extends CI_Controller {
         return $aux;
     }
 
+    private function formatear_fecha_para_mostrar($fecha) {
+        $aux = '';
+        $aux .= substr($fecha, 8, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 5, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 0, 4);
+
+        return $aux;
+    }
 }
 
 ?>

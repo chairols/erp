@@ -18,6 +18,15 @@ class Tipos_responsables_model extends CI_Model {
                                         tipo_responsable");
         return $query->result_array();
     }
+    
+    /*
+     *  Retenciones/modificar
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('tipos_responsables', $where);
+        
+        return $query->row_array();
+    }
 }
 
 ?>

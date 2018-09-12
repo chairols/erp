@@ -28,6 +28,14 @@ class Retenciones_model extends CI_Model {
         return $this->db->insert_id();
     }
 
+    /*
+     *  Retenciones/modificar
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('retenciones', $where);
+        
+        return $query->row_array();
+    }
 }
 
 ?>

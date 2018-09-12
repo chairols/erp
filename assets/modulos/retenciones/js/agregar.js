@@ -20,10 +20,6 @@ $("#agregar").click(function () {
                     allow_dismiss: false
                 });
             } else if (resultado['status'] == 'ok') {
-                $.notify(resultado['data'], 
-                {   type: 'success',
-                    allow_dismiss: false
-                });
                 window.location.href = "/retenciones/modificar/"+resultado['data']+'/';
             }
         },

@@ -188,23 +188,23 @@ class Parametros extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
-    public function sistema() {
+    public function empresa() {
         $data['title'] = 'Listado de Parámetros';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array(
-            '/assets/modulos/parametros/js/sistema.js'
+            '/assets/modulos/parametros/js/empresa.js'
         );
-        $data['view'] = 'parametros/sistema';
+        $data['view'] = 'parametros/empresa';
 
-        $data['parametro'] = $this->parametros_model->get_parametros_sistema();
+        $data['parametro'] = $this->parametros_model->get_parametros_empresa();
         $data['provincias'] = $this->provincias_model->gets();
         $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
 
         $this->load->view('layout/app', $data);
     }
 
-    public function sistema_modificar_ajax() {
+    public function empresa_modificar_ajax() {
         $session = $this->session->all_userdata();
 
         $this->form_validation->set_rules('empresa', 'Nombre de la Empresa', 'required');
@@ -229,7 +229,7 @@ class Parametros extends CI_Controller {
         } else {
             $where = $this->input->post();
 
-            $id = $this->parametros_model->update_parametros_sistema($where);
+            $id = $this->parametros_model->update_parametros_empresa($where);
 
             if ($id) {
                 $json = array(

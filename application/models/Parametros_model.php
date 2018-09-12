@@ -140,20 +140,20 @@ class Parametros_model extends CI_Model {
     /*
      *  Parametros/sistema
      */
-    public function get_parametros_sistema() {
+    public function get_parametros_empresa() {
         $query = $this->db->query("SELECT *
                                     FROM
-                                        parametros_sistema
+                                        parametros_empresa
                                     WHERE
-                                        idparametro_sistema = '1'");
+                                        idparametro_empresa = '1'");
         return $query->row_array();
     }
     
     /*
      *  Parametros/sistema_modificar_ajax
      */
-    public function update_parametros_sistema($where) {
-        $this->db->update('parametros_sistema', $where, array('idparametro_sistema' => 1));
+    public function update_parametros_empresa($where) {
+        $this->db->update('parametros_empresa', $where, array('idparametro_empresa' => 1));
         
         return $this->db->affected_rows();
     }

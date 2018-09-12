@@ -21,7 +21,7 @@ $("#modificar").click(function () {
                 };
                 $.ajax({
                     type: 'POST',
-                    url: '/parametros/sistema_modificar_ajax/',
+                    url: '/parametros/empresa_modificar_ajax/',
                     data: datos,
                     beforeSend: function () {
 

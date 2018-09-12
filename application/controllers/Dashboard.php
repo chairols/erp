@@ -26,7 +26,7 @@ class Dashboard extends CI_Controller {
         $data['javascript'] = array();
 
         $data['dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1); // 1 es id del dolar
-        $data['parametro'] = $this->parametros_model->get_parametros_sistema();
+        $data['parametro'] = $this->parametros_model->get_parametros_empresa();
         
         $data['view'] = 'dashboard/index';
         $this->load->view('layout/app', $data);

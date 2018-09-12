@@ -9,7 +9,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3"><?= $parametro['parametro'] ?></label>
                         <div class="col-md-6">
-                            <input type="text" maxlength="100" class="form-control" name="id-<?= $parametro['idparametro'] ?>" value="<?= $parametro['valor'] ?>">
+                            <input type="text" maxlength="100" class="form-control" id="id-<?=$parametro['idparametro']?>" name="id-<?= $parametro['idparametro'] ?>" value="<?= $parametro['valor'] ?>">
                         </div>
                     </div>
                 <?php } ?>

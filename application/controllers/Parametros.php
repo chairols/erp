@@ -58,6 +58,36 @@ class Parametros extends CI_Controller {
         $data['view'] = 'parametros/usuario';
         $this->load->view('layout/app', $data);
     }
+    
+    public function sistema() {
+        $data['title'] = 'Listado de Parámetros de Sistema';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['view'] = 'parametros/sistema';
+        
+        if ($this->input->post()) {
+            $post = $this->input->post();
+
+            foreach ($post as $key => $value) {
+                $id = explode("-", $key);
+                $idparametro = $id['1'];
+
+                $datos = array(
+                    'valor_sistema' => $value
+                );
+                $where = array(
+                    'idparametro' => $idparametro
+                );
+                
+                $this->parametros_model->update($datos, $where);
+                
+            }
+        }
+        
+        $data['parametros'] = $this->parametros_model->gets_parametros_sistema();
+        
+        $this->load->view('layout/app', $data);
+    }
 
     public function agregar() {
         $data['title'] = 'Agregar Parámetro';

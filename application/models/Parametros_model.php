@@ -88,6 +88,20 @@ class Parametros_model extends CI_Model {
     }
     
     /*
+     *  Parametros/sistema
+     */
+    public function gets_parametros_sistema() {
+        $query = $this->db->query("SELECT *
+                                    FROM
+                                        parametros p
+                                    WHERE
+                                        p.idparametro_tipo = 3 AND
+                                        p.estado = 'A'");
+        
+        return $query->result_array();
+    }
+    
+    /*
      *  Parametros/usuarios
      */
     public function get_parametro_por_usuario($idparametro, $idusuario) {
@@ -154,6 +168,12 @@ class Parametros_model extends CI_Model {
      */
     public function update_parametros_empresa($where) {
         $this->db->update('parametros_empresa', $where, array('idparametro_empresa' => 1));
+        
+        return $this->db->affected_rows();
+    }
+    
+    public function update($datos, $where) {
+        $this->db->update('parametros', $datos, $where);
         
         return $this->db->affected_rows();
     }

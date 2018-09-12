@@ -13,9 +13,11 @@ class Retenciones extends CI_Controller {
         ));
         $this->load->model(array(
             'provincias_model',
-            'empresas_model'
+            'empresas_model',
+            'parametros_model',
+            'retenciones_model'
         ));
-        
+
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
     }
@@ -28,19 +30,17 @@ class Retenciones extends CI_Controller {
             '/assets/modulos/retenciones/js/agregar.js'
         );
         $data['view'] = 'retenciones/agregar';
-        
+
         $data['jurisdicciones'] = $this->provincias_model->gets();
-        
+
         $this->load->view('layout/app', $data);
     }
-    
+
     public function agregar_ajax() {
-        $url_tango = "https://afip.tangofactura.com/Rest/GetContribuyenteFull?cuit=";
-        
         $this->form_validation->set_rules('idempresa', 'Proveedor', 'required|integer');
         $this->form_validation->set_rules('idjurisdiccion', 'Jurisdicción', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');
-        
+
         if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
@@ -52,12 +52,30 @@ class Retenciones extends CI_Controller {
                 'idempresa' => $this->input->post('idempresa')
             );
             $empresa = $this->empresas_model->get_where($where);
-            
-            $contenido = json_decode(file_get_contents($url_tango.$empresa['cuit']));
-            
+
+            $where = array(
+                'identificador' => 'url_consulta_cuit'
+            );
+            $url_api = $this->parametros_model->get_where($where);
+            $contenido = json_decode(file_get_contents($url_api['valor_sistema'] . $empresa['cuit']));
+
+            $where = array(
+                'identificador' => 'punto_retencion'
+            );
+            $punto_retencion = $this->parametros_model->get_where($where);
+
+            $where = array(
+                'punto' => $punto_retencion['valor_sistema']
+            );
+            $ultimo_numero_array = $this->retenciones_model->get_max_numero_where($where);
+            $ultimo_numero = 1;
+            if ($ultimo_numero_array['numero']) {
+                $ultimo_numero = $ultimo_numero_array['numero'] + 1;
+            }
+
             $set = array(
-                //'punto' => 
-                //'numero' =>
+                'punto' => $punto_retencion['valor_sistema'],
+                'numero' => $ultimo_numero,
                 'idempresa' => $this->input->post('idempresa'),
                 'empresa' => $empresa['empresa'],
                 //'direccion' =>  OK
@@ -67,28 +85,41 @@ class Retenciones extends CI_Controller {
                 //'provincia' => OK
                 'cuit' => $empresa['cuit'],
                 'iibb' => $empresa['iibb'],
-                'idtipo_resposable' => $empresa['iva_id'],
+                'idtipo_responsable' => $empresa['iva_id'],
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
                 'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
-                //'porcentaje' =>
+                    //'porcentaje' =>
             );
-            
-            if(!$contenido->errorGetData) {
+
+            if (!$contenido->errorGetData) {
                 $set['direccion'] = $contenido->Contribuyente->domicilioFiscal->direccion;
-                $set['localidad'] = $contenido->Contribuyente->domicilioFiscal->localidad;
+                if(is_null($contenido->Contribuyente->domicilioFiscal->localidad)) {
+                    $set['localidad'] = '';
+                } else {
+                    $set['localidad'] = $contenido->Contribuyente->domicilioFiscal->localidad;
+                }
                 $set['codigopostal'] = $contenido->Contribuyente->domicilioFiscal->codPostal;
                 $set['idprovincia'] = $contenido->Contribuyente->domicilioFiscal->idProvincia;
                 $set['provincia'] = $contenido->Contribuyente->domicilioFiscal->nombreProvincia;
             }
-            
-            $json = array(
-                'status' => 'error',
-                'data' => json_encode($set)
-            );
-            echo json_encode($json);
+
+            $id = $this->retenciones_model->set($set);
+            if ($id) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => $id
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo crear la retención.'
+                );
+                echo json_encode($json);
+            }
         }
     }
-    
+
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);
@@ -99,6 +130,7 @@ class Retenciones extends CI_Controller {
 
         return $aux;
     }
+
 }
 
 ?>

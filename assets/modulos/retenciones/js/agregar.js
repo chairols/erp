@@ -24,6 +24,7 @@ $("#agregar").click(function () {
                 {   type: 'success',
                     allow_dismiss: false
                 });
+                window.location.href = "/retenciones/modificar/"+resultado['data']+'/';
             }
         },
         error: function (xhr) { // if error occured

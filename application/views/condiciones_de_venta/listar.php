@@ -84,51 +84,22 @@
                             </div>
                             <div class="col-lg-1 col-md-1 col-sm-1 hideMobile990"></div>
                             <!-- ////////////////////////////   Información Detallada   //////////////////////////// -->
-                            <div class="animated DetailedInformation Hidden col-md-12">
-                                <div class="list-margin-top">
-                                    <div class="row bg-gray" style="padding:5px;">
-                                        <?php foreach($condicion['articulos'] as $art) { ?>
-                                        <div class='col-lg-4 col-sm-5 col-xs-12'>
-                                            <div class="listRowInner">
-                                                <!--<img class=" hideMobile990" src="../../../../skin/images/products/default/default.jpg" alt="16011">-->
-                                                <span class="listTextStrong"><?=$art['articulo']?></span>
-                                                <span class="smallTitle hideMobile990"><strong><?=$art['linea']?></strong></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 col-xs-12">
-                                            <div class="listRowInner">
-                                                <span class="smallTitle">Marca</span>
-                                                <span class="emailTextResp">
-                                                    <span class="label label-primary"><?=$art['marca']?></span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3 col-xs-12">
-                                            <div class="listRowInner">
-                                                <span class="smallTitle">Stock</span>
-                                                <span class="listTextStrong"><span class="label bg-navy"><?= $art['stock'] ?></span></span>
-                                            </div>
-                                        </div>
-                                        <?php } ?>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="listActions flex-justify-center Hidden">
                                 <div>
                                     <span class="roundItemActionsGroup">
-                                        <a class="hint--bottom hint--bounce" aria-label="Más información">
+                                        <!--<a class="hint--bottom hint--bounce" aria-label="Más información">
                                             <button type="button" class="btn bg-navy ExpandButton" id="expand_<?=$condicion['idcondicion_de_venta']?>"><i class="fa fa-plus"></i></button>
-                                        </a>
-                                        <a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="/articulos/modificar/<?= $condicion['idcondicion_de_venta'] ?>/" id="view_<?=$condicion['idcondicion_de_venta']?>">
+                                        </a>-->
+                                        <!--<a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="/articulos/modificar/<?= $condicion['idcondicion_de_venta'] ?>/" id="view_<?=$condicion['idcondicion_de_venta']?>">
                                             <button type="button" class="btn btn-github"><i class="fa fa-eye"></i></button>
-                                        </a>
+                                        </a>-->
                                         <!-- <a class="hint--bottom hint--bounce hint--success" aria-label="Crear Orden" process="../../../core/resources/processes/proc.core.php" id="purchase_<?= $condicion['idcondicion_de_venta'] ?>" status="">
                                           <button type="button" class="btn bg-olive"><i class="fa fa-truck"></i></button>
                                         </a>
                                         <a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" url="../../../core/resources/processes/proc.core.php" id="store_<?= $condicion['idcondicion_de_venta'] ?>">
                                           <button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button>
                                         </a> -->
-                                        <a href="/articulos/modificar/<?= $condicion['idcondicion_de_venta'] ?>/" class="hint--bottom hint--bounce hint--info" aria-label="Editar">
+                                        <a href="/condiciones_de_venta/modificar/<?= $condicion['idcondicion_de_venta'] ?>/" class="hint--bottom hint--bounce hint--info" aria-label="Editar">
                                             <button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button>
                                         </a>
                                         <a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" url="/sucursales/gets_sucusales_ajax/" campo="idsucursal" success="" error="" id="delete_<?= $condicion['idcondicion_de_venta'] ?>">

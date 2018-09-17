@@ -14,7 +14,10 @@ class Importar extends CI_Controller {
         $this->load->model(array(
             'articulos_model',
             'importar_model',
-            'comprobantes_model'
+            'comprobantes_model',
+            'progresos_model',
+            'clientes_model',
+            'proveedores_model'
         ));
         $this->load->helper(array(
             'file'
@@ -78,12 +81,12 @@ class Importar extends CI_Controller {
                 $count++;
                 $init++;
 
-                
+
                 if (round(($count * 100 / $cantidad)) > $porcentaje) {
                     $porcentaje = round(($count * 100 / $cantidad), 0, PHP_ROUND_HALF_DOWN);
                     //echo $porcentaje . " %\n";
                 }
-                
+
 
                 //  CARACTERES AL FINAL DEL VALOR
                 //  { = POSITIVO
@@ -271,7 +274,7 @@ class Importar extends CI_Controller {
             $fp = fopen("upload/importar/" . $archivo, "r");
 
             $this->importar_model->truncate('comprobantes_notas_varias_items');
-            
+
             while (!feof($fp)) {
                 $linea = fgets($fp);
                 $array = preg_split('/;/', $linea);
@@ -292,7 +295,7 @@ class Importar extends CI_Controller {
                 //  [7] = importe
                 //  [8] = total  
 
-                
+
 
                 $datos = array(
                     'tipo' => trim($array[0]),
@@ -318,15 +321,15 @@ class Importar extends CI_Controller {
 
     public function migrar_comprobantes($archivo = null) {
         if ($archivo) {
-            
+
             $fp = fopen("upload/importar/" . $archivo, "r");
-            
+
             $this->importar_model->truncate('comprobantes');
             while (!feof($fp)) {
-            //for($i = 0; $i < 10; $i++) {
+                //for($i = 0; $i < 10; $i++) {
                 $linea = fgets($fp);
                 $array = preg_split('/;/', $linea);
-                
+
 
                 //  CARACTERES AL FINAL DEL VALOR
                 //  { = POSITIVO
@@ -351,17 +354,17 @@ class Importar extends CI_Controller {
                 //  [18] = IVA EN PESOS
                 //  [19] = IVA EN DOLARES
                 //  [22] = MONTO PAGADO
-                
+
                 $fecha = substr(trim($array[5]), -2, 2);
-                if($fecha > '70') {
-                    $fecha = '19'.$fecha.'-';
+                if ($fecha > '70') {
+                    $fecha = '19' . $fecha . '-';
                 } else {
-                    $fecha = '20'.$fecha.'-';
+                    $fecha = '20' . $fecha . '-';
                 }
                 $fecha .= substr(trim($array[5]), -4, 2);
                 $fecha .= '-';
                 $fecha .= substr(trim($array[5]), -6, 2);
-                
+
                 $insert = array(
                     'tipo_comprobante' => trim($array[0]),
                     'letra' => trim($array[1]),
@@ -382,19 +385,216 @@ class Importar extends CI_Controller {
                     'iva_dolares' => trim($array[19]),
                     'monto_pagado' => trim($array[22])
                 );
-                
-                
+
+
                 $this->comprobantes_model->set($insert);
-                
             }
 
             $array = array(
                 'status' => 'ok'
             );
             echo json_encode($array);
-            
         }
     }
+
+    /*
+     * Está pendiente
+     */
+
+    public function clientes($archivo = null) {
+        if ($archivo) {
+            $fp = fopen("upload/importar/" . $archivo, "r");
+            $count = 0;
+            $init = 0;
+            $porcentaje = 0;
+
+            while (!feof($fp)) {
+                $linea = fgets($fp);
+                $array = preg_split('/;/', $linea);
+                $count++;
+                $init++;
+                var_dump($array);
+                //  CARACTERES AL FINAL DEL VALOR
+                //  { = POSITIVO
+                //  } = NEGATIVO
+                //  
+                //  [0] = ID CLIENTE
+                //  [1] = RAZON SOCIAL 1
+                //  [2] = RAZON SOCIAL 2
+                //  [3] = CUIT
+                //  [4] = DIRECCION
+                //  [5] = CODIGO POSTAL
+                //  [6] = LOCALIDAD
+                //  [7] = ID PROVINCIA
+                //  [8] = TELEFONO
+                //  [9] = TIPO RESPONSABLE
+                //  [10] = INGRESOS BRUTOS
+                //  [11] = SALDO CUENTA CORRIENTE
+                //  [12] = SALDO INICIAL
+                //  [13] = SALDO A CUENTA
+                //  [14] = BONIFICACION
+                //  [15] = SUCURSAL
+                //  [16] = NUMERO DE CORREDOR
+                //  [17] = CONDICION DE VENTA
+                //  [18] = MONEDA DE FACTURACION DEFAULT
+                //  [19] = NUMERO DE PROVEEDOR
+                //  [20] = MAL PAGADOR
+                //  [21] = LIMITE DE CREDITO
+                //  [22] = TIPO DE CLIENTE
+                //  [23] = ATENDIDO POR
+                //  [24] = HORARIO
+                //  [25] = DESCRIPCION
+                //  [26] = EMAIL
+                //  [27] = WEB
+                //  [28] = NUMERO DE GRUPO
+                //  [29] = FLETE
+                $where = array(
+                    'cuit' => trim($array[3])
+                );
+                $resultado = $this->clientes_model->get_where($where);
+                if ($resultado) {  // Si existe, actualizo
+                    $datos = array(
+                        // 'idempresa_tipo' => OK
+                        'empresa' => trim($array[1]) . ' ' . trim($array[2]),
+                        'cuit' => str_replace('-', '', $array[3]),
+                        //'idtipo_responsable' => OK
+                    );
+                    $where = array(
+                        'idempresa' => $array[0]
+                    );
+                } else {  // Si no existe, lo creo
+                    $datos = array(
+                        'idcliente' => $array[0],
+                        'cliente' => trim($array[1]) . ' ' . trim($array[2]),
+                        'cuit' => str_replace('-', '', $array[3])
+                    );
+                    if ($array[22] == 'R') {  // Tipo de Cliente
+                        $datos['idempresa_tipo'] = 1;
+                    } else {
+                        $datos['idempresa_tipo'] = 2;
+                    }
+
+                    switch ($array[9]) {
+                        case 'IN':
+                            $datos['idtipo_responsable'] = 1;
+                            break;
+                        case 'CF':
+                            $datos['idtipo_responsable'] = 5;
+                            break;
+                        case 'EX':
+                            $datos['idtipo_responsable'] = 4;
+                            break;
+                        case 'XE':
+                            $datos['idtipo_responsable'] = 9;
+                            break;
+                        default:
+                            $datos['idtipo_responsable'] = 0;
+                            break;
+                    }
+
+                    $this->clientes_model->set($datos);
+                }
+            }
+        }
+        $json = array(
+            'status' => 'ok'
+        );
+        echo json_encode($json);
+    }
+
+    public function proveedores($archivo = null) {
+        if ($archivo) {
+            $fp = fopen("upload/importar/" . $archivo, "r");
+            while (!feof($fp)) {
+                $linea = fgets($fp);
+                $array = preg_split('/;/', $linea);
+                var_dump($array);
+                //  CARACTERES AL FINAL DEL VALOR
+                //  { = POSITIVO
+                //  } = NEGATIVO
+                //  
+                //  [0] = ID PROVEEDOR
+                //  [1] = RAZON SOCIAL 1
+                //  [2] = RAZON SOCIAL 2
+                //  [3] = CUIT
+                //  [4] = DOMICILIO
+                //  [5] = CODIGO POSTAL
+                //  [6] = LOCALIDAD
+                //  [7] = PROVINCIA
+                //  [8] = TELEFONO
+                //  [9] = EMAIL
+                //  [10] = PAIS
+                //  [11] = CONTACTO
+                //  [12] = TIPO DE IVA
+                //  [13] = INGRESOS BRUTOS
+                //  [14] = SALDO CUENTA CORRIENTE
+                //  [15] = SALDO INICIAL
+                //  [16] = SALDO A CUENTA
+                //  [17] = 
+
+                $datos = array(
+                    'idproveedor' => $array[0],
+                    'proveedor' => trim($array[1]) . ' ' . trim($array[2]),
+                    'cuit' => str_replace('-', '', $array[3]),
+                    'domicilio' => trim($array[4]),
+                    'codigo_postal' => trim($array[5]),
+                    'localidad' => trim($array[6]),
+                    'idprovincia' => trim($array[7])
+                );
+                $this->proveedores_model->set($datos);
+                
+            }
+        }
+    }
+
+    public function progreso($tabla) {
+        $session = $this->session->all_userdata();
+
+        $fecha_actual = strtotime(date("Y-m-d H:i:s"));
+
+        $where = array(
+            'idusuario' => $session['SID'],
+            'tabla' => $tabla
+        );
+        $resultado = $this->progresos_model->get_where($where);
+        $fecha_db = $resultado['timestamp'];
+        if ($fecha_db == null) {
+            $datos = array(
+                'idusuario' => $session['SID'],
+                'tabla' => $tabla,
+                'progreso' => 0
+            );
+            $this->progresos_model->set($datos);
+
+            $json = array(
+                'status' => 'ok',
+                'progreso' => 0
+            );
+            echo json_encode($json);
+        } else {
+            $fecha_db = strtotime($fecha_db);
+
+            while ($fecha_db < $fecha_actual) {
+                $where = array(
+                    'idusuario' => $session['SID'],
+                    'tabla' => $tabla
+                );
+                $resultado = $this->progresos_model->get_where($where);
+
+                usleep(100000); //anteriormente 10000
+                clearstatcache();
+                $fecha_db = strtotime($resultado['timestamp']);
+            }
+            $json = array(
+                'status' => 'ok',
+                'progreso' => $resultado['progreso'],
+                'fecha_actual' => $fecha_actual,
+                'fecha_db' => $fecha_db
+            );
+            echo json_encode($json);
+        }
+    }
+
 }
 
 ?>

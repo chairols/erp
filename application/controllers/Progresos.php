@@ -34,6 +34,16 @@ class Progresos extends CI_Controller {
         echo json_encode($json);
     }
 
+    public function get_where() {
+        $query = $this->db->get_where('progresos', $where);
+        
+        return $query->row_array();
+    }
+    
+    public function set($datos) {
+        $this->db->insert('progresos', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

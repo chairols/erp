@@ -63,7 +63,7 @@
                 </button>
             </div>
             <div class="col-xs-2" id="resultado-4">
-                
+
             </div>
         </div>
         <hr>
@@ -81,8 +81,23 @@
                 </button>
             </div>
             <div class="col-xs-2" id="resultado-5">
+
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-8">
+                <strong>Prueba para la tabla clientes</strong>
+            </div>
+            <div class="col-xs-2" id="boton-6">
+                <button class="btn btn-xs btn-primary" onclick="procesar2(6, '/importar/clientes/', 'clientes')">
+                    <i class="fa fa-database"></i> Comenzar >>
+                </button>
+            </div>
+            <div class="col-xs-2" id="resultado-6">
                 
             </div>
         </div>
     </div>
 </div>
+

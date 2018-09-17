@@ -38,11 +38,12 @@
                          status = json.status;
                          tipo = json.tipo;
                          */
-                        if (timestamp == null)
+                        /*if (timestamp == null)
                         {
 
                         } else
                         {
+                            /*
                             $.ajax({
                                 async: true,
                                 type: "POST",
@@ -54,7 +55,7 @@
                                     $('#div' + tipo).html(data);
                                 }
                             });
-                        }
+                        }*/
                         setTimeout('cargar_push()', 1000);
 
                     }

@@ -60,6 +60,22 @@ class Empresas_model extends CI_Model {
         
         return $query->row_array();
     }
+    
+    /*
+     *  Importar/clientes
+     */
+    public function update($datos, $where) {
+        $this->db->update('empresas', $datos, $where);
+        return $this->db->affected_rows();
+    }
+    
+    /*
+     *  Importar/clientes
+     */
+    public function set($datos) {
+        $this->db->insert('empresas', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

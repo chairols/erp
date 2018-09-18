@@ -13,8 +13,8 @@
         <div class="box-body">
             <div class="row">
                 <div class="col-xs-12 col-sm-5 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-                    <input type="text" id="TextAutoCompleteempresa" name="TextAutoCompleteempresa" placeholder="Seleccionar Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="Empresas" actionauto="gets_empresas_ajax" varsauto="proveedor:=Y" iconauto="ship">
-                    <input type="hidden" id="empresa" name="empresa" value="">
+                    <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Seleccionar Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="proveedores" actionauto="gets_proveedores_ajax" varsauto="" iconauto="ship">
+                    <input type="hidden" id="proveedor" name="proveedor" value="">
                 </div>
             </div>
             <hr>

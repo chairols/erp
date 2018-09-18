@@ -578,12 +578,15 @@ class Importar extends CI_Controller {
     }
 
     public function proveedores($archivo = null) {
+        $session = $this->session->all_userdata();
         if ($archivo) {
             $fp = fopen("upload/importar/" . $archivo, "r");
+            $linea = fgets($fp);  // Leo la primer línea en blanco
+            $linea = fgets($fp);  // Leo la segunda linea de cabeceras
+            
             while (!feof($fp)) {
                 $linea = fgets($fp);
                 $array = preg_split('/;/', $linea);
-                var_dump($array);
                 //  CARACTERES AL FINAL DEL VALOR
                 //  { = POSITIVO
                 //  } = NEGATIVO
@@ -607,6 +610,95 @@ class Importar extends CI_Controller {
                 //  [16] = SALDO A CUENTA
                 //  [17] = 
 
+                $where = array(
+                    'cuit' => str_replace('-', '', $array[3])
+                );
+                $resultado = $this->empresas_model->get_where($where);
+                
+                if ($resultado && trim($array[3]) != '') {  // Si existe, actualizo
+                    $datos = array(
+                        'proveedor' => 'Y',
+                        'idproveedor' => $array[0],
+                        'actualizado_por' => $session['SID']
+                    );
+                    $where = array(
+                        'cuit' => trim(str_replace('-', '', $array[3]))
+                    );
+                    
+                    $this->empresas_model->update($datos, $where);
+                    
+                } else {
+                    $datos = array(
+                        //'idempresa_tipo' => '0'  --- Esto aplica para los clientes
+                        'empresa' => trim($array[1]) . ' ' . trim($array[2]),
+                        'cuit' => str_replace('-', '', $array[3]),
+                        //'idtipo_resposable' => OK
+                        //'idcondicion_de_venta' => $array[17],  --- Esto aplica para los clientes
+                        'iibb' => trim($array[13]),
+                        //'internacionales' => OK
+                        'proveedor' => 'Y',
+                        'saldo_cuenta_corriente' => $array[14],
+                        'saldo_inicial' => $array[15],
+                        'saldo_a_cuenta' => $array[16],
+                        //'idmoneda' => $array[18],
+                        //'mal_pagador' => trim($array[20]),
+                        //'web' => trim($array[27]),
+                        'idproveedor' => $array[0],
+                        //'limite_credito' => $array[21],
+                        'fecha_creacion' => date("Y-m-d H:i:s"),
+                        'idcreador' => $session['SID'],
+                        'actualizado_por' => $session['SID']
+                    );
+                    switch ($array[12]) {
+                        case 'IN':
+                            $datos['idtipo_responsable'] = 1;
+                            break;
+                        case 'CF':
+                            $datos['idtipo_responsable'] = 5;
+                            break;
+                        case 'EX':
+                            $datos['idtipo_responsable'] = 4;
+                            break;
+                        case 'XE':
+                            $datos['idtipo_responsable'] = 9;
+                            break;
+                        default:
+                            $datos['idtipo_responsable'] = 0;
+                            break;
+                    }
+                    if(trim($array[7]) >= 25) {
+                        $datos['internacional'] = 'Y';
+                    }
+                    $idempresa = $this->empresas_model->set($datos);
+                    
+                    $datos = array(
+                        'idempresa' => $idempresa,
+                        //'idpais' => Ver si se graba
+                        'idprovincia' => $array[7],
+                        //'idregion' => ???????
+                        //'idzona' => ???????
+                        'sucursal' => 'Casa Central', 
+                        'direccion' => $array[4],
+                        'codigo_postal' => trim($array[5]),
+                        'localidad' => trim($array[6]),
+                        'telefono' => trim($array[8]),
+                        'email' => trim($array[9]),
+                        
+                    );
+                    $idsucursal = $this->empresas_model->set_sucursal($datos);
+                    
+                    $datos = array(
+                        'idempresa' => $idempresa,
+                        'idsucursal' => $idsucursal,
+                        'agente' => trim($array[11]),
+                        'email' => trim($array[9]),
+                        'telefono' => trim($array[8]),
+                        'fecha_creacion' => date("Y-m-d H:i:s"),
+                        'creado_por' => $session['SID']
+                    );
+                    $this->empresas_model->set_agente($datos);
+                }
+                /*
                 $datos = array(
                     'idproveedor' => $array[0],
                     'proveedor' => trim($array[1]) . ' ' . trim($array[2]),
@@ -617,9 +709,14 @@ class Importar extends CI_Controller {
                     'idprovincia' => trim($array[7])
                 );
                 $this->proveedores_model->set($datos);
-                
+                */
             }
         }
+        
+        $json = array(
+            'status' => 'ok'
+        );
+        echo json_encode($json);
     }
 
     public function progreso($tabla) {

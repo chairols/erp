@@ -87,10 +87,10 @@
         <hr>
         <div class="row">
             <div class="col-xs-8">
-                <strong>Actualiza la tabla <label class="label label-success">empresas</label> mediante archivo CLIENTES.TXT de Sistema anterior.<br>
+                <strong>Actualiza las tablas <label class="label label-success">clientes</label> <label class="label label-success">clientes_sucursales</label> y <label class="label label-success">clientes_agentes</label> mediante archivo CLIENTES.TXT de Sistema anterior.<br>
                 php index.php importar clientes CLIENTES.TXT <br>
                 Se ejecuta desde acá, no es necesario eliminar cabeceras, descarta las 2 primeras líneas por default. (totalmente transparente).<br>
-                Hace truncate a empresas, empresas_sucursales y empresas_agentes
+                Hace truncate a clientes, clientes_sucursales y clientes_agentes
                 
                 </strong>
             </div>
@@ -106,10 +106,10 @@
         <hr>
         <div class="row">
             <div class="col-xs-8">
-                <strong>Actualiza la tabla <label class="label label-success">empresas</label> mediante archivo PROVEDOR.TXT de Sistema anterior.<br>
+                <strong>Actualiza la tabla <label class="label label-success">proveedores</label> mediante archivo PROVEDOR.TXT de Sistema anterior.<br>
                     php index.php importar proveedores PROVEDOR.TXT<br>
                     Se ejecuta desde acá, no es necesario eliminar cabeceras, descarta las 2 primeras líneas por default. (totalmente transparente)<br>
-                    Debe ejecutarse primero la importación de CLIENTES.TXT antes que PROVEDOR.TXT
+                    Hace trancate a la tabla proveedores
                 </strong>
             </div>
             <div class="col-xs-2" id="boton-7">

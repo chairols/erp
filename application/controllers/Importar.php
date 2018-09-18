@@ -16,7 +16,7 @@ class Importar extends CI_Controller {
             'importar_model',
             'comprobantes_model',
             'progresos_model',
-            'clientes_model',
+            'empresas_model',
             'proveedores_model'
         ));
         $this->load->helper(array(
@@ -402,18 +402,26 @@ class Importar extends CI_Controller {
      */
 
     public function clientes($archivo = null) {
+        $session = $this->session->all_userdata();
+        
         if ($archivo) {
             $fp = fopen("upload/importar/" . $archivo, "r");
             $count = 0;
             $init = 0;
             $porcentaje = 0;
 
+            $this->importar_model->truncate('empresas');
+            $this->importar_model->truncate('empresas_sucursales');
+            $this->importar_model->truncate('empresas_agentes');
+            
+            $linea = fgets($fp);  // Leo la primer línea en blanco
+            $linea = fgets($fp);  // Leo la segunda linea de cabeceras
+            
             while (!feof($fp)) {
                 $linea = fgets($fp);
                 $array = preg_split('/;/', $linea);
                 $count++;
                 $init++;
-                var_dump($array);
                 //  CARACTERES AL FINAL DEL VALOR
                 //  { = POSITIVO
                 //  } = NEGATIVO
@@ -449,25 +457,65 @@ class Importar extends CI_Controller {
                 //  [28] = NUMERO DE GRUPO
                 //  [29] = FLETE
                 $where = array(
-                    'cuit' => trim($array[3])
+                    'cuit' => str_replace('-', '', $array[3])
                 );
-                $resultado = $this->clientes_model->get_where($where);
-                if ($resultado) {  // Si existe, actualizo
+                $resultado = $this->empresas_model->get_where($where);
+                
+                if ($resultado && trim($array[3]) != '') {  // Si existe, actualizo
                     $datos = array(
-                        // 'idempresa_tipo' => OK
-                        'empresa' => trim($array[1]) . ' ' . trim($array[2]),
-                        'cuit' => str_replace('-', '', $array[3]),
-                        //'idtipo_responsable' => OK
+                        'idempresa' => $resultado['idempresa'],
+                        //'idpais' => Ver si se graba
+                        'idprovincia' => $array[7],
+                        //'idregion' => ???????
+                        //'idzona' => ???????
+                        'sucursal' => trim($array[1]).' '.trim($array[2]), 
+                        'direccion' => $array[4],
+                        'codigo_postal' => trim($array[5]),
+                        'localidad' => trim($array[6]),
+                        'telefono' => trim($array[8]),
+                        'email' => trim($array[26]),
+                        
                     );
-                    $where = array(
-                        'idempresa' => $array[0]
+                    $idsucursal = $this->empresas_model->set_sucursal($datos);
+                    
+                    $datos = array(
+                        'idempresa' => $resultado['idempresa'],
+                        'idsucursal' => $idsucursal,
+                        'agente' => trim($array[23]),
+                        'email' => trim($array[26]),
+                        'telefono' => trim($array[8]),
+                        'fecha_creacion' => date("Y-m-d H:i:s"),
+                        'creado_por' => $session['SID']
                     );
+                    $this->empresas_model->set_agente($datos);
                 } else {  // Si no existe, lo creo
                     $datos = array(
-                        'idcliente' => $array[0],
-                        'cliente' => trim($array[1]) . ' ' . trim($array[2]),
-                        'cuit' => str_replace('-', '', $array[3])
+                        'idempresa' => $array[0],
+                        //'idempresa_tipo' => OK
+                        'empresa' => trim($array[1]) . ' ' . trim($array[2]),
+                        'cuit' => str_replace('-', '', $array[3]),
+                        //'idtipo_resposable' => OK
+                        'idcondicion_de_venta' => $array[17],
+                        'iibb' => trim($array[10]),
+                        //'internacionales' => OK
+                        'cliente' => 'Y',
+                        'saldo_cuenta_corriente' => $array[11],
+                        'saldo_inicial' => $array[12],
+                        'saldo_a_cuenta' => $array[13],
+                        'bonificacion' => $array[14],
+                        'idmoneda' => $array[18],
+                        'mal_pagador' => trim($array[20]),
+                        'web' => trim($array[27]),
+                        'limite_credito' => $array[21],
+                        'fecha_creacion' => date("Y-m-d H:i:s"),
+                        'idcreador' => $session['SID'],
+                        'actualizado_por' => $session['SID']
                     );
+                    
+                    if(trim($array[7]) >= 25) {
+                        $datos['internacional'] = 'Y';
+                    }
+                    
                     if ($array[22] == 'R') {  // Tipo de Cliente
                         $datos['idempresa_tipo'] = 1;
                     } else {
@@ -491,8 +539,35 @@ class Importar extends CI_Controller {
                             $datos['idtipo_responsable'] = 0;
                             break;
                     }
-
-                    $this->clientes_model->set($datos);
+                    $idempresa = $this->empresas_model->set($datos);
+                    
+                    $datos = array(
+                        'idempresa' => $idempresa,
+                        //'idpais' => Ver si se graba
+                        'idprovincia' => $array[7],
+                        //'idregion' => ???????
+                        //'idzona' => ???????
+                        'sucursal' => 'Casa Central', 
+                        'direccion' => $array[4],
+                        'codigo_postal' => trim($array[5]),
+                        'localidad' => trim($array[6]),
+                        'telefono' => trim($array[8]),
+                        'email' => trim($array[26]),
+                        
+                    );
+                    
+                    $idsucursal = $this->empresas_model->set_sucursal($datos);
+                    
+                    $datos = array(
+                        'idempresa' => $idempresa,
+                        'idsucursal' => $idsucursal,
+                        'agente' => trim($array[23]),
+                        'email' => trim($array[26]),
+                        'telefono' => trim($array[8]),
+                        'fecha_creacion' => date("Y-m-d H:i:s"),
+                        'creado_por' => $session['SID']
+                    );
+                    $this->empresas_model->set_agente($datos);
                 }
             }
         }

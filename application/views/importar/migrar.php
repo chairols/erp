@@ -87,10 +87,13 @@
         <hr>
         <div class="row">
             <div class="col-xs-8">
-                <strong>Prueba para la tabla clientes</strong>
+                <strong>Actualiza la tabla <label class="label label-success">empresas</label> mediante archivo CLIENTES.TXT de Sistema anterior.<br>
+                php index.php importar clientes CLIENTES.TXT <br>
+                Se ejecuta desde acá, no es necesario eliminar cabeceras, descarta las 2 primeras líneas por default. (totalmente transparente)
+                </strong>
             </div>
             <div class="col-xs-2" id="boton-6">
-                <button class="btn btn-xs btn-primary" onclick="procesar2(6, '/importar/clientes/', 'clientes')">
+                <button class="btn btn-xs btn-primary" onclick="procesar(6, '/importar/clientes/CLIENTES.TXT');">
                     <i class="fa fa-database"></i> Comenzar >>
                 </button>
             </div>

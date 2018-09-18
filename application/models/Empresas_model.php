@@ -76,6 +76,22 @@ class Empresas_model extends CI_Model {
         $this->db->insert('empresas', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Importar/clientes
+     */
+    public function set_sucursal($datos) {
+        $this->db->insert('empresas_sucursales', $datos);
+        return $this->db->insert_id();
+    }
+    
+    /*
+     *  Importar/clientes
+     */
+    public function set_agente($datos) {
+        $this->db->insert('empresas_agentes', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

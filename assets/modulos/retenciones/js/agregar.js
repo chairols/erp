@@ -1,6 +1,6 @@
 $("#agregar").click(function () {
     datos = {
-        'idempresa': $("#empresa").val(),
+        'idproveedor': $("#proveedor").val(),
         'idjurisdiccion': $("#idjurisdiccion").val(),
         'fecha': $("#fecha").val()
     };

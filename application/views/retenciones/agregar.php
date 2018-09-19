@@ -3,8 +3,8 @@
     <div class="row form-group inline-form-custom">
         <div class="col-xs-12">
             <!-- Autocomplete Empresas -->
-            <input type="text" id="TextAutoCompleteempresa" name="TextAutoCompleteempresa" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" objectauto="Empresas" actionauto="gets_empresas_ajax" varsauto="proveedor:=Y///internacional:=N" iconauto="ship">
-            <input type="hidden" id="empresa" name="empresa" value="">
+            <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" objectauto="proveedores" actionauto="gets_proveedores_ajax" iconauto="ship">
+            <input type="hidden" id="proveedor" name="proveedor" value="">
         </div>
     </div>
     <h4 class="subTitleB"><i class="fa fa-map-signs"></i> Jurisdicción</h4>

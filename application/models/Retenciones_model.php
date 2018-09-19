@@ -36,6 +36,14 @@ class Retenciones_model extends CI_Model {
         
         return $query->row_array();
     }
+    
+    /*
+     *  Retenciones/update_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('retenciones', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

@@ -61,7 +61,7 @@ class Retenciones extends CI_Controller {
             //$contenido = json_decode(file_get_contents($url_api['valor_sistema'] . $empresa['cuit']));
             // Se trae de nuevo para evitar errores, suele fallar en la primera consulta
             //$contenido = json_decode(file_get_contents($url_api['valor_sistema'] . $empresa['cuit']));
-            
+
             $where = array(
                 'identificador' => 'punto_retencion'
             );
@@ -75,7 +75,7 @@ class Retenciones extends CI_Controller {
             if ($ultimo_numero_array['numero']) {
                 $ultimo_numero = $ultimo_numero_array['numero'] + 1;
             }
-            
+
             $where = array(
                 'idprovincia' => $proveedor['idprovincia']
             );
@@ -98,9 +98,9 @@ class Retenciones extends CI_Controller {
                 'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
                 'porcentaje' => 0
             );
-            
 
-            
+
+
             $id = $this->retenciones_model->set($set);
             if ($id) {
                 $json = array(
@@ -117,16 +117,19 @@ class Retenciones extends CI_Controller {
             }
         }
     }
-    
+
     public function modificar($idretencion = null) {
-        if($idretencion == null) {
+        if ($idretencion == null) {
             show_404();
         }
         $data['title'] = 'Modificar Retención';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/retenciones/js/modificar.js'
+        );
         $data['view'] = 'retenciones/modificar';
-        
+
         // Retención
         $where = array(
             'idretencion' => $idretencion
@@ -141,7 +144,7 @@ class Retenciones extends CI_Controller {
             'idjurisdiccion_afip' => $data['retencion']['idjurisdiccion_afip']
         );
         $data['retencion']['jurisdiccion'] = $this->provincias_model->get_where($where);
-        
+
         // Empresa emisora
         $data['parametro'] = $this->parametros_model->get_parametros_empresa();
         $where = array(
@@ -152,8 +155,41 @@ class Retenciones extends CI_Controller {
             'idtipo_responsable' => $data['parametro']['idtipo_responsable']
         );
         $data['parametro']['iva'] = $this->tipos_responsables_model->get_where($where);
-        
+
         $this->load->view('layout/app', $data);
+    }
+
+    public function update_ajax() {
+        $this->form_validation->set_rules('alicuota', 'Alícuota', 'required|decimal');
+        $this->form_validation->set_rules('idretencion', 'ID de Retención', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = $this->input->post();
+            $where = array(
+                'idretencion' => $this->input->post('idretencion')
+            );
+            $resultado = $this->retenciones_model->update($datos, $where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'La alícuota se actualizó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar'
+                );
+                echo json_encode($json);
+            }
+        }
     }
 
     private function formatear_fecha($fecha) {
@@ -177,6 +213,7 @@ class Retenciones extends CI_Controller {
 
         return $aux;
     }
+
 }
 
 ?>

@@ -71,7 +71,7 @@
                             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-7">
                                 <div class="listRowInner">
                                     <!--<img class="img-circle hideMobile990" src="../../../../skin/images/quotations/default/default.png" alt="ADOLFO FORTIER S.A.">-->
-                                    <span class="listTextStrong"><?= $lista['empresa'] ?></span>
+                                    <span class="listTextStrong"><?= $lista['proveedor'] ?></span>
                                     <span class="smallTitle"><b>(ID: <?= $lista['idlista_de_precios'] ?>)</b></span>
                                 </div>
                             </div>

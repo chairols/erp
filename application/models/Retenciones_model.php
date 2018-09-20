@@ -72,6 +72,34 @@ class Retenciones_model extends CI_Model {
         $this->db->update('retenciones_items', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Retenciones/listar
+     */
+    public function get_cantidad_where($where) {
+        $this->db->select('*');
+        $this->db->from('retenciones');
+        $this->db->join('proveedores', 'retenciones.idproveedor = proveedores.idproveedor');
+        $this->db->like($where);
+        
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+    
+    /*
+     *  Retenciones/listar
+     */
+    public function gets_where_limit($where, $per_page, $pagina) {
+        $this->db->select('retenciones.*, proveedores.proveedor');
+        $this->db->from('retenciones');
+        $this->db->join('proveedores', 'retenciones.idproveedor = proveedores.idproveedor');
+        $this->db->like($where);
+        $this->db->order_by('idretencion DESC');
+        $this->db->limit($per_page, $pagina);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

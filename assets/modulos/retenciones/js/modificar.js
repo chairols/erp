@@ -113,7 +113,8 @@ $("#agregar").click(function() {
         url: '/retenciones/agregar_item_ajax/',
         data: datos,
         beforeSend: function () {
-            
+            $("#div-boton-agregar").hide();
+            $("#div-boton-loading").show();
         },
         success: function (data) {
             resultado = $.parseJSON(data);
@@ -123,6 +124,8 @@ $("#agregar").click(function() {
                             type: 'danger',
                             allow_dismiss: false
                         });
+                        $("#div-boton-loading").hide();
+                        $("#div-boton-agregar").show();
             } else if (resultado['status'] == 'ok') {
                 $.notify('<strong>' + resultado['data'] + '</strong>',
                         {
@@ -133,6 +136,8 @@ $("#agregar").click(function() {
                         $("#comprobante").val("");
                         $("#fecha").val("");
                         $("#base_imponible").val("");
+                        $("#div-boton-loading").hide();
+                        $("#div-boton-agregar").show();
                         get_items_tabla();
             }
         },

@@ -23,7 +23,12 @@
             <input type="text" id="fecha" value="<?= date('d/m/Y') ?>" class="form-control datePicker" placeholder="Seleccione una fecha">
         </div>
     </div>
-    <div class="row txC">
+    <div id="div-boton-agregar" class="row txC">
         <button type="submit" class="btn btn-success btnGreen" id="agregar"><i class="fa fa-plus"></i> Crear Retención</button>
+    </div>
+    <div id="div-boton-loading" class="row txC" style="display: none;">
+        <button type="button" class="btn btn-success btnGreen" id="loading">
+            <i class="fa fa-refresh fa-spin"></i>
+        </button>
     </div>
 </div>

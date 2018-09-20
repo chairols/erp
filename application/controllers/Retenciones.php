@@ -255,6 +255,38 @@ class Retenciones extends CI_Controller {
         }
     }
 
+    public function borrar_item() {
+        $this->form_validation->set_rules('idretencion_item', 'ID de Item de la Retención', 'required|integer');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idretencion_item' => $this->input->post('idretencion_item')
+            );
+            $resultado = $this->retenciones_model->update_item($datos, $where);
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se eliminó el comprobante.'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo eliminar el comprobante.'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);

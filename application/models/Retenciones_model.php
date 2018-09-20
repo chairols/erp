@@ -64,6 +64,14 @@ class Retenciones_model extends CI_Model {
         $this->db->insert('retenciones_items', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Retenciones/borrar_item
+     */
+    public function update_item($datos, $where) {
+        $this->db->update('retenciones_items', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

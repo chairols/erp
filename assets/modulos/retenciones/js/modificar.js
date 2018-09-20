@@ -147,6 +147,44 @@ $("#agregar").click(function() {
     
 });
 
+function borrar_item(idretencion_item) {
+    datos = {
+        'idretencion_item': idretencion_item
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/retenciones/borrar_item/',
+        data: datos,
+        beforeSend: function () {
+            
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: false
+                        });
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: false
+                        });
+                        get_items_tabla();
+            }
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+        }
+    });
+}
+
 $(document).ready(function() {
     get_items_tabla();
 });

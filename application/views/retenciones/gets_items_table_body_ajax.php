@@ -16,7 +16,7 @@
             <td><?=$item['base_imponible']?></td>
             <td><?= number_format(round((($item['base_imponible']*$retencion['alicuota'])/100), 2), 2)?></td>
             <td>
-                <button class="btn btn-danger btn-xs">
+                <button class="btn btn-danger btn-xs" onclick="borrar_item(<?=$item['idretencion_item']?>)">
                     <i class="fa fa-trash-o"></i>
                 </button>
             </td>

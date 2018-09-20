@@ -1,6 +1,6 @@
 <div class="box">
     <div class="box-header">
-        <form method="GET" class="input-group input-group-sm col-md-5">
+        <form method="GET" target="/retenciones/listar/" class="input-group input-group-sm col-md-5">
             <input class="form-control pull-left" name="proveedor" id="proveedor" placeholder="Buscar ..." type="text">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="submit">

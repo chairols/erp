@@ -56,6 +56,14 @@ class Retenciones_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Retenciones/agregar_item_ajax
+     */
+    public function set_item($datos) {
+        $this->db->insert('retenciones_items', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

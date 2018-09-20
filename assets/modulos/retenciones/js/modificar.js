@@ -101,7 +101,50 @@ function get_items_tabla() {
 }
 
 $("#agregar").click(function() {
-    get_items_tabla();
+    datos = {
+        'idretencion': $("#idretencion").val(),
+        'punto_de_venta': $("#punto_de_venta").val(),
+        'comprobante': $("#comprobante").val(),
+        'fecha': $("#fecha").val(),
+        'base_imponible': $("#base_imponible").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/retenciones/agregar_item_ajax/',
+        data: datos,
+        beforeSend: function () {
+            
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: false
+                        });
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: false
+                        });
+                        $("#punto_de_venta").val("");
+                        $("#comprobante").val("");
+                        $("#fecha").val("");
+                        $("#base_imponible").val("");
+                        get_items_tabla();
+            }
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+        }
+    });
+    
 });
 
 $(document).ready(function() {

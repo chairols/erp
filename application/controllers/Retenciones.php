@@ -96,7 +96,7 @@ class Retenciones extends CI_Controller {
                 'idtipo_responsable' => $proveedor['idtipo_responsable'],
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
                 'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
-                'porcentaje' => 0
+                'alicuota' => 0
             );
 
 
@@ -191,11 +191,11 @@ class Retenciones extends CI_Controller {
             }
         }
     }
-    
+
     public function gets_items_table_body_ajax() {
         $this->form_validation->set_rules('idretencion', 'ID de Retención', 'required|integer');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
@@ -208,12 +208,50 @@ class Retenciones extends CI_Controller {
             );
             $data['retencion'] = $this->retenciones_model->get_where($where);
             $data['items'] = $this->retenciones_model->gets_items_where($where);
-            
-            foreach($data['items'] as $key => $value) {
+
+            foreach ($data['items'] as $key => $value) {
                 $data['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
             }
-            
+
             $this->load->view('retenciones/gets_items_table_body_ajax', $data);
+        }
+    }
+
+    public function agregar_item_ajax() {
+        $this->form_validation->set_rules('idretencion', 'ID de Retención', 'required|integer');
+        $this->form_validation->set_rules('punto_de_venta', 'Punto de Venta', 'required|integer');
+        $this->form_validation->set_rules('comprobante', 'Comprobante', 'required|integer');
+        $this->form_validation->set_rules('fecha', 'Fecha', 'required');
+        $this->form_validation->set_rules('base_imponible', 'Base Imponible', 'required|decimal');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'idretencion' => $this->input->post('idretencion'),
+                'punto_de_venta' => $this->input->post('punto_de_venta'),
+                'comprobante' => $this->input->post('comprobante'),
+                'fecha' => $this->formatear_fecha($this->input->post('fecha')),
+                'base_imponible' => $this->input->post('base_imponible')
+            );
+            $resultado = $this->retenciones_model->set_item($datos);
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se agregó el comprobante.'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo agregar el comprobante.'
+                );
+                echo json_encode($json);
+            }
         }
     }
 

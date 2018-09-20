@@ -79,7 +79,7 @@ class Retenciones_model extends CI_Model {
     public function get_cantidad_where($where) {
         $this->db->select('*');
         $this->db->from('retenciones');
-        $this->db->join('proveedores', 'retenciones.idproveedor = proveedores.idproveedor');
+        $this->db->join('provincias', 'retenciones.idjurisdiccion_afip = provincias.idjurisdiccion_afip');
         $this->db->like($where);
         
         $query = $this->db->count_all_results();
@@ -90,9 +90,9 @@ class Retenciones_model extends CI_Model {
      *  Retenciones/listar
      */
     public function gets_where_limit($where, $per_page, $pagina) {
-        $this->db->select('retenciones.*, proveedores.proveedor');
+        $this->db->select('retenciones.*, provincias.provincia as jurisdiccion');
         $this->db->from('retenciones');
-        $this->db->join('proveedores', 'retenciones.idproveedor = proveedores.idproveedor');
+        $this->db->join('provincias', 'retenciones.idjurisdiccion_afip = provincias.idjurisdiccion_afip');
         $this->db->like($where);
         $this->db->order_by('idretencion DESC');
         $this->db->limit($per_page, $pagina);

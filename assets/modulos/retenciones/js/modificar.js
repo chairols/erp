@@ -57,6 +57,7 @@ $("#alicuota-guardar-boton").click(function () {
                             type: 'success',
                             allow_dismiss: false
                         });
+                        get_items_tabla();
             }
         },
         error: function (xhr) { // if error occured
@@ -70,4 +71,39 @@ $("#alicuota-guardar-boton").click(function () {
                     });
         }
     });
+});
+
+function get_items_tabla() {
+    datos = {
+        'idretencion': $("#idretencion").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/retenciones/gets_items_table_body_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#body-tabla-items").html('<h1 class="text-center"><i class="fa fa-refresh fa-spin"></i></h1>');
+        },
+        success: function (data) {
+            $("#body-tabla-items").html(data);
+        },
+        error: function (xhr) { // if error occured
+            $("#body-tabla-items").html(xhr.responseText);
+            console.log(xhr);
+            
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+        }
+    });
+}
+
+$("#agregar").click(function() {
+    get_items_tabla();
+});
+
+$(document).ready(function() {
+    get_items_tabla();
 });

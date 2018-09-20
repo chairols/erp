@@ -191,6 +191,31 @@ class Retenciones extends CI_Controller {
             }
         }
     }
+    
+    public function gets_items_table_body_ajax() {
+        $this->form_validation->set_rules('idretencion', 'ID de Retención', 'required|integer');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'idretencion' => $this->input->post('idretencion'),
+                'estado' => 'A'
+            );
+            $data['retencion'] = $this->retenciones_model->get_where($where);
+            $data['items'] = $this->retenciones_model->gets_items_where($where);
+            
+            foreach($data['items'] as $key => $value) {
+                $data['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+            }
+            
+            $this->load->view('retenciones/gets_items_table_body_ajax', $data);
+        }
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';

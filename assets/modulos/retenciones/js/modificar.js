@@ -134,7 +134,7 @@ $("#agregar").click(function() {
                         });
                         $("#punto_de_venta").val("");
                         $("#comprobante").val("");
-                        $("#fecha").val("");
+                        //$("#fecha").val("");
                         $("#base_imponible").val("");
                         $("#div-boton-loading").hide();
                         $("#div-boton-agregar").show();

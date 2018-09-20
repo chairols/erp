@@ -90,8 +90,13 @@
         </div>
         <div class="col-xs-2">
             <br>
-            <span class="input-group-btn">
+            <span id="div-boton-agregar" class="input-group-btn">
                 <button id="agregar" class="btn btn-info btn-sm btn-flat" type="button">Agregar</button>
+            </span>
+            <span id="div-boton-loading" class="input-group-btn" style="display: none;">
+                <button class="btn btn-info btn-sm btn-flat" type="button">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </button>
             </span>
         </div>
     </div>

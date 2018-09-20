@@ -24,7 +24,7 @@
         </div>
     </div>
     <div id="div-boton-agregar" class="row txC">
-        <button type="submit" class="btn btn-success btnGreen" id="agregar"><i class="fa fa-plus"></i> Crear Retención</button>
+        <button type="submit" class="btn btn-success btnGreen" id="agregar">Crear Retención</button>
     </div>
     <div id="div-boton-loading" class="row txC" style="display: none;">
         <button type="button" class="btn btn-success btnGreen" id="loading">

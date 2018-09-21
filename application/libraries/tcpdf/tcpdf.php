@@ -131,7 +131,7 @@ require_once(dirname(__FILE__).'/include/tcpdf_static.php');
  * @version 6.2.8
  * @author Nicola Asuni - info@tecnick.com
  */
-class TCPDF {
+class Tcpdf {
 
 	// Protected properties
 

@@ -1,8 +1,8 @@
-/*------------------------------------------------------------*\
-|*                                                            *|
-|*               Funciones generales del sistema              *|
-|*                                                            *|
-\*------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*\
+|*                                                                          *|
+|*                      Funciones generales del sistema                     *|
+|*                                                                          *|
+\*--------------------------------------------------------------------------*/
 
 
 /*
@@ -14,18 +14,33 @@
 |
 */
 var process_url = "../../../core/resources/processes/proc.core.php";
-$(document).ready(function(){
-  setDatePicker();
-  inputMask();
-	chosenSelect();
-	SetAutoComplete();
-	closeWindow();
-  SidebarMenu();
-  validateOnSubmit();
-	if($("input[type='file']").length>0)
-	{
-	  CustomizedFilefield();
-	}
+
+$( document ).ready( function()
+{
+
+    setDatePicker();
+
+    inputMask();
+
+  	chosenSelect();
+
+  	SetAutoComplete();
+
+  	closeWindow();
+
+    SidebarMenu();
+
+    validateOnSubmit();
+
+  	if( $( 'input[type="file"]' ).length > 0 )
+  	{
+
+  	  CustomizedFilefield();
+
+  	}
+
+    SetDropzones();
+
 });
 
 /*
@@ -869,6 +884,496 @@ function validateDivChange()
     });
 
 }
+
+/*
+| -------------------------------------------------------------------
+| DROPZONE
+| -------------------------------------------------------------------
+| Crea automáticamente los dropzones.
+|
+*/
+function SetDropzones()
+{
+
+    Dropzone.options.myAwesomeDropzone = false;
+
+    Dropzone.autoDiscover = false;
+
+		$( '.dropzone' ).each( function()
+		{
+
+				SetDropzone( $( this ) );
+
+		});
+
+}
+
+function SetDropzone( div )
+{
+		var id 			= div.attr( 'id' );
+
+		var subir 		= div.attr( 'subir' );
+
+		if( !subir || subir == undefined ) var subir = '/archivos/subir_archivo/';
+
+		var mensaje 	= div.attr( 'mensaje' );
+
+		if( !mensaje || mensaje == undefined ) var mensaje = 'Para subir un archivo haga click o arrastrelo hasta aqu&iacute;.';
+
+		var imagen	= true;
+
+		if( div.attr( 'imagen' ) == 'false' ) imagen	= false;
+
+		var ancho = div.attr( 'imagen-ancho' );
+
+		if( !ancho || ancho == undefined ) var ancho = 120;
+
+		var alto 	= div.attr( 'imagen-alto' );
+
+		if( !alto || alto == undefined ) var alto = 107;
+
+    div.after( '<input type="hidden" id="contador' + id + '" name="contador' + id + '" value="0">' );
+
+		var DivDropzone = new Dropzone( '#' + id,
+		{
+
+				url: subir,
+
+        paramName: 'archivo',
+
+				dictDefaultMessage: mensaje,
+
+				createImageThumbnails: imagen,
+
+				thumbnailWidth: ancho,
+
+				thumbnailHeight: alto,
+
+				accept: function( archivo, hecho )
+				{
+						if( imagen )
+						{
+
+								var thumbnail = $( '#' + id + ' .dz-preview.dz-file-preview .dz-image:last' ).children( 'img' );
+
+								switch( archivo.type )
+								{
+
+										case 'application/pdf':
+
+												thumbnail.attr( 'src', GetFileIcon( 'pdf', 'big' ) );
+
+												thumbnail.attr( 'width', '100%' );
+
+												thumbnail.attr( 'height', '100%' );
+
+										break;
+
+										case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+
+												thumbnail.attr( 'src', GetFileIcon( 'doc', 'big' ) );
+
+												thumbnail.attr( 'width', '100%' );
+
+												thumbnail.attr( 'height', '100%' );
+
+										break;
+
+										case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+
+												thumbnail.attr( 'src', GetFileIcon( 'xls', 'big' ) );
+
+												thumbnail.attr( 'width', '100%' );
+
+												thumbnail.attr('height', '100%' );
+
+										break;
+
+										case 'application/vnd.ms-excel':
+
+												thumbnail.attr( 'src', GetFileIcon( 'xls', 'big' ) );
+
+												thumbnail.attr( 'width', '100%' );
+
+												thumbnail.attr('height', '100%' );
+
+										break;
+
+										case 'application/zip, application/x-compressed-zip':
+
+												thumbnail.attr( 'src', GetFileIcon( 'zip', 'big' ) );
+
+												thumbnail.attr( 'width', '100%' );
+
+												thumbnail.attr('height', '100%' );
+
+										break;
+
+										case 'application/vnd.ms-powerpointtd':
+
+												thumbnail.attr( 'src', GetFileIcon( 'ppt', 'big' ) );
+
+												thumbnail.attr( 'width', '100%' );
+
+												thumbnail.attr('height', '100%' );
+
+										break;
+
+										case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+
+												thumbnail.attr( 'src', GetFileIcon( 'ppt', 'big' ) );
+
+												thumbnail.attr( 'width', '100%' );
+
+												thumbnail.attr('height', '100%' );
+
+										break;
+
+										case 'application/octet-stream':
+
+												thumbnail.attr( 'src', GetFileIcon( 'eml', 'big' ) );
+
+												thumbnail.attr( 'width', '100%' );
+
+												thumbnail.attr('height', '100%' );
+
+										break;
+
+										case 'image/jpeg':
+										break;
+
+										case 'image/png':
+										break;
+
+										default:
+
+												thumbnail.attr( 'src', GetFileIcon( 'txt', 'big' ) );
+
+												thumbnail.attr( 'width', '100%' );
+
+												thumbnail.attr('height', '100%' );
+
+										break;
+
+								}
+
+						}
+
+						hecho();
+
+				}
+
+		});
+
+		DivDropzone.on( 'sending', function( archivo, xhr, formData )
+		{
+
+
+
+    });
+
+    DivDropzone.on( 'addedfile', function( archivo )
+		{
+        var id = archivo.previewElement.parentElement.id;
+
+        var botonEliminar = Dropzone.createElement( '<button id="ultimoboton' + id + '" class="btn btn-danger d-inline" style="cursor: pointer;"><i class="fa fa-times"></i></button>' );
+
+        var linkBoton 		= Dropzone.createElement( '<a id="ultimolink' + id + '" class="btn btn-primary d-inline" target="_blank" style="margin-left:5px;cursor: pointer;"><i class="fa fa-download"></i></a>' );
+
+				var _this = this;
+
+        botonEliminar.addEventListener( 'click', function( e )
+        {
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            EliminarArchivoDeContenedor( $( this ) );
+
+        });
+
+        archivo.previewElement.appendChild( botonEliminar );
+
+        archivo.previewElement.appendChild( linkBoton );
+
+    });
+
+    DivDropzone.on( 'success', function( archivo, datos )
+		{
+
+        // console.log( 'entra success' );
+        //
+        // console.log( archivo.previewElement.parentElement.id );
+
+        try
+        {
+
+            // console.log( 'datos:' + datos );
+
+        		datos = JSON.parse( datos );
+
+        }
+        catch( e )
+        {
+
+            notifyError( 'Ha ocurrido un error al intentar subir el archivo seleccionado.' );
+
+            console.log( 'Error: ' + datos );
+
+        }
+
+        if( datos.id )
+        {
+
+						var id = archivo.previewElement.parentElement.id;
+
+            var contador = parseInt( $( '#contador' + id ).val() ) + 1;
+
+            var ArchivoNuevoHTML = '<input type="hidden" id="idarchivo_' + contador + '" value="' + datos.id + '" >';
+
+            $( '#ContenedorArchivos' ).append( ArchivoNuevoHTML );
+
+            $( '#contador' + id ).val( contador );
+
+            var EliminarBotonHTML = $( '#ultimoboton' + id );
+
+            EliminarBotonHTML.addClass( 'EliminarArchivoDeContenedor' + id );
+
+            EliminarBotonHTML.attr( 'id', 'archivo_' + id + '_' + contador );
+
+            EliminarBotonHTML.attr( 'idarchivo', datos.id );
+
+            EliminarBotonHTML.attr( 'nombrearchivo', datos.raw_name );
+
+            EliminarBotonHTML.attr( 'urlarchivo', datos.url );
+
+            $('#ultimolink' + id ).attr( 'href', datos.url );
+
+            $('#ultimolink' + id ).attr( 'id', 'link_' + id + '_' + contador );
+
+        }
+    });
+
+    DivDropzone.on( 'drop', function( archivo )
+		{
+
+        $( '#' + archivo.previewElement.parentElement.id + ' .dz-default' ).hide();
+
+    });
+
+    DivDropzone.on( 'complete', function( archivo )
+		{
+
+        if( $( '.EliminarArchivoDeContenedor' + archivo.previewElement.parentElement.id ).length == 0 )
+        {
+
+            $( '#' + archivo.previewElement.parentElement.id + ' .dz-default' ).show();
+
+        }else{
+
+            $( '#' + archivo.previewElement.parentElement.id + ' .dz-default' ).hide();
+
+        }
+
+    });
+
+}
+
+function LlenarDropzone( DivDropzone, datos )
+{
+
+		$.each( datos, function( indice, archivo )
+		{
+
+				if( archivo.size > 0 )
+				{
+
+						id = DivDropzone.attr( 'id' );
+
+						var mockFile =
+						{
+
+								name: archivo.nombre,
+
+								size: archivo.size
+
+						};
+
+						DivDropzone.emit( 'addedfile', mockFile );
+
+						DivDropzone.emit( 'complete', mockFile );
+
+						var contador = parseInt( $( '#contador' + id ).val() ) + 1;
+
+						var ArchivoNuevoHTML = '<input type="hidden" id="idarchivo_' + contador + '" value="' + archivo.id + '" >';
+
+						$( '#ContenedorArchivos' ).append( ArchivoNuevoHTML );
+
+						$( '#contador' + id ).val( contador );
+
+						var EliminarBotonHTML = $( '#ultimoboton' + id );
+
+						EliminarBotonHTML.addClass( 'EliminarArchivoDeContenedor' + id );
+
+						EliminarBotonHTML.attr( 'id', 'archivo_' + id + '_' + contador );
+
+						EliminarBotonHTML.attr( 'idarchivo', archivo.id );
+
+						EliminarBotonHTML.attr( 'nombrearchivo', archivo.nombre );
+
+						EliminarBotonHTML.attr( 'urlarchivo', archivo.url );
+
+						$( '#ultimolink' + id ).attr( 'href', archivo.url );
+
+						$( '#ultimolink' + id ).attr( 'id', 'link_' + id + '_' + contador );
+
+						var imagenurl = archivo.url;
+
+						var thumbnail = $( '#' + id + ' .dz-preview.dz-file-preview .dz-image:last' ).children( 'img' );
+
+						if( archivo.type != 'jpg' && archivo.type != 'png' && archivo.type != 'bmp' && archivo.type != 'jpeg' )
+						{
+
+								thumbnail.attr( 'src', GetFileIcon( archivo.type, 'big' ) );
+
+						}else{
+
+								thumbnail.attr('src',archivo.url);
+
+						}
+
+						thumbnail.attr( 'width', '100%' );
+
+						thumbnail.attr( 'height', '100%' );
+
+				}
+
+		});
+
+		$( '#' + id + ' .dz-default' ).hide();
+
+}
+
+// $( document ).ready( function()
+// {
+//
+//     if( $('#id').length && !isNaN($("#id").val()))
+//     {
+//
+//         var process = process_url+'?object=Quotation&action=Getquotationfiles&quotation='+$("#id").val();
+//         $.ajax({
+//             type: "POST",
+//             url: process,
+//             cache: false,
+//             success: function( respuesta )
+//             {
+//                 try
+//                 {
+//                   respuesta = JSON.parse(respuesta);
+//                 }
+//                 catch(e)
+//                 {
+//                     notifyError("Ha ocurrido un error al intentar subir el archivo seleccionado.");
+//                     console.log("Error: "+respuesta);
+//                 }
+//                 if(respuesta)
+//                 {
+//                     LlenarDropzone( DivDropzone, respuesta );
+//                 }
+//             }
+//         });
+//     }
+// });
+
+
+///////////////////////////////// Dropzone FilesFunctions /////////////////////////////////
+function EliminarArchivoDeContenedor( boton )
+{
+    var contenedorarchivos = boton;
+
+    var nombrearchvio = contenedorarchivos.attr( 'nombrearchivo' );
+
+    alertify.confirm( '¿Desea eliminar el archivo <b>' + nombrearchvio + '</b>?', function( e )
+		{
+
+        if( e )
+				{
+
+            var eliminar      = contenedorarchivos.parent().parent().attr( 'eliminar' );
+
+            if( !eliminar || eliminar == undefined ) var eliminar = '/archivos/eliminar_archivo/';
+
+            var idcontenedor	= contenedorarchivos.attr( 'id' ).split( '_' );
+
+            var idarchivo     = contenedorarchivos.attr( 'idarchivo' );
+
+            var datos = {
+
+                            idarchivo: idarchivo
+
+                        }
+
+            $.ajax(
+						{
+
+                type: 'POST',
+
+                url: eliminar,
+
+                data: datos,
+
+                cache: false,
+
+                success: function( respuesta )
+                {
+
+
+
+                    notifySuccess( 'El archivo <b>' + nombrearchvio + '</b> ha sido eliminado correctamente.' );
+
+                    contenedorarchivos.parent().remove();
+
+                    if( $( '.EliminarArchivoDeContenedor' + idcontenedor[ 1 ] ).length == 0 )
+                    {
+
+                        $( '.dz-default' ).show();
+
+                    }
+
+
+
+                },
+
+                error: function( respuesta )
+                {
+
+                    notifyError( 'Ha ocurrido un error al intentar eliminar el archivo <b>' + nombrearchvio + '</b>' );
+
+                    console.log( respuesta );
+
+                }
+
+            });
+
+        }
+
+    });
+
+}
+
+// EliminarArchivoDeContenedor( boton );
+
+function ClickLinkArchivo( boton )
+{
+
+    console.log( boton );
+
+    window.open( boton.attr( 'urlarchivo' ), '_blank' );
+
+}
+
+
 //////////////////////////////////////////////////// Logout ////////////////////////////////////////////////////
 $(function(){
   $("#Logout").click(function(){

@@ -46,10 +46,10 @@ html {
   display: none !important; }
 
 .pad0 {
-  padding: 0; }
+  padding: 0!important; }
 
 .mar0 {
-  margin: 0; }
+  margin: 0!important; }
 
 .padL0 {
   padding-left: 0px; }

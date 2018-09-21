@@ -2,12 +2,12 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Cotizaciones_model extends CI_Model {
+class Cotizaciones_clientes_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
     }
-    
+
     /*
      *  Cotizaciones/proveedores_internacionales
      */
@@ -17,7 +17,7 @@ class Cotizaciones_model extends CI_Model {
         $this->db->join('empresas', 'cotizaciones.idempresa = empresas.idempresa');
         $this->db->join('monedas', 'cotizaciones.idmoneda = monedas.idmoneda');
         $this->db->like($where);
-        
+
         $query = $this->db->count_all_results();
         return $query;
     }
@@ -33,11 +33,11 @@ class Cotizaciones_model extends CI_Model {
         $this->db->like($where);
         $this->db->order_by('idcotizacion DESC');
         $this->db->limit($per_page, $pagina);
-        
+
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
     /*
      *  Cotizaciones/proveedores_internacionales
      */
@@ -46,9 +46,37 @@ class Cotizaciones_model extends CI_Model {
         $this->db->from('cotizaciones_items');
         $this->db->join('articulos', 'cotizaciones_items.idarticulo = articulos.idarticulo');
         $this->db->like($where);
-        
+
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    public function gets_archivos_ajax( $where )
+    {
+
+        $this->db->select( '*' );
+
+        $this->db->from( 'cotizaciones_archivos' );
+
+        $this->db->join( 'archivos', 'cotizaciones_archivos.idarchivo = archivos.idarchivo' );
+
+        $this->db->like($where);
+
+        $query = $this->db->get();
+
+        $archivos = $query->result_array();
+
+        echo json_encode( $archivos );
+
+    }
+
+    public function eliminar_archivo( $id )
+    {
+
+        $idarchivo    = array( 'idarchivo' => $id );
+
+        $this->db->delete( 'cotizaciones_archivos', $idarchivo );
+
     }
 }
 

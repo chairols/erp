@@ -1,19 +1,91 @@
 ///////////////////////// ALERTS ////////////////////////////////////
-$(document).ready(function(){
-	if(get['msg']=='insert')
-		notifySuccess('La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido creada correctamente.');
-	if(get['msg']=='update')
-	{
-		var popuptext = 'La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido modificada correctamente'
-		if(get['emailsent'])
-			popuptext = popuptext + ' y un email fue enviado a <b>'+get['emailsent']+'</b> con la cotizaci&oacute;n.';
-		notifySuccess(popuptext);
-	}
-	if(get['error']=="status")
-		notifyError('La cotizaci&oacute;n no puede ser editada ya que no se encuentra en estado activo.');
-	if(get['error']=="user")
-		notifyError('La cotizaci&oacute;n que desea editar no existe.');
-});
+// $(document).ready(function(){
+// 	if(get['msg']=='insert')
+// 		notifySuccess('La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido creada correctamente.');
+// 	if(get['msg']=='update')
+// 	{
+// 		var popuptext = 'La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido modificada correctamente'
+// 		if(get['emailsent'])
+// 			popuptext = popuptext + ' y un email fue enviado a <b>'+get['emailsent']+'</b> con la cotizaci&oacute;n.';
+// 		notifySuccess(popuptext);
+// 	}
+// 	if(get['error']=="status")
+// 		notifyError('La cotizaci&oacute;n no puede ser editada ya que no se encuentra en estado activo.');
+// 	if(get['error']=="user")
+// 		notifyError('La cotizaci&oacute;n que desea editar no existe.');
+// });
+
+// $( '#BotonCrear' ).click( function()
+// {
+//
+//   if
+//
+//   	alertify.confirm( 'Se creará una cotización de <strong>' + $( '#TextAutoCompleteempresa' ).val() + '</strong><br><strong>¿Desea continuar?</strong>', function( e )
+// 		{
+//
+//     		if( e )
+//     		{
+//
+// 						var datos =
+// 						{
+//
+//         				'idempresa': $( '#empresa' ).val(),
+//
+// 								'idproveedor': $( '#empresa' ).val(),
+//
+//         				'idagente': $( '#agente' ).val(),
+//
+// 								'idmoneda': $( '#moneda' ).val(),
+//
+// 								'fecha_cotización': $( '#fechareal' ).val(),
+//
+// 								'fecha_vencimiento': $( '#fechavencimiento' ).val(),
+//
+// 								'dias_vencimiento': $( '#diasvencimiento' ).val(),
+//
+//       			};
+//
+//       			$.ajax(
+// 						{
+//
+//         				type: 'POST',
+//
+//         				url: '/lineas/agregar_ajax/',
+//
+//         				data: datos,
+//
+//         				success: function( data )
+// 								{
+//
+//           					resultado = $.parseJSON( data );
+//
+//           					if ( resultado[ 'status' ] == 'error' )
+// 										{
+//
+//             						notifyError( '<strong>Hubo un error al intentar crear la cotización</strong>' );
+//
+//             						console.log( resultado[ 'data' ] );
+//
+//           					}
+// 										else if( resultado[ 'status' ] == 'ok' )
+// 										{
+//
+//             						notifySuccess( 'Se agregó correctamente' );
+//
+//             						document.getElementById( 'linea' ).value = '';
+//
+//             						document.getElementById( 'nombre_corto' ).value = '';
+//
+//           					}
+//
+//         				}
+//
+//       			});
+//
+//     		}
+//
+//   	});
+// });
 
 ///////////////////////// CREATE/EDIT ////////////////////////////////////
 $(function(){
@@ -26,75 +98,78 @@ $(function(){
 	// 	{notifyError('Compruebe los campos.');}
 	// });
 
-	$("#BtnEdit").click(function(){
-		var element = $('#company option:selected').html();
-		var target		= 'list.php?msg='+msg+params+'&element='+element;
-		askAndSubmit(target,role,'¿Desea modificar la cotizaci&oacute;n de <b>'+element+'</b>?','','QuotationForm');
-	});
-
-	$("#SaveAndSend").click(function(){
-		if($("#action").val()=='insert')
-			var action = 'crear';
-		else
-			var action = 'editar';
-		var element = $('#company option:selected').html();
-		var target		= 'list.php?msg='+msg+params+'&emailsent='+$('#receiver').val()+'&element='+element;
-		askAndSubmit(target,role,'¿Desea '+action+' la cotizaci&oacute;n de <b>'+element+'</b> y enviarla por email al destinatario <b>'+$("#receiver").val()+'</b>?','','EmailWindowForm');
-	});
+	// $("#BtnEdit").click(function(){
+	// 	var element = $('#company option:selected').html();
+	// 	var target		= 'list.php?msg='+msg+params+'&element='+element;
+	// 	askAndSubmit(target,role,'¿Desea modificar la cotizaci&oacute;n de <b>'+element+'</b>?','','QuotationForm');
+	// });
+  //
+	// $("#SaveAndSend").click(function(){
+	// 	if($("#action").val()=='insert')
+	// 		var action = 'crear';
+	// 	else
+	// 		var action = 'editar';
+	// 	var element = $('#company option:selected').html();
+	// 	var target		= 'list.php?msg='+msg+params+'&emailsent='+$('#receiver').val()+'&element='+element;
+	// 	askAndSubmit(target,role,'¿Desea '+action+' la cotizaci&oacute;n de <b>'+element+'</b> y enviarla por email al destinatario <b>'+$("#receiver").val()+'</b>?','','EmailWindowForm');
+	// });
 
 
 });
 
 
 ///////////////////////////// QUOTATION FUNCTIONS ///////////////////////////
-$(document).ready(function(){
-	addItem();
-	saveItem();
-	calculateRowPrice();
-	editItem();
-	changeDates();
-	countItems();
-	calculateTotalQuotationPrice();
-	calculateTotalQuotationQuantity();
-	deleteItem();
-	setDatePicker();
-	priceImputMask(1);
-	updateDeliveryDateFromDays();
-	updateAllDeliveryDates();
-	showHistoryWindow();
-	showHistoryButtons();
-	checkHistoryButtons();
-	updateExpireDate();
+$( document ).ready( function()
+{
+
+  	addItem();
+  	saveItem();
+  	calculateRowPrice();
+  	editItem();
+  	changeDates();
+  	countItems();
+  	calculateTotalQuotationPrice();
+  	calculateTotalQuotationQuantity();
+  	deleteItem();
+  	setDatePicker();
+  	priceImputMask(1);
+  	updateDeliveryDateFromDays();
+  	updateAllDeliveryDates();
+  	showHistoryWindow();
+  	showHistoryButtons();
+  	checkHistoryButtons();
+  	updateExpireDate();
+
 });
 
-function setDatePicker()
-{
-	if($(".delivery_date").length>0)
-	{
-		$.fn.datepicker.dates['es'] = {
-		    days: ["Domingo", "Lunes", "Martes", "Miércoles", "Juves", "Viernes", "Sábado"],
-		    daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
-		    daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-		    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-		    monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-		    today: "Hoy",
-		    clear: "Borrar",
-		    format: "dd/mm/yyyy",
-		    titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
-		    weekStart: 1
-		};
-		setADatePicker();
-	}
-}
-
-function setADatePicker()
-{
-	$(".delivery_date").datepicker({
-		autoclose:true,
-		todayHighlight: true,
-		language: 'es'
-	});
-}
+// function setDatePicker()
+// {
+// 	if($(".delivery_date").length>0)
+// 	{
+// 		$.fn.datepicker.dates['es'] = {
+// 		    days: ["Domingo", "Lunes", "Martes", "Miércoles", "Juves", "Viernes", "Sábado"],
+// 		    daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+// 		    daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+// 		    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+// 		    monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+// 		    today: "Hoy",
+// 		    clear: "Borrar",
+// 		    format: "dd/mm/yyyy",
+// 		    titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
+// 		    weekStart: 1
+// 		};
+// 		setADatePicker();
+// 	}
+// }
+//
+// function setADatePicker()
+// {
+// 	$(".delivery_date").datepicker({
+// 		autoclose:true,
+// 		todayHighlight: true,
+// 		language: 'es'
+// 	});
+// }
 
 function updateExpireDate()
 {

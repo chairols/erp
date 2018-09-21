@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Cotizaciones extends CI_Controller {
+class Cotizaciones_proveedores extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -13,27 +13,28 @@ class Cotizaciones extends CI_Controller {
         ));
         $this->load->model(array(
             'parametros_model',
-            'cotizaciones_model',
+            'cotizaciones_proveedores_model',
             'monedas_model',
+            'archivos_model',
         ));
 
         $session = $this->session->all_userdata();
-        $this->r_session->check($session);
+        // $this->r_session->check($session);
     }
 
-    public function agregar_proveedor() {
+    public function agregar() {
         $data['title'] = 'Agregar Cotización de Proveedor';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array(
-                                    '/assets/modulos/cotizaciones/js/agregar.js',
-                                    '/assets/modulos/cotizaciones/js/agregar_agente.js',
-                                    '/assets/modulos/cotizaciones/js/agregar_articulo.js',
-                                    '/assets/modulos/cotizaciones/js/agregar_dropzone.js',
-                                    '/assets/modulos/cotizaciones/js/agregar_trazabilidad.js',
-                                    '/assets/modulos/cotizaciones/js/agregar_email.js'
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar.js',
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_agente.js',
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_articulo.js',
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_dropzone.js',
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_trazabilidad.js',
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_email.js'
                                   );
-        $data['view'] =              'cotizaciones/agregar_proveedor';
+        $data['view'] =              'cotizaciones_proveedores/agregar';
 
         $data['fecha_vencimiento'] = strtotime("+10 day", strtotime(date('Y-m-d')));
         $data['monedas'] = $this->monedas_model->gets();
@@ -41,12 +42,12 @@ class Cotizaciones extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
-    public function proveedores_nacionales($pagina = 0) {
+    public function nacionales($pagina = 0) {
         $data['title'] = 'Listado de Cotizaciones de Proveedores Nacionales';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        $data['view'] = 'cotizaciones/proveedores_nacionales';
+        $data['view'] = 'cotizaciones_proveedores/nacionales';
 
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
@@ -59,9 +60,9 @@ class Cotizaciones extends CI_Controller {
         /*
          * inicio paginador
          */
-        $total_rows = $this->cotizaciones_model->get_cantidad_where($where);
+        $total_rows = $this->cotizaciones_proveedores_model->get_cantidad_where($where);
         $config['reuse_query_string'] = TRUE;
-        $config['base_url'] = '/cotizaciones/proveedores_nacionales/';
+        $config['base_url'] = '/cotizaciones_proveedores/nacionales/';
         $config['total_rows'] = $total_rows;
         $config['per_page'] = $per_page;
         $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
@@ -85,24 +86,24 @@ class Cotizaciones extends CI_Controller {
          * fin paginador
          */
 
-        $data['cotizaciones'] = $this->cotizaciones_model->get_cantidad_where_limit($where, $per_page, $pagina);
+        $data['cotizaciones'] = $this->cotizaciones_proveedores_model->get_cantidad_where_limit($where, $per_page, $pagina);
         foreach($data['cotizaciones'] as $key => $value) {
             $where = array(
                 'idcotizacion' => $value['idcotizacion']
             );
-            $data['cotizaciones'][$key]['items'] = $this->cotizaciones_model->gets_items_where($where);
+            $data['cotizaciones'][$key]['items'] = $this->cotizaciones_proveedores_model->gets_items_where($where);
         }
 
 
         $this->load->view('layout/app', $data);
     }
 
-    public function proveedores_internacionales($pagina = 0) {
+    public function internacionales($pagina = 0) {
         $data['title'] = 'Listado de Cotizaciones de Proveedores Internacionales';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
-        $data['view'] = 'cotizaciones/proveedores_internacionales';
+        $data['view'] = 'cotizaciones_proveedores/internacionales';
 
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
@@ -115,9 +116,9 @@ class Cotizaciones extends CI_Controller {
         /*
          * inicio paginador
          */
-        $total_rows = $this->cotizaciones_model->get_cantidad_where($where);
+        $total_rows = $this->cotizaciones_proveedores_model->get_cantidad_where($where);
         $config['reuse_query_string'] = TRUE;
-        $config['base_url'] = '/cotizaciones/proveedores_internacionales/';
+        $config['base_url'] = '/cotizaciones_proveedores/internacionales/';
         $config['total_rows'] = $total_rows;
         $config['per_page'] = $per_page;
         $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
@@ -141,16 +142,45 @@ class Cotizaciones extends CI_Controller {
          * fin paginador
          */
 
-        $data['cotizaciones'] = $this->cotizaciones_model->get_cantidad_where_limit($where, $per_page, $pagina);
+        $data['cotizaciones'] = $this->cotizaciones_proveedores_model->get_cantidad_where_limit($where, $per_page, $pagina);
         foreach($data['cotizaciones'] as $key => $value) {
             $where = array(
                 'idcotizacion' => $value['idcotizacion']
             );
-            $data['cotizaciones'][$key]['items'] = $this->cotizaciones_model->gets_items_where($where);
+            $data['cotizaciones'][$key]['items'] = $this->cotizaciones_proveedores_model->gets_items_where($where);
         }
 
 
         $this->load->view('layout/app', $data);
+    }
+
+    public function subir_archivo()
+    {
+
+        $archivo = $this->archivos_model->subir_archivo( 'archivo', 'assets/modulos/cotizaciones_proveedores/archivos/' );
+
+        echo json_encode( $archivo );
+
+    }
+
+    public function eliminar_archivo()
+    {
+
+        $datos = $this->input->post();
+
+        if( $this->archivos_model->eliminar_archivo( $datos[ 'idarchivo' ] ) )
+        {
+
+            $this->cotizaciones_proveedores_model->eliminar_archivo( $datos[ 'idarchivo' ] );
+
+            echo json_encode( array( 'borrado' => true ) );
+
+        }else{
+
+            echo json_encode( array( 'borrado' => false ) );
+
+        }
+
     }
 
 }

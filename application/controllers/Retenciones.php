@@ -10,8 +10,7 @@ class Retenciones extends CI_Controller {
             'session',
             'r_session',
             'form_validation',
-            'pagination',
-            'tcpdf/tcpdf'
+            'pagination'
         ));
         $this->load->model(array(
             'provincias_model',
@@ -342,6 +341,9 @@ class Retenciones extends CI_Controller {
         if ($idretencion == null) {
             redirect('/retenciones/listar/', 'refresh');
         }
+        $this->load->library(array(
+            'tcpdf/tcpdf'
+        ));
         // Empresa emisora
         $data['parametro'] = $this->parametros_model->get_parametros_empresa();
         $where = array(

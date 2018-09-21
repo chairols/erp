@@ -45,7 +45,7 @@
             <td style="width: 20%; text-align: right"><?=$retencion['alicuota']?> %</td>
             <td style="width: 20%; text-align: right"><?=number_format(round((($item['base_imponible']*$retencion['alicuota'])/100), 2), 2)?></td>
             <?php $total_base_imponible += $item['base_imponible']; ?>    
-            <?php $total += number_format(round((($item['base_imponible']*$retencion['alicuota'])/100), 2), 2); ?>
+            <?php $total += round((($item['base_imponible']*$retencion['alicuota'])/100), 2); ?>
         </tr>
         <?php } ?>
         <hr>

@@ -52,9 +52,9 @@
         <tr>
             <td style="width: 20%; text-align: right"></td>
             <td style="width: 20%; text-align: right"><strong>Total Base Imponible:</strong></td>
-            <td style="width: 20%; text-align: right"><strong><?=$total_base_imponible?></strong></td>
+            <td style="width: 20%; text-align: right"><strong><?= number_format($total_base_imponible, 2)?></strong></td>
             <td style="width: 20%; text-align: right"><strong>Total Retenido:</strong></td>
-            <td style="width: 20%; text-align: right"><strong><?=$total?></strong></td>
+            <td style="width: 20%; text-align: right"><strong><?= number_format($total, 2)?></strong></td>
         </tr>
         <hr>
     </table>

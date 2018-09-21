@@ -10,7 +10,8 @@ class Retenciones extends CI_Controller {
             'session',
             'r_session',
             'form_validation',
-            'pagination'
+            'pagination',
+            'tcpdf/tcpdf'
         ));
         $this->load->model(array(
             'provincias_model',
@@ -258,8 +259,8 @@ class Retenciones extends CI_Controller {
 
     public function borrar_item() {
         $this->form_validation->set_rules('idretencion_item', 'ID de Item de la Retención', 'required|integer');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
@@ -288,7 +289,7 @@ class Retenciones extends CI_Controller {
             }
         }
     }
-    
+
     public function listar($pagina = 0) {
         $data['title'] = 'Listado de Retenciones';
         $data['session'] = $this->session->all_userdata();
@@ -333,10 +334,86 @@ class Retenciones extends CI_Controller {
          */
 
         $data['retenciones'] = $this->retenciones_model->gets_where_limit($where, $per_page, $pagina);
-        
+
         $this->load->view('layout/app', $data);
     }
-    
+
+    public function pdf($idretencion = null) {
+        if ($idretencion == null) {
+            redirect('/retenciones/listar/', 'refresh');
+        }
+        // Empresa emisora
+        $data['parametro'] = $this->parametros_model->get_parametros_empresa();
+        $where = array(
+            'idprovincia' => $data['parametro']['idprovincia']
+        );
+        $data['parametro']['provincia'] = $this->provincias_model->get_where($where);
+        $where = array(
+            'idtipo_responsable' => $data['parametro']['idtipo_responsable']
+        );
+        $data['parametro']['iva'] = $this->tipos_responsables_model->get_where($where);
+
+        // Parámetros de sistema
+        $where = array(
+            'identificador' => 'firma_presidente'
+        );
+        $data['firma'] = $this->parametros_model->get_where($where);
+        
+        // Datos de Retención
+        $where = array(
+            'idretencion' => $idretencion,
+            'estado' => 'A'
+        );
+        $data['retencion'] = $this->retenciones_model->get_where($where);
+        $data['retencion']['fecha_formateada'] = $this->formatear_fecha_para_mostrar($data['retencion']['fecha']);
+        
+        $where = array(
+            'idjurisdiccion_afip' => $data['retencion']['idjurisdiccion_afip']
+        );
+        $data['jurisdiccion'] = $this->provincias_model->get_where($where);
+
+        $where = array(
+            'idretencion' => $data['retencion']['idretencion'],
+            'estado' => 'A'
+        );
+        $data['retencion']['items'] = $this->retenciones_model->gets_items_where($where);
+        foreach($data['retencion']['items'] as $key => $value) {
+            $data['retencion']['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+        }
+        
+        // create new PDF document
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('ROLLER SERVICE S.A.');
+        $pdf->SetTitle('Retención ' . str_pad($data['retencion']['punto'], 4, '0', STR_PAD_LEFT) . '-' . str_pad($data['retencion']['numero'], 8, '0', STR_PAD_LEFT));
+        //$pdf->SetSubject('TCPDF Tutorial');
+        //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        // set default header data
+        $pdf->SetHeaderData('', '150', '', 'ORIGINAL');
+
+        // set header and footer fonts
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        
+        
+        //$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+
+        $pdf->AddPage();
+        
+        $html = $this->load->view('retenciones/pdf', $data);
+        
+        // output the HTML content
+        $pdf->writeHTML($html->output->final_output, true, false, true, false, '');
+        
+        //$pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
+
+
+        $pdf->Output('Retencion IIBB ' . str_pad($data['retencion']['punto'], 4, '0', STR_PAD_LEFT) . '-' . str_pad($data['retencion']['numero'], 8, '0', STR_PAD_LEFT) . '.pdf', 'I');
+    }
+
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);

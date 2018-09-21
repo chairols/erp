@@ -122,7 +122,7 @@ class Retenciones extends CI_Controller {
 
     public function modificar($idretencion = null) {
         if ($idretencion == null) {
-            redirect('/retenciones/listar', 'refresh');
+            redirect('/retenciones/listar/', 'refresh');
         }
         $data['title'] = 'Modificar Retención';
         $data['session'] = $this->session->all_userdata();

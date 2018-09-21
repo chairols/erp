@@ -317,5 +317,29 @@ class Usuarios extends CI_Controller {
             $this->usuarios_model->update($datos, $session['SID']);
         }
     }
+    
+    public function modificar($idusuario = null) {
+        if ($idusuario == null) {
+            redirect('/usuarios/listar/', 'refresh');
+        }
+        $data['title'] = 'Modificar Usuario';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/usuarios/js/modificar.js'
+        );
+        $data['view'] = 'usuarios/modificar';
+
+        $where = array(
+            'idusuario' => $idusuario
+        );
+        $data['usuario'] = $this->usuarios_model->get_where($where);
+        
+        $data['perfil_usuario'] = $this->usuarios_model->get_perfil($data['usuario']['idusuario']);
+        
+        $data['perfiles'] = $this->perfiles_model->gets();
+
+        $this->load->view('layout/app', $data);
+    }
 }
 ?>

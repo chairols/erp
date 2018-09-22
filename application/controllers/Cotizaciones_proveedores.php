@@ -22,7 +22,8 @@ class Cotizaciones_proveedores extends CI_Controller {
         // $this->r_session->check($session);
     }
 
-    public function agregar() {
+    public function agregar()
+    {
         $data['title'] = 'Agregar Cotización de Proveedor';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
@@ -40,6 +41,19 @@ class Cotizaciones_proveedores extends CI_Controller {
         $data['monedas'] = $this->monedas_model->gets();
 
         $this->load->view('layout/app', $data);
+    }
+
+    public function agregar_ajax()
+    {
+
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required');
+        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required');
+        $this->form_validation->set_rules('tipo', 'Tipo de Parámetro', 'required');
+
+        $this->cotizaciones_proveedores_model->set( $datos );
+
     }
 
     public function nacionales($pagina = 0) {

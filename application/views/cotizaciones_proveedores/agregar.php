@@ -1,5 +1,3 @@
-<?php $this->view('/cotizaciones/ventanas/agente'); ?>
-
 <div class="innerContainer main_form">
 
     <form id="Crear" enctype="multipart/form-data" method="POST" confirmacion="¿Desea crear una nueva cotización?" error="Verifique que el proveedor haya sido seleccionado.">
@@ -8,33 +6,17 @@
 
         <div class="row form-group inline-form-custom">
 
-            <!-- Empresa -->
-            <div class="col-xs-12 col-sm-8">
+            <!-- Proveedor -->
+            <div class="col-xs-12 col-sm-12">
 
                 <h4 class="subTitleB"><i class="fa fa-ship"></i> Proveedor</h4>
 
-                <input type="text" id="TextAutoCompleteempresa" name="TextAutoCompleteempresa" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="Empresas" actionauto="gets_empresas_ajax" varsauto="proveedor:=Y" iconauto="ship">
+                <input type="text" id="TextAutoCompleteidproveedor" name="TextAutoCompleteidproveedor" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="Proveedores" actionauto="gets_proveedores_ajax" iconauto="ship">
 
-                <input type="hidden" id="empresa" name="empresa" value="">
-
-            </div>
-            <!-- /Empresa -->
-
-            <!-- Contacto -->
-            <div class="col-xs-12 col-sm-4">
-
-                <h4 class="subTitleB"><i class="fa fa-male"></i> Contacto</h4>
-
-                <div id="agent-wrapper txC" class="mar0 pad0">
-
-                    <input type="hidden" name="agente" id="agente" value="">
-
-                    <strong><button type="button" class="btn btn-lg btn-warning mar0" id="MostrarAgenteBtn"><i class="fa fa-times"></i> Seleccionar Contacto</button></strong>
-
-                </div>
+                <input type="hidden" id="idproveedor" name="idproveedor" value="">
 
             </div>
-            <!-- /Contacto -->
+            <!-- /Proveedor -->
 
         </div>
 
@@ -47,7 +29,7 @@
 
                 <h4 class="subTitleB"><i class="fa fa-money"></i> Moneda</h4>
 
-                <select class="form-control chosenSelect" name="moneda" id="moneda" validateEmpty="Seleccione una Moneda" data-placeholder="Seleccione una Moneda">
+                <select class="form-control chosenSelect" name="idmoneda" id="idmoneda" validateEmpty="Seleccione una Moneda" data-placeholder="Seleccione una Moneda">
 
                     <?php
 
@@ -73,7 +55,7 @@
 
                 <h4 class="subTitleB"><i class="fa fa-calendar"></i> Fecha de Cotizaci&oacute;n</h4>
 
-                <input type="text" name="fechareal" id="fechareal" value="<?= date( 'd/m/Y' ) ?>" class="form-control delivery_date" validateEmpty="Seleccione una Fecha" placeholder="Seleccione una fecha">
+                <input type="text" name="fechareal" id="fechareal" value="<?= date( 'd/m/Y' ) ?>" class="form-control datePicker" validateEmpty="Seleccione una Fecha" placeholder="Seleccione una fecha">
 
             </div>
             <!-- /Fecha -->
@@ -118,9 +100,11 @@
         </div>
         <!-- /Notas -->
 
+        <br>
+
         <h4 class="subTitleB"><i class="fa fa-file"></i> Archivos Adjuntos</h4>
 
-        <div id="DropzoneCotizacion" class="dropzone txC" subir="/cotizaciones/subir_archivo/" eliminar="/cotizaciones/eliminar_archivo/">
+        <div id="DropzoneCotizacion" class="dropzone txC" subir="/cotizaciones_proveedores/subir_archivo/" eliminar="/cotizaciones_proveedores/eliminar_archivo/">
 
         </div>
 

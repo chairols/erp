@@ -100,7 +100,22 @@ class Retenciones extends CI_Controller {
                 'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
                 'alicuota' => 0
             );
-
+            
+            if($this->input->post('idjurisdiccion') == "914") {  // Si la retención es de Misiones
+                if($proveedor['idprovincia'] == "14") {  // Si el proveedor es de misiones
+                    $where = array(
+                        'identificador' => '914_misiones'
+                    );
+                    $valor = $this->parametros_model->get_where($where);
+                    $set['alicuota'] = $valor['valor_sistema'];
+                } else {   // Si el proveedor no es misiones
+                    $where = array(
+                        'identificador' => '914_no_misiones'
+                    );
+                    $valor = $this->parametros_model->get_where($where);
+                    $set['alicuota'] = $valor['valor_sistema'];
+                }
+            }
 
 
             $id = $this->retenciones_model->set($set);

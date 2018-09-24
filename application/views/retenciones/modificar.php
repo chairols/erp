@@ -102,7 +102,16 @@
     </div>
     <div class="row">
         <div class="col-xs-12 table-responsive" id="body-tabla-items">
-            
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="/retenciones/pdf/<?= $retencion['idretencion'] ?>/" target="_blank">
+                <button class="btn btn-primary pull-right" type="button" style="margin-right: 5px;">
+                    <i class="fa fa-download"></i> Generar PDF
+                </button>
+            </a>
         </div>
     </div>
 </div>

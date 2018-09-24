@@ -1,6 +1,6 @@
 <div class="innerContainer main_form">
 
-    <form id="Crear" enctype="multipart/form-data" method="POST" confirmacion="¿Desea crear una nueva cotización?" error="Verifique que el proveedor haya sido seleccionado.">
+    <form id="Crear" enctype="multipart/form-data" method="POST">
 
         <input type="hidden" name="creation_date" id="creation_date" value="<?=date("Y-m-d")?>">
 
@@ -11,9 +11,9 @@
 
                 <h4 class="subTitleB"><i class="fa fa-ship"></i> Proveedor</h4>
 
-                <input type="text" id="TextAutoCompleteidproveedor" name="TextAutoCompleteidproveedor" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="Proveedores" actionauto="gets_proveedores_ajax" iconauto="ship">
+                <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="Proveedores" actionauto="gets_proveedores_ajax" iconauto="ship">
 
-                <input type="hidden" id="idproveedor" name="idproveedor" value="">
+                <input type="hidden" id="proveedor" name="proveedor" value="">
 
             </div>
             <!-- /Proveedor -->
@@ -112,7 +112,7 @@
 
         <div class="row txC">
 
-            <button type="submit" class="btn btn-success btnGreen" id="BotonCrear"><i class="fa fa-plus"></i> Crear Cotizaci&oacute;n</button>
+            <button type="button" class="btn btn-success btnGreen" id="BotonCrear"><i class="fa fa-plus"></i> Crear Cotizaci&oacute;n</button>
 
             <button type="button" class="btn btn-error btnRed" id="BtnCancel"><i class="fa fa-times"></i> Cancelar</button>
 

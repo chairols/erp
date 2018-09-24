@@ -1,3 +1,130 @@
+/*
+|------------------------------------------------------------------------------
+| FUNCIONES ON READY
+|------------------------------------------------------------------------------
+*/
+
+$( document ).ready( function()
+{
+
+    CambiarFechaVencimiento();
+    CrearCotizacion();
+
+});
+
+
+/*
+|------------------------------------------------------------------------------
+| FUNCIONES DE COTIZACIONES
+|------------------------------------------------------------------------------
+*/
+
+function CambiarFechaVencimiento()
+{
+
+  	$( "#diasvencimiento" ).change( function()
+    {
+
+    		if( parseInt( $( this ).val() ) > -1 )
+    		{
+
+            var FechaCreacion = $( "#fechareal" ).val().split( '/' ).reverse().join( '-' );
+
+            var FechaVencimiento = AddDaysToDate( $( this ).val(), FechaCreacion );
+
+      			$( "#fechavencimiento" ).val( FechaVencimiento );
+
+    		}
+
+  	});
+
+}
+
+function CrearCotizacion()
+{
+
+    $( '#BotonCrear' ).click( function()
+    {
+
+        if( alertify.confirm( 'Se creará una cotización de <strong>' + $( '#TextAutoCompleteempresa' ).val() + '</strong><br><strong>¿Desea continuar?</strong>', function( e )
+    		{
+
+        		if( e )
+        		{
+
+                var archivos = '';
+                for( id = 1; id <= $( '#contadorDropzoneCotizacion' ).val(); id++ )
+                {
+
+                    if( archivos && archivos != '' )
+                    {
+
+                        archivos = archivos + ',' + $( '#archivo_DropzoneCotizacion_' + id ).attr( 'idarchivo' );
+
+                    }else{
+
+                        archivos = $( '#archivo_DropzoneCotizacion_' + id ).attr( 'idarchivo' );
+
+                    }
+
+                }
+
+    						var datos =
+    						{
+
+            				'idproveedor': $( '#proveedor' ).val(),
+
+    								'idmoneda': $( '#moneda' ).val(),
+
+    								'fecha_cotización': $( '#fechareal' ).val(),
+
+    								'fecha_vencimiento': $( '#fechavencimiento' ).val(),
+
+    								'dias_vencimiento': $( '#diasvencimiento' ).val(),
+
+                    'notas': $( '#notas' ).val(),
+
+                    'archivos': archivos;
+
+          			};
+
+          			$.ajax(
+    						{
+
+            				type: 'POST',
+
+            				url: '/cotizaciones_proveedores/agregar_ajax/',
+
+            				data: datos,
+
+            				success: function( respuesta )
+    								{
+
+              					resultado = $.parseJSON( respuesta );
+
+              					notifySuccess( '<strong>La contiazción ha sido creada correctamente.</strong>' );
+
+            				},
+
+                    error: function( respuesta )
+                    {
+
+                        console.log( respuesta );
+
+                        notifyError( '<strong>Hubo un error al intentar crear la cotización.</strong>' );
+
+                    }
+
+          			});
+
+        		}
+
+      	});
+    });
+
+}
+
+
 ///////////////////////// ALERTS ////////////////////////////////////
 // $(document).ready(function(){
 // 	if(get['msg']=='insert')
@@ -138,7 +265,7 @@ $( document ).ready( function()
   	// showHistoryWindow();
   	// showHistoryButtons();
   	// checkHistoryButtons();
-  	CambiarFechaVencimiento();
+  	// CambiarFechaVencimiento();
 
 });
 

@@ -1679,19 +1679,34 @@ var n = this,
  ///(123456789.12345).formatMoney(2);
 
  ////////////////////////////// ADD DAYS TO A DATE //////////////////////////////////////////////
-function AddDaysToDate(days,adate)
+function AddDaysToDate( days, adate )
 {
-  if(typeof(adate)==="undefined")
-    adate = new Date();
-  else
-    adate = new Date(adate);
-  var finaldate = adate.getTime()+parseInt(days)*24*60*60*1000;
-  finaldate = new Date(finaldate);
-  var day = finaldate.getUTCDate()
-  if(day<10) day = "0"+day;
-  var month = finaldate.getUTCMonth()+1;
-  if(month<10) month = "0"+month;
-  return day+"/"+month+"/"+finaldate.getUTCFullYear();
+
+    if( typeof( adate ) === "undefined" )
+    {
+
+      adate = new Date();
+
+    }else{
+
+      adate = new Date( adate );
+
+    }
+
+    var finaldate = adate.getTime() + parseInt( days ) * 24 * 60 * 60 * 1000;
+
+    finaldate = new Date( finaldate );
+
+    var day = finaldate.getUTCDate()
+
+    if( day < 10 ) day = "0" + day;
+
+    var month = finaldate.getUTCMonth() + 1;
+
+    if( month < 10 ) month = "0" + month;
+
+    return day + "/" + month + "/" + finaldate.getUTCFullYear();
+
 }
 /////////////////////////// WINDOWS /////////////////////////////
 function closeWindow()

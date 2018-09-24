@@ -1,7 +1,7 @@
 <div class="col-md-12">
     <div class="box">
         <div class="box-header">
-
+            <input type="hidden" id="idusuario" value="<?=$usuario['idusuario']?>">
         </div>
         <div class="box-body no-padding">
             <div class="form-horizontal">
@@ -15,12 +15,6 @@
                     <label class="control-label col-md-3">Contraseña</label>
                     <div class="col-md-6">
                         <input type="password" maxlength="40" class="form-control" id="password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-3">Repetir Contraseña</label>
-                    <div class="col-md-6">
-                        <input type="password" maxlength="40" class="form-control" id="password2">
                     </div>
                 </div>
                 <div class="form-group">

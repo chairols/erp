@@ -298,7 +298,7 @@ class Usuarios extends CI_Controller {
     public function actualizar_foto() {
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
-        
+
         $config['upload_path'] = './upload/usuarios/perfil/';
         $config['allowed_types'] = 'gif|jpg|png';
         $config['max_size'] = '100';
@@ -312,13 +312,15 @@ class Usuarios extends CI_Controller {
         } else {
             $data = $this->upload->data();
             $datos = array(
-                'imagen' => '/upload/usuarios/perfil/'.$data['file_name']
+                'imagen' => '/upload/usuarios/perfil/' . $data['file_name']
             );
             $this->usuarios_model->update($datos, $session['SID']);
         }
     }
-    
+
     public function modificar($idusuario = null) {
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
         if ($idusuario == null) {
             redirect('/usuarios/listar/', 'refresh');
         }
@@ -334,12 +336,80 @@ class Usuarios extends CI_Controller {
             'idusuario' => $idusuario
         );
         $data['usuario'] = $this->usuarios_model->get_where($where);
-        
+
         $data['perfil_usuario'] = $this->usuarios_model->get_perfil($data['usuario']['idusuario']);
-        
+
         $data['perfiles'] = $this->perfiles_model->gets();
 
         $this->load->view('layout/app', $data);
     }
+
+    public function modificar_ajax() {
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
+
+        $this->form_validation->set_rules('idusuario', 'ID del Usuario', 'required|integer');
+        $this->form_validation->set_rules('usuario', 'Usuario', 'required');
+        if (strlen($this->input->post('password'))) {
+            $this->form_validation->set_rules('password', 'Contraseña', 'required');
+        }
+        $this->form_validation->set_rules('nombre', 'Nombre', 'required');
+        $this->form_validation->set_rules('apellido', 'Apellido', 'required');
+        $this->form_validation->set_rules('email', 'E-mail', 'required|valid_email');
+        $this->form_validation->set_rules('idperfil', 'Perfil', 'required|integer');
+        
+        
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'usuario' => $this->input->post('usuario'),
+                'nombre' => $this->input->post('nombre'),
+                'apellido' => $this->input->post('apellido'),
+                'email' => $this->input->post('email')
+            );
+            if (strlen($this->input->post('password'))) {
+                $datos['password'] = sha1($this->input->post('password'));
+            }
+            $flag = 0;
+            $resultado = $this->usuarios_model->update($datos, $this->input->post('idusuario'));
+            
+            if ($resultado) {
+                $flag = 1;
+            }
+
+            $datos = array(
+                'idperfil' => $this->input->post('idperfil')
+            );
+            $where = array(
+                'idusuario' => $this->input->post('idusuario')
+            );
+            $resultado = $this->usuarios_model->update_perfil($datos, $where);
+            
+            if ($resultado) {
+                $flag = 1;
+            }
+
+            if ($flag) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'El perfil se actualizó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el perfil'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
 }
+
 ?>

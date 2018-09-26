@@ -24,7 +24,5 @@ function cargar_archivos() {
 
 
 $(document).ready(function() {
-    
-    
     cargar_archivos();
 });

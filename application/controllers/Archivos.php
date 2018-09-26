@@ -8,7 +8,8 @@ class Archivos extends CI_Controller {
         parent::__construct();
         $this->load->library(array(
             'session',
-            'r_session'
+            'r_session',
+            'form_validation'
         ));
         $this->load->model(array(
             'parametros_model'
@@ -79,6 +80,32 @@ class Archivos extends CI_Controller {
         }
     }
 
+    public function extraer() {
+        $this->form_validation->set_rules('archivo', 'Archivo', 'required');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'identificador' => 'ruta_upload',
+                'estado' => 'A'
+            );
+            $ruta_upload = $this->parametros_model->get_where($where);
+            
+            $ruta_archivo = getcwd().$ruta_upload['valor_sistema'].$this->input->post('archivo');
+            
+            $res = shell_exec("unzip ".$ruta_archivo);
+            
+            var_dump($res);
+        }
+        
+        
+        
+    }
 }
 
 ?>

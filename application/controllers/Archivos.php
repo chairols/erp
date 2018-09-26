@@ -25,37 +25,60 @@ class Archivos extends CI_Controller {
             '/assets/modulos/archivos/js/administrar.js'
         );
         $data['view'] = 'archivos/administrar';
-        
+
         $data['archivos'] = opendir("./upload/importar/");
-        
+
         $this->load->view('layout/app', $data);
     }
-    
+
     public function listar_archivos() {
-        
+
         $where = array(
             'identificador' => 'ruta_upload',
             'estado' => 'A'
         );
         $ruta_upload = $this->parametros_model->get_where($where);
-        
-        $data['archivos'] = opendir(".".$ruta_upload['valor_sistema']);
-        
+
+        $data['archivos'] = opendir("." . $ruta_upload['valor_sistema']);
+
         $this->load->view('archivos/listar_archivos', $data);
-        
     }
-    
+
     public function borrar_archivo_ajax() {
-        
+
         $where = array(
             'identificador' => 'ruta_upload',
             'estado' => 'A'
         );
         $ruta_upload = $this->parametros_model->get_where($where);
-        
-        unlink(".".$ruta_upload['valor_sistema'].$this->input->post('archivo'));
-        
+
+        unlink("." . $ruta_upload['valor_sistema'] . $this->input->post('archivo'));
     }
+
+    public function agregar_ajax() {
+        $where = array(
+            'identificador' => 'ruta_upload',
+            'estado' => 'A'
+        );
+        $ruta_upload = $this->parametros_model->get_where($where);
+
+        $config['upload_path'] = "." . $ruta_upload['valor_sistema'];
+        $config['allowed_types'] = '*';
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('archivo')) {
+            $error = array('error' => $this->upload->display_errors());
+            
+            show_404();
+        } else {
+            $data = $this->upload->data();
+            /* $datos = array(
+              'imagen' => '/upload/usuarios/perfil/' . $data['file_name']
+              );
+              $this->usuarios_model->update($datos, $session['SID']); */
+            var_dump($data);
+        }
+    }
+
 }
 
 ?>

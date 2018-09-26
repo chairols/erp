@@ -12,20 +12,27 @@
                 <span class="text"><?= $archivo ?></span>
                 <div class="tools">
                     <?php if ($flag) { ?>
-                        <i class="fa fa-file-zip-o"></i>
-        <?php } ?>
+                    <i valor="<?= $archivo ?>" class="fa fa-file-zip-o extraer"></i>
+                    <?php } ?>
                     <i class="fa fa-edit"></i>
                     <i class="fa fa-trash-o borrar_archivo" valor="<?= $archivo ?>" class="fa fa-trash-o"></i>
                 </div>
             </li>
-    <?php }
-}
-?>
+        <?php
+        }
+    }
+    ?>
 </ul>
 
 <script type="text/javascript">
+    $(".extraer").click(function() {
+        datos = {
+            'archivo': this.attributes.valor.value
+        };
+        
+    });
+
     $(".borrar_archivo").click(function () {
-        console.log(this.attributes.valor.value);
 
         datos = {
             'archivo': this.attributes.valor.value

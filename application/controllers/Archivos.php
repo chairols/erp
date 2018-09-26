@@ -98,7 +98,7 @@ class Archivos extends CI_Controller {
             
             $ruta_archivo = getcwd().$ruta_upload['valor_sistema'].$this->input->post('archivo');
             
-            $res = shell_exec("unzip ".$ruta_archivo);
+            $res = shell_exec("/usr/bin/unzip ".$ruta_archivo);
             
             var_dump($res);
         }

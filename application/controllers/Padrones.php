@@ -126,6 +126,37 @@ class Padrones extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
+    public function borrar_ajax() {
+        $this->form_validation->set_rules('idpadron', 'ID de Padrón', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'idpadron' => $this->input->post('idpadron')
+            );
+            $resultado = $this->padrones_model->borrado_fisico_padron($where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se eliminó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Ocurrió un error inesperado'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
     private function jurisdiccion_901($archivo) {  //  CABA
         $where = array(
             'identificador' => 'ruta_upload',
@@ -134,7 +165,7 @@ class Padrones extends CI_Controller {
         $ruta_upload = $this->parametros_model->get_where($where);
 
         $url = substr($ruta_upload['valor_sistema'], 1); // Quito el primer caracter
-        
+
         /*
          *  Código para guardar en padron
          */
@@ -152,7 +183,7 @@ class Padrones extends CI_Controller {
         /*
          *  Fin de código para guardar en padrón
          */
-        
+
         /*
          *  Cógido para guardar items de padrón
          */
@@ -203,7 +234,7 @@ class Padrones extends CI_Controller {
 
         return $aux;
     }
-    
+
     private function formatear_fecha_para_mostrar($fecha) {
         $aux = '';
         $aux .= substr($fecha, 8, 2);

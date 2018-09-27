@@ -84,7 +84,16 @@ class Padrones_model extends CI_Model {
         $this->db->where($where);
         
         return $this->db->count_all_results();
-        //return $query->row_array();
+    }
+    
+    /*
+     *  Padrones/borrar_ajax
+     */
+    public function borrado_fisico_padron($where) {
+        $this->db->delete('padrones_items', $where);
+        $this->db->delete('padrones', $where);
+        
+        return $this->db->affected_rows();
     }
 }
 

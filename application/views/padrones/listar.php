@@ -24,7 +24,9 @@
                     <td><?=$padron['fecha_desde_formateada']?></td>
                     <td><?=$padron['fecha_hasta_formateada']?></td>
                     <td><?= number_format($padron['cantidad'], 0)?></td>
-                    <td></td>
+                    <td>
+                        
+                    </td>
                 </tr>
                 <?php } ?>
             </tbody>

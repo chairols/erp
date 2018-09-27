@@ -276,6 +276,8 @@ class Retenciones extends CI_Controller {
     }
 
     public function agregar_item_ajax() {
+        $session = $this->session->all_userdata();
+        
         $this->form_validation->set_rules('idretencion', 'ID de Retención', 'required|integer');
         $this->form_validation->set_rules('punto_de_venta', 'Punto de Venta', 'required|integer');
         $this->form_validation->set_rules('comprobante', 'Comprobante', 'required|integer');
@@ -298,6 +300,19 @@ class Retenciones extends CI_Controller {
             );
             $resultado = $this->retenciones_model->set_item($datos);
             if ($resultado) {
+                $log = array(
+                    'tabla' => 'retenciones',
+                    'idtabla' => $datos['idretencion'],
+                    'texto' => "<h2><strong>Se agreg&oacute; el comprobante : ".str_pad($datos['punto_de_venta'], 4, '0', STR_PAD_LEFT)."-". str_pad($datos['comprobante'], 8, '0', STR_PAD_LEFT)."</strong></h2>
+
+<p><strong>Punto del comprobante: </strong>".str_pad($datos['punto_de_venta'], 4, '0', STR_PAD_LEFT)."<br />
+<strong>N&uacute;mero del comprobante: </strong>".str_pad($datos['comprobante'], 8, '0', STR_PAD_LEFT)."<br />
+<strong>Fecha: </strong>".$this->input->post('fecha')."<br />
+<strong>Base Imponible: </strong>".$datos['base_imponible']."</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+                $this->log_model->set($log);
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se agregó el comprobante.'

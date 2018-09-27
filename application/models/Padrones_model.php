@@ -16,7 +16,14 @@ class Padrones_model extends CI_Model {
         $this->db->insert('padrones', $datos);
         return $this->db->insert_id();
     }
-
+    
+    /*
+     *  Retenciones/agregar_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('padrones', $where);
+        return $query->row_array();
+    }
 }
 
 ?>

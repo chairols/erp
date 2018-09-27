@@ -100,8 +100,8 @@ class Padrones extends CI_Controller {
                 'fecha_desde' => $this->formatear_fecha($array[1]),
                 'fecha_hasta' => $this->formatear_fecha($array[2]),
                 'cuit' => $array[3],
-                'percepcion' => $array[7],
-                'retencion' => $array[8],
+                'percepcion' => str_replace(",", ".", $array[7]),
+                'retencion' => str_replace(",", ".", $array[8]),
                 'razonsocial' => trim($array[11])
             );
             

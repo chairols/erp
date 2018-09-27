@@ -19,7 +19,8 @@ class Retenciones extends CI_Controller {
             'parametros_model',
             'retenciones_model',
             'tipos_responsables_model',
-            'padrones_model'
+            'padrones_model',
+            'log_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -41,6 +42,8 @@ class Retenciones extends CI_Controller {
     }
 
     public function agregar_ajax() {
+        $session = $this->session->all_userdata();
+        
         $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|integer');
         $this->form_validation->set_rules('idjurisdiccion', 'Jurisdicción', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');
@@ -101,9 +104,9 @@ class Retenciones extends CI_Controller {
                 'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
                 'alicuota' => 0
             );
-            
-            if($this->input->post('idjurisdiccion') == "914") {  // Si la retención es de Misiones
-                if($proveedor['idprovincia'] == "14") {  // Si el proveedor es de misiones
+
+            if ($this->input->post('idjurisdiccion') == "914") {  // Si la retención es de Misiones
+                if ($proveedor['idprovincia'] == "14") {  // Si el proveedor es de misiones
                     $where = array(
                         'identificador' => '914_misiones'
                     );
@@ -118,7 +121,7 @@ class Retenciones extends CI_Controller {
                 }
             }
 
-            if($this->input->post('idjurisdiccion') == "901") { // Si la retención es de CABA
+            if ($this->input->post('idjurisdiccion') == "901") { // Si la retención es de CABA
                 $where = array(
                     'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
                     'cuit' => $proveedor['cuit'],
@@ -126,14 +129,38 @@ class Retenciones extends CI_Controller {
                     'fecha_hasta >=' => $this->formatear_fecha($this->input->post('fecha'))
                 );
                 $resultado = $this->padrones_model->get_where($where);
-                
-                if($resultado) {
+
+                if ($resultado) {
                     $set['alicuota'] = $resultado['retencion'];
                 }
             }
-            
+
             $id = $this->retenciones_model->set($set);
             if ($id) {
+                $log = array(
+                    'tabla' => 'retenciones',
+                    'idtabla' => $id,
+                    'texto' => "<h2><strong>Se cre&oacute; la retenci&oacute;n n&uacute;mero: ". str_pad($set['punto'], 4, '0', STR_PAD_LEFT)."-". str_pad($set['numero'], 8, '0', STR_PAD_LEFT)."</strong></h2>
+
+<p><strong>Punto de la retenci&oacute;n: </strong>".str_pad($set['punto'], 4, '0', STR_PAD_LEFT)."<br />
+<strong>N&uacute;mero de Retenci&oacute;n: </strong>".str_pad($set['numero'], 8, '0', STR_PAD_LEFT)."<br />
+<strong>ID Proveedor: </strong>".$set['idproveedor']."<br />
+<strong>Proveedor: </strong>".$set['proveedor']."<br />
+<strong>Direcci&oacute;n: </strong>".$set['direccion']."<br />
+<strong>Localidad: </strong>".$set['localidad']."<br />
+<strong>C&oacute;digo Postal: </strong>".$set['codigopostal']."<br />
+<strong>ID Provincia: </strong>".$set['idprovincia']."<br />
+<strong>Provincia: </strong>".$set['provincia']."<br />
+<strong>CUIT: </strong>".$set['cuit']."<br />
+<strong>Ingresos Brutos: </strong>".$set['iibb']."<br />
+<strong>Fecha: </strong>".$this->formatear_fecha($this->input->post('fecha'))."<br />
+<strong>ID Jurisdiccion: </strong>".$this->input->post('idjurisdiccion')."<br />
+<strong>Al&iacute;cuota: </strong>".$set['alicuota']."</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+                $this->log_model->set($log);
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => $id
@@ -387,7 +414,7 @@ class Retenciones extends CI_Controller {
             'identificador' => 'firma_presidente'
         );
         $data['firma'] = $this->parametros_model->get_where($where);
-        
+
         // Datos de Retención
         $where = array(
             'idretencion' => $idretencion,
@@ -395,7 +422,7 @@ class Retenciones extends CI_Controller {
         );
         $data['retencion'] = $this->retenciones_model->get_where($where);
         $data['retencion']['fecha_formateada'] = $this->formatear_fecha_para_mostrar($data['retencion']['fecha']);
-        
+
         $where = array(
             'idjurisdiccion_afip' => $data['retencion']['idjurisdiccion_afip']
         );
@@ -406,10 +433,10 @@ class Retenciones extends CI_Controller {
             'estado' => 'A'
         );
         $data['retencion']['items'] = $this->retenciones_model->gets_items_where($where);
-        foreach($data['retencion']['items'] as $key => $value) {
+        foreach ($data['retencion']['items'] as $key => $value) {
             $data['retencion']['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
         }
-        
+
         // create new PDF document
         $pdf = new Tcpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -425,18 +452,18 @@ class Retenciones extends CI_Controller {
         // set header and footer fonts
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        
-        
+
+
         //$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        
+
 
         $pdf->AddPage();
-        
+
         $html = $this->load->view('retenciones/pdf', $data);
-        
+
         // output the HTML content
         $pdf->writeHTML($html->output->final_output, true, false, true, false, '');
-        
+
         //$pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
 
 

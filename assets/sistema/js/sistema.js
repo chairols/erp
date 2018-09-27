@@ -889,7 +889,15 @@ function validateDivChange()
 | -------------------------------------------------------------------
 | DROPZONE
 | -------------------------------------------------------------------
-| Crea automáticamente los dropzones.
+| Crea automáticamente los dropzones para los div que tengan la clase
+| 'DropZone'.
+|
+| Si se quiere ejecutar una función al subir un archvio, dicha función
+| se debe llamar 'dzsuccess' y debe aceptar 2 parámetros 'archivo' y
+| 'datos'.
+|
+| Si se quiere ejecutar una función al eliminar un archvio, dicha función
+| se debe llamar 'dzdrop' y debe aceptar 1 solo parámetro: 'archivo'.
 |
 */
 function SetDropzones()
@@ -1111,7 +1119,12 @@ function SetDropzone( div )
 
             // console.log( 'datos:' + datos );
 
-        		datos = JSON.parse( datos );
+            if( typeof dzsuccess === "function" )
+            {
+
+                dzsuccess( archivo, datos );
+
+            }
 
         }
         catch( e )
@@ -1159,6 +1172,13 @@ function SetDropzone( div )
 		{
 
         $( '#' + archivo.previewElement.parentElement.id + ' .dz-default' ).hide();
+
+        if( typeof dzdrop === "function" )
+        {
+
+            dzdrop( archivo );
+
+        }
 
     });
 

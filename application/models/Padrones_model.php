@@ -50,7 +50,7 @@ class Padrones_model extends CI_Model {
      *  Padrones/listar
      */
     public function gets_where_limit($where, $per_page, $pagina) {
-        $this->db->select('count(*) as cantidad, padrones.fecha_desde, padrones.fecha_hasta, provincias.provincia');
+        $this->db->select('padrones.idpadron, padrones.fecha_desde, padrones.fecha_hasta, provincias.provincia');
         $this->db->from('padrones');
         $this->db->join('provincias', 'padrones.idjurisdiccion_afip = provincias.idjurisdiccion_afip');
         $this->db->like($where);
@@ -73,6 +73,18 @@ class Padrones_model extends CI_Model {
         
         $query = $this->db->get();
         return $query->row_array();
+    }
+    
+    /*
+     *  Padrones/listar
+     */
+    public function get_count_items_where($where) {
+        $this->db->select("*");
+        $this->db->from("padrones_items");
+        $this->db->where($where);
+        
+        return $this->db->count_all_results();
+        //return $query->row_array();
     }
 }
 

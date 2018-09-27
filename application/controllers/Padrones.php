@@ -72,7 +72,7 @@ class Padrones extends CI_Controller {
     }
 
     public function listar($pagina = 0) {
-        $data['title'] = 'Listado de Importaciones';
+        $data['title'] = 'Listado de Padrones';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
@@ -114,6 +114,14 @@ class Padrones extends CI_Controller {
          */
 
         $data['padrones'] = $this->padrones_model->gets_where_limit($where, $per_page, $pagina);
+        foreach ($data['padrones'] as $key => $value) {
+            $data['padrones'][$key]['fecha_desde_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_desde']);
+            $data['padrones'][$key]['fecha_hasta_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_hasta']);
+            $where = array(
+                'idpadron' => $value['idpadron']
+            );
+            $data['padrones'][$key]['cantidad'] = $this->padrones_model->get_count_items_where($where);
+        }
 
         $this->load->view('layout/app', $data);
     }
@@ -192,6 +200,17 @@ class Padrones extends CI_Controller {
         $aux .= substr($fecha, 2, 2);
         $aux .= '-';
         $aux .= substr($fecha, 0, 2);
+
+        return $aux;
+    }
+    
+    private function formatear_fecha_para_mostrar($fecha) {
+        $aux = '';
+        $aux .= substr($fecha, 8, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 5, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 0, 4);
 
         return $aux;
     }

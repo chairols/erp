@@ -46,7 +46,7 @@ function CrearCotizacion()
     $( '#BotonCrear' ).click( function()
     {
 
-        if( alertify.confirm( 'Se creará una cotización de <strong>' + $( '#TextAutoCompleteempresa' ).val() + '</strong><br><strong>¿Desea continuar?</strong>', function( e )
+        alertify.confirm( 'Se creará una cotización de <strong>' + $( '#TextAutoCompleteproveedor' ).val() + '</strong><br><strong>¿Desea continuar?</strong>', function( e )
     		{
 
         		if( e )
@@ -76,7 +76,7 @@ function CrearCotizacion()
 
     								'idmoneda': $( '#moneda' ).val(),
 
-    								'fecha_cotización': $( '#fechareal' ).val(),
+    								'fecha_cotizacion': $( '#fechareal' ).val(),
 
     								'fecha_vencimiento': $( '#fechavencimiento' ).val(),
 
@@ -84,7 +84,7 @@ function CrearCotizacion()
 
                     'notas': $( '#notas' ).val(),
 
-                    'archivos': archivos;
+                    'archivos': archivos
 
           			};
 
@@ -102,7 +102,11 @@ function CrearCotizacion()
 
               					resultado = $.parseJSON( respuesta );
 
-              					notifySuccess( '<strong>La contiazción ha sido creada correctamente.</strong>' );
+              					notifySuccess( '<strong>La contización ha sido creada correctamente.</strong>' );
+
+                        if( resultado.idcotizacion )
+
+                            window.location.href = '/cotizaciones_proveedores/items/' + resultado.idcotizacion + '/';
 
             				},
 

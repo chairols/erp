@@ -9,13 +9,15 @@ class Cotizaciones_proveedores extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'pagination'
+            'pagination',
+            'form_validation'
         ));
         $this->load->model(array(
             'parametros_model',
             'cotizaciones_proveedores_model',
             'monedas_model',
             'archivos_model',
+            'proveedores_model',
         ));
 
         $session = $this->session->all_userdata();
@@ -24,35 +26,159 @@ class Cotizaciones_proveedores extends CI_Controller {
 
     public function agregar()
     {
-        $data['title'] = 'Agregar Cotización de Proveedor';
-        $data['session'] = $this->session->all_userdata();
-        $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array(
-                                    '/assets/modulos/cotizaciones_proveedores/js/agregar.js',
-                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_agente.js',
-                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_articulo.js',
-                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_dropzone.js',
-                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_trazabilidad.js',
-                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_email.js'
-                                  );
-        $data['view'] =              'cotizaciones_proveedores/agregar';
 
-        $data['fecha_vencimiento'] = strtotime("+10 day", strtotime(date('Y-m-d')));
+        $data['title'] = 'Agregar Cotización de Proveedor';
+
+        $data['session'] = $this->session->all_userdata();
+
+        $data['menu'] = $this->r_session->get_menu();
+
+        $data['javascript'] = array(
+
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar.js',
+
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_agente.js',
+
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_articulo.js',
+
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_dropzone.js',
+
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_trazabilidad.js',
+
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_email.js'
+
+                                  );
+
+        $data['view'] = 'cotizaciones_proveedores/agregar';
+
+        $data['fecha_vencimiento'] = strtotime( "+10 day", strtotime( date( 'Y-m-d' ) ) );
+
         $data['monedas'] = $this->monedas_model->gets();
 
-        $this->load->view('layout/app', $data);
+        $this->load->view( 'layout/app', $data );
+
+    }
+
+    public function items( $idcotizacion = null )
+    {
+
+        if( $idcotizacion == null )
+        {
+
+            redirect('/cotizaciones_proveedores/listar/', 'refresh');
+
+        }
+
+        // $idcotizacion = $this->input->get( 'idcotizacion' );
+
+        $data['title'] = 'Agregar Items a Cotización';
+
+        $data['session'] = $this->session->all_userdata();
+
+        $data['menu'] = $this->r_session->get_menu();
+
+        $data['javascript'] = array(
+
+                                    '/assets/modulos/cotizaciones_proveedores/js/items.js',
+
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_articulo.js',
+
+                                    '/assets/modulos/cotizaciones_proveedores/js/agregar_trazabilidad.js',
+
+                                  );
+
+        $data['view'] = 'cotizaciones_proveedores/items';
+
+        // $data['fecha_vencimiento'] = strtotime( "+10 day", strtotime( date( 'Y-m-d' ) ) );
+
+        $data[ 'cotizacion' ] = $this->cotizaciones_proveedores_model->get_where( array( 'idcotizacion' => $idcotizacion ) );
+
+        $data[ 'proveedor' ] = $this->proveedores_model->get_where( array( 'idproveedor' => $data[ 'cotizacion' ][ 'idproveedor' ] ) );
+
+        $data[ 'moneda' ] = $this->monedas_model->get_where( array( 'idmoneda' => $data[ 'cotizacion' ][ 'idmoneda' ] ) );
+
+        $this->load->view( 'layout/app', $data );
+
     }
 
     public function agregar_ajax()
     {
 
+        // DATOS DE SESION
+
         $session = $this->session->all_userdata();
 
-        $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required');
-        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required');
-        $this->form_validation->set_rules('tipo', 'Tipo de Parámetro', 'required');
+        // VALIDACION DE DATOS
 
-        $this->cotizaciones_proveedores_model->set( $datos );
+        $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required');
+
+        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required');
+
+        $this->form_validation->set_rules('fecha_cotizacion', 'Fecha de la Cotizacion', 'required');
+
+        $this->form_validation->set_rules('fecha_vencimiento', 'Fecha de Vencimiento de la Cotizacion', 'required');
+
+        $this->form_validation->set_rules('dias_vencimiento', 'Dias de Vencimiento de la Cotizacion', 'required');
+
+        // OBTENCION DE DATOS
+
+        $datos[ 'idproveedor' ] = $this->input->post( 'idproveedor' );
+
+        $datos[ 'idmoneda' ] = $this->input->post( 'idmoneda' );
+
+        $datos[ 'fecha_cotizacion' ] = implode( '-', array_reverse( explode( '/', $this->input->post( 'fecha_cotizacion' ) ) ) );
+
+        $datos[ 'fecha_vencimiento' ] = implode( '-', array_reverse( explode( '/', $this->input->post( 'fecha_vencimiento' ) ) ) );
+
+        $datos[ 'dias_vencimiento' ] = $this->input->post( 'dias_vencimiento' );
+
+        $datos[ 'fecha_creacion' ] = date( 'Y-m-d' );
+
+        $datos[ 'idcreador' ] = $session[ 'SID' ];
+
+        if( $this->input->post( 'notas' ) )
+        {
+
+            $datos[ 'notas' ] = $this->input->post( 'notas' );
+
+        }
+
+        // INSERT Y OBTENCION DE ID
+
+        $idcotizacion = $this->cotizaciones_proveedores_model->set( $datos );
+
+        // OBTENCION DE ID DE ARCHIVOS
+
+        if( $this->input->post( 'archivos' ) )
+        {
+
+            $idarchivos = explode( ',', $this->input->post( 'archivos' ) );
+
+            $archivos = array();
+
+            foreach( $idarchivos as $idarchivo )
+            {
+
+                $archivos[] = array( 'idarchivo' => $idarchivo, 'idcotizacion' => $idcotizacion );
+
+            }
+
+            // SI EXISTEN ARCHIVOS PARA INSERTAR Y EXISTE LA COTIZACION
+            if( !empty( $archivos ) && $idcotizacion > 0 )
+            {
+
+                // INSERT DE ARCHIVOS
+                $this->cotizaciones_proveedores_model->set_archivos( $archivos );
+
+            }
+
+        }
+
+        $respuesta[ 'idcotizacion' ] = $idcotizacion;
+
+        $respuesta[ 'archivos' ] = $archivos;
+
+        echo json_encode( $respuesta );
 
     }
 

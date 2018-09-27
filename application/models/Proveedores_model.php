@@ -12,10 +12,13 @@ class Proveedores_model extends CI_Model {
      *  Importar/proveedores
      */
 
-    public function get_where($where) {
-        $query = $this->db->get_where('proveedores', $where);
+    public function get_where($where)
+    {
+
+        $query = $this->db->get_where( 'proveedores', $where );
 
         return $query->row_array();
+
     }
 
     /*

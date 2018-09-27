@@ -9,6 +9,37 @@ class Cotizaciones_proveedores_model extends CI_Model {
     }
 
     /*
+     *  Cotizaciones_proveedores/agregar
+     */
+    public function set( $datos )
+    {
+
+        $this->db->insert( 'cotizaciones_proveedores', $datos );
+
+        return $this->db->insert_id();
+
+    }
+
+    /*
+     *  Cotizaciones_proveedores/agregar
+     */
+    public function set_archivos( $registros )
+    {
+
+        $this->db->insert_batch( 'cotizaciones_proveedores_archivos', $registros );
+
+    }
+
+    public function get_where( $where )
+    {
+
+        $query = $this->db->get_where( 'cotizaciones_proveedores', $where );
+
+        return $query->row_array();
+
+    }
+
+    /*
      *  Cotizaciones/internacionales
      */
     public function get_cantidad_where($where) {

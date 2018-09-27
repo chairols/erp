@@ -2,8 +2,6 @@
 
     <form id="Crear" enctype="multipart/form-data" method="POST">
 
-        <input type="hidden" name="creation_date" id="creation_date" value="<?=date("Y-m-d")?>">
-
         <div class="row form-group inline-form-custom">
 
             <!-- Proveedor -->
@@ -29,7 +27,7 @@
 
                 <h4 class="subTitleB"><i class="fa fa-money"></i> Moneda</h4>
 
-                <select class="form-control chosenSelect" name="idmoneda" id="idmoneda" validateEmpty="Seleccione una Moneda" data-placeholder="Seleccione una Moneda">
+                <select class="form-control chosenSelect" name="moneda" id="moneda" validateEmpty="Seleccione una Moneda" data-placeholder="Seleccione una Moneda">
 
                     <?php
 

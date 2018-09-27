@@ -329,6 +329,8 @@ class Retenciones extends CI_Controller {
     }
 
     public function borrar_item() {
+        $session = $this->session->all_userdata();
+        
         $this->form_validation->set_rules('idretencion_item', 'ID de Item de la Retención', 'required|integer');
 
         if ($this->form_validation->run() == FALSE) {
@@ -338,6 +340,11 @@ class Retenciones extends CI_Controller {
             );
             echo json_encode($json);
         } else {
+            $where = array(
+                'idretencion_item' => $this->input->post('idretencion_item')
+            );
+            $item = $this->retenciones_model->get_where_item($where);
+            
             $datos = array(
                 'estado' => 'I'
             );
@@ -346,6 +353,22 @@ class Retenciones extends CI_Controller {
             );
             $resultado = $this->retenciones_model->update_item($datos, $where);
             if ($resultado) {
+                $log = array(
+                    'tabla' => 'retenciones',
+                    'idtabla' => $item['idretencion'],
+                    'texto' => "<h2><strong>Se hizo borrado l&oacute;gico de comprobante ". str_pad($item['punto_de_venta'], 4, '0', STR_PAD_LEFT)."-". str_pad($item['comprobante'], 8, '0', STR_PAD_LEFT)."</strong></h2>
+
+<p><strong>ID Retenci&oacute;n: </strong>".$item['idretencion']."<br />
+<strong>ID Retenci&oacute;n Item: </strong>".$item['idretencion_item']."<br />
+<strong>Punto de Venta: </strong>".str_pad($item['punto_de_venta'], 4, '0', STR_PAD_LEFT)."<br />
+<strong>N&uacute;mero de Comprobante: </strong>".str_pad($item['comprobante'], 8, '0', STR_PAD_LEFT)."<br />
+<strong>Fecha: </strong>".$this->formatear_fecha_para_mostrar($item['fecha'])."<br />
+<strong>Base Imponible: </strong>".$item['base_imponible']."</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'del'
+                );
+                $this->log_model->set($log);
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se eliminó el comprobante.'

@@ -38,6 +38,15 @@ class Retenciones_model extends CI_Model {
     }
     
     /*
+     *  Retenciones/borrar_item
+     */
+    public function get_where_item($where) {
+        $query = $this->db->get_where('retenciones_items', $where);
+        
+        return $query->row_array();
+    }
+    
+    /*
      *  Retenciones/update_ajax
      */
     public function update($datos, $where) {

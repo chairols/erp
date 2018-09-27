@@ -9,7 +9,8 @@ class Padrones extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'form_validation'
+            'form_validation',
+            'pagination'
         ));
         $this->load->model(array(
             'provincias_model',
@@ -70,6 +71,53 @@ class Padrones extends CI_Controller {
         }
     }
 
+    public function listar($pagina = 0) {
+        $data['title'] = 'Listado de Importaciones';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'padrones/listar';
+
+
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+
+        $where = $this->input->get();
+
+        /*
+         * inicio paginador
+         */
+        $total_rows = $this->padrones_model->get_cantidad_where($where);
+        $config['reuse_query_string'] = TRUE;
+        $config['base_url'] = '/padrones/listar/';
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        $data['links'] = $this->pagination->create_links();
+        $data['total_rows'] = $total_rows;
+        /*
+         * fin paginador
+         */
+
+        $data['padrones'] = $this->padrones_model->gets_where_limit($where, $per_page, $pagina);
+
+        $this->load->view('layout/app', $data);
+    }
+
     private function jurisdiccion_901($archivo) {  //  CABA
         $where = array(
             'identificador' => 'ruta_upload',
@@ -78,10 +126,32 @@ class Padrones extends CI_Controller {
         $ruta_upload = $this->parametros_model->get_where($where);
 
         $url = substr($ruta_upload['valor_sistema'], 1); // Quito el primer caracter
-        $fp = fopen($url . $archivo, "r");
         
+        /*
+         *  Código para guardar en padron
+         */
+        $fp = fopen($url . $archivo, "r");
+        $linea = fgets($fp);
+        $array = preg_split('/;/', $linea);
+        $set = array(
+            'idjurisdiccion_afip' => 901,
+            'fecha_publicacion' => $this->formatear_fecha($array[0]),
+            'fecha_desde' => $this->formatear_fecha($array[1]),
+            'fecha_hasta' => $this->formatear_fecha($array[2])
+        );
+        $idpadron = $this->padrones_model->set($set);
+        fclose($fp);
+        /*
+         *  Fin de código para guardar en padrón
+         */
+        
+        /*
+         *  Cógido para guardar items de padrón
+         */
+        $fp = fopen($url . $archivo, "r");
+
         while (!feof($fp)) {
-            
+
             $linea = fgets($fp);
             $array = preg_split('/;/', $linea);
             /*
@@ -93,21 +163,20 @@ class Padrones extends CI_Controller {
              *  [8] = Retención
              *  [11] = Razon Social
              */
-            
+
             $set = array(
-                'idjurisdiccion_afip' => 901,
-                'fecha_publicacion' => $this->formatear_fecha($array[0]),
-                'fecha_desde' => $this->formatear_fecha($array[1]),
-                'fecha_hasta' => $this->formatear_fecha($array[2]),
+                'idpadron' => $idpadron,
                 'cuit' => $array[3],
                 'percepcion' => str_replace(",", ".", $array[7]),
                 'retencion' => str_replace(",", ".", $array[8]),
                 'razonsocial' => trim($array[11])
             );
-            
-            $this->padrones_model->set($set);
-            
+
+            $this->padrones_model->set_item($set);
         }
+        /*
+         * Fin de código para guardar items de padrón
+         */
 
         $json = array(
             'status' => 'ok',
@@ -115,7 +184,7 @@ class Padrones extends CI_Controller {
         );
         echo json_encode($json);
     }
-    
+
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 4, 4);
@@ -126,6 +195,7 @@ class Padrones extends CI_Controller {
 
         return $aux;
     }
+
 }
 
 ?>

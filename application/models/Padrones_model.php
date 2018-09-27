@@ -40,7 +40,7 @@ class Padrones_model extends CI_Model {
         $this->db->from('padrones');
         $this->db->join('provincias', 'padrones.idjurisdiccion_afip = provincias.idjurisdiccion_afip');
         $this->db->like($where);
-        $this->db->group_by(array("padrones.fecha_desde", "padrones.fecha_hasta", "provincias.provincia"));
+        $this->db->group_by("padrones.idpadron");
         
         $query = $this->db->count_all_results();
         return $query;
@@ -54,7 +54,7 @@ class Padrones_model extends CI_Model {
         $this->db->from('padrones');
         $this->db->join('provincias', 'padrones.idjurisdiccion_afip = provincias.idjurisdiccion_afip');
         $this->db->like($where);
-        $this->db->group_by(array("padrones.fecha_desde", "padrones.fecha_hasta", "provincias.provincia"));
+        $this->db->group_by("padrones.idpadron");
         $this->db->order_by('padrones.fecha_desde DESC');
         $this->db->limit($per_page, $pagina);
         

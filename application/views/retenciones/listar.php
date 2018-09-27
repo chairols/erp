@@ -36,11 +36,14 @@
                                     <i class="fa fa-edit"></i>
                                 </button>
                             </a>
-                            <a href="/retenciones/pdf/<?=$retencion['idretencion']?>/" target="_blank" data-pacement="top" data-toggle="tooltip" data-original-title="Ver PDF" class="tooltips">
+                            <a href="/retenciones/pdf/<?= $retencion['idretencion'] ?>/" target="_blank" data-pacement="top" data-toggle="tooltip" data-original-title="Ver PDF" class="tooltips">
                                 <button class="btn btn-google btn-xs">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </button>
                             </a>
+                            <button class="btn btn-danger btn-xs borrar_retencion" idretencion="<?= $retencion['idretencion'] ?>" data-pacement="top" data-toggle="tooltip" data-original-title="Eliminar" class="tooltips">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
                         </td>
                     </tr>
                 <?php } ?>

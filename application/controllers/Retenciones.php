@@ -74,7 +74,8 @@ class Retenciones extends CI_Controller {
             $punto_retencion = $this->parametros_model->get_where($where);
 
             $where = array(
-                'punto' => $punto_retencion['valor_sistema']
+                'punto' => $punto_retencion['valor_sistema'],
+                'estado' => 'A'
             );
             $ultimo_numero_array = $this->retenciones_model->get_max_numero_where($where);
             $ultimo_numero = 1;
@@ -388,7 +389,9 @@ class Retenciones extends CI_Controller {
         $data['title'] = 'Listado de Retenciones';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/retenciones/js/listar.js'
+        );
         $data['view'] = 'retenciones/listar';
 
 
@@ -506,6 +509,50 @@ class Retenciones extends CI_Controller {
 
 
         $pdf->Output('Retencion IIBB ' . str_pad($data['retencion']['punto'], 4, '0', STR_PAD_LEFT) . '-' . str_pad($data['retencion']['numero'], 8, '0', STR_PAD_LEFT) . '.pdf', 'I');
+    }
+    
+    public function borrar_retencion_ajax() {
+        $session = $this->session->all_userdata();
+        
+        $this->form_validation->set_rules('idretencion', 'ID Retención', 'required|integer');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idretencion' => $this->input->post('idretencion')
+            );
+            $resultado = $this->retenciones_model->update($datos, $where);
+            if($resultado) {
+                $log = array(
+                    'tabla' => 'retenciones',
+                    'idtabla' => $this->input->post('idretencion'),
+                    'texto' => "<h2><strong>Se borró la retención (Borrado lógico)</strong></h2>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'del'
+                );
+                $this->log_model->set($log);
+                
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se borró correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo borrar la retención.'
+                );
+                echo json_encode($json);
+            }
+        }
     }
 
     private function formatear_fecha($fecha) {

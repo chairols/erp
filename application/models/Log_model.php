@@ -10,13 +10,14 @@ class Log_model extends CI_Model {
     }
     
     /*
-     *  Menu/agregar
+     *  Menu/agregar  -  Revisar
      * 
-     *  Parametros/agregar_ajax
+     *  Parametros/agregar_ajax  --  Revisar
      * 
      *  Retenciones/agregar_ajax
      *  Retenciones/agregar_item_ajax
      *  Retenciones/borrar_item
+     *  Retenciones/borrar_retencion_ajax
      */
     public function set($array) {
         $this->db->insert('log', $array);

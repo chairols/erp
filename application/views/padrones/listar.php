@@ -25,7 +25,9 @@
                     <td><?=$padron['fecha_hasta_formateada']?></td>
                     <td><?= number_format($padron['cantidad'], 0)?></td>
                     <td>
-                        
+                        <button class="btn btn-danger btn-xs borrar_padron" idpadron="<?=$padron['idpadron']?>" data-pacement="top" data-toggle="tooltip" data-original-title="Borrar" class="tooltips">
+                            <i class="fa fa-trash-o"></i>
+                        </button> 
                     </td>
                 </tr>
                 <?php } ?>

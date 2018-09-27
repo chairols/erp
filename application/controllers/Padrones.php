@@ -75,7 +75,9 @@ class Padrones extends CI_Controller {
         $data['title'] = 'Listado de Padrones';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/padrones/js/listar.js'
+        );
         $data['view'] = 'padrones/listar';
 
 

@@ -11,6 +11,9 @@
                         <div class="col-md-6">
                             <input type="text" maxlength="100" class="form-control" id="id-<?=$parametro['idparametro']?>" name="id-<?= $parametro['idparametro'] ?>" value="<?= $parametro['valor_sistema'] ?>">
                         </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" value="<?=$parametro['identificador']?>" disabled="">
+                        </div>
                     </div>
                 <?php } ?>
                 <div class="ln_solid"></div>

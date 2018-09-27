@@ -18,7 +18,8 @@ class Retenciones extends CI_Controller {
             'proveedores_model',
             'parametros_model',
             'retenciones_model',
-            'tipos_responsables_model'
+            'tipos_responsables_model',
+            'padrones_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -100,9 +101,37 @@ class Retenciones extends CI_Controller {
                 'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
                 'alicuota' => 0
             );
+            
+            if($this->input->post('idjurisdiccion') == "914") {  // Si la retención es de Misiones
+                if($proveedor['idprovincia'] == "14") {  // Si el proveedor es de misiones
+                    $where = array(
+                        'identificador' => '914_misiones'
+                    );
+                    $valor = $this->parametros_model->get_where($where);
+                    $set['alicuota'] = $valor['valor_sistema'];
+                } else {   // Si el proveedor no es misiones
+                    $where = array(
+                        'identificador' => '914_no_misiones'
+                    );
+                    $valor = $this->parametros_model->get_where($where);
+                    $set['alicuota'] = $valor['valor_sistema'];
+                }
+            }
 
-
-
+            if($this->input->post('idjurisdiccion') == "901") { // Si la retención es de CABA
+                $where = array(
+                    'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
+                    'cuit' => $proveedor['cuit'],
+                    'fecha_desde <=' => $this->formatear_fecha($this->input->post('fecha')),
+                    'fecha_hasta >=' => $this->formatear_fecha($this->input->post('fecha'))
+                );
+                $resultado = $this->padrones_model->get_where($where);
+                
+                if($resultado) {
+                    $set['alicuota'] = $resultado['retencion'];
+                }
+            }
+            
             $id = $this->retenciones_model->set($set);
             if ($id) {
                 $json = array(

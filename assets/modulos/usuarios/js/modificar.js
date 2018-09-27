@@ -1,5 +1,6 @@
 $("#modificar").click(function () {
     datos = {
+        'idusuario': $("#idusuario").val(),
         'usuario': $("#usuario").val(),
         'password': $("#password").val(),
         'password2': $("#password2").val(),
@@ -17,14 +18,11 @@ $("#modificar").click(function () {
 
         },
         success: function (data) {
-            alertify.defaults.glossary = {
-                ok: "Aceptar",
-            };
             resultado = $.parseJSON(data);
             if (resultado['status'] == 'error') {
                 notifyError(resultado['data'], 1000);
             } else if (resultado['status'] == 'ok') {
-                notifySuccess("Se agregó correctamente", 1000);
+                notifySuccess(resultado['data'], 1000);
             }
         },
         error: function (xhr) { // if error occured

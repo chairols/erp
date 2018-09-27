@@ -33,6 +33,7 @@ class Usuarios_model extends CI_Model{
      */
     public function update($where, $idusuario) {
         $this->db->update('usuarios', $where, array('idusuario' => $idusuario));
+        return $this->db->affected_rows();
     }
     
     
@@ -116,5 +117,13 @@ class Usuarios_model extends CI_Model{
     public function set_perfil($datos) {
         $this->db->insert('usuarios_perfiles', $datos);
         return $this->db->insert_id();
+    }
+    
+    /*
+     *  Usuarios/modificar_ajax
+     */
+    public function update_perfil($datos, $where) {
+        $this->db->update('usuarios_perfiles', $datos, $where);
+        return $this->db->affected_rows();
     }
 }

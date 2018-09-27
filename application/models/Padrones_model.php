@@ -7,7 +7,7 @@ class Padrones_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-
+    
     /*
      *  Padrones/jurisdiccion_901
      */
@@ -51,7 +51,6 @@ class Padrones_model extends CI_Model {
      */
     public function gets_where_limit($where, $per_page, $pagina) {
         $this->db->select('count(*) as cantidad, padrones.fecha_desde, padrones.fecha_hasta, provincias.provincia');
-        $this->db->from('importaciones');
         $this->db->from('padrones');
         $this->db->join('provincias', 'padrones.idjurisdiccion_afip = provincias.idjurisdiccion_afip');
         $this->db->like($where);
@@ -61,6 +60,19 @@ class Padrones_model extends CI_Model {
         
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    /*
+     *  Retenciones/agregar_ajax
+     */
+    public function get_where($where) {
+        $this->db->select("*");
+        $this->db->from("padrones");
+        $this->db->join("padrones_items", "padrones.idpadron = padrones_items.idpadron");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->row_array();
     }
 }
 

@@ -323,6 +323,24 @@ class Cotizaciones_proveedores extends CI_Controller {
 
     }
 
+    public function gets_archivos_ajax()
+    {
+
+        $datos = array();
+
+        foreach( $this->input->post() as $key => $value )
+        {
+
+            $datos[ str_replace( '-', '.', $key ) ] = $value;
+
+        }
+
+        $archivos = $this->cotizaciones_proveedores_model->gets_archivos_ajax( $datos );
+
+        echo json_encode( $archivos );
+
+    }
+
 }
 
 ?>

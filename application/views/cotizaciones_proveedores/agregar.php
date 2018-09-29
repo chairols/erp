@@ -102,6 +102,7 @@
 
         <h4 class="subTitleB"><i class="fa fa-file"></i> Archivos Adjuntos</h4>
 
+        <!-- <div id="DropzoneCotizacion" class="dropzone txC" subir="/cotizaciones_proveedores/subir_archivo/" eliminar="/cotizaciones_proveedores/eliminar_archivo/" llenar="/cotizaciones_proveedores/gets_archivos_ajax" variables="cotizaciones_proveedores_archivos-idcotizacion:=422" -->
         <div id="DropzoneCotizacion" class="dropzone txC" subir="/cotizaciones_proveedores/subir_archivo/" eliminar="/cotizaciones_proveedores/eliminar_archivo/">
 
         </div>

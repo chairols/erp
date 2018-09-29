@@ -899,7 +899,17 @@ function validateDivChange()
 | Si se quiere ejecutar una función al eliminar un archvio, dicha función
 | se debe llamar 'dzdrop' y debe aceptar 1 solo parámetro: 'archivo'.
 |
+| Ejemplo de implementación del div de Dropzone:
+| <div  id="DropzoneCotizacion" class="dropzone txC"
+|       subir="/cotizaciones_proveedores/subir_archivo/"
+|       eliminar="/cotizaciones_proveedores/eliminar_archivo/"
+|       llenar="/cotizaciones_proveedores/gets_archivos_ajax"
+|       variables="idcotizacion:=2///estado:=A">
+|
+| * El atributo 'varbiales' es para pasar variables al ajax de 'llenar'
+|
 */
+
 function SetDropzones()
 {
 
@@ -913,6 +923,8 @@ function SetDropzones()
 				SetDropzone( $( this ) );
 
 		});
+
+    LlenarDropzones();
 
 }
 
@@ -1110,14 +1122,10 @@ function SetDropzone( div )
     DivDropzone.on( 'success', function( archivo, datos )
 		{
 
-        // console.log( 'entra success' );
-        //
-        // console.log( archivo.previewElement.parentElement.id );
-
         try
         {
 
-            // console.log( 'datos:' + datos );
+            datos = JSON.parse( datos );
 
             if( typeof dzsuccess === "function" )
             {
@@ -1127,6 +1135,7 @@ function SetDropzone( div )
             }
 
         }
+
         catch( e )
         {
 
@@ -1203,30 +1212,32 @@ function SetDropzone( div )
 function LlenarDropzone( DivDropzone, datos )
 {
 
+    console.log( DivDropzone );
+
+    id = DivDropzone.attr( 'id' );
+
 		$.each( datos, function( indice, archivo )
 		{
 
-				if( archivo.size > 0 )
+				if( archivo.url )
 				{
-
-						id = DivDropzone.attr( 'id' );
 
 						var mockFile =
 						{
 
 								name: archivo.nombre,
 
-								size: archivo.size
+								size: 200
 
 						};
 
-						DivDropzone.emit( 'addedfile', mockFile );
+						Dropzone.forElement( 'div#' + DivDropzone.attr( 'id' ) ).emit( 'addedfile', mockFile );
 
-						DivDropzone.emit( 'complete', mockFile );
+						Dropzone.forElement( 'div#' + DivDropzone.attr( 'id' ) ).emit( 'complete', mockFile );
 
 						var contador = parseInt( $( '#contador' + id ).val() ) + 1;
 
-						var ArchivoNuevoHTML = '<input type="hidden" id="idarchivo_' + contador + '" value="' + archivo.id + '" >';
+						var ArchivoNuevoHTML = '<input type="hidden" id="idarchivo_' + contador + '" value="' + archivo.idarchivo + '" >';
 
 						$( '#ContenedorArchivos' ).append( ArchivoNuevoHTML );
 
@@ -1238,7 +1249,7 @@ function LlenarDropzone( DivDropzone, datos )
 
 						EliminarBotonHTML.attr( 'id', 'archivo_' + id + '_' + contador );
 
-						EliminarBotonHTML.attr( 'idarchivo', archivo.id );
+						EliminarBotonHTML.attr( 'idarchivo', archivo.idarchivo );
 
 						EliminarBotonHTML.attr( 'nombrearchivo', archivo.nombre );
 
@@ -1252,10 +1263,10 @@ function LlenarDropzone( DivDropzone, datos )
 
 						var thumbnail = $( '#' + id + ' .dz-preview.dz-file-preview .dz-image:last' ).children( 'img' );
 
-						if( archivo.type != 'jpg' && archivo.type != 'png' && archivo.type != 'bmp' && archivo.type != 'jpeg' )
+						if( archivo.tipo != 'jpg' && archivo.tipo != 'png' && archivo.tipo != 'bmp' && archivo.tipo != 'jpeg' )
 						{
 
-								thumbnail.attr( 'src', GetFileIcon( archivo.type, 'big' ) );
+								thumbnail.attr( 'src', GetFileIcon( archivo.tipo, 'big' ) );
 
 						}else{
 
@@ -1275,37 +1286,94 @@ function LlenarDropzone( DivDropzone, datos )
 
 }
 
-// $( document ).ready( function()
-// {
-//
-//     if( $('#id').length && !isNaN($("#id").val()))
-//     {
-//
-//         var process = process_url+'?object=Quotation&action=Getquotationfiles&quotation='+$("#id").val();
-//         $.ajax({
-//             type: "POST",
-//             url: process,
-//             cache: false,
-//             success: function( respuesta )
-//             {
-//                 try
-//                 {
-//                   respuesta = JSON.parse(respuesta);
-//                 }
-//                 catch(e)
-//                 {
-//                     notifyError("Ha ocurrido un error al intentar subir el archivo seleccionado.");
-//                     console.log("Error: "+respuesta);
-//                 }
-//                 if(respuesta)
-//                 {
-//                     LlenarDropzone( DivDropzone, respuesta );
-//                 }
-//             }
-//         });
-//     }
-// });
+function LlenarDropzones()
+{
 
+    $( ".dropzone" ).each( function()
+    {
+
+        var DivDropzone = $( this );
+
+        if( DivDropzone.attr( 'llenar' ) )
+        {
+
+            var variables = DivDropzone.attr( 'variables' );
+
+            var datos = {};
+
+            if( variables )
+            {
+
+                variables = variables.split( '///' );
+
+                for( $x=0; $x<variables.length; $x++ )
+                {
+
+                    var campo = variables[ $x ].split( ':=' );
+
+                    if( campo[ 1 ] )
+                    {
+
+                        datos[ campo[ 0 ] ] = campo[ 1 ];
+
+                    }else{
+
+                        datos[ variables[ $x ] ] = $( '#' + variables[ $x ] ).val();
+
+                    }
+
+                }
+
+            }
+
+            $.ajax(
+            {
+
+                type: 'POST',
+
+                url: DivDropzone.attr( 'llenar' ),
+
+                data: datos,
+
+                cache: false,
+
+                success: function( respuesta )
+                {
+
+                    try
+                    {
+                        respuesta = JSON.parse( respuesta );
+                    }
+
+                    catch( e )
+                    {
+
+                        notifyError( 'Ha ocurrido un error al intentar subir el archivo seleccionado.' );
+
+                        console.log( 'Error: ' + respuesta );
+
+                        respuesta = false;
+
+                    }
+
+                    if( respuesta )
+                    {
+
+                        LlenarDropzone( DivDropzone, respuesta );
+
+                    }
+
+                }
+
+            });
+
+
+
+        }
+
+    });
+
+}
 
 ///////////////////////////////// Dropzone FilesFunctions /////////////////////////////////
 function EliminarArchivoDeContenedor( boton )

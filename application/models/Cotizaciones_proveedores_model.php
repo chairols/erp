@@ -20,16 +20,6 @@ class Cotizaciones_proveedores_model extends CI_Model {
 
     }
 
-    /*
-     *  Cotizaciones_proveedores/agregar
-     */
-    public function set_archivos( $registros )
-    {
-
-        $this->db->insert_batch( 'cotizaciones_proveedores_archivos', $registros );
-
-    }
-
     public function get_where( $where )
     {
 
@@ -91,16 +81,27 @@ class Cotizaciones_proveedores_model extends CI_Model {
 
         $this->db->join( 'archivos', 'cotizaciones_proveedores_archivos.idarchivo = archivos.idarchivo' );
 
-        $this->db->like($where);
+        $this->db->where( $where );
 
         $query = $this->db->get();
 
-        $archivos = $query->result_array();
-
-        echo json_encode( $archivos );
+        return $query->result_array();
 
     }
 
+    /*
+     *  Cotizaciones_proveedores/agregar
+     */
+    public function set_archivos( $registros )
+    {
+
+        $this->db->insert_batch( 'cotizaciones_proveedores_archivos', $registros );
+
+    }
+
+    /*
+     *  Cotizaciones_proveedores/agregar
+     */
     public function eliminar_archivo( $id )
     {
 

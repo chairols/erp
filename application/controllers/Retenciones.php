@@ -43,7 +43,7 @@ class Retenciones extends CI_Controller {
 
     public function agregar_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|integer');
         $this->form_validation->set_rules('idjurisdiccion', 'Jurisdicción', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');
@@ -141,27 +141,27 @@ class Retenciones extends CI_Controller {
                 $log = array(
                     'tabla' => 'retenciones',
                     'idtabla' => $id,
-                    'texto' => "<h2><strong>Se cre&oacute; la retenci&oacute;n n&uacute;mero: ". str_pad($set['punto'], 4, '0', STR_PAD_LEFT)."-". str_pad($set['numero'], 8, '0', STR_PAD_LEFT)."</strong></h2>
+                    'texto' => "<h2><strong>Se cre&oacute; la retenci&oacute;n n&uacute;mero: " . str_pad($set['punto'], 4, '0', STR_PAD_LEFT) . "-" . str_pad($set['numero'], 8, '0', STR_PAD_LEFT) . "</strong></h2>
 
-<p><strong>Punto de la retenci&oacute;n: </strong>".str_pad($set['punto'], 4, '0', STR_PAD_LEFT)."<br />
-<strong>N&uacute;mero de Retenci&oacute;n: </strong>".str_pad($set['numero'], 8, '0', STR_PAD_LEFT)."<br />
-<strong>ID Proveedor: </strong>".$set['idproveedor']."<br />
-<strong>Proveedor: </strong>".$set['proveedor']."<br />
-<strong>Direcci&oacute;n: </strong>".$set['direccion']."<br />
-<strong>Localidad: </strong>".$set['localidad']."<br />
-<strong>C&oacute;digo Postal: </strong>".$set['codigopostal']."<br />
-<strong>ID Provincia: </strong>".$set['idprovincia']."<br />
-<strong>Provincia: </strong>".$set['provincia']."<br />
-<strong>CUIT: </strong>".$set['cuit']."<br />
-<strong>Ingresos Brutos: </strong>".$set['iibb']."<br />
-<strong>Fecha: </strong>".$this->formatear_fecha($this->input->post('fecha'))."<br />
-<strong>ID Jurisdiccion: </strong>".$this->input->post('idjurisdiccion')."<br />
-<strong>Al&iacute;cuota: </strong>".$set['alicuota']."</p>",
+<p><strong>Punto de la retenci&oacute;n: </strong>" . str_pad($set['punto'], 4, '0', STR_PAD_LEFT) . "<br />
+<strong>N&uacute;mero de Retenci&oacute;n: </strong>" . str_pad($set['numero'], 8, '0', STR_PAD_LEFT) . "<br />
+<strong>ID Proveedor: </strong>" . $set['idproveedor'] . "<br />
+<strong>Proveedor: </strong>" . $set['proveedor'] . "<br />
+<strong>Direcci&oacute;n: </strong>" . $set['direccion'] . "<br />
+<strong>Localidad: </strong>" . $set['localidad'] . "<br />
+<strong>C&oacute;digo Postal: </strong>" . $set['codigopostal'] . "<br />
+<strong>ID Provincia: </strong>" . $set['idprovincia'] . "<br />
+<strong>Provincia: </strong>" . $set['provincia'] . "<br />
+<strong>CUIT: </strong>" . $set['cuit'] . "<br />
+<strong>Ingresos Brutos: </strong>" . $set['iibb'] . "<br />
+<strong>Fecha: </strong>" . $this->formatear_fecha($this->input->post('fecha')) . "<br />
+<strong>ID Jurisdiccion: </strong>" . $this->input->post('idjurisdiccion') . "<br />
+<strong>Al&iacute;cuota: </strong>" . $set['alicuota'] . "</p>",
                     'idusuario' => $session['SID'],
                     'tipo' => 'add'
                 );
                 $this->log_model->set($log);
-                
+
                 $json = array(
                     'status' => 'ok',
                     'data' => $id
@@ -271,14 +271,14 @@ class Retenciones extends CI_Controller {
             foreach ($data['items'] as $key => $value) {
                 $data['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
             }
-
+            
             $this->load->view('retenciones/gets_items_table_body_ajax', $data);
         }
     }
 
     public function agregar_item_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idretencion', 'ID de Retención', 'required|integer');
         $this->form_validation->set_rules('punto_de_venta', 'Punto de Venta', 'required|integer');
         $this->form_validation->set_rules('comprobante', 'Comprobante', 'required|integer');
@@ -304,16 +304,38 @@ class Retenciones extends CI_Controller {
                 $log = array(
                     'tabla' => 'retenciones',
                     'idtabla' => $datos['idretencion'],
-                    'texto' => "<h2><strong>Se agreg&oacute; el comprobante : ".str_pad($datos['punto_de_venta'], 4, '0', STR_PAD_LEFT)."-". str_pad($datos['comprobante'], 8, '0', STR_PAD_LEFT)."</strong></h2>
+                    'texto' => "<h2><strong>Se agreg&oacute; el comprobante : " . str_pad($datos['punto_de_venta'], 4, '0', STR_PAD_LEFT) . "-" . str_pad($datos['comprobante'], 8, '0', STR_PAD_LEFT) . "</strong></h2>
 
-<p><strong>Punto del comprobante: </strong>".str_pad($datos['punto_de_venta'], 4, '0', STR_PAD_LEFT)."<br />
-<strong>N&uacute;mero del comprobante: </strong>".str_pad($datos['comprobante'], 8, '0', STR_PAD_LEFT)."<br />
-<strong>Fecha: </strong>".$this->input->post('fecha')."<br />
-<strong>Base Imponible: </strong>".$datos['base_imponible']."</p>",
+<p><strong>Punto del comprobante: </strong>" . str_pad($datos['punto_de_venta'], 4, '0', STR_PAD_LEFT) . "<br />
+<strong>N&uacute;mero del comprobante: </strong>" . str_pad($datos['comprobante'], 8, '0', STR_PAD_LEFT) . "<br />
+<strong>Fecha: </strong>" . $this->input->post('fecha') . "<br />
+<strong>Base Imponible: </strong>" . $datos['base_imponible'] . "</p>",
                     'idusuario' => $session['SID'],
                     'tipo' => 'add'
                 );
                 $this->log_model->set($log);
+
+                $where = array(
+                    'idretencion' => $this->input->post('idretencion'),
+                    'estado' => 'A'
+                );
+                $data['items'] = $this->retenciones_model->gets_items_where($where);
+
+                $total_base_imponible = 0;
+                foreach ($data['items'] as $key => $value) {
+                    $data['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+                    $total_base_imponible += $value['base_imponible'];
+                }
+
+                $datos = array(
+                    'monto_retenido' => round(($total_base_imponible * $data['retencion']['alicuota']) / 100, 2)
+                );
+                $where = array(
+                    'idretencion' => $this->input->post('idretencion')
+                );
+                $this->retenciones_model->update($datos, $where);
+                
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se agregó el comprobante.'
@@ -331,7 +353,7 @@ class Retenciones extends CI_Controller {
 
     public function borrar_item() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idretencion_item', 'ID de Item de la Retención', 'required|integer');
 
         if ($this->form_validation->run() == FALSE) {
@@ -345,7 +367,7 @@ class Retenciones extends CI_Controller {
                 'idretencion_item' => $this->input->post('idretencion_item')
             );
             $item = $this->retenciones_model->get_where_item($where);
-            
+
             $datos = array(
                 'estado' => 'I'
             );
@@ -357,19 +379,19 @@ class Retenciones extends CI_Controller {
                 $log = array(
                     'tabla' => 'retenciones',
                     'idtabla' => $item['idretencion'],
-                    'texto' => "<h2><strong>Se hizo borrado l&oacute;gico de comprobante ". str_pad($item['punto_de_venta'], 4, '0', STR_PAD_LEFT)."-". str_pad($item['comprobante'], 8, '0', STR_PAD_LEFT)."</strong></h2>
+                    'texto' => "<h2><strong>Se hizo borrado l&oacute;gico de comprobante " . str_pad($item['punto_de_venta'], 4, '0', STR_PAD_LEFT) . "-" . str_pad($item['comprobante'], 8, '0', STR_PAD_LEFT) . "</strong></h2>
 
-<p><strong>ID Retenci&oacute;n: </strong>".$item['idretencion']."<br />
-<strong>ID Retenci&oacute;n Item: </strong>".$item['idretencion_item']."<br />
-<strong>Punto de Venta: </strong>".str_pad($item['punto_de_venta'], 4, '0', STR_PAD_LEFT)."<br />
-<strong>N&uacute;mero de Comprobante: </strong>".str_pad($item['comprobante'], 8, '0', STR_PAD_LEFT)."<br />
-<strong>Fecha: </strong>".$this->formatear_fecha_para_mostrar($item['fecha'])."<br />
-<strong>Base Imponible: </strong>".$item['base_imponible']."</p>",
+<p><strong>ID Retenci&oacute;n: </strong>" . $item['idretencion'] . "<br />
+<strong>ID Retenci&oacute;n Item: </strong>" . $item['idretencion_item'] . "<br />
+<strong>Punto de Venta: </strong>" . str_pad($item['punto_de_venta'], 4, '0', STR_PAD_LEFT) . "<br />
+<strong>N&uacute;mero de Comprobante: </strong>" . str_pad($item['comprobante'], 8, '0', STR_PAD_LEFT) . "<br />
+<strong>Fecha: </strong>" . $this->formatear_fecha_para_mostrar($item['fecha']) . "<br />
+<strong>Base Imponible: </strong>" . $item['base_imponible'] . "</p>",
                     'idusuario' => $session['SID'],
                     'tipo' => 'del'
                 );
                 $this->log_model->set($log);
-                
+
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se eliminó el comprobante.'
@@ -510,13 +532,13 @@ class Retenciones extends CI_Controller {
 
         $pdf->Output('Retencion IIBB ' . str_pad($data['retencion']['punto'], 4, '0', STR_PAD_LEFT) . '-' . str_pad($data['retencion']['numero'], 8, '0', STR_PAD_LEFT) . '.pdf', 'I');
     }
-    
+
     public function borrar_retencion_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idretencion', 'ID Retención', 'required|integer');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
@@ -530,7 +552,7 @@ class Retenciones extends CI_Controller {
                 'idretencion' => $this->input->post('idretencion')
             );
             $resultado = $this->retenciones_model->update($datos, $where);
-            if($resultado) {
+            if ($resultado) {
                 $log = array(
                     'tabla' => 'retenciones',
                     'idtabla' => $this->input->post('idretencion'),
@@ -539,7 +561,7 @@ class Retenciones extends CI_Controller {
                     'tipo' => 'del'
                 );
                 $this->log_model->set($log);
-                
+
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se borró correctamente'
@@ -549,6 +571,40 @@ class Retenciones extends CI_Controller {
                 $json = array(
                     'status' => 'error',
                     'data' => 'No se pudo borrar la retención.'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
+    public function update_monto_retenido() {
+        $this->form_validation->set_rules('monto_retenido', 'Monto Retenido', 'required|decimal');
+        $this->form_validation->set_rules('idretencion', 'ID Retención', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'monto_retenido' => $this->input->post('monto_retenido')
+            );
+            $where = array(
+                'idretencion' => $this->input->post('idretencion')
+            );
+            $resultado = $this->retenciones_model->update($datos, $where);
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizo correctamente el monto retenido'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Ocurrió un error inesperado'
                 );
                 echo json_encode($json);
             }

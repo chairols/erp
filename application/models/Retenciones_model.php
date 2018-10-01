@@ -48,6 +48,7 @@ class Retenciones_model extends CI_Model {
     
     /*
      *  Retenciones/update_ajax
+     *  Retenciones/update_monto_retenido
      */
     public function update($datos, $where) {
         $this->db->update('retenciones', $datos, $where);

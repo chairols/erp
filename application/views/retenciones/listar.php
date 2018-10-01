@@ -22,6 +22,7 @@
                     <th>Proveedor</th>
                     <th>Fecha</th>
                     <th>Jurisdicción</th>
+                    <th>Monto Retenido</th>
                     <th>Acciones</th>
                 </tr>
                 <?php foreach ($retenciones as $retencion) { ?>
@@ -30,6 +31,7 @@
                         <td><?= $retencion['proveedor'] ?></td>
                         <td><?= $retencion['fecha'] ?></td>
                         <td><?= $retencion['idjurisdiccion_afip'] ?> - <?= $retencion['jurisdiccion'] ?></td>
+                        <td><?= $retencion['monto_retenido']?></td>
                         <td>
                             <a href="/retenciones/modificar/<?= $retencion['idretencion'] ?>/" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">
                                 <button class="btn btn-primary btn-xs">

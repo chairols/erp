@@ -319,6 +319,7 @@ class Retenciones extends CI_Controller {
                     'idretencion' => $this->input->post('idretencion'),
                     'estado' => 'A'
                 );
+                $data['retencion'] = $this->retenciones_model->get_where($where);
                 $data['items'] = $this->retenciones_model->gets_items_where($where);
 
                 $total_base_imponible = 0;
@@ -391,7 +392,30 @@ class Retenciones extends CI_Controller {
                     'tipo' => 'del'
                 );
                 $this->log_model->set($log);
+                
+                
+                $where = array(
+                    'idretencion' => $item['idretencion'],
+                    'estado' => 'A'
+                );
+                $data['retencion'] = $this->retenciones_model->get_where($where);
+                $data['items'] = $this->retenciones_model->gets_items_where($where);
 
+                $total_base_imponible = 0;
+                foreach ($data['items'] as $key => $value) {
+                    $data['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+                    $total_base_imponible += $value['base_imponible'];
+                }
+
+                $datos = array(
+                    'monto_retenido' => round(($total_base_imponible * $data['retencion']['alicuota']) / 100, 2)
+                );
+                $where = array(
+                    'idretencion' => $item['idretencion']
+                );
+                $this->retenciones_model->update($datos, $where);
+                
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se eliminó el comprobante.'

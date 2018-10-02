@@ -1,27 +1,24 @@
-<input type="hidden" id="menues" value="<?=$ids?>">
+<div class="box box-primary">
+    <div class="box-header">
 
-<div id="treeview-checkbox">
-    <?php foreach ($mmenu as $m) { ?>
-        <ul>
-            <li data-value="<?= $m['idmenu'] ?>">
-                <i class="<?= $m['icono'] ?>"></i> <?= $m['titulo'] ?>
-                <?php foreach ($m['submenu'] as $m1) { ?>
-                    <ul>
-                        <li data-value="<?= $m1['idmenu'] ?>">
-                            <i class="<?= $m1['icono'] ?>"></i> <?= $m1['titulo'] ?>
-                            <?php foreach ($m1['submenu'] as $m2) { ?>
-                                <ul>
-                                    <li data-value="<?= $m2['idmenu'] ?>">
-                                        <i class="<?= $m2['icono'] ?>"></i> <?= $m2['titulo'] ?>
-                                    </li>
-                                </ul>
-                            <?php } ?>
-                        </li>
-                    </ul>
-                <?php } ?>
-            </li> 
-        </ul>
-    <?php } ?>
+    </div>
+    <div class="box-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-md-3">Perfil</label>
+                <div class="col-md-6">
+                    <input type="text" maxlength="255" class="form-control" id="perfil" autofocus>
+                </div>
+            </div>
+            <div class="ln_solid"></div>
+            <div class="form-group">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <button type="button" id="agregar" class="btn btn-primary">Agregar</button>
+                    <button type="button" id="loading" class="btn btn-primary" style="display: none;">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<?php var_dump($ids) ?>

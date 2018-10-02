@@ -37,6 +37,7 @@ class Perfiles_model extends CI_Model {
     }
     
     /*
+     *  Perfiles/agregar_ajax
      *  Perfiles/modificar
      */
     public function get_where($where) {
@@ -82,6 +83,14 @@ class Perfiles_model extends CI_Model {
      */
     public function borrar_perfiles_menu($where) {
         $this->db->delete('perfiles_menu', $where);
+    }
+    
+    /*
+     *  Perfiles/agregar_ajax
+     */
+    public function set($datos) {
+        $this->db->insert('perfiles', $datos);
+        return $this->db->insert_id();
     }
 }
 

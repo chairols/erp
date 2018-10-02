@@ -70,26 +70,53 @@ class Perfiles extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array(
-            '/assets/modulos/perfiles/js/script.js'
+            '/assets/modulos/perfiles/js/agregar.js'
         );
-
-        $ids = $this->menu_model->gets_menu_por_perfil($data['session']['perfil']);
-        $data['ids'] = array();
-        foreach ($ids as $id) {
-            $data['ids'][] = $id['idmenu'];
-        }
-        $data['ids'] = implode(",", $data['ids']);
-
-        $data['mmenu'] = $this->menu_model->obtener_menu_por_padre(0);
-        foreach ($data['mmenu'] as $key => $value) {
-            $data['mmenu'][$key]['submenu'] = $this->menu_model->obtener_menu_por_padre($value['idmenu']);
-            foreach ($data['mmenu'][$key]['submenu'] as $k1 => $v1) {
-                $data['mmenu'][$key]['submenu'][$k1]['submenu'] = $this->menu_model->obtener_menu_por_padre($v1['idmenu']);
-            }
-        }
 
         $data['view'] = 'perfiles/agregar';
         $this->load->view('layout/app', $data);
+    }
+
+    public function agregar_ajax() {
+        $this->form_validation->set_rules('perfil', 'Perfil', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'perfil' => $this->input->post('perfil')
+            );
+            $resultado = $this->perfiles_model->get_where($where);
+            if ($resultado) {  // Si ya existe el perfil
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'El perfil ' . $this->input->post('perfil') . ' ya existe'
+                );
+                echo json_encode($json);
+            } else {
+                $datos = array(
+                    'perfil' => $this->input->post('perfil')
+                );
+                $resultado = $this->perfiles_model->set($datos);
+                if ($resultado) {  // Si se agregó el perfil
+                    $json = array(
+                        'status' => 'ok',
+                        'data' => 'Se agregó el perfil ' . $this->input->post('perfil')
+                    );
+                    echo json_encode($json);
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'No se pudo agregar el perfil'
+                    );
+                    echo json_encode($json);
+                }
+            }
+        }
     }
 
     private function modificar_anterior($idperfil = null) {
@@ -146,7 +173,7 @@ class Perfiles extends CI_Controller {
             '/assets/modulos/perfiles/js/modificar.js'
         );
 
-        
+
         $datos = array(
             'idperfil' => $idperfil
         );
@@ -166,11 +193,11 @@ class Perfiles extends CI_Controller {
                 $data['mmenu'][$key]['submenu'][$k1]['submenu'] = $this->menu_model->obtener_menu_por_padre_con_accesos($v1['idmenu'], $idperfil);
             }
         }
-        
+
         $data['view'] = 'perfiles/modificar';
         $this->load->view('layout/app', $data);
     }
-    
+
     public function actualizar_accesos() {
         $this->form_validation->set_rules('idmenu', 'Menú', 'required|integer');
         $this->form_validation->set_rules('idperfil', 'Perfil', 'required|integer');
@@ -203,11 +230,11 @@ class Perfiles extends CI_Controller {
             }
         }
     }
-    
+
     public function actualizar_orden() {
         $this->form_validation->set_rules('orden', 'Orden', 'required');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
@@ -267,9 +294,8 @@ class Perfiles extends CI_Controller {
             );
             echo json_encode($json);
         }
-        
     }
-    
+
     public function modificar_ajax() {
         $session = $this->session->all_userdata();
 

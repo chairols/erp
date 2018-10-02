@@ -6,8 +6,76 @@ class Certificados extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->library(array(
+            'session',
+            'r_session',
+            'form_validation'
+        ));
+        $this->load->model(array(
+            'parametros_model',
+            'certificados_model'
+        ));
+
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
 
         require_once('assets/vendors/afip/wsfe-class-ci.php');
+    }
+
+    public function agregar() {
+        $data['title'] = 'Subir Certificado';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['view'] = 'certificados/agregar';
+
+
+        $where = array(
+            'identificador' => 'ruta_certificados'
+        );
+        $valor = $this->parametros_model->get_where($where);
+        $data['ruta'] = $valor['valor_sistema'];
+        /*
+          if (substr($data['ruta'], 0, 1) == '/') {
+          $data['ruta'] = substr($data['ruta'], 1, strlen($data['ruta']));
+          }
+         */
+
+
+        $config['upload_path'] = "." . $data['ruta'];
+        $config['allowed_types'] = '*';
+        $this->load->library('upload', $config);
+
+        $flag = true;
+        if (!$this->upload->do_upload('certificado')) {  // Si no se sube el certificado
+            $error = array('error' => $this->upload->display_errors());
+            $flag = false;
+        } else {  // Si sube el certificado
+            $data['certificado'] = $this->upload->data();
+            if (!$this->upload->do_upload('clave')) {  // Si no se sube la clave
+                $error = array('error' => $this->upload->display_errors());
+                $flag = false;
+            } else {
+                $data['clave'] = $this->upload->data();
+                if ($flag) {
+                    $datos = array(
+                        'nombre' => $this->input->post('nombre'),
+                        'certificado' => $data['ruta'] . $data['certificado']['raw_name']. $data['certificado']['file_ext'],
+                        'clave' => $data['ruta'] . $data['clave']['raw_name'] . $data['clave']['file_ext'],
+                        'fecha_desde' => $this->formatear_fecha($this->input->post('fecha_desde')),
+                        'fecha_hasta' => $this->formatear_fecha($this->input->post('fecha_hasta')),
+                        'idusuario' => $data['session']['SID']
+                    );
+                    
+                    $resultado = $this->certificados_model->set($datos);
+                    
+                    if($resultado) {
+                        redirect('/certificados/listar/', 'refresh');
+                    }
+                }
+            }
+        }
+
+        $this->load->view('layout/app', $data);
     }
 
     public function index($numeroFactura = 8) {
@@ -136,6 +204,16 @@ class Certificados extends CI_Controller {
         }
     }
 
+    private function formatear_fecha($fecha) {
+        $aux = '';
+        $aux .= substr($fecha, 6, 4);
+        $aux .= '-';
+        $aux .= substr($fecha, 3, 2);
+        $aux .= '-';
+        $aux .= substr($fecha, 0, 2);
+
+        return $aux;
+    }
 }
 
 ?>

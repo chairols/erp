@@ -17,6 +17,7 @@ $("#modificar").click(function () {
                     'cuit': $("#cuit").val(),
                     'ingresos_brutos': $("#ingresos_brutos").val(),
                     'numero_importador': $("#numero_importador").val(),
+                    'idcertificado': $("#idcertificado").val(),
                     'factor_correccion': $("#factor_correccion").val()
                 };
                 $.ajax({

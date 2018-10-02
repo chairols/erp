@@ -17,7 +17,8 @@ class Parametros extends CI_Controller {
             'parametros_model',
             'log_model',
             'provincias_model',
-            'tipos_responsables_model'
+            'tipos_responsables_model',
+            'certificados_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -230,6 +231,7 @@ class Parametros extends CI_Controller {
         $data['parametro'] = $this->parametros_model->get_parametros_empresa();
         $data['provincias'] = $this->provincias_model->gets();
         $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
+        $data['certificados'] = $this->certificados_model->gets();
 
         $this->load->view('layout/app', $data);
     }
@@ -248,6 +250,7 @@ class Parametros extends CI_Controller {
         $this->form_validation->set_rules('cuit', 'CUIT', 'required');
         $this->form_validation->set_rules('ingresos_brutos', 'Ingresos Brutos', 'required');
         $this->form_validation->set_rules('numero_importador', 'Número de Importador', 'required');
+        $this->form_validation->set_rules('idcertificado', 'ID Certificado', 'required|integer');
         $this->form_validation->set_rules('factor_correccion', 'Factor de Corrección', 'required|decimal');
 
         if ($this->form_validation->run() == FALSE) {

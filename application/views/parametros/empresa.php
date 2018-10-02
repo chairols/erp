@@ -80,6 +80,16 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label col-md-3">Certificado Digital</label>
+                    <div class="col-md-6">
+                        <select id="idcertificado" class="form-control chosenSelect">
+                            <?php foreach ($certificados as $certificado) { ?>
+                                <option value="<?= $certificado['idcertificado'] ?>"<?= ($certificado['idcertificado'] == $parametro['idcertificado'] ? " selected" : "") ?>><?= $certificado['nombre'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="control-label col-md-3">Factor de Corrección</label>
                     <div class="col-md-6">
                         <input type="text" maxlength="9" class="form-control" id="factor_correccion" value="<?= $parametro['factor_correccion'] ?>">

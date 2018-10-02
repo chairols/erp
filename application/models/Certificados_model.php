@@ -42,6 +42,18 @@ class Certificados_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     * 
+     */
+    public function gets() {
+        $this->db->select('*');
+        $this->db->from('certificados');
+        $this->db->order_by('fecha_hasta DESC');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

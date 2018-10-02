@@ -136,6 +136,28 @@ class Retenciones extends CI_Controller {
                 }
             }
 
+            if ($this->input->post('idjurisdiccion') == "902") { // Si la retención es de ARBA
+                require_once('assets/vendors/afip/wsfe-class-ci.php');
+
+                $anio = substr($this->input->post('fecha'), 6, 4);
+                $mes = substr($this->input->post('fecha'), 3, 2);
+
+                $fechadesde = $anio . $mes . '01';
+                $fechahasta = $anio . $mes . date("d", (mktime(0, 0, 0, $mes + 1, 1, $anio) - 1));
+
+                $wsfe = new WsFE();
+                $wsfe->CUIT = floatval(30714016918);
+                $wsfe->PasswodArba = "252729";
+
+                if ($wsfe->ConsultaARBA(floatval($proveedor['cuit']), $fechadesde, $fechahasta, $alicuotas)) {
+                    $percepcion = $alicuotas->percepcion;
+                    $retencion = $alicuotas->retencion;
+                    
+                    $set['alicuota'] = $retencion;
+                    
+                }
+            }
+
             $id = $this->retenciones_model->set($set);
             if ($id) {
                 $log = array(
@@ -271,7 +293,7 @@ class Retenciones extends CI_Controller {
             foreach ($data['items'] as $key => $value) {
                 $data['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
             }
-            
+
             $this->load->view('retenciones/gets_items_table_body_ajax', $data);
         }
     }
@@ -335,8 +357,8 @@ class Retenciones extends CI_Controller {
                     'idretencion' => $this->input->post('idretencion')
                 );
                 $this->retenciones_model->update($datos, $where);
-                
-                
+
+
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se agregó el comprobante.'
@@ -392,8 +414,8 @@ class Retenciones extends CI_Controller {
                     'tipo' => 'del'
                 );
                 $this->log_model->set($log);
-                
-                
+
+
                 $where = array(
                     'idretencion' => $item['idretencion'],
                     'estado' => 'A'
@@ -414,8 +436,8 @@ class Retenciones extends CI_Controller {
                     'idretencion' => $item['idretencion']
                 );
                 $this->retenciones_model->update($datos, $where);
-                
-                
+
+
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se eliminó el comprobante.'

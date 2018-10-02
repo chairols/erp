@@ -16,7 +16,7 @@
     </div>
     <div class="box-body no-padding">
         <table class="table table-bordered table-hover table-striped">
-            <tbody>
+            <thead>
                 <tr>
                     <th>Comprobante</th>
                     <th>Proveedor</th>
@@ -25,6 +25,8 @@
                     <th>Monto Retenido</th>
                     <th>Acciones</th>
                 </tr>
+            </thead>
+            <tbody>
                 <?php foreach ($retenciones as $retencion) { ?>
                     <tr>
                         <td><?= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT) ?>-<?= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT) ?></td>

@@ -4,8 +4,8 @@
         <div class="row form-group inline-form-custom">
             <div class="col-xs-12">
                 <!-- Autocomplete Empresas -->
-                <input type="text" id="TextAutoCompleteempresa" name="TextAutoCompleteempresa" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="Empresas" actionauto="gets_empresas_ajax" varsauto="proveedor:=Y///internacional:=Y" iconauto="ship">
-                <input type="hidden" id="empresa" name="empresa" value="">
+                <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="proveedores" actionauto="gets_proveedores_ajax" varsauto="internacional:=Y" iconauto="ship">
+                <input type="hidden" id="proveedor" name="proveedor" value="">
             </div>
         </div>
         <h4 class="subTitleB"><i class="fa fa-money"></i> Moneda</h4>

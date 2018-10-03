@@ -33,7 +33,7 @@ class Importaciones extends CI_Controller {
         $data['javascript'] = array();
         $data['view'] = 'importaciones/agregar';
 
-        $this->form_validation->set_rules('empresa', 'Empresa', 'required');
+        $this->form_validation->set_rules('proveedor', 'Proveedor', 'required|integer');
         $this->form_validation->set_rules('moneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('fecha_pedido', 'Fecha de Pedido', 'required');
 
@@ -41,7 +41,7 @@ class Importaciones extends CI_Controller {
             
         } else {
             $datos = array(
-                'idproveedor' => $this->input->post('empresa'),
+                'idproveedor' => $this->input->post('proveedor'),
                 'idmoneda' => $this->input->post('moneda'),
                 'fecha_pedido' => $this->formatear_fecha($this->input->post('fecha_pedido')),
                 'fecha_creacion' => date("Y-m-d H:i:s"),

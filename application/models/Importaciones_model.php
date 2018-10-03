@@ -9,7 +9,7 @@ class Importaciones_model extends CI_Model {
     }
 
     /*
-     *  Importaciones/agregar
+     *  Importaciones/agregar_ajax
      */
     public function set($datos) {
         $this->db->insert('importaciones', $datos);
@@ -80,7 +80,7 @@ class Importaciones_model extends CI_Model {
     public function get_cantidad_where($where) {
         $this->db->select('*');
         $this->db->from('importaciones');
-        $this->db->join('empresas', 'importaciones.idproveedor = empresas.idempresa');
+        $this->db->join('proveedores', 'importaciones.idproveedor = proveedores.idproveedor');
         $this->db->join('monedas', 'importaciones.idmoneda = monedas.idmoneda');
         $this->db->like($where);
         
@@ -92,9 +92,9 @@ class Importaciones_model extends CI_Model {
      *  Importaciones/listar
      */
     public function gets_where_limit($where, $per_page, $pagina) {
-        $this->db->select('importaciones.*, empresas.empresa, monedas.moneda');
+        $this->db->select('importaciones.*, proveedores.proveedor, monedas.moneda');
         $this->db->from('importaciones');
-        $this->db->join('empresas', 'importaciones.idproveedor = empresas.idempresa');
+        $this->db->join('proveedores', 'importaciones.idproveedor = proveedores.idproveedor');
         $this->db->join('monedas', 'importaciones.idmoneda = monedas.idmoneda');
         $this->db->like($where);
         $this->db->order_by('idimportacion DESC');

@@ -15,7 +15,7 @@ class Importaciones extends CI_Controller {
         $this->load->model(array(
             'importaciones_model',
             'log_model',
-            'empresas_model',
+            'proveedores_model',
             'parametros_model',
             'monedas_model',
             'articulos_model',
@@ -30,7 +30,9 @@ class Importaciones extends CI_Controller {
         $data['title'] = 'Agregar Pedido de Importación';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/importaciones/js/agregar.js'
+        );
         $data['view'] = 'importaciones/agregar';
 
         $this->form_validation->set_rules('proveedor', 'Proveedor', 'required|integer');
@@ -72,6 +74,74 @@ class Importaciones extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
+    public function agregar_ajax() {
+        $data['session'] = $this->session->all_userdata();
+        
+        $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|integer');
+        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
+        $this->form_validation->set_rules('fecha', 'Fecha de Pedido', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'idproveedor' => $this->input->post('idproveedor'),
+                'idmoneda' => $this->input->post('idmoneda'),
+                'fecha_pedido' => $this->formatear_fecha($this->input->post('fecha')),
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'idcreador' => $data['session']['SID']
+            );
+
+            $id = $this->importaciones_model->set($datos);
+
+            if ($id) {
+                $where = array(
+                    'idproveedor' => $datos['idproveedor']
+                );
+                $proveedor = $this->proveedores_model->get_where($where);
+
+                $where = array(
+                    'idmoneda' => $datos['idmoneda']
+                );
+                $moneda = $this->monedas_model->get_where($where);
+
+                $log = array(
+                    'tabla' => 'importaciones',
+                    'idtabla' => $id,
+                    'texto' => "<h2><strong>Se cre&oacute; el pedido de importaci&oacute;n n&uacute;mero: " . $id . "</strong></h2>
+
+<p><strong>Proveedor: </strong>" . $proveedor['proveedor'] . "<br />
+<strong>Moneda: </strong>" . $moneda['moneda'] . "<br />
+&nbsp;</p>
+",
+                    'idusuario' => $data['session']['SID'],
+                    'tipo' => 'add'
+                );
+
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se creó exitosamente',
+                    'id' => $id
+                );
+                echo json_encode($json);
+
+                //redirect('/importaciones/agregar_items/' . $id . '/', 'refresh');
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo crear el pedido de importación'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
     public function agregar_items($idimportacion = null) {
         if (!$idimportacion) {
             redirect('/importaciones/listar/', 'refresh');
@@ -84,7 +154,8 @@ class Importaciones extends CI_Controller {
         );
         $data['view'] = 'importaciones/agregar_items';
 
-        $this->form_validation->set_rules('empresa', 'Empresa', 'required|integer');
+
+        $this->form_validation->set_rules('proveedor', 'Proveedor', 'required|integer');
         $this->form_validation->set_rules('moneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('fecha_pedido', 'Fecha de Pedido', 'required');
         $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
@@ -118,7 +189,7 @@ class Importaciones extends CI_Controller {
         $data['importacion'] = $this->importaciones_model->get_where($datos);
         $data['importacion']['fecha_pedido'] = $this->formatear_fecha_para_mostrar($data['importacion']['fecha_pedido']);
 
-        $data['proveedor'] = $this->empresas_model->get_where(array('idempresa' => $data['importacion']['idproveedor']));
+        $data['proveedor'] = $this->proveedores_model->get_where(array('idproveedor' => $data['importacion']['idproveedor']));
 
         $datos = array(
             'importaciones_items.idimportacion' => $idimportacion,
@@ -301,7 +372,7 @@ class Importaciones extends CI_Controller {
 
     public function confirmar_item_de_pedido_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('cantidad', 'Cantidad a confirmar', 'required|integer');
         $this->form_validation->set_rules('idimportacion_confirmacion', 'Identificador de Confirmación', 'required|integer');
         $this->form_validation->set_rules('idimportacion_item', 'Identificador del Item', 'required|integer');
@@ -398,7 +469,7 @@ class Importaciones extends CI_Controller {
 
     public function borrar_item_confirmado_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idimportacion_confirmacion_item', 'Identificador de Item', 'required|integer');
 
         if ($this->form_validation->run() == FALSE) {

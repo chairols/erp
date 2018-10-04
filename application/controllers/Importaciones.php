@@ -76,7 +76,7 @@ class Importaciones extends CI_Controller {
 
     public function agregar_ajax() {
         $data['session'] = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|integer');
         $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha de Pedido', 'required');
@@ -200,6 +200,44 @@ class Importaciones extends CI_Controller {
         $data['monedas'] = $this->monedas_model->gets();
 
         $this->load->view('layout/app', $data);
+    }
+
+    public function actualizar_cabecera_importacion_ajax() {
+        $this->form_validation->set_rules('idimportacion', 'ID Importación', 'required|integer');
+        $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|integer');
+        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
+        $this->form_validation->set_rules('fecha_pedido', 'Fecha de Pedido', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'idproveedor' => $this->input->post('idproveedor'),
+                'idmoneda' => $this->input->post('idmoneda'),
+                'fecha_pedido' => $this->formatear_fecha($this->input->post('fecha_pedido'))
+            );
+            $where = array(
+                'idimportacion' => $this->input->post('idimportacion')
+            );
+            $resultado = $this->importaciones_model->update($datos, $where);
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Los datos se actualizaron correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudieron actualizar los datos'
+                );
+                echo json_encode($json);
+            }
+        }
     }
 
     public function listar($pagina = 0) {

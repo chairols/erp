@@ -35,10 +35,11 @@ class Importaciones_model extends CI_Model {
     }
     
     /*
-     *  Importaciones/agregar_items
+     *  Importaciones/actualizar_cabecera_importacion_ajax
      */
-    public function update($where, $idimportacion) {
-        $this->db->update('importaciones', $where, array('idimportacion' => $idimportacion));
+    public function update($datos, $where) {
+        $this->db->update('importaciones',$datos, $where);
+        return $this->db->affected_rows();
     }
     
     /*

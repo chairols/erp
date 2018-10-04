@@ -1,3 +1,50 @@
+$("#actualizar").click(function () {
+
+    datos = {
+        'idimportacion': $("#idimportacion").val(),
+        'idproveedor': $("#proveedor").val(),
+        'idmoneda': $("#moneda").val(),
+        'fecha_pedido': $("#fecha_pedido").val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/importaciones/actualizar_cabecera_importacion_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#actualizar").hide();
+            $("#actualizar_loading").show();
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: false
+                        });
+                
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: false
+                        });
+            }
+            $("#actualizar").show();
+            $("#actualizar_loading").hide();
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            $("#actualizar").show();
+            $("#actualizar_loading").hide();
+        }
+    });
+});
 
 function borrar_item(articulo, id) {
 
@@ -17,12 +64,12 @@ function borrar_item(articulo, id) {
 
     alertify.confirm(
             "<strong>¿Desea confirmar?</strong>",
-            "Se eliminará el item "+articulo,
+            "Se eliminará el item " + articulo,
             function () {
                 datos = {};
                 $.ajax({
                     type: 'POST',
-                    url: '/importaciones/borrar_item/'+id,
+                    url: '/importaciones/borrar_item/' + id,
                     data: datos,
                     beforeSend: function () {
 
@@ -46,4 +93,5 @@ function borrar_item(articulo, id) {
             }
     );
 
-};
+}
+;

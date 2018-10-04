@@ -78,8 +78,14 @@ $("#agregar_item").click(function() {
                             allow_dismiss: false
                         });
             }
+            gets_items();
             $("#agregar_item").show();
             $("#agregar_item_loading").hide();
+            $("#TextAutoCompletearticulo").val("");
+            $("#articulo").val("");
+            $("#cantidad").val("");
+            $("#costo_fob").val("");
+            $("#TextAutoCompletearticulo").focus();
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
@@ -93,6 +99,36 @@ $("#agregar_item").click(function() {
     });
 });
 
+function gets_items() {
+    datos = {
+        'idimportacion': $("#idimportacion").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/importaciones/gets_items_pedido_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#items").html('<h1 class="text-center"><i class="fa fa-refresh fa-spin"></i></h1>');
+        },
+        success: function (data) {
+            $("#items").html(data);
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            $("#agregar_item").show();
+            $("#agregar_item_loading").hide();
+        }
+    });
+}
+
+$(document).ready(function() {
+    gets_items();
+});
+/*
 function borrar_item(articulo, id) {
 
     alertify.defaults.transition = "slide";
@@ -142,3 +178,4 @@ function borrar_item(articulo, id) {
 
 }
 ;
+*/

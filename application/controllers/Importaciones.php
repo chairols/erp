@@ -165,12 +165,6 @@ class Importaciones extends CI_Controller {
 
         $data['proveedor'] = $this->proveedores_model->get_where(array('idproveedor' => $data['importacion']['idproveedor']));
 
-        $datos = array(
-            'importaciones_items.idimportacion' => $idimportacion,
-            'importaciones_items.estado' => 'A'
-        );
-        $data['items'] = $this->importaciones_model->gets_items($datos);
-
         $data['monedas'] = $this->monedas_model->gets();
 
         $this->load->view('layout/app', $data);
@@ -211,6 +205,16 @@ class Importaciones extends CI_Controller {
                 echo json_encode($json);
             }
         }
+    }
+    
+    public function gets_items_pedido_ajax() {
+        $datos = array(
+            'importaciones_items.idimportacion' => $this->input->post('idimportacion'),
+            'importaciones_items.estado' => 'A'
+        );
+        $data['items'] = $this->importaciones_model->gets_items($datos);
+        
+        $this->load->view('importaciones/gets_items_pedido_ajax', $data);
     }
 
     public function actualizar_cabecera_importacion_ajax() {

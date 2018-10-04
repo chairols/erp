@@ -48,18 +48,21 @@
 
     <div class="row form-group inline-form-custom">
         <div class="col-xs-8 txC">
-            <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Artículo" placeholderauto="Artículo inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un artículo." objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="cube" autofocus>
+            <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Artículo" placeholderauto="Artículo inexistente" class="form-control input-sm TextAutoComplete" value="" validateEmpty="Seleccione un artículo." objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="cube" autofocus>
             <input type="hidden" id="articulo" name="idarticulo" value="">
         </div>
         <div class="col-xs-2 txC">
-            <input type="text" name="cantidad" placeholder="Cantidad" id="cantidad" class="form-control" validateEmpty="Ingrese Cantidad" validateOnlyNumbers="El valor debe ser numérico entero">
+            <input type="text" id="cantidad" placeholder="Cantidad" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,11}'">
         </div>
         <div class="col-xs-2 txC">
-            <input type="text" name="costo_fob" placeholder="Costo FOB" id="costo_fob" class="form-control" validateEmpty="Ingrese Costo Fob" validateOnlyNumbers="El valor debe ser numérico">
+            <input type="text" id="costo_fob" placeholder="Costo FOB" class="form-control input-sm inputMask" data-inputmask="'mask': '[-]9{1,17}.99'">
         </div>
     </div>
     <div class="row txC">
-        <button type="submit" class="btn btn-success btnGreen" id="BtnCreate"><i class="fa fa-plus"></i> Agregar Item</button>
+        <button type="button" class="btn btn-primary" id="agregar_item">Agregar Item</button>
+        <button type="button" class="btn btn-primary" id="agregar_item_loading" style="display: none;">
+            <i class="fa fa-refresh fa-spin"></i>
+        </button>
     </div>
 
     <h4 class="subTitleB">

@@ -46,6 +46,53 @@ $("#actualizar").click(function () {
     });
 });
 
+$("#agregar_item").click(function() {
+    datos = {
+        'idimportacion': $("#idimportacion").val(),
+        'idarticulo': $("#articulo").val(),
+        'cantidad': $("#cantidad").val(),
+        'costo_fob': $("#costo_fob").val()
+    };
+    
+    $.ajax({
+        type: 'POST',
+        url: '/importaciones/agregar_item_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#agregar_item").hide();
+            $("#agregar_item_loading").show();
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: false
+                        });
+                
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: false
+                        });
+            }
+            $("#agregar_item").show();
+            $("#agregar_item_loading").hide();
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            $("#agregar_item").show();
+            $("#agregar_item_loading").hide();
+        }
+    });
+});
+
 function borrar_item(articulo, id) {
 
     alertify.defaults.transition = "slide";

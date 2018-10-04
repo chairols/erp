@@ -52,7 +52,7 @@ class Importaciones_model extends CI_Model {
     }
     
     /*
-     *  Importaciones/agregar_items
+     *  Importaciones/agregar_item_ajax
      */
     public function set_item($datos) {
         $this->db->insert('importaciones_items', $datos);

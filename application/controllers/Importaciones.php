@@ -155,33 +155,7 @@ class Importaciones extends CI_Controller {
         $data['view'] = 'importaciones/agregar_items';
 
 
-        $this->form_validation->set_rules('proveedor', 'Proveedor', 'required|integer');
-        $this->form_validation->set_rules('moneda', 'Moneda', 'required|integer');
-        $this->form_validation->set_rules('fecha_pedido', 'Fecha de Pedido', 'required');
-        $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
-        $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
-        $this->form_validation->set_rules('costo_fob', 'Costo FOB', 'required');
 
-        if ($this->form_validation->run() == FALSE) {
-            
-        } else {
-            $datos = array(
-                'idproveedor' => $this->input->post('empresa'),
-                'idmoneda' => $this->input->post('moneda'),
-                'fecha_pedido' => $this->formatear_fecha($this->input->post('fecha_pedido')),
-                'actualizado_por' => $data['session']['SID']
-            );
-            $this->importaciones_model->update($datos, $idimportacion);
-
-            $datos = array(
-                'idimportacion' => $idimportacion,
-                'idarticulo' => $this->input->post('idarticulo'),
-                'cantidad' => $this->input->post('cantidad'),
-                'cantidad_pendiente' => $this->input->post('cantidad'),
-                'costo_fob' => $this->input->post('costo_fob')
-            );
-            $this->importaciones_model->set_item($datos);
-        }
 
         $datos = array(
             'idimportacion' => $idimportacion
@@ -202,7 +176,46 @@ class Importaciones extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
+    public function agregar_item_ajax() {
+        $this->form_validation->set_rules('idimportacion', 'ID Importación', 'required|integer');
+        $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
+        $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
+        $this->form_validation->set_rules('costo_fob', 'Costo FOB', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'idimportacion' => $this->input->post('idimportacion'),
+                'idarticulo' => $this->input->post('idarticulo'),
+                'cantidad' => $this->input->post('cantidad'),
+                'cantidad_pendiente' => $this->input->post('cantidad'),
+                'costo_fob' => $this->input->post('costo_fob')
+            );
+            $resultado = $this->importaciones_model->set_item($datos);
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se agregó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo agregar el item'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
     public function actualizar_cabecera_importacion_ajax() {
+        $session = $this->session->all_userdata();
+
         $this->form_validation->set_rules('idimportacion', 'ID Importación', 'required|integer');
         $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|integer');
         $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
@@ -218,7 +231,8 @@ class Importaciones extends CI_Controller {
             $datos = array(
                 'idproveedor' => $this->input->post('idproveedor'),
                 'idmoneda' => $this->input->post('idmoneda'),
-                'fecha_pedido' => $this->formatear_fecha($this->input->post('fecha_pedido'))
+                'fecha_pedido' => $this->formatear_fecha($this->input->post('fecha_pedido')),
+                'actualizado_por' => $session['SID']
             );
             $where = array(
                 'idimportacion' => $this->input->post('idimportacion')

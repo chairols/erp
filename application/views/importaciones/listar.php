@@ -81,7 +81,7 @@
                 <?php foreach ($importaciones as $importacion) { ?>
                     <tr>
                         <td><?= $importacion['idimportacion'] ?></td>
-                        <td><?= $importacion['empresa'] ?></td>
+                        <td><?= $importacion['proveedor'] ?></td>
                         <td><span class="label label-success"><?= $importacion['moneda'] ?></span></td>
                         <td><span class="label label-brown"><?= $importacion['cantidad_items'] ?></span></td>
                         <td>

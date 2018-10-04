@@ -61,6 +61,7 @@ class Retenciones_model extends CI_Model {
     public function gets_items_where($where) {
         $this->db->select('*');
         $this->db->from('retenciones_items');
+        $this->db->join('tipos_comprobantes', 'retenciones_items.idtipo_comprobante = tipos_comprobantes.idtipo_comprobante');
         $this->db->where($where);
         
         $query = $this->db->get();

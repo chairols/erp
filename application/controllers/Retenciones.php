@@ -20,7 +20,8 @@ class Retenciones extends CI_Controller {
             'retenciones_model',
             'tipos_responsables_model',
             'padrones_model',
-            'log_model'
+            'log_model',
+            'tipos_comprobantes_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -225,6 +226,10 @@ class Retenciones extends CI_Controller {
             'idjurisdiccion_afip' => $data['retencion']['idjurisdiccion_afip']
         );
         $data['retencion']['jurisdiccion'] = $this->provincias_model->get_where($where);
+        $where = array(
+            'activo' => 'A'
+        );
+        $data['tipos_comprobantes'] = $this->tipos_comprobantes_model->gets_where($where);
 
         // Empresa emisora
         $data['parametro'] = $this->parametros_model->get_parametros_empresa();
@@ -302,6 +307,7 @@ class Retenciones extends CI_Controller {
         $session = $this->session->all_userdata();
 
         $this->form_validation->set_rules('idretencion', 'ID de Retención', 'required|integer');
+        $this->form_validation->set_rules('idtipo_comprobante', 'Tipo de Comprobante', 'required|integer');
         $this->form_validation->set_rules('punto_de_venta', 'Punto de Venta', 'required|integer');
         $this->form_validation->set_rules('comprobante', 'Comprobante', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');
@@ -316,6 +322,7 @@ class Retenciones extends CI_Controller {
         } else {
             $datos = array(
                 'idretencion' => $this->input->post('idretencion'),
+                'idtipo_comprobante' => $this->input->post('idtipo_comprobante'),
                 'punto_de_venta' => $this->input->post('punto_de_venta'),
                 'comprobante' => $this->input->post('comprobante'),
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
@@ -323,12 +330,19 @@ class Retenciones extends CI_Controller {
             );
             $resultado = $this->retenciones_model->set_item($datos);
             if ($resultado) {
+                $where = array(
+                    'idtipo_comprobante' => $this->input->post('idtipo_comprobante')
+                );
+                $tipo_comprobante = $this->tipos_comprobantes_model->get_where($where);
+                
                 $log = array(
                     'tabla' => 'retenciones',
                     'idtabla' => $datos['idretencion'],
                     'texto' => "<h2><strong>Se agreg&oacute; el comprobante : " . str_pad($datos['punto_de_venta'], 4, '0', STR_PAD_LEFT) . "-" . str_pad($datos['comprobante'], 8, '0', STR_PAD_LEFT) . "</strong></h2>
 
-<p><strong>Punto del comprobante: </strong>" . str_pad($datos['punto_de_venta'], 4, '0', STR_PAD_LEFT) . "<br />
+<p>
+<strong>Tipo de Comprobante: </strong>".$tipo_comprobante['tipo_comprobante']." <br />
+<strong>Punto del comprobante: </strong>" . str_pad($datos['punto_de_venta'], 4, '0', STR_PAD_LEFT) . "<br />
 <strong>N&uacute;mero del comprobante: </strong>" . str_pad($datos['comprobante'], 8, '0', STR_PAD_LEFT) . "<br />
 <strong>Fecha: </strong>" . $this->input->post('fecha') . "<br />
 <strong>Base Imponible: </strong>" . $datos['base_imponible'] . "</p>",

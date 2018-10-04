@@ -11,7 +11,7 @@
     <tbody>
         <?php foreach ($items as $item) { ?>
             <tr>
-                <td><?= str_pad($item['punto_de_venta'], 4, '0', STR_PAD_LEFT); ?>-<?= str_pad($item['comprobante'], 8, '0', STR_PAD_LEFT); ?></td>
+                <td><?=$item['tipo_comprobante']?> <?= str_pad($item['punto_de_venta'], 4, '0', STR_PAD_LEFT); ?>-<?= str_pad($item['comprobante'], 8, '0', STR_PAD_LEFT); ?></td>
                 <td><?= $item['fecha_formateada'] ?></td>
                 <td><?= $item['base_imponible'] ?></td>
                 <td><?= number_format(round((($item['base_imponible'] * $retencion['alicuota']) / 100), 2), 2) ?></td>

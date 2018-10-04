@@ -72,11 +72,19 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-xs-3 txC">
+            <strong>Tipo de Comprobante</strong>
+            <select id="tipo_comprobante" class="form-control chosenSelect">
+                <?php foreach($tipos_comprobantes as $tipo_comprobante) { ?>
+                <option value="<?=$tipo_comprobante['idtipo_comprobante']?>"><?=$tipo_comprobante['tipo_comprobante']?></option>
+                <?php } ?>
+            </select>
+        </div>
         <div class="col-xs-2 txC">
             <strong>Punto de Venta</strong><br>
             <input type="text" id="punto_de_venta" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,4}'">
         </div>
-        <div class="col-xs-3 txC">
+        <div class="col-xs-2 txC">
             <strong>Comprobante</strong><br>
             <input type="text" id="comprobante" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,8}'">
         </div>
@@ -84,11 +92,11 @@
             <strong>Fecha</strong><br>
             <input type="text" id="fecha" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha">
         </div>
-        <div class="col-xs-3 txC">
+        <div class="col-xs-2 txC">
             <strong>Base Imponible</strong><br>
             <input type="text" id="base_imponible" class="form-control input-sm inputMask" data-inputmask="'mask': '[-]9{1,17}.99'">
         </div>
-        <div class="col-xs-2">
+        <div class="col-xs-1">
             <br>
             <span id="div-boton-agregar" class="input-group-btn">
                 <button id="agregar" class="btn btn-info btn-sm btn-flat" type="button">Agregar</button>

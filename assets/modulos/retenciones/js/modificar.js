@@ -102,6 +102,7 @@ function get_items_tabla() {
 
 $("#agregar").click(function () {
     datos = {
+        'idtipo_comprobante': $("#tipo_comprobante").val(),
         'idretencion': $("#idretencion").val(),
         'punto_de_venta': $("#punto_de_venta").val(),
         'comprobante': $("#comprobante").val(),

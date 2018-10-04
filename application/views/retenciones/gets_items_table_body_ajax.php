@@ -16,7 +16,7 @@
                 <td><?= $item['base_imponible'] ?></td>
                 <td><?= number_format(round((($item['base_imponible'] * $retencion['alicuota']) / 100), 2), 2) ?></td>
                 <td>
-                    <button class="btn btn-danger btn-xs" onclick="borrar_item(<?= $item['idretencion_item'] ?>)">
+                    <button class="btn btn-danger btn-xs" onclick="borrar_item(<?= $item['idretencion_item'] ?>, '<?= str_pad($item['punto_de_venta'], 4, '0', STR_PAD_LEFT); ?>-<?= str_pad($item['comprobante'], 8, '0', STR_PAD_LEFT); ?>')">
                         <i class="fa fa-trash-o"></i>
                     </button>
                 </td>

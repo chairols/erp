@@ -57,7 +57,7 @@ $("#alicuota-guardar-boton").click(function () {
                             type: 'success',
                             allow_dismiss: false
                         });
-                        get_items_tabla();
+                get_items_tabla();
             }
         },
         error: function (xhr) { // if error occured
@@ -90,7 +90,7 @@ function get_items_tabla() {
         error: function (xhr) { // if error occured
             $("#body-tabla-items").html(xhr.responseText);
             console.log(xhr);
-            
+
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
                     {
                         type: 'danger',
@@ -100,7 +100,7 @@ function get_items_tabla() {
     });
 }
 
-$("#agregar").click(function() {
+$("#agregar").click(function () {
     datos = {
         'idretencion': $("#idretencion").val(),
         'punto_de_venta': $("#punto_de_venta").val(),
@@ -124,21 +124,21 @@ $("#agregar").click(function() {
                             type: 'danger',
                             allow_dismiss: false
                         });
-                        $("#div-boton-loading").hide();
-                        $("#div-boton-agregar").show();
+                $("#div-boton-loading").hide();
+                $("#div-boton-agregar").show();
             } else if (resultado['status'] == 'ok') {
                 $.notify('<strong>' + resultado['data'] + '</strong>',
                         {
                             type: 'success',
                             allow_dismiss: false
                         });
-                        $("#punto_de_venta").val("");
-                        $("#comprobante").val("");
-                        //$("#fecha").val("");
-                        $("#base_imponible").val("");
-                        $("#div-boton-loading").hide();
-                        $("#div-boton-agregar").show();
-                        get_items_tabla();
+                $("#punto_de_venta").val("");
+                $("#comprobante").val("");
+                //$("#fecha").val("");
+                $("#base_imponible").val("");
+                $("#div-boton-loading").hide();
+                $("#div-boton-agregar").show();
+                get_items_tabla();
             }
         },
         error: function (xhr) { // if error occured
@@ -149,47 +149,54 @@ $("#agregar").click(function() {
                     });
         }
     });
-    
+
 });
 
-function borrar_item(idretencion_item) {
-    datos = {
-        'idretencion_item': idretencion_item
-    };
-    $.ajax({
-        type: 'POST',
-        url: '/retenciones/borrar_item/',
-        data: datos,
-        beforeSend: function () {
-            
-        },
-        success: function (data) {
-            resultado = $.parseJSON(data);
-            if (resultado['status'] == 'error') {
-                $.notify('<strong>' + resultado['data'] + '</strong>',
-                        {
-                            type: 'danger',
-                            allow_dismiss: false
-                        });
-            } else if (resultado['status'] == 'ok') {
-                $.notify('<strong>' + resultado['data'] + '</strong>',
-                        {
-                            type: 'success',
-                            allow_dismiss: false
-                        });
+function borrar_item(idretencion_item, comprobante) {
+
+    alertify.confirm("Se eliminará el comprobante <strong>" + comprobante + "</strong><br><strong>¿Desea confirmar?</strong>", function (e) {
+        if (e) {
+            datos = {
+                'idretencion_item': idretencion_item
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/retenciones/borrar_item/',
+                data: datos,
+                beforeSend: function () {
+
+                },
+                success: function (data) {
+                    resultado = $.parseJSON(data);
+                    if (resultado['status'] == 'error') {
+                        $.notify('<strong>' + resultado['data'] + '</strong>',
+                                {
+                                    type: 'danger',
+                                    allow_dismiss: false
+                                });
+                    } else if (resultado['status'] == 'ok') {
+                        $.notify('<strong>' + resultado['data'] + '</strong>',
+                                {
+                                    type: 'success',
+                                    allow_dismiss: false
+                                });
                         get_items_tabla();
-            }
-        },
-        error: function (xhr) { // if error occured
-            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
-                    {
-                        type: 'danger',
-                        allow_dismiss: false
-                    });
+                    }
+                },
+                error: function (xhr) { // if error occured
+                    $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                            {
+                                type: 'danger',
+                                allow_dismiss: false
+                            });
+                }
+            });
         }
     });
+
+    
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     get_items_tabla();
 });

@@ -46,8 +46,8 @@ class Importaciones_model extends CI_Model {
      *  Importaciones/agregar_items
      *  Importaciones/borrar_item_confirmado_ajax
      */
-    public function update_item($where, $idimportacion_item) {
-        $this->db->update('importaciones_items', $where, array('idimportacion_item' => $idimportacion_item));
+    public function update_item($datos, $where) {
+        $this->db->update('importaciones_items', $datos, $where);
         return $this->db->affected_rows();
     }
     

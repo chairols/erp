@@ -23,7 +23,7 @@ $("#actualizar").click(function () {
                             type: 'danger',
                             allow_dismiss: false
                         });
-                
+
             } else if (resultado['status'] == 'ok') {
                 $.notify('<strong>' + resultado['data'] + '</strong>',
                         {
@@ -46,14 +46,14 @@ $("#actualizar").click(function () {
     });
 });
 
-$("#agregar_item").click(function() {
+$("#agregar_item").click(function () {
     datos = {
         'idimportacion': $("#idimportacion").val(),
         'idarticulo': $("#articulo").val(),
         'cantidad': $("#cantidad").val(),
         'costo_fob': $("#costo_fob").val()
     };
-    
+
     $.ajax({
         type: 'POST',
         url: '/importaciones/agregar_item_ajax/',
@@ -70,7 +70,7 @@ $("#agregar_item").click(function() {
                             type: 'danger',
                             allow_dismiss: false
                         });
-                
+
             } else if (resultado['status'] == 'ok') {
                 $.notify('<strong>' + resultado['data'] + '</strong>',
                         {
@@ -125,57 +125,51 @@ function gets_items() {
     });
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     gets_items();
 });
-/*
+
 function borrar_item(articulo, id) {
+    
+    alertify.confirm("Se eliminará el artículo <strong>" + articulo + "</strong><br><strong>¿Desea confirmar?</strong>", function (e) {
+        if (e) {
+            datos = {
+                'idimportacion_item': id
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/importaciones/borrar_item/',
+                data: datos,
+                beforeSend: function () {
 
-    alertify.defaults.transition = "slide";
-    alertify.defaults.theme.ok = "btn btn-success";
-    alertify.defaults.theme.cancel = "btn btn-danger";
-    alertify.defaults.theme.input = "form-control";
-    alertify.defaults.notifier = {
-        delay: 3,
-        position: 'bottom-right',
-        closeButton: false
-    };
-    alertify.defaults.glossary = {
-        ok: "Agregar",
-        cancel: "Cancelar"
-    };
-
-    alertify.confirm(
-            "<strong>¿Desea confirmar?</strong>",
-            "Se eliminará el item " + articulo,
-            function () {
-                datos = {};
-                $.ajax({
-                    type: 'POST',
-                    url: '/importaciones/borrar_item/' + id,
-                    data: datos,
-                    beforeSend: function () {
-
-                    },
-                    success: function (data) {
-                        alertify.defaults.glossary = {
-                            ok: "Aceptar",
-                        };
-                        resultado = $.parseJSON(data);
-                        if (resultado['status'] == 'error') {
-                            alertify.alert('<strong>ERROR</strong>', resultado['data']);
-                        } else if (resultado['status'] == 'ok') {
-                            alertify.success("Se borró correctamente");
-                            location.reload();
-                        }
+                },
+                success: function (data) {
+                    resultado = $.parseJSON(data);
+                    if (resultado['status'] == 'error') {
+                        $.notify('<strong>' + resultado['data'] + '</strong>',
+                                {
+                                    type: 'danger',
+                                    allow_dismiss: false
+                                });
+                    } else if (resultado['status'] == 'ok') {
+                        $.notify('<strong>' + resultado['data'] + '</strong>',
+                                {
+                                    type: 'success',
+                                    allow_dismiss: false
+                                });
+                        gets_items();
                     }
-                });
-            },
-            function () {
-                alertify.error("Se canceló la operación");
-            }
-    );
-
+                },
+                error: function (xhr) { // if error occured
+                    $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                            {
+                                type: 'danger',
+                                allow_dismiss: false
+                            });
+                    $("#agregar_item").show();
+                    $("#agregar_item_loading").hide();
+                }
+            });
+        }
+    });
 }
-;
-*/

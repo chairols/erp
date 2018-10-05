@@ -42,7 +42,7 @@
                     <i class="fa fa-edit"></i>
                 </button>
             </a>
-            <button onclick="borrar_item('<?= $item['articulo'] ?>', '<?= $item['idimportacion_item'] ?>');" class="btn btn-danger btn-xs tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Eliminar <?= $item['articulo'] ?>">
+            <button onclick="borrar_item('<?= $item['articulo'] ?> - <?=$item['marca']?>', '<?= $item['idimportacion_item'] ?>');" class="btn btn-danger btn-xs tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Eliminar <?= $item['articulo'] ?>">
                 <i class="fa fa-trash"></i>
             </button>
         </div>

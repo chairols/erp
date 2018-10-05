@@ -206,14 +206,14 @@ class Importaciones extends CI_Controller {
             }
         }
     }
-    
+
     public function gets_items_pedido_ajax() {
         $datos = array(
             'importaciones_items.idimportacion' => $this->input->post('idimportacion'),
             'importaciones_items.estado' => 'A'
         );
         $data['items'] = $this->importaciones_model->gets_items($datos);
-        
+
         $this->load->view('importaciones/gets_items_pedido_ajax', $data);
     }
 
@@ -309,22 +309,37 @@ class Importaciones extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
-    public function borrar_item($idimportacion_item) {
-        $datos = array(
-            'estado' => 'I'
-        );
-        $resultado = $this->importaciones_model->update_item($datos, $idimportacion_item);
-        if ($resultado) {
+    public function borrar_item() {
+        $this->form_validation->set_rules('idimportacion_item', 'ID Item', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
             $json = array(
-                'status' => 'ok'
+                'status' => 'error',
+                'data' => validation_errors()
             );
             echo json_encode($json);
         } else {
-            $json = array(
-                'status' => 'error',
-                'data' => '<p>No se pudo eliminar el item.</p>'
+            $datos = array(
+                'estado' => 'I'
             );
-            echo json_encode($json);
+            $where = array(
+                'idimportacion_item' => $this->input->post('idimportacion_item')
+            );
+            $resultado = $this->importaciones_model->update_item($datos, $where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se eliminó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => '<p>No se pudo eliminar el item.</p>'
+                );
+                echo json_encode($json);
+            }
         }
     }
 

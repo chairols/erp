@@ -134,22 +134,18 @@ class Importaciones_model extends CI_Model {
      *  Importaciones/confirmacion
      */
     public function gets_proveedores_con_items_pendientes() {
-        $query = $this->db->query("SELECT *
-                                    FROM
-                                        importaciones i,
-                                        empresas e
-                                    WHERE
-                                        i.importaciones_estado = 'P' AND
-                                        e.idempresa = i.idproveedor
-                                    GROUP BY
-                                        e.empresa
-                                    ORDER BY
-                                        e.empresa");
+        $this->db->select("*");
+        $this->db->from("importaciones");
+        $this->db->join("proveedores", "importaciones.idproveedor = proveedores.idproveedor");
+        $this->db->group_by("proveedores.proveedor");
+        $this->db->order_by("proveedores.proveedor");
+        
+        $query = $this->db->get();
         return $query->result_array();
     }
     
     /*
-     *  Importaciones/confirmacion
+     *  Importaciones/confirmacion_ajax
      */
     public function set_importacion_confirmacion($datos) {
         $this->db->insert('importaciones_confirmaciones', $datos);

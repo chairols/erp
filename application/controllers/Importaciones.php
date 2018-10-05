@@ -392,14 +392,29 @@ class Importaciones extends CI_Controller {
         $data['title'] = 'Confirmar Pedido de Importación';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/importaciones/js/confirmacion.js'
+        );
         $data['view'] = 'importaciones/confirmacion';
+
+
+        $data['proveedores'] = $this->importaciones_model->gets_proveedores_con_items_pendientes();
+
+        $this->load->view('layout/app', $data);
+    }
+
+    public function confirmacion_ajax() {
+        $data['session'] = $this->session->all_userdata();
 
         $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|numeric');
         $this->form_validation->set_rules('fecha_confirmacion', 'Fecha de Confirmación', 'required');
 
         if ($this->form_validation->run() == FALSE) {
-            
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
         } else {
             $datos = array(
                 'idproveedor' => $this->input->post('idproveedor'),
@@ -407,15 +422,22 @@ class Importaciones extends CI_Controller {
                 'fecha_creacion' => date("Y-m-d H:i:s"),
                 'idcreador' => $data['session']['SID']
             );
-
             $id = $this->importaciones_model->set_importacion_confirmacion($datos);
-
-            redirect('/importaciones/confirmacion_items/' . $id . '/', 'refresh');
+            if ($id) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se realizó la confirmación exitosamente',
+                    'id' => $id
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo confirmar la importación'
+                );
+                echo json_encode($json);
+            }
         }
-
-        $data['proveedores'] = $this->importaciones_model->gets_proveedores_con_items_pendientes();
-
-        $this->load->view('layout/app', $data);
     }
 
     public function confirmacion_items($idimportacion_confirmacion = null) {

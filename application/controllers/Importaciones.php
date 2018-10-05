@@ -458,7 +458,7 @@ class Importaciones extends CI_Controller {
         );
         $data['confirmacion'] = $this->importaciones_model->get_confirmacion_where($datos);
 
-        $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($data['confirmacion']['idempresa']);
+        $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($data['confirmacion']['idproveedor']);
 
         $this->load->view('layout/app', $data);
     }
@@ -517,10 +517,13 @@ class Importaciones extends CI_Controller {
                 if ($idconfirmacion_item) {
                     $nueva_cantidad_pendiente = ($item_pedido['cantidad_pendiente'] - $this->input->post('cantidad'));
 
-                    $where = array(
+                    $datos = array(
                         'cantidad_pendiente' => $nueva_cantidad_pendiente
                     );
-                    $rows_afectadas = $this->importaciones_model->update_item($where, $this->input->post('idimportacion_item'));
+                    $where = array(
+                        'idimportacion_item' => $this->input->post('idimportacion_item')
+                    );
+                    $rows_afectadas = $this->importaciones_model->update_item($datos, $where);
 
                     if ($rows_afectadas) {
                         $json = array(
@@ -546,7 +549,7 @@ class Importaciones extends CI_Controller {
     }
 
     public function items_backorder_ajax() {
-        $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($this->input->post('idempresa'));
+        $data['items_backorder'] = $this->importaciones_model->gets_items_backorder($this->input->post('idproveedor'));
         $this->load->view('importaciones/items_backorder_ajax', $data);
     }
 

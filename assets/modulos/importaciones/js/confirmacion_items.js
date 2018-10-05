@@ -24,7 +24,7 @@ function refrescar_items_confirmados() {
 
 function refrescar_items_backorder() {
     datos = {
-        'idempresa': $("#idempresa").val()
+        'idproveedor': $("#idproveedor").val()
     };
     $.ajax({
 

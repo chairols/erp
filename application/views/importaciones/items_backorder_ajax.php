@@ -23,7 +23,7 @@
                         </td>
                         <td class="txC text-sm"><?= $item['cantidad'] ?></td>
                         <td class="txC text-sm"><?= $item['cantidad_pendiente'] ?></td>
-                        <td class="col-xs-1">
+                        <td class="col-xs-1 text-sm">
                             <input type="text" id="cantidad-<?=$item['idimportacion_item']?>" class="form-control input-sm" value="<?= $item['cantidad_pendiente'] ?>" required>
                         </td>
                         <td class="txC text-sm"><?= $item['idimportacion'] ?></td>

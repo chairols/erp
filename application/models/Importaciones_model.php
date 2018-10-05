@@ -158,8 +158,8 @@ class Importaciones_model extends CI_Model {
     public function get_confirmacion_where($where) {
         $this->db->select('*');
         $this->db->from('importaciones_confirmaciones');
-        $this->db->join('empresas', 'importaciones_confirmaciones.idproveedor = empresas.idempresa');
-        $this->db->like($where);
+        $this->db->join('proveedores', 'importaciones_confirmaciones.idproveedor = proveedores.idproveedor');
+        $this->db->where($where);
         
         $query = $this->db->get();
         return $query->row_array();

@@ -3,8 +3,8 @@
         <h4 class="subTitleB"><i class="fa fa-building"></i> Proveedor</h4>
         <div class="row form-group inline-form-custom">
             <div class="col-xs-12">
-                <input type="text" id="proveedor" name="proveedor" value="<?= $confirmacion['empresa'] ?>" class="form-control" disabled>
-                <input type="hidden" id="idempresa" value="<?=$confirmacion['idempresa']?>">
+                <input type="text" id="proveedor" name="proveedor" value="<?= $confirmacion['proveedor'] ?>" class="form-control" disabled>
+                <input type="hidden" id="idproveedor" value="<?=$confirmacion['idproveedor']?>">
             </div>
         </div>
         <h4 class="subTitleB"><i class="fa fa-calendar"></i> Fecha de Confirmación</h4>

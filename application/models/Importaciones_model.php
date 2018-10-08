@@ -105,6 +105,33 @@ class Importaciones_model extends CI_Model {
         return $query->result_array();
     }
     
+    /*
+     *  Importaciones/listar_confirmaciones
+     */
+    public function get_cantidad_confirmaciones_where($where) {
+        $this->db->select('*');
+        $this->db->from('importaciones_confirmaciones');
+        $this->db->join('proveedores', 'importaciones_confirmaciones.idproveedor = proveedores.idproveedor');
+        $this->db->like($where);
+        
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+    
+    /*
+     *  Importaciones/listar_confirmaciones
+     */
+    public function gets_confirmaciones_where_limit($where, $per_page, $pagina) {
+        $this->db->select('importaciones_confirmaciones.*, proveedores.proveedor');
+        $this->db->from('importaciones_confirmaciones');
+        $this->db->join('proveedores', 'importaciones_confirmaciones.idproveedor = proveedores.idproveedor');
+        $this->db->like($where);
+        $this->db->order_by('importaciones_confirmaciones.idimportacion_confirmacion DESC');
+        $this->db->limit($per_page, $pagina);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
     
     public function get_cantidad_items($idimportacion) {
         $this->db->select('*');

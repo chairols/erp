@@ -111,6 +111,20 @@ class Retenciones_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Retenciones/reporte_ajax
+     */
+    public function gets_where($where) {
+        $this->db->select('retenciones.*, provincias.provincia as jurisdiccion');
+        $this->db->from('retenciones');
+        $this->db->join('provincias', 'retenciones.idjurisdiccion_afip = provincias.idjurisdiccion_afip');
+        $this->db->where($where);
+        $this->db->order_by('idretencion');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

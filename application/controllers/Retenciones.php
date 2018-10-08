@@ -670,6 +670,54 @@ class Retenciones extends CI_Controller {
             }
         }
     }
+    
+    public function reporte() {
+        $data['title'] = 'Reporte de Retenciones';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/retenciones/js/reporte.js'
+        );
+        $data['view'] = 'retenciones/reporte';
+        
+        $data['provincias'] = $this->provincias_model->gets();
+        
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function reporte_ajax() {
+        $this->form_validation->set_rules('idjurisdiccion_afip', 'Jurisdiccion', 'required');
+        $this->form_validation->set_rules('fecha_desde', 'Fecha Desde', 'required');
+        $this->form_validation->set_rules('fecha_hasta', 'Fecha Hasta', 'required');
+        
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'idjurisdiccion_afip' => $this->input->post('idjurisdiccion_afip')
+            );
+            $data['provincia'] = $this->provincias_model->get_where($where);
+            
+            $where = array(
+                'retenciones.fecha >=' => $this->formatear_fecha($this->input->post('fecha_desde')),
+                'retenciones.fecha <=' => $this->formatear_fecha($this->input->post('fecha_hasta')),
+                'retenciones.idjurisdiccion_afip' => $this->input->post('idjurisdiccion_afip'),
+                'retenciones.estado' => 'A'
+            );
+            
+            $data['retenciones'] = $this->retenciones_model->gets_where($where);
+            foreach ($data['retenciones'] as $key => $value) {
+                $data['retenciones'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+            }
+            
+            $this->load->view('retenciones/reporte_ajax', $data);
+        }
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';

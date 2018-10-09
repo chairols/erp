@@ -1,8 +1,11 @@
 <link rel="stylesheet" href="/assets/vendors/DataTables-1.10.18/DataTables-1.10.18/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="/assets/vendors/DataTables-1.10.18/Buttons-1.5.4/css/buttons.dataTables.min.css">
 
-<br><br>
-<table id="example" class="display" style="width:100%">
+<h1 class="text-center" id="loading">
+    <i class="fa fa-refresh fa-spin"></i>
+</h1>
+
+<table id="example" class="display" style="width:100%; display: none;">
     <thead>
         <tr>
             <th class="text-right">Retención</th>
@@ -70,5 +73,7 @@
             ]
         });
 
+        $("#loading").hide();
+        $("#example").show();
     });
 </script>

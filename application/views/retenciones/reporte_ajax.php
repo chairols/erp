@@ -1,13 +1,8 @@
-<h3 class="text-center">
-    <strong>
-        Jurisdicción: <?= $provincia['idjurisdiccion_afip'] ?> - <?= $provincia['provincia'] ?>
-    </strong>
-</h3>
-<input type="hidden" id="jurisdiccion" value="<?=$provincia['idjurisdiccion_afip']?>">
-<input type="hidden" id="fecha_desde" value="<?=$where['fecha_desde']?>">
-<input type="hidden" id="fecha_hasta" value="<?=$where['fecha_hasta']?>">
+<link rel="stylesheet" href="/assets/vendors/DataTables-1.10.18/DataTables-1.10.18/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="/assets/vendors/DataTables-1.10.18/Buttons-1.5.4/css/buttons.dataTables.min.css">
 
-<table class="table table-striped table-hover table-responsive">
+<br><br>
+<table id="example" class="display" style="width:100%">
     <thead>
         <tr>
             <th class="text-right">Retención</th>
@@ -33,34 +28,47 @@
         <?php } ?>
     </tbody>
 </table>
-<div class="pull-right">
-    <button id="pdf" class="btn btn-primary">Generar PDF</button>
-</div>
+
+<!--<script type="text/javascript" src="/assets/vendors/DataTables-1.10.18/jQuery-3.3.1/jquery-3.3.1.min.js"></script>-->
+<script type="text/javascript" src="/assets/vendors/DataTables-1.10.18/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/assets/vendors/DataTables-1.10.18/Buttons-1.5.4/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="/assets/vendors/DataTables-1.10.18/JSZip-2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="/assets/vendors/DataTables-1.10.18/pdfmake-0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="/assets/vendors/DataTables-1.10.18/pdfmake-0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="/assets/vendors/DataTables-1.10.18/Buttons-1.5.4/js/buttons.html5.min.js"></script>
 
 <script type="text/javascript">
-    $("#pdf").click(function () {
-        
-        var form = document.createElement("form");
-        form.setAttribute("method", "post");
-        form.setAttribute("action", "/retenciones/reporte_pdf/");
-        form.setAttribute("target", "_blank");
 
-        var jurisdiccion = document.createElement("input");
-        jurisdiccion.setAttribute("name", "idjurisdiccion_afip");
-        jurisdiccion.setAttribute("value", $("#jurisdiccion").val());
-        form.appendChild(jurisdiccion);
-        
-        var fecha_desde = document.createElement("input");
-        fecha_desde.setAttribute("name", "fecha_desde");
-        fecha_desde.setAttribute("value", $("#fecha_desde").val());
-        form.appendChild(fecha_desde);
-        
-        var fecha_hasta = document.createElement("input");
-        fecha_hasta.setAttribute("name", "fecha_hasta");
-        fecha_hasta.setAttribute("value", $("#fecha_hasta").val());
-        form.appendChild(fecha_hasta);
-        
-        document.body.appendChild(form);    // Not entirely sure if this is necessary           
-        form.submit();
+    $(document).ready(function () {
+        var buttonCommon = {
+            exportOptions: {
+                format: {
+                    body: function (data, row, column, node) {
+                        // Strip $ from salary column to make it numeric
+                        return column === 5 ?
+                                data.replace(/[$,]/g, '') :
+                                data;
+                    }
+                }
+            }
+        };
+        $("#example").DataTable({
+            "language": {
+                "url": "/assets/vendors/DataTables-1.10.18/spanish.json"
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                $.extend(true, {}, buttonCommon, {
+                    extend: 'copyHtml5'
+                }),
+                $.extend(true, {}, buttonCommon, {
+                    extend: 'excelHtml5'
+                }),
+                $.extend(true, {}, buttonCommon, {
+                    extend: 'pdfHtml5'
+                })
+            ]
+        });
+
     });
 </script>

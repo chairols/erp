@@ -721,63 +721,61 @@ class Retenciones extends CI_Controller {
             $this->load->view('retenciones/reporte_ajax', $data);
         }
     }
-
-    public function reporte_pdf() {
-        $this->form_validation->set_rules('idjurisdiccion_afip', 'ID Jurisdiccion', 'required|integer');
+    
+    public function ddjj() {
+        $this->form_validation->set_rules('idjurisdiccion_afip', 'ID Jurisdicción Afip', 'required|integer');
         $this->form_validation->set_rules('fecha_desde', 'Fecha Desde', 'required');
         $this->form_validation->set_rules('fecha_hasta', 'Fecha Hasta', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            
+        
+        if($this->form_validation->run() == FALSE) {
+            show_404(validation_errors());
         } else {
-            $where = array(
-                'idjurisdiccion_afip' => $this->input->post('idjurisdiccion_afip')
-            );
-            $provincia = $this->provincias_model->get_where($where);
-            
             $where = array(
                 'retenciones.fecha >=' => $this->formatear_fecha($this->input->post('fecha_desde')),
                 'retenciones.fecha <=' => $this->formatear_fecha($this->input->post('fecha_hasta')),
                 'retenciones.idjurisdiccion_afip' => $this->input->post('idjurisdiccion_afip'),
                 'retenciones.estado' => 'A'
             );
-
-            $data['retenciones'] = $this->retenciones_model->gets_where($where);
-            foreach ($data['retenciones'] as $key => $value) {
-                $data['retenciones'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+            $retenciones = $this->retenciones_model->gets_where($where);
+            foreach($retenciones as $key => $value) {
+                $where = array(
+                    'idretencion' => $value['idretencion'],
+                    'estado' => 'A'
+                );
+                $retenciones[$key]['items'] = $this->retenciones_model->gets_items_where($where);
             }
             
-            // create new PDF document
-            $pdf = new Tcpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-            // set document information
-            $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('ROLLER SERVICE S.A.');
-            $pdf->SetTitle('Listado de Retenciones de '.$provincia['provincia']);
-            //$pdf->SetSubject('TCPDF Tutorial');
-            //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-            // set default header data
-            $pdf->SetHeaderData('', '0', '', 'Listado de Retenciones Jurisdicción '.$provincia['idjurisdiccion_afip'].' - '.$provincia['provincia'].". Período: ".$this->input->post('fecha_desde')." hasta ".$this->input->post('fecha_hasta'));
+            $this->output->set_content_type('text/plain');
             
-            // set header and footer fonts
-            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-
-            //$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-
-            $pdf->AddPage();
-
-            $html = $this->load->view('retenciones/reporte_pdf', $data);
-
-            // output the HTML content
-            $pdf->writeHTML($html->output->final_output, true, false, true, false, '');
-
-            //$pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
-
-
-            $pdf->Output('Listado de Retenciones de '.$provincia['provincia']);
+            if($this->input->post('idjurisdiccion_afip') == '914') {  // Si es Misiones
+                foreach($retenciones as $retencion) {
+                    echo str_replace("/", "-", $this->formatear_fecha_para_mostrar($retencion['fecha']));
+                    echo ",";
+                    echo str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT);
+                    echo "-";
+                    echo str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT);
+                    echo ",";
+                    echo str_replace(",", ".", $retencion['proveedor']);
+                    echo ",";
+                    echo str_replace(",", ".", $retencion['direccion']);
+                    echo ",";
+                    echo substr($retencion['cuit'], 0, 2);
+                    echo "-";
+                    echo substr($retencion['cuit'], 2, 8);
+                    echo "-";
+                    echo substr($retencion['cuit'], 10, 1);
+                    echo ",";
+                    $base_imponible = 0;
+                    foreach($retencion['items'] as $item) {
+                        $base_imponible += $item['base_imponible'];
+                    }
+                    echo $base_imponible;
+                    echo ",";
+                    echo $retencion['alicuota'];
+                    
+                    echo chr(13);
+                }
+            }
         }
     }
 

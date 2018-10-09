@@ -5,32 +5,43 @@
     <i class="fa fa-refresh fa-spin"></i>
 </h1>
 
-<table id="example" class="display" style="width:100%; display: none;">
-    <thead>
-        <tr>
-            <th class="text-right">Retención</th>
-            <th class="text-right">Fecha</th>
-            <th class="text-right">Proveedor</th>
-            <th class="text-right">Alícuota</th>
-            <th class="text-right">Monto Retenido</th>
-            <th class="text-right">Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php $subtotal = 0; ?>
-        <?php foreach ($retenciones as $retencion) { ?>
-            <?php $subtotal += $retencion['monto_retenido']; ?>
-            <tr class="text-right">
-                <td><?= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT) ?>-<?= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT) ?></td>
-                <td><?= $retencion['fecha_formateada'] ?></td>
-                <td><?= $retencion['proveedor'] ?></td>
-                <td><?= $retencion['alicuota'] ?></td>
-                <td><?= number_format($retencion['monto_retenido'], 2) ?></td>
-                <td><?= number_format($subtotal, 2) ?></td>
+<div id="pagina" style="display: none;">
+    <?php if ($provincia['idjurisdiccion_afip'] == '914' || $provincia['idjurisdiccion_afip'] == '902' || $provincia['idjurisdiccion_afip'] == '901') { ?>
+        <div class="pull-right">
+            <input type="hidden" id="idjurisdiccion" value="<?= $provincia['idjurisdiccion_afip'] ?>">
+            <input type="hidden" id="fecha_desde" value="<?= $where['fecha_desde'] ?>">
+            <input type="hidden" id="fecha_hasta" value="<?= $where['fecha_hasta'] ?>">
+            <button class="btn btn-primary" id="declaracion"><i class="fa fa-download"></i> Descargar Declaración Jurada</button>
+        </div>
+        <br><br><br>
+    <?php } ?>
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th class="text-right">Retención</th>
+                <th class="text-right">Fecha</th>
+                <th class="text-right">Proveedor</th>
+                <th class="text-right">Alícuota</th>
+                <th class="text-right">Monto Retenido</th>
+                <th class="text-right">Subtotal</th>
             </tr>
-        <?php } ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php $subtotal = 0; ?>
+            <?php foreach ($retenciones as $retencion) { ?>
+                <?php $subtotal += $retencion['monto_retenido']; ?>
+                <tr class="text-right">
+                    <td><?= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT) ?>-<?= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT) ?></td>
+                    <td><?= $retencion['fecha_formateada'] ?></td>
+                    <td><?= $retencion['proveedor'] ?></td>
+                    <td><?= $retencion['alicuota'] ?></td>
+                    <td><?= number_format($retencion['monto_retenido'], 2) ?></td>
+                    <td><?= number_format($subtotal, 2) ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
 
 <!--<script type="text/javascript" src="/assets/vendors/DataTables-1.10.18/jQuery-3.3.1/jquery-3.3.1.min.js"></script>-->
 <script type="text/javascript" src="/assets/vendors/DataTables-1.10.18/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
@@ -74,6 +85,31 @@
         });
 
         $("#loading").hide();
-        $("#example").show();
+        $("#pagina").show();
+    });
+
+    $("#declaracion").click(function () {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/retenciones/ddjj/");
+        form.setAttribute("target", "_blank");
+
+        var jurisdiccion = document.createElement("input");
+        jurisdiccion.setAttribute("name", "idjurisdiccion_afip");
+        jurisdiccion.setAttribute("value", $("#idjurisdiccion").val());
+        form.appendChild(jurisdiccion);
+        
+        var fecha_desde = document.createElement("input");
+        fecha_desde.setAttribute("name", "fecha_desde");
+        fecha_desde.setAttribute("value", $("#fecha_desde").val());
+        form.appendChild(fecha_desde);
+        
+        var fecha_hasta = document.createElement("input");
+        fecha_hasta.setAttribute("name", "fecha_hasta");
+        fecha_hasta.setAttribute("value", $("#fecha_hasta").val());
+        form.appendChild(fecha_hasta);
+        
+        document.body.appendChild(form);    // Not entirely sure if this is necessary           
+        form.submit();
     });
 </script>

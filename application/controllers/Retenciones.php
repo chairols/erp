@@ -754,7 +754,6 @@ class Retenciones extends CI_Controller {
                     $string .= str_replace("/", "-", $this->formatear_fecha_para_mostrar($retencion['fecha']));
                     $string .= ",";
                     $string .= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT);
-                    $string .= "-";
                     $string .= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT);
                     $string .= ",";
                     $string .= str_replace(",", ".", $retencion['proveedor']);

@@ -745,36 +745,40 @@ class Retenciones extends CI_Controller {
                 $retenciones[$key]['items'] = $this->retenciones_model->gets_items_where($where);
             }
             
-            $this->output->set_content_type('text/plain');
+            header("Content-type: text/plain");
+            header("Content-Disposition: attachment; filename=Misiones.txt");
             
             if($this->input->post('idjurisdiccion_afip') == '914') {  // Si es Misiones
+                $string = "";
                 foreach($retenciones as $retencion) {
-                    echo str_replace("/", "-", $this->formatear_fecha_para_mostrar($retencion['fecha']));
-                    echo ",";
-                    echo str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT);
-                    echo "-";
-                    echo str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT);
-                    echo ",";
-                    echo str_replace(",", ".", $retencion['proveedor']);
-                    echo ",";
-                    echo str_replace(",", ".", $retencion['direccion']);
-                    echo ",";
-                    echo substr($retencion['cuit'], 0, 2);
-                    echo "-";
-                    echo substr($retencion['cuit'], 2, 8);
-                    echo "-";
-                    echo substr($retencion['cuit'], 10, 1);
-                    echo ",";
+                    $string .= str_replace("/", "-", $this->formatear_fecha_para_mostrar($retencion['fecha']));
+                    $string .= ",";
+                    $string .= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT);
+                    $string .= "-";
+                    $string .= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT);
+                    $string .= ",";
+                    $string .= str_replace(",", ".", $retencion['proveedor']);
+                    $string .= ",";
+                    $string .= str_replace(",", ".", $retencion['direccion']);
+                    $string .= ",";
+                    $string .= substr($retencion['cuit'], 0, 2);
+                    $string .= "-";
+                    $string .= substr($retencion['cuit'], 2, 8);
+                    $string .= "-";
+                    $string .= substr($retencion['cuit'], 10, 1);
+                    $string .= ",";
                     $base_imponible = 0;
                     foreach($retencion['items'] as $item) {
                         $base_imponible += $item['base_imponible'];
                     }
-                    echo $base_imponible;
-                    echo ",";
-                    echo $retencion['alicuota'];
+                    $string .= $base_imponible;
+                    $string .= ",";
+                    $string .= $retencion['alicuota'];
                     
-                    echo "\r\n";
+                    $string .= "\r\n";
                 }
+                
+                echo $string;
             }
         }
     }

@@ -773,7 +773,7 @@ class Retenciones extends CI_Controller {
                     echo ",";
                     echo $retencion['alicuota'];
                     
-                    echo chr(13);
+                    echo "\r\n";
                 }
             }
         }

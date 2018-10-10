@@ -745,10 +745,9 @@ class Retenciones extends CI_Controller {
                 $retenciones[$key]['items'] = $this->retenciones_model->gets_items_where($where);
             }
             
-            header("Content-type: text/plain");
-            header("Content-Disposition: attachment; filename=Misiones.txt");
-            
             if($this->input->post('idjurisdiccion_afip') == '914') {  // Si es Misiones
+                header("Content-type: text/plain");
+                header("Content-Disposition: attachment; filename=Misiones.txt");
                 $string = "";
                 foreach($retenciones as $retencion) {
                     $string .= str_replace("/", "-", $this->formatear_fecha_para_mostrar($retencion['fecha']));
@@ -773,6 +772,43 @@ class Retenciones extends CI_Controller {
                     $string .= $base_imponible;
                     $string .= ",";
                     $string .= $retencion['alicuota'];
+                    
+                    $string .= "\r\n";
+                } 
+                
+                echo $string;
+            } elseif($this->input->post('idjurisdiccion_afip') == '902') {  // Si es Buenos Aires
+                $empresa = $this->parametros_model->get_parametros_empresa();
+                $quincena = '';
+                
+                if(substr($this->input->post('fecha_desde'), 0, 2) <= 15) {
+                    $quincena = '1';
+                } else {
+                    $quincena = '2';
+                }
+                
+                $archivo = 'AR-';
+                $archivo .= $empresa['cuit'];
+                $archivo .= '-';
+                $archivo .= substr($this->input->post('fecha_desde'), 6, 4); // Recolecto el año
+                $archivo .= substr($this->input->post('fecha_desde'), 3, 2); // Recolecto el mes
+                $archivo .= $quincena;
+                $archivo .= '-6-LOTE1';
+                
+                header("Content-type: text/plain");
+                header("Content-Disposition: attachment; filename=".$archivo.".TXT");
+                $string = "";
+                foreach($retenciones as $retencion) {
+                    $string .= substr($retencion['cuit'], 0, 2);
+                    $string .= "-";
+                    $string .= substr($retencion['cuit'], 2, 8);
+                    $string .= "-";
+                    $string .= substr($retencion['cuit'], 10, 1);
+                    $string .= $this->formatear_fecha_para_mostrar($retencion['fecha']);
+                    $string .= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT);
+                    $string .= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT);
+                    $string .= str_pad($retencion['monto_retenido'], 11, '0', STR_PAD_LEFT);
+                    $string .= 'A';
                     
                     $string .= "\r\n";
                 }

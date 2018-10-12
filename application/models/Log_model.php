@@ -29,5 +29,62 @@ class Log_model extends CI_Model {
         
         return $query->row_array();
     }
+    
+    /*
+     *  Log/listar
+     */
+    public function gets_usuarios() {
+        $this->db->select("usuarios.idusuario, usuarios.nombre, usuarios.apellido");
+        $this->db->from("log");
+        $this->db->join("usuarios", "log.idusuario = usuarios.idusuario");
+        $this->db->order_by("usuarios.nombre, usuarios.apellido");
+        $this->db->group_by("usuarios.idusuario");
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     *  Log/listar
+     */
+    public function gets_tablas() {
+        $this->db->select("*");
+        $this->db->from("log");
+        $this->db->order_by("log.tabla");
+        $this->db->group_by("log.tabla");
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     *  Log/listar
+     */
+    public function get_cantidad_where($where, $like) {
+        $this->db->select('*');
+        $this->db->from('log');
+        $this->db->join('usuarios', 'log.idusuario = usuarios.idusuario');
+        $this->db->where($where);
+        $this->db->like($where);
+        
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+    
+    /*
+     *  Log/listar
+     */
+    public function gets_where_limit($where, $like, $per_page, $pagina) {
+        $this->db->select('*');
+        $this->db->from('log');
+        $this->db->join('usuarios', 'log.idusuario = usuarios.idusuario');
+        $this->db->where($where);
+        $this->db->like($like);
+        $this->db->order_by('idlog DESC');
+        $this->db->limit($per_page, $pagina);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 ?>

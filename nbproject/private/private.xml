@@ -12,10 +12,7 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/views/retenciones/agregar.php</file>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/views/retenciones/reporte.php</file>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/views/retenciones/reporte_ajax.php</file>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/models/Retenciones_model.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/models/Parametros_model.php</file>
             <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Retenciones.php</file>
         </group>
     </open-files>

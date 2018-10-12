@@ -839,7 +839,7 @@ class Retenciones extends CI_Controller {
 
         return $aux;
     }
-
+   
 }
 
 ?>

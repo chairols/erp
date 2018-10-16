@@ -74,7 +74,12 @@ class Importar extends CI_Controller {
             $count = 0;
             $init = 0;
             $porcentaje = 0;
-
+            /*
+             * Elimino las 2 filas extras
+             */
+            $linea = fgets($fp);
+            $linea = fgets($fp);
+            
             while (!feof($fp)) {
                 $linea = fgets($fp);
                 $array = preg_split('/;/', $linea);

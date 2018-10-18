@@ -18,8 +18,8 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Legajo</label>
-                <div class="col-sm-6">
-                    <input id="legajo" class="form-control" type="text">
+                <div class="col-sm-6" id="legajo_div">
+                    
                 </div>
             </div>
             <div class="form-group">
@@ -29,7 +29,25 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">Calificación</label>
+                <label class="col-sm-3 control-label">Sección</label>
+                <div class="col-sm-6">
+                    <select id="idseccion" class="form-control chosenSelect">
+                        <?php foreach ($calificaciones as $calificacion) { ?>
+                            <option value="<?= $calificacion['idcalificacion'] ?>"><?= $calificacion['calificacion'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Categoría</label>
+                <div class="col-sm-6">
+                    <select id="idcategoria" class="form-control chosenSelect">
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Calificación Personal</label>
                 <div class="col-sm-6">
                     
                 </div>
@@ -37,8 +55,18 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">Usuario en Sistema</label>
                 <div class="col-sm-6">
-                    
+                    <select id="idusuario" class="form-control chosenSelect">
+                        <?php foreach ($usuarios as $usuario) { ?>
+                            <option value="<?= $usuario['idusuario'] ?>"><?= $usuario['nombre'] ?> <?= $usuario['apellido'] ?></option>
+                        <?php } ?>
+                    </select>
                 </div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary" id="agregar">Agregar Empleado</button>
+                <button class="btn btn-primary" id="agregar_loading" style="display: none;">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </button>
             </div>
         </div>
     </div>

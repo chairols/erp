@@ -126,4 +126,14 @@ class Usuarios_model extends CI_Model{
         $this->db->update('usuarios_perfiles', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    public function gets_where($where) {
+        $this->db->select("nombre, apellido, idusuario");
+        $this->db->from('usuarios');
+        $this->db->where($where);
+        $this->db->order_by("nombre, apellido");
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

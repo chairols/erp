@@ -18,6 +18,7 @@ class Calificaciones_model extends CI_Model {
     
     /*
      *  Calificaciones/ordenar
+     *  Empleados/agregar
      */
     public function gets_where($where) {
         $this->db->select("*");

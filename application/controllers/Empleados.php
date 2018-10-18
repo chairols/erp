@@ -8,8 +8,12 @@ class Empleados extends CI_Controller {
         parent::__construct();
         $this->load->library(array(
             'session',
-            'r_session',
-            'numeroaletras'
+            'r_session'
+        ));
+        $this->load->model(array(
+            'calificaciones_model',
+            'usuarios_model',
+            'empleados_model'
         ));
         
         $session = $this->session->all_userdata();
@@ -20,14 +24,38 @@ class Empleados extends CI_Controller {
         $data['title'] = 'Agregar Empleado';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/empleados/js/agregar.js'
+        );
         $data['view'] = 'empleados/agregar';
 
-        $data['numero'] = $this->numeroaletras->convertir(5235.99, 'pesos', 'centavos');
+        $where = array(
+            'padre' => 0,
+            'estado' => 'A'
+        );
+        $data['calificaciones'] = $this->calificaciones_model->gets_where($where);
+        
+        $where = array(
+            'estado' => 'A'
+        );
+        $data['usuarios'] = $this->usuarios_model->gets_where($where);
         
         $this->load->view('layout/app', $data);
     }
 
+    public function get_proximo_legajo_input_ajax() {
+        
+        $where = array();
+        $data['legajo'] = $this->empleados_model->get_max_legajo_where($where);
+        
+        if($data['legajo']['idempleado']) {
+            $data['legajo'] = $data['legajo']['idempleado'] + 1;
+        } else {
+            $data['legajo'] = 1;
+        }
+        
+        $this->load->view('empleados/get_proximo_legajo_input_ajax', $data);
+    }
 }
 
 ?>

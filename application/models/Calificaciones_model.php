@@ -15,6 +15,27 @@ class Calificaciones_model extends CI_Model {
         $this->db->insert('calificaciones', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Calificaciones/ordenar
+     */
+    public function gets_where($where) {
+        $this->db->select("*");
+        $this->db->from('calificaciones');
+        $this->db->where($where);
+        $this->db->order_by("orden");
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     *  Calificaciones/actualizar_orden
+     */
+    public function update($datos, $where) {
+        $this->db->update('calificaciones', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

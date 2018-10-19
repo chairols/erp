@@ -19,6 +19,23 @@ class Empleados_model extends CI_Model {
         $query = $this->db->get();
         return $query->row_array();
     }
+    
+    /*
+     *  Empleados/agregar_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('empleados', $where);
+        
+        return $query->row_array();
+    }
+    
+    /*
+     *  Empleados/agregar_ajax
+     */
+    public function set($datos) {
+        $this->db->insert('empleados', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

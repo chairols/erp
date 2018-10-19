@@ -1,9 +1,9 @@
-$(document).ready(function() {
+$(document).ready(function () {
     actualizar_legajo();
     $("#idseccion").change();
 });
 
-$("#idseccion").change(function() {
+$("#idseccion").change(function () {
     datos = {
         'idpadre': $("#idseccion").val(),
         'id': 'idcategoria'
@@ -48,6 +48,54 @@ function actualizar_legajo() {
     });
 }
 
-$("#agregar").click(function() {
-    console.log($("#idcalificacion").val());
+$("#agregar").click(function () {
+    datos = {
+        'nombre': $("#nombre").val(),
+        'apellido': $("#apellido").val(),
+        'legajo': $("#legajo").val(),
+        'fecha_ingreso': $("#fecha_ingreso").val(),
+        'idcalificacion': $("#idcalificacion").val(),
+        'idusuario': $("#idusuario").val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/empleados/agregar_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#agregar").hide();
+            $("#agregar_loading").show();
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: false
+                        });
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: false
+                        });
+                $("#nombre").val("");
+                $("#apellido").val("");
+                actualizar_legajo();
+                $("#nombre").focus();
+            }
+            $("#agregar_loading").hide();
+            $("#agregar").show();
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            $("#agregar_loading").hide();
+            $("#agregar").show();
+        }
+    });
 });

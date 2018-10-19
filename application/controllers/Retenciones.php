@@ -11,7 +11,8 @@ class Retenciones extends CI_Controller {
             'r_session',
             'form_validation',
             'pagination',
-            'tcpdf/tcpdf'
+            'tcpdf/tcpdf',
+            'numeroaletras'
         ));
         $this->load->model(array(
             'provincias_model',
@@ -558,6 +559,8 @@ class Retenciones extends CI_Controller {
         foreach ($data['retencion']['items'] as $key => $value) {
             $data['retencion']['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
         }
+        
+        $data['numeroaletras'] = $this->numeroaletras->convertir($data['retencion']['monto_retenido'], 'pesos', 'centavos');
 
         // create new PDF document
         $pdf = new Tcpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);

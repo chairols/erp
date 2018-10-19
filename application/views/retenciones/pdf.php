@@ -58,7 +58,13 @@
         </tr>
         <hr>
     </table>
-    <br><br>
+    
+    <br>&nbsp;<br>
+    
+    <strong>SON <?=$numeroaletras?></strong>
+    
+    <br>&nbsp;
+    
     <div style="text-align: center">
         <img style="width: 150px;" src="<?=$firma['valor_sistema']?>">
     </div>

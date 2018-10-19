@@ -56,6 +56,17 @@ class Empleados extends CI_Controller {
         
         $this->load->view('empleados/get_proximo_legajo_input_ajax', $data);
     }
+    
+    public function gets_options_select() {
+        $where = array(
+            'padre' => $this->input->post('idpadre'),
+            'estado' => 'A'
+        );
+        $data['id'] = $this->input->post('id');
+        $data['calificaciones'] = $this->calificaciones_model->gets_where($where);
+        
+        $this->load->view('empleados/gets_options_select', $data);
+    }
 }
 
 ?>

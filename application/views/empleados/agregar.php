@@ -40,15 +40,13 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Categoría</label>
-                <div class="col-sm-6">
-                    <select id="idcategoria" class="form-control chosenSelect">
-                        
-                    </select>
+                <div class="col-sm-6" id="categoria_div">
+                    
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Calificación Personal</label>
-                <div class="col-sm-6">
+                <div class="col-sm-6" id="calificacion_div">
                     
                 </div>
             </div>
@@ -56,6 +54,7 @@
                 <label class="col-sm-3 control-label">Usuario en Sistema</label>
                 <div class="col-sm-6">
                     <select id="idusuario" class="form-control chosenSelect">
+                        <option value="0">--- Sin Usuario ---</option>
                         <?php foreach ($usuarios as $usuario) { ?>
                             <option value="<?= $usuario['idusuario'] ?>"><?= $usuario['nombre'] ?> <?= $usuario['apellido'] ?></option>
                         <?php } ?>

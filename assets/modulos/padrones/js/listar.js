@@ -2,6 +2,7 @@ $(".borrar_padron").click(function() {
     datos = {
         'idpadron': this.attributes.idpadron.value
     };
+    id = this.attributes.idpadron.value;
     
     alertify.confirm("Se eliminará el padrón del proveedor<br><strong>¿Desea confirmar?</strong>", function (e) {
         if (e) {
@@ -10,7 +11,8 @@ $(".borrar_padron").click(function() {
                 url: '/padrones/borrar_ajax/',
                 data: datos,
                 beforeSend: function () {
-
+                    $("#borrar-"+id).hide();
+                    $("#loading-"+id).show();
                 },
                 success: function (data) {
                     resultado = $.parseJSON(data);
@@ -26,6 +28,7 @@ $(".borrar_padron").click(function() {
                                     type: 'success',
                                     allow_dismiss: false
                                 });
+                        $("#tr-"+id).fadeOut(1000);
                     }
                 },
                 error: function (xhr) { // if error occured

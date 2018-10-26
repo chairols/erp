@@ -11,6 +11,10 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/views/padrones/listar.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Padrones.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/assets/modulos/padrones/js/listar.js</file>
+        </group>
     </open-files>
 </project-private>

@@ -18,8 +18,7 @@ class Proveedores extends CI_Controller {
         $this->r_session->check($session);
     }
 
-    public function gets_proveedores_ajax()
-    {
+    public function gets_proveedores_ajax() {
 
         $where = $this->input->post();
 

@@ -40,6 +40,19 @@ class Clientes_model extends CI_Model {
         $this->db->insert('clientes_agentes', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Clientes/gets_clientes_ajax
+     */
+    public function gets_where($where) {
+        $this->db->select('idcliente as id, cliente as text');
+        $this->db->from('clientes');
+        $this->db->like($where);
+        $this->db->order_by('cliente');
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

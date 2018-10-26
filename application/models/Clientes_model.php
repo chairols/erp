@@ -53,6 +53,19 @@ class Clientes_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Clientes/gets_sucursales_select
+     */
+    public function gets_sucursales($where) {
+        $this->db->select('*');
+        $this->db->from('clientes_sucursales');
+        $this->db->where($where);
+        $this->db->order_by('sucursal');
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

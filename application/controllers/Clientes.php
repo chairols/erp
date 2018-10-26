@@ -15,8 +15,8 @@ class Clientes extends CI_Controller {
             'clientes_model'
         ));
         
-        $session = $this->session->all_userdata();
-        $this->r_session->check($session);
+        //$session = $this->session->all_userdata();
+        //$this->r_session->check($session);
     }
 
     public function gets_clientes_ajax() {
@@ -26,6 +26,14 @@ class Clientes extends CI_Controller {
         echo json_encode($this->clientes_model->gets_where($where));
     }
 
+    public function gets_sucursales_select() {
+        $where = array(
+            'idcliente' => $this->input->post('idcliente')
+        );
+        $data['sucursales'] = $this->clientes_model->gets_sucursales($where);
+        
+        $this->load->view('clientes/gets_sucursales_select', $data);
+    }
 }
 
 ?>

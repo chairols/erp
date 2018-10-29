@@ -15,8 +15,8 @@ class Clientes extends CI_Controller {
             'clientes_model'
         ));
         
-        //$session = $this->session->all_userdata();
-        //$this->r_session->check($session);
+        $session = $this->session->all_userdata();
+        $this->r_session->check($session);
     }
 
     public function gets_clientes_ajax() {

@@ -65,6 +65,7 @@
                     <label class="control-label col-md-3">Horario de Entrega</label>
                     <div class="col-md-3">
                         <div class="input-group">
+                            <pepe></pepe>
                             <input type="text" class="form-control timepicker" id="horario_desde">
                             <div class="input-group-addon">
                                 <i class="fa fa-clock-o"></i>

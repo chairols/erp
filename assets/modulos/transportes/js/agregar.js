@@ -1,7 +1,8 @@
 $(document).ready(function() {
     //Timepicker
     $('.timepicker').timepicker({
-      showInputs: false
+      showInputs: false,
+      showMeridian: false
     });
 });
 
@@ -42,6 +43,16 @@ $("#agregar").click(function() {
                             type: 'success',
                             allow_dismiss: false
                         });
+                $("#transporte").val("");
+                $("#direccion").val("");
+                $("#codigo_postal").val("");
+                $("#localidad").val("");
+                $("#idprovincia").val("");
+                $("#telefono").val("");
+                $("#idtipo_responsable").val("");
+                $("#cuit").val("");
+                $("#observaciones").val("");
+                $("#transporte").focus();
             }
             $("#agregar_loading").hide();
             $("#agregar").show();

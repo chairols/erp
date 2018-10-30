@@ -47,7 +47,6 @@ $("#agregar").click(function() {
                 $("#direccion").val("");
                 $("#codigo_postal").val("");
                 $("#localidad").val("");
-                $("#idprovincia").val("");
                 $("#telefono").val("");
                 $("#idtipo_responsable").val("");
                 $("#cuit").val("");

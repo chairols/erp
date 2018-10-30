@@ -9,12 +9,14 @@ class Transportes extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'form_validation'
+            'form_validation',
+            'pagination'
         ));
         $this->load->model(array(
             'provincias_model',
             'tipos_responsables_model',
-            'transportes_model'
+            'transportes_model',
+            'parametros_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -85,6 +87,52 @@ class Transportes extends CI_Controller {
                 echo json_encode($json);
             }
         }
+    }
+    
+    public function listar($pagina = 0) {
+        $data['title'] = 'Listado de Transportes';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['view'] = 'transportes/listar';
+        
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+
+        $where = $this->input->get();
+        $where['transportes.estado'] = 'A';
+
+        /*
+         * inicio paginador
+         */
+        $total_rows = $this->transportes_model->get_cantidad_where($where);
+        $config['reuse_query_string'] = TRUE;
+        $config['base_url'] = '/retenciones/listar/';
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        $data['links'] = $this->pagination->create_links();
+        $data['total_rows'] = $total_rows;
+        /*
+         * fin paginador
+         */
+
+        $data['transportes'] = $this->transportes_model->gets_where_limit($where, $per_page, $pagina);
+
+        $this->load->view('layout/app', $data);
     }
 
 }

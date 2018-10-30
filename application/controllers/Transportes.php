@@ -16,7 +16,8 @@ class Transportes extends CI_Controller {
             'provincias_model',
             'tipos_responsables_model',
             'transportes_model',
-            'parametros_model'
+            'parametros_model',
+            'log_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -63,7 +64,7 @@ class Transportes extends CI_Controller {
                 'idprovincia' => $this->input->post('idprovincia'),
                 'telefono' => $this->input->post('telefono'),
                 'idtipo_responsable' => $this->input->post('idtipo_responsable'),
-                'cuit' => $this->input->post('cuit'),
+                'cuit' => str_replace("-", "", $this->input->post('cuit')),
                 'horario_desde' => $this->input->post('horario_desde'),
                 'horario_hasta' => $this->input->post('horario_hasta'),
                 'observaciones' => $this->input->post('observaciones'),
@@ -74,6 +75,28 @@ class Transportes extends CI_Controller {
 
             $id = $this->transportes_model->set($set);
             if ($id) {
+                $log = array(
+                    'tabla' => 'transportes',
+                    'idtabla' => $id,
+                    'texto' => "<h2><strong>Se cre&oacute; el transporte: " . $this->input->post('transporte') . "</strong></h2>
+
+<p><strong>Dirección: </strong>" . $this->input->post('direccion') . "<br />
+<strong>Código Postal: </strong>" . $this->input->post('codigo_postal') . "<br />
+<strong>Localidad: </strong>" . $this->input->post('localidad') . "<br />
+<strong>ID Provincia: </strong>" . $this->input->post('provincia') . "<br />
+<strong>Teléfono: </strong>" . $this->input->post('telefono') . "<br />
+<strong>ID Tipo de Resposabilidad: </strong>" . $this->input->post('idtipo_responsable') . "<br />
+<strong>C&oacute;digo Postal: </strong>" . $set['codigopostal'] . "<br />
+<strong>CUIT: </strong>" . $this->input->post('cuit') . "<br />
+<strong>Horario Desde: </strong>" . $this->input->post('horario_desde') . "<br />
+<strong>Horario Hasta: </strong>" . $this->input->post('horario_hasta') . "<br />
+<strong>Observaciones: </strong>" . $this->input->post('observaciones') . "<br /></p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+                $this->log_model->set($log);
+                
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se agregó el transporte correctamente'

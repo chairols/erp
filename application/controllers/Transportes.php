@@ -106,7 +106,7 @@ class Transportes extends CI_Controller {
          */
         $total_rows = $this->transportes_model->get_cantidad_where($where);
         $config['reuse_query_string'] = TRUE;
-        $config['base_url'] = '/retenciones/listar/';
+        $config['base_url'] = '/transportes/listar/';
         $config['total_rows'] = $total_rows;
         $config['per_page'] = $per_page;
         $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';

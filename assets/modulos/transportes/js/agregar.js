@@ -48,7 +48,6 @@ $("#agregar").click(function() {
                 $("#codigo_postal").val("");
                 $("#localidad").val("");
                 $("#telefono").val("");
-                $("#idtipo_responsable").val("");
                 $("#cuit").val("");
                 $("#observaciones").val("");
                 $("#transporte").focus();

@@ -16,8 +16,8 @@ class Crontab extends CI_Controller {
         ));
         
         // Certificado REAL
-        $certificado = 'upload/certificados/PCAFIP_12e5d279ba7d69a7.crt';
-        $clave = "upload/certificados/privada";
+        $certificado = 'upload/certificados/PCAFIP_794703585cef0a60.crt';
+        $clave = "upload/certificados/privada_794703585cef0a60";
         
         // Configuración
         $CUIT = 33647656779;

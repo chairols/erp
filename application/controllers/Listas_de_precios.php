@@ -695,8 +695,9 @@ class Listas_de_precios extends CI_Controller {
          * fin paginador
          */
         $data['items'] = $this->listas_de_precios_model->get_cantidad_comparaciones_items_where_limit($where, $like, $per_page, $pagina);
-
+        
         foreach ($data['items'] as $key => $value) {
+            
             $where = array(
                 'articulos.idarticulo_generico' => $value['idarticulo_generico'],
                 'articulos.estado' => 'A'
@@ -715,7 +716,7 @@ class Listas_de_precios extends CI_Controller {
                 $data['items'][$key]['items'][$k1]['articulo_completo'] = $this->articulos_model->get_where($where);
             }
         }
-
+        
         $data['view'] = 'listas_de_precios/ver_comparacion';
         $this->load->view('layout/app', $data);
     }

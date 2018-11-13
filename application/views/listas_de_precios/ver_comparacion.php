@@ -158,7 +158,7 @@
                                             </div>
                                             <div class="col-xs-2">
                                                 <div class="listRowInner">
-                                                    <span class="label label-primary"><?= $i['empresa'] ?></span>
+                                                    <span class="label label-primary"><?= $i['proveedor'] ?></span>
                                                 </div>
                                             </div>
                                             <div class="col-xs-3">

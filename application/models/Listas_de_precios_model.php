@@ -275,11 +275,11 @@ class Listas_de_precios_model extends CI_Model {
      *  Listas_de_precios/ver_comparacion
      */
     public function gets_comparaciones_items($where) {
-        $this->db->select("listas_de_precios_comparaciones_items.articulo, listas_de_precios_comparaciones_items.precio, listas_de_precios_comparaciones_items.stock, empresas.empresa, marcas.marca, marcas.idmarca");
+        $this->db->select("listas_de_precios_comparaciones_items.articulo, listas_de_precios_comparaciones_items.precio, listas_de_precios_comparaciones_items.stock, proveedores.proveedor, marcas.marca, marcas.idmarca");
         $this->db->from("listas_de_precios_comparaciones_items");
         $this->db->join("listas_de_precios_items", "listas_de_precios_comparaciones_items.idlista_de_precios_item = listas_de_precios_items.idlista_de_precios_item");
         $this->db->join("listas_de_precios", "listas_de_precios_items.idlista_de_precios = listas_de_precios.idlista_de_precios");
-        $this->db->join("empresas", "listas_de_precios.idempresa = empresas.idempresa");
+        $this->db->join("proveedores", "listas_de_precios.idproveedor = proveedores.idproveedor");
         $this->db->join("marcas", "listas_de_precios_items.idmarca = marcas.idmarca");
         
         $this->db->where($where);

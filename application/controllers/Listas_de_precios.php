@@ -290,11 +290,14 @@ class Listas_de_precios extends CI_Controller {
         );
         $data['lista_de_precios'] = $this->listas_de_precios_model->get_where($datos);
         $data['lista_de_precios']['fecha'] = $this->formatear_fecha_para_mostrar($data['lista_de_precios']['fecha']);
-
+        
+        /*
         $datos = array(
             'idproveedor' => $data['lista_de_precios']['idproveedor']
         );
         $data['lista_de_precios']['proveedor'] = $this->proveedores_model->get_where($datos);
+         *   Ya que ahora se guarda el nombre del proveedor en la lista de precios y no se asocia más
+         */
 
         $data['monedas'] = $this->monedas_model->gets();
 

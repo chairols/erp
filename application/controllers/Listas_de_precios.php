@@ -526,7 +526,7 @@ class Listas_de_precios extends CI_Controller {
                 foreach ($this->input->post('proveedores') as $proveedor) {
                     //  Traer última lista
                     $where = array(
-                        'idempresa' => $proveedor
+                        'idproveedor' => $proveedor
                     );
                     $ultima_lista = $this->listas_de_precios_model->get_ultima_lista($where);
 
@@ -579,7 +579,8 @@ class Listas_de_precios extends CI_Controller {
                 }
 
                 $json = array(
-                    'status' => 'ok'
+                    'status' => 'ok',
+                    'idcomparacion' => $idcomparacion
                 );
                 echo json_encode($json);
             } else {

@@ -47,6 +47,7 @@ function comparar() {
             } else if (resultado['status'] == 'ok') {
                 notifySuccess("OK", 5000);
                 $("#comparar").html("<i class='fa fa-copy'></i> Comparar");
+                window.location.href = "/listas_de_precios/ver_comparacion/"+resultado['idcomparacion']+"/";
             }
         }
     });

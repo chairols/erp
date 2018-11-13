@@ -11,8 +11,8 @@
                     </div>
                     <div class="col-xs-12 col-sm-12">
                         <select id="proveedores" multiple="" class="form-control chosenSelect">
-                            <?php foreach($empresas as $empresa) { ?>
-                            <option value="<?=$empresa['idempresa']?>"><?=$empresa['empresa']?></option>
+                            <?php foreach($proveedores as $proveedor) { ?>
+                            <option value="<?=$proveedor['idproveedor']?>"><?=$proveedor['proveedor']?></option>
                             <?php } ?>
                         </select>
                     </div>

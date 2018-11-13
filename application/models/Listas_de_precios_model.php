@@ -128,12 +128,11 @@ class Listas_de_precios_model extends CI_Model {
         return $query->result_array();
     }
     
-    public function gets_empresas_con_lista() {
+    public function gets_proveedores_con_lista() {
         $this->db->select('*');
         $this->db->from('listas_de_precios');
-        $this->db->join('empresas', 'listas_de_precios.idempresa = empresas.idempresa');
-        $this->db->order_by('empresas.empresa');
-        $this->db->group_by('empresa');
+        $this->db->order_by('proveedor');
+        $this->db->group_by('proveedor');
         
         $query = $this->db->get();
         return $query->result_array();

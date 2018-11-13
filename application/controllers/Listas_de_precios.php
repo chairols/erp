@@ -497,7 +497,7 @@ class Listas_de_precios extends CI_Controller {
         );
 
 
-        $data['empresas'] = $this->listas_de_precios_model->gets_empresas_con_lista();
+        $data['proveedores'] = $this->listas_de_precios_model->gets_proveedores_con_lista();
         $data['marcas'] = $this->marcas_model->gets();
 
         $data['view'] = 'listas_de_precios/nueva_comparacion';

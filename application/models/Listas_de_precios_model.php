@@ -116,9 +116,8 @@ class Listas_de_precios_model extends CI_Model {
      *  Listas_de_precios/ver_listas
      */
     public function get_cantidad_where_limit($where, $like,$per_page, $pagina) {
-        $this->db->select('listas_de_precios.*, proveedores.proveedor, monedas.moneda');
+        $this->db->select('listas_de_precios.*, monedas.moneda');
         $this->db->from('listas_de_precios');
-        $this->db->join('proveedores', 'listas_de_precios.idempresa = proveedores.idproveedor');
         $this->db->join('monedas', 'listas_de_precios.idmoneda = monedas.idmoneda', 'left');
         $this->db->where($where);
         $this->db->like($like);

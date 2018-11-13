@@ -17,7 +17,7 @@ class Listas_de_precios extends CI_Controller {
             'monedas_model',
             'listas_de_precios_model',
             'marcas_model',
-            'empresas_model',
+            'proveedores_model',
             'parametros_model',
             'articulos_genericos_model',
             'articulos_model'
@@ -32,7 +32,7 @@ class Listas_de_precios extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
 
-        $this->form_validation->set_rules('empresa', 'Empresa', 'required|integer');
+        $this->form_validation->set_rules('proveedor', 'Proveedor', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');
         $this->form_validation->set_rules('moneda', 'Moneda', 'required|integer');
 
@@ -59,9 +59,15 @@ class Listas_de_precios extends CI_Controller {
                 $this->excel_reader->read('./upload/listas_de_precios/' . $adjunto['upload_data']['file_name']);
 
                 $excel = $this->excel_reader->sheets[0];
+                
+                $datos = array(
+                    'idproveedor' => $this->input->post('proveedor')
+                );
+                $proveedor = $this->proveedores_model->get_where($datos);
 
                 $datos = array(
-                    'idempresa' => $this->input->post('empresa'),
+                    'idproveedor' => $this->input->post('proveedor'),
+                    'proveedor' => $proveedor['proveedor'],
                     'idmoneda' => $this->input->post('moneda'),
                     'fecha' => $this->formatear_fecha($this->input->post('fecha')),
                     'archivo' => '/upload/listas_de_precios/' . $adjunto['upload_data']['file_name'],
@@ -286,9 +292,9 @@ class Listas_de_precios extends CI_Controller {
         $data['lista_de_precios']['fecha'] = $this->formatear_fecha_para_mostrar($data['lista_de_precios']['fecha']);
 
         $datos = array(
-            'idempresa' => $data['lista_de_precios']['idempresa']
+            'idproveedor' => $data['lista_de_precios']['idproveedor']
         );
-        $data['lista_de_precios']['empresa'] = $this->empresas_model->get_where($datos);
+        $data['lista_de_precios']['proveedor'] = $this->proveedores_model->get_where($datos);
 
         $data['monedas'] = $this->monedas_model->gets();
 

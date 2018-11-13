@@ -11,7 +11,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12 col-sm-4 col-sm-offset-1 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-1">
-                <input type="text" class="form-control" value="<?= $lista_de_precios['empresa']['empresa'] ?>" disabled="">
+                <input type="text" class="form-control" value="<?= $lista_de_precios['proveedor']['proveedor'] ?>" disabled="">
             </div>
             <div class="col-xs-12 col-sm-4 col-sm-offset-1 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-1">
                 <select name="moneda" id="moneda" class="form-control chosenSelect">

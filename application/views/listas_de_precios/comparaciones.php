@@ -76,10 +76,10 @@
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2 hideMobile990">
                                 <div class="listRowInner">
-                                    <span class="smallTitle">Empresas</span>
+                                    <span class="smallTitle">Proveedores</span>
                                     <span class="listTextStrong">
-                                        <?php foreach($comparacion['empresas'] as $empresa) { ?>
-                                        <span class="label label-primary"><?=$empresa['empresa']?></span>
+                                        <?php foreach($comparacion['proveedores'] as $proveedor) { ?>
+                                        <span class="label label-primary"><?=$proveedor['proveedor']?></span>
                                         <?php } ?>
                                     </span>
                                 </div>

@@ -640,7 +640,7 @@ class Listas_de_precios extends CI_Controller {
             $where = array(
                 'listas_de_precios_comparaciones_items.idlista_de_precios_comparacion' => $value['idlista_de_precios_comparacion']
             );
-            $data['comparaciones'][$key]['empresas'] = $this->listas_de_precios_model->gets_empresas_comparaciones($where);
+            $data['comparaciones'][$key]['proveedores'] = $this->listas_de_precios_model->gets_proveedores_comparaciones($where);
             $data['comparaciones'][$key]['marcas'] = $this->listas_de_precios_model->gets_marcas_comparaciones($where);
         }
 

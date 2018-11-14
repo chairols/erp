@@ -18,6 +18,8 @@ class Preordenes_model extends CI_Model {
     }
     
     /*
+     *  Listas_de_precios/ver_comparacion
+     * 
      *  Preordenes/agregar_modificar_item_ajax
      */
     public function set($datos) {

@@ -220,7 +220,7 @@
                                             </div>
                                             <div class="col-xs-1">
                                                 <div class="listRowInner">
-                                                    <input type="text" class="form-control cantidad_pedida" iditem="<?=$i['idlista_de_precios_comparacion_item']?>">
+                                                    <input type="text" class="form-control text-center cantidad_pedida" value="<?=(isset($i['preorden']['cantidad']))?$i['preorden']['cantidad']:''?>" iditem="<?=$i['idlista_de_precios_comparacion_item']?>">
                                                     
                                                 </div>
                                             </div>

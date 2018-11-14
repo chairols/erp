@@ -20,7 +20,8 @@ class Listas_de_precios extends CI_Controller {
             'proveedores_model',
             'parametros_model',
             'articulos_genericos_model',
-            'articulos_model'
+            'articulos_model',
+            'preordenes_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -714,6 +715,11 @@ class Listas_de_precios extends CI_Controller {
                     'idmarca' => $v1['idmarca']
                 );
                 $data['items'][$key]['items'][$k1]['articulo_completo'] = $this->articulos_model->get_where($where);
+                
+                $where = array(
+                    'idlista_de_precios_comparacion_item' => $v1['idlista_de_precios_comparacion_item']
+                );
+                $data['items'][$key]['items'][$k1]['preorden'] = $this->preordenes_model->get_where($where);
             }
         }
         

@@ -218,6 +218,13 @@
                                                     <?php } ?>
                                                 </div>
                                             </div>
+                                            <div class="col-xs-1">
+                                                <div class="listRowInner">
+                                                    <input type="text" class="form-control cantidad_pedida" iditem="<?=$i['idlista_de_precios_comparacion_item']?>">
+                                                    
+                                                </div>
+                                            </div>
+                                            
                                         </div>
 
                                     </div>

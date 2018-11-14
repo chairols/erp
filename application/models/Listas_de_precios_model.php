@@ -51,6 +51,8 @@ class Listas_de_precios_model extends CI_Model {
     
     /*
      *  Listas_de_precios/asociar_marcas
+     * 
+     *  Preordenes/agregar_modificar_item_ajax
      */
     public function get_where_item($where) {
         $query = $this->db->get_where('listas_de_precios_items', $where);
@@ -275,7 +277,7 @@ class Listas_de_precios_model extends CI_Model {
      *  Listas_de_precios/ver_comparacion
      */
     public function gets_comparaciones_items($where) {
-        $this->db->select("listas_de_precios_comparaciones_items.articulo, listas_de_precios_comparaciones_items.precio, listas_de_precios_comparaciones_items.stock, proveedores.proveedor, marcas.marca, marcas.idmarca");
+        $this->db->select("listas_de_precios.idproveedor, listas_de_precios_comparaciones_items.idlista_de_precios_comparacion_item, listas_de_precios_comparaciones_items.articulo, listas_de_precios_comparaciones_items.precio, listas_de_precios_comparaciones_items.stock, proveedores.proveedor, marcas.marca, marcas.idmarca");
         $this->db->from("listas_de_precios_comparaciones_items");
         $this->db->join("listas_de_precios_items", "listas_de_precios_comparaciones_items.idlista_de_precios_item = listas_de_precios_items.idlista_de_precios_item");
         $this->db->join("listas_de_precios", "listas_de_precios_items.idlista_de_precios = listas_de_precios.idlista_de_precios");
@@ -287,6 +289,15 @@ class Listas_de_precios_model extends CI_Model {
         
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    /*
+     *  Preordenes/agregar_modificar_item_ajax
+     */
+    public function get_where_comparacion_item($where) {
+        $query = $this->db->get_where('listas_de_precios_comparaciones_items', $where);
+        
+        return $query->row_array();
     }
 }
 

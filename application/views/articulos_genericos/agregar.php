@@ -1,30 +1,44 @@
 <div class="box box-primary">
     <div class="box-header with-border">
-
+        <h3 class="box-title">
+            Agregar Artículo Genérico
+        </h3>
     </div>
-    <div class="box-body flex-justify-center">
-        <div class="col-md-8 col-sm-6 col-xs-12">
-            <div class="innerContainer">
-                <h4 class="subTitleB">
-                    <i class="fa fa-certificate"></i> <?= $title ?>
-                </h4>
-                <div class="form-group">
-                    Línea:
-                    <input type="text" id="TextAutoCompletelinea" name="TextAutoCompletelinea" placeholder="Seleccionar Línea" placeholderauto="Línea Inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione una línea" objectauto="Lineas" actionauto="gets_lineas_ajax" varsauto="estado:=A" iconauto="ship">
+    <div class="box-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Línea</label>
+                <div class="col-sm-6">
+                    <input type="text" id="TextAutoCompletelinea" name="TextAutoCompletelinea" placeholder="Seleccionar Línea" placeholderauto="Línea Inexistente" class="form-control TextAutoComplete" value="" objectauto="Lineas" actionauto="gets_lineas_ajax" varsauto="estado:=A" iconauto="" autofocus>
                     <input type="hidden" id="linea" name="linea" value="">
                 </div>
-                <div class="form-group">
-                    Código: 
-                    <input id="articulo_generico" class="form-control" name="articulo_generico" validateempty="Ingrese un código" type="text">
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Código</label>
+                <div class="col-sm-6">
+                    <input id="articulo_generico" class="form-control" name="articulo_generico" type="text" maxlength="255">
                 </div>
-                <hr>
-                <div class="form-group">
-                    Asociar Código:
-                    <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo Inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un artículo" objectauto="Articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="ship">
-                    <input type="hidden" id="articulo" name="articulo" value="">
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Número de Orden</label>
+                <div class="col-sm-6">
+                    <input id="numero_orden" class="form-control" name="numero_orden" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <button type="button" class="btn btn-success" id="agregar">Crear Artículo Genérico</button>
+                    <button type="button" class="btn btn-success" id="loading" style="display: none;">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </button>
                 </div>
             </div>
         </div>
+
+        
+        
+        
     </div>
 </div>
+
 

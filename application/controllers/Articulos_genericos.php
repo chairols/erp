@@ -152,6 +152,9 @@ class Articulos_genericos extends CI_Controller {
         $data['title'] = 'Agregar Artículo Genérico';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/articulos_genericos/js/agregar.js'
+        );
 
         $data['view'] = 'articulos_genericos/agregar';
         $this->load->view('layout/app', $data);

@@ -29,10 +29,11 @@ $("#agregar").click(function() {
                             type: 'success',
                             allow_dismiss: false
                         });
+                $("#TextAutoCompletelinea").val("");
                 $("#linea").val("");
                 $("#articulo_generico").val("");
                 $("#numero_orden").val("");
-                $("#linea").focus();
+                $("#TextAutoCompletelinea").focus();
                 $("#loading").hide();
                 $("#agregar").show();
             }

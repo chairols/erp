@@ -31,9 +31,12 @@ class Crontab extends CI_Controller {
             
             $monedas = $this->monedas_model->gets();
             
+            echo "<pre>";
             foreach($monedas as $moneda) {
                 if($moneda['codigo_afip'] != 'PES' && $moneda['codigo_afip'] != '') {
                     $cotizacion = $wsfe->getTipoDeCambio($moneda['codigo_afip']);
+                    echo "<strong>Cotización del día: </strong><br>";
+                    print_r($cotizacion);
                     
                     $where = array(
                         'idmoneda' => $moneda['idmoneda'],
@@ -52,6 +55,7 @@ class Crontab extends CI_Controller {
                     
                 }
             }
+            echo "</pre>";
         }
     }
 

@@ -54,8 +54,11 @@
             </div>
         </div>
         <div class="box-footer txC">
-            <button class="btn btn-sm btn-success" type="submit">
+            <button class="btn btn-sm btn-success" id="continuar" type="submit">
                 Continuar <i class="fa fa-arrow-right"></i>
+            </button>
+            <button class="btn btn-sm btn-success" id="loading" type="button" style="display: none;">
+                <i class="fa fa-refresh fa-spin"></i>
             </button>
         </div>
     </form>

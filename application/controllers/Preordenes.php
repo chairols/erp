@@ -52,23 +52,23 @@ class Preordenes extends CI_Controller {
                 $where = array(
                     'idpre_orden' => $item['idpre_orden']
                 );
-                
-                if($this->input->post('cantidad') == 0) {
+
+                if ($this->input->post('cantidad') == 0) {
                     $datos['estado'] = 'I';
                 }
-                
+
                 $resultado = $this->preordenes_model->update($datos, $where);
-                
-                if($resultado) {
+
+                if ($resultado) {
                     $json = array(
                         'status' => 'ok',
-                        'data' => 'Se actualizó correctamente el item '.$item['articulo']
+                        'data' => 'Se actualizó correctamente el item ' . $item['articulo']
                     );
                     echo json_encode($json);
                 } else {
                     $json = array(
                         'status' => 'error',
-                        'data' => 'No se pudo actualizar el item '.$item['articulo']
+                        'data' => 'No se pudo actualizar el item ' . $item['articulo']
                     );
                     echo json_encode($json);
                 }
@@ -110,7 +110,7 @@ class Preordenes extends CI_Controller {
                 if ($id) {  // Si se creó
                     $json = array(
                         'status' => 'ok',
-                        'data' => 'Se agregó el item '.$item_lista['articulo']
+                        'data' => 'Se agregó el item ' . $item_lista['articulo']
                     );
                     echo json_encode($json);
                 } else {  // Si no se pudo crear
@@ -121,10 +121,9 @@ class Preordenes extends CI_Controller {
                     echo json_encode($json);
                 }
             }
-            
         }
     }
-    
+
     public function listar($pagina = 0) {
         $data['title'] = 'Listado de Preórdenes';
         $data['session'] = $this->session->all_userdata();
@@ -171,6 +170,82 @@ class Preordenes extends CI_Controller {
 
         $this->load->view('layout/app', $data);
     }
+
+    public function modificar($idproveedor = null) {
+        $data['title'] = 'Modificar Preorden';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/preordenes/js/modificar.js'
+        );
+        $data['view'] = 'preordenes/modificar';
+
+        if ($idproveedor == null) {
+            redirect('/preordenes/listar/', 'refresh');
+        }
+
+        $where = array(
+            'idproveedor' => $idproveedor,
+            'estado' => 'A'
+        );
+        $data['preorden'] = $this->preordenes_model->gets_where($where);
+        
+        $data['total'] = $this->preordenes_model->get_total($where);
+
+
+        $this->load->view('layout/app', $data);
+    }
+
+    public function modificar_cantidad_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idpreorden', 'ID Preorden', 'required|integer');
+        $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'cantidad' => $this->input->post('cantidad')
+            );
+            $where = array(
+                'idpre_orden' => $this->input->post('idpreorden')
+            );
+            $resultado = $this->preordenes_model->update($datos, $where);
+
+            if ($resultado) {
+                $where = array(
+                    'idpre_orden' => $this->input->post('idpreorden')
+                );
+                $item = $this->preordenes_model->get_where($where); // Obtengo el total del item
+                
+                $where = array(
+                    'idproveedor' => $item['idproveedor'],
+                    'estado' => 'A'
+                );
+                $total = $this->preordenes_model->get_total($where);
+                
+                $json = array(
+                    'status' => 'ok',
+                    'subtotal' => number_format($item['cantidad']*$item['precio'], 2),
+                    'total' => number_format($total['total'], 2),
+                    'data' => 'Se actualizó correctamente la cantidad'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Ocurrió un error inesperado'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
 }
 
 ?>

@@ -32,6 +32,9 @@ class Listas_de_precios extends CI_Controller {
         $data['title'] = 'Importar Lista de Precios';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/listas_de_precios/js/importar.js'
+        );
 
         $this->form_validation->set_rules('proveedor', 'Proveedor', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');

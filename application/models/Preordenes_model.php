@@ -10,6 +10,8 @@ class Preordenes_model extends CI_Model {
 
     /*
      *  Preordenes/agregar_modificar_item_ajax
+     *  Preordenes/modificar_cantidad_ajax
+     *  
      */
     public function get_where($where) {
         $query = $this->db->get_where('pre_ordenes', $where);
@@ -29,6 +31,7 @@ class Preordenes_model extends CI_Model {
     
     /*
      *  Preordenes/agregar_modificar_item_ajax
+     *  Preordenes/modificar_cantidad_ajax
      */
     public function update($datos, $where) {
         $this->db->update('pre_ordenes', $datos, $where);
@@ -42,6 +45,7 @@ class Preordenes_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('pre_ordenes');
         $this->db->where($where);
+        $this->db->group_by('idproveedor');
         
         $query = $this->db->count_all_results();
         return $query;
@@ -51,14 +55,38 @@ class Preordenes_model extends CI_Model {
      *  Preordenes/listar
      */
     public function gets_where_limit($where, $per_page, $pagina) {
-        $this->db->select('*');
+        $this->db->select('*, sum(cantidad) as cantidad_items, count(*) as cantidad_registros, sum(cantidad*precio) as total');
         $this->db->from('pre_ordenes');
         $this->db->where($where);
+        $this->db->group_by('idproveedor');
         $this->db->order_by('proveedor');
         $this->db->limit($per_page, $pagina);
         
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    /*
+     *  Preordenes/modificar
+     */
+    public function gets_where($where) {
+        $query = $this->db->get_where('pre_ordenes', $where);
+        
+        return $query->result_array();
+    }
+    
+    /*
+     *  Preordenes/modificar
+     *  Preordenes/modificar_cantidad_ajax
+     */
+    public function get_total($where) {
+        $this->db->select('*, sum(cantidad*precio) as total');
+        $this->db->from('pre_ordenes');
+        $this->db->where($where);
+        $this->db->group_by('idproveedor');
+        
+        $query = $this->db->get();
+        return $query->row_array();
     }
 }
 

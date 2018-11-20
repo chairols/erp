@@ -35,10 +35,13 @@
                         <td><?= $retencion['idjurisdiccion_afip'] ?> - <?= $retencion['jurisdiccion'] ?></td>
                         <td><?= $retencion['monto_retenido']?></td>
                         <td>
-                            <a href="/retenciones/modificar/<?= $retencion['idretencion'] ?>/" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">
-                                <button class="btn btn-primary btn-xs">
+                            <a href="/retenciones/modificar/<?=$retencion['idretencion']?>/" class="hint--top-right hint--bounce hint--info" aria-label="Modificar">
+                                <button class="btn btn-primary btn-xs" type="button">
                                     <i class="fa fa-edit"></i>
                                 </button>
+                            </a>
+                            <a href="/retenciones/pdf/<?=$retencion['idretencion']?>/" class="hint--top hint--bounce hint--error" aria-label="Ver PDF">
+                                
                             </a>
                             <a href="/retenciones/pdf/<?= $retencion['idretencion'] ?>/" target="_blank" data-pacement="top" data-toggle="tooltip" data-original-title="Ver PDF" class="tooltips">
                                 <button class="btn btn-google btn-xs">

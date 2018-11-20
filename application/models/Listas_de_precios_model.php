@@ -253,6 +253,7 @@ class Listas_de_precios_model extends CI_Model {
         $this->db->from('listas_de_precios_comparaciones_items');
         $this->db->where($where);
         $this->db->like($like);
+        $this->db->group_by('idarticulo_generico');
 
         $query = $this->db->count_all_results();
         return $query;
@@ -267,6 +268,7 @@ class Listas_de_precios_model extends CI_Model {
         $this->db->join('articulos_genericos', 'listas_de_precios_comparaciones_items.idarticulo_generico = articulos_genericos.idarticulo_generico');
         $this->db->where($where);
         $this->db->like($like);
+        $this->db->group_by('listas_de_precios_comparaciones_items.idarticulo_generico');
         $this->db->limit($per_page, $pagina);
 
         $query = $this->db->get();

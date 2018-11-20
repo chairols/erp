@@ -2,7 +2,7 @@ $(".borraritems").click(function() {
     console.log($("#selected_ids").val());
 });
 
-$(".cantidad_pedida").focusout(function() {
+$(".cantidad_pedida").change(function() {
     datos = {
         'cantidad': this.value,
         'idlista_de_precios_comparacion_item': this.attributes.iditem.value

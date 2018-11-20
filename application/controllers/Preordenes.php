@@ -41,9 +41,6 @@ class Preordenes extends CI_Controller {
             $item = $this->preordenes_model->get_where($where);
 
             if ($item) {
-                /*
-                 *  Desarrollar
-                 */
                 $datos = array(
                     'cantidad' => $this->input->post('cantidad'),
                     'estado' => 'A',
@@ -91,6 +88,7 @@ class Preordenes extends CI_Controller {
                 $set = array(
                     'idproveedor' => $lista['idproveedor'],
                     'proveedor' => $lista['proveedor'],
+                    'idmoneda' => $lista['idmoneda'],
                     'cantidad' => $this->input->post('cantidad'),
                     'articulo' => $item_lista['articulo'],
                     'precio' => $item_lista['precio'],

@@ -36,6 +36,8 @@ class Lineas_model extends CI_Model {
     }
     
     /*
+     *  Articulos_genericos/agregar_ajax
+     * 
      *  Lineas/agregar_ajax
      */
     public function get_where($where) {

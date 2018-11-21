@@ -15,7 +15,9 @@ class Articulos_genericos extends CI_Controller {
         $this->load->model(array(
             'parametros_model',
             'articulos_genericos_model',
-            'articulos_model'
+            'articulos_model',
+            'lineas_model',
+            'log_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -139,12 +141,12 @@ class Articulos_genericos extends CI_Controller {
         $where['estado'] = 'A';
         echo json_encode($this->articulos_genericos_model->gets_where($where));
     }
-    
+
     public function gets_articulos_tabla_ajax() {
         $where = $this->input->post();
         $where['estado'] = 'A';
         $data['articulos'] = $this->articulos_genericos_model->gets_where($where);
-        
+
         $this->load->view('articulos_genericos/gets_articulos_tabla_ajax', $data);
     }
 
@@ -198,26 +200,43 @@ class Articulos_genericos extends CI_Controller {
                 );
                 $id = $this->articulos_genericos_model->set($datos);
                 if ($id) {
+                    $where = array(
+                        'idlinea' => $this->input->post('idlinea')
+                    );
+                    $linea = $this->lineas_model->get_where($where);
+                    
+                    $log = array(
+                        'tabla' => 'articulos_genericos',
+                        'idtabla' => $id,                     
+                        'texto' => '<h2><strong>Se cre&oacute; el art&iacute;culo gen&eacute;rico: '.$this->input->post('articulo_generico').'</strong></h2>
+
+<p><strong>L&iacute;nea: </strong>'.$linea['linea'].'<br />
+<strong>N&uacute;mero de Orden: </strong>'.$this->input->post('numero_orden').'<br /></p>',
+                        'idusuario' => $session['SID'],
+                        'tipo' => 'add'
+                    );
+                    $this->log_model->set($log);
+
                     $json = array(
                         'status' => 'ok',
-                        'data' => '<p>Se creó el genérico ' . $datos['articulo_generico'].'</p>'
+                        'data' => '<p>Se creó el genérico ' . $datos['articulo_generico'] . '</p>'
                     );
                     echo json_encode($json);
                 } else {
                     $json = array(
                         'status' => 'error',
-                        'data' => '<p>No se pudo crear el genérico ' . $datos['articulo_generico'].'</p>'
+                        'data' => '<p>No se pudo crear el genérico ' . $datos['articulo_generico'] . '</p>'
                     );
                     echo json_encode($json);
                 }
             }
         }
     }
-    
+
     public function borrar_ajax() {
         $this->form_validation->set_rules('idarticulo_generico', 'Artículo Genérico', 'required|integer');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
@@ -230,9 +249,9 @@ class Articulos_genericos extends CI_Controller {
             $where = array(
                 'idarticulo_generico' => $this->input->post('idarticulo_generico')
             );
-            
+
             $resultado = $this->articulos_genericos_model->update($datos, $where);
-            if($resultado) {
+            if ($resultado) {
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se eliminó correctamente'

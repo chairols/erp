@@ -10,7 +10,7 @@
             <tr>
                 <td><?= $articulo['text'] ?></td>
                 <td>
-                    <button class="btn btn-xs btn-danger borrargenerico hint--bottom hint--bounce hint--error" aria-label="Eliminar <?= $articulo['text'] ?>" idgenerico="<?= $articulo['id'] ?>">
+                    <button class="btn btn-xs btn-danger borrargenerico hint--top hint--bounce hint--error" aria-label="Eliminar <?= $articulo['text'] ?>" idgenerico="<?= $articulo['id'] ?>">
                         <i class="fa fa-trash"></i>
                     </button>
                 </td>

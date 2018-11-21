@@ -5,15 +5,16 @@
                 <label>Usuarios</label>
                 <select name="idusuario" id="idusuario" class="form-control chosenSelect">
                     <?php foreach($usuarios as $usuario) { ?>
-                    <option value="<?=$usuario['idusuario']?>"><?=$usuario['nombre']?> <?=$usuario['apellido']?></option>
+                    <option value="<?=$usuario['idusuario']?>"<?=($this->input->get('idusuario')==$usuario['idusuario'])?" selected":""?>><?=$usuario['nombre']?> <?=$usuario['apellido']?></option>
                     <?php } ?>
                 </select>
             </div>
             <div class="col-xs-3">
                 <label>Tabla</label>
                 <select name="idtabla" id="idtabla" class="form-control chosenSelect">
+                    <option value="">Todos los movimientos</option>
                     <?php foreach($tablas as $tabla) { ?>
-                    <option value="<?=$tabla['tabla']?>"><?=$tabla['tabla']?></option>
+                    <option value="<?=$tabla['tabla']?>"<?=($this->input->get('idtabla')==$tabla['tabla'])?" selected":""?>><?=$tabla['tabla']?></option>
                     <?php } ?>
                 </select>
             </div>

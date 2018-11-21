@@ -33,6 +33,9 @@ class Log extends CI_Controller {
         $like['usuarios.idusuario'] = $this->input->get('idusuario');
         $where['log.tabla'] = $this->input->get('idtabla');
         
+        if($this->input->get('idtabla') == '') {
+            unset($where['log.tabla']);
+        }
         /*
          * inicio paginador
          */

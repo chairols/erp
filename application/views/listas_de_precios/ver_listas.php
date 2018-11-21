@@ -40,7 +40,7 @@
                             <a href="/listas_de_precios/asociar_generico/<?= $lista['idlista_de_precios'] ?>/" class="hint--top hint--bounce hint--info" aria-label="Editar">
                                 <button type="button" class="btn btn-xs btnBlue"><i class="fa fa-pencil"></i></button>
                             </a>
-                            <a class="hint--bottom hint--bounce hint--top" aria-label="Eliminar" url="#" campo="idsucursal" success="" error="" id="delete_<?= $lista['idlista_de_precios'] ?>">
+                            <a class="hint--top hint--bounce hint--error" aria-label="Eliminar" url="#" campo="idsucursal" success="" error="" id="delete_<?= $lista['idlista_de_precios'] ?>">
                                 <button type="button" class="btn btn-xs btnRed"><i class="fa fa-trash"></i></button>
                             </a>
                         </td>

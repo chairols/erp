@@ -51,6 +51,7 @@ class Listas_de_precios_model extends CI_Model {
     
     /*
      *  Listas_de_precios/asociar_marcas
+     *  Listas_de_precios/update_item_articulo_generico
      * 
      *  Preordenes/agregar_modificar_item_ajax
      */

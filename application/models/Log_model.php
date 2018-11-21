@@ -10,6 +10,8 @@ class Log_model extends CI_Model {
     }
     
     /*
+     *  Articulos_genericos/agregar_ajax
+     * 
      *  Menu/agregar  -  Revisar
      * 
      *  Parametros/agregar_ajax  --  Revisar

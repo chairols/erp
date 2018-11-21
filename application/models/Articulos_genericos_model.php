@@ -52,6 +52,7 @@ class Articulos_genericos_model extends CI_Model {
     
     /*
      *  Listas_de_precios/asociar_importar
+     *  Listas_de_precios/update_item_articulo_generico
      */
     public function get_where($where) {
         $query = $this->db->get_where('articulos_genericos', $where);

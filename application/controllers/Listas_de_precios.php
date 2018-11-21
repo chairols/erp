@@ -21,7 +21,8 @@ class Listas_de_precios extends CI_Controller {
             'parametros_model',
             'articulos_genericos_model',
             'articulos_model',
-            'preordenes_model'
+            'preordenes_model',
+            'log_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -63,7 +64,7 @@ class Listas_de_precios extends CI_Controller {
                 $this->excel_reader->read('./upload/listas_de_precios/' . $adjunto['upload_data']['file_name']);
 
                 $excel = $this->excel_reader->sheets[0];
-                
+
                 $datos = array(
                     'idproveedor' => $this->input->post('proveedor')
                 );
@@ -294,12 +295,12 @@ class Listas_de_precios extends CI_Controller {
         );
         $data['lista_de_precios'] = $this->listas_de_precios_model->get_where($datos);
         $data['lista_de_precios']['fecha'] = $this->formatear_fecha_para_mostrar($data['lista_de_precios']['fecha']);
-        
+
         /*
-        $datos = array(
-            'idproveedor' => $data['lista_de_precios']['idproveedor']
-        );
-        $data['lista_de_precios']['proveedor'] = $this->proveedores_model->get_where($datos);
+          $datos = array(
+          'idproveedor' => $data['lista_de_precios']['idproveedor']
+          );
+          $data['lista_de_precios']['proveedor'] = $this->proveedores_model->get_where($datos);
          *   Ya que ahora se guarda el nombre del proveedor en la lista de precios y no se asocia más
          */
 
@@ -345,6 +346,8 @@ class Listas_de_precios extends CI_Controller {
     }
 
     public function update_item_articulo_generico() {
+        $session = $this->session->all_userdata();
+        
         $this->form_validation->set_rules('idarticulo_generico', 'Artículo Genérico', 'required|integer');
         $this->form_validation->set_rules('idlista_de_precios_item', 'ID Item', 'required|integer');
 
@@ -365,6 +368,31 @@ class Listas_de_precios extends CI_Controller {
             $resultado = $this->listas_de_precios_model->update_items($datos, $where);
 
             if ($resultado) {
+                $where = array(
+                    'idlista_de_precios_item' => $this->input->post('idlista_de_precios_item')
+                );
+                $lista_de_precios_item = $this->listas_de_precios_model->get_where_item($where);
+                
+                $where = array(
+                    'idarticulo_generico' => $this->input->post('idarticulo_generico')
+                );
+                $articulo_generico = $this->articulos_genericos_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'listas_de_precios',
+                    'idtabla' => $lista_de_precios_item['idlista_de_precios_item'],
+                    'texto' => '<h2><strong>Se asoci&oacute; el art&iacute;culo '.$lista_de_precios_item['articulo'].' </strong></h2>
+
+<p><strong>Al Art&iacute;culo Gen&eacute;rico: </strong>'.$articulo_generico['articulo_generico'].'</p>
+
+<p><strong>ID Lista de Precios Item: </strong>'.$lista_de_precios_item['idlista_de_precios_item'].'<br />
+<strong>ID Art&iacute;culo Gen&eacute;rico: </strong>'.$articulo_generico['idarticulo_generico'].'</p>',
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+                $this->log_model->set($log);
+
+
                 $json = array(
                     'status' => 'ok'
                 );
@@ -699,9 +727,9 @@ class Listas_de_precios extends CI_Controller {
          * fin paginador
          */
         $data['items'] = $this->listas_de_precios_model->get_cantidad_comparaciones_items_where_limit($where, $like, $per_page, $pagina);
-        
+
         foreach ($data['items'] as $key => $value) {
-            
+
             $where = array(
                 'articulos.idarticulo_generico' => $value['idarticulo_generico'],
                 'articulos.estado' => 'A'
@@ -718,14 +746,14 @@ class Listas_de_precios extends CI_Controller {
                     'idmarca' => $v1['idmarca']
                 );
                 $data['items'][$key]['items'][$k1]['articulo_completo'] = $this->articulos_model->get_where($where);
-                
+
                 $where = array(
                     'idlista_de_precios_comparacion_item' => $v1['idlista_de_precios_comparacion_item']
                 );
                 $data['items'][$key]['items'][$k1]['preorden'] = $this->preordenes_model->get_where($where);
             }
         }
-        
+
         $data['view'] = 'listas_de_precios/ver_comparacion';
         $this->load->view('layout/app', $data);
     }

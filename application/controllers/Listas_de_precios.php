@@ -388,7 +388,7 @@ class Listas_de_precios extends CI_Controller {
 <p><strong>ID Lista de Precios Item: </strong>'.$lista_de_precios_item['idlista_de_precios_item'].'<br />
 <strong>ID Art&iacute;culo Gen&eacute;rico: </strong>'.$articulo_generico['idarticulo_generico'].'</p>',
                     'idusuario' => $session['SID'],
-                    'tipo' => 'add'
+                    'tipo' => 'edit'
                 );
                 $this->log_model->set($log);
 

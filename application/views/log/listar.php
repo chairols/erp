@@ -1,6 +1,6 @@
 <div class="box box-primary">
     <div class="box-header">
-        <form class="row form-group inline-form-custom" method="GET">
+        <form class="row form-group inline-form-custom" method="GET" action="/log/listar/">
             <div class="col-xs-3">
                 <label>Usuarios</label>
                 <select name="idusuario" id="idusuario" class="form-control chosenSelect">

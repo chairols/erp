@@ -70,6 +70,15 @@
                 
             </ul>
         </div>
-        
+    </div>
+    <div class="box-footer clearfix">
+        <div class="pull-left">
+            <strong>Total <?= $total_rows ?> registros.</strong>
+        </div>
+        <div class="box-tools">
+            <ul class="pagination pagination-sm no-margin pull-right">
+                <?= $links ?>
+            </ul>
+        </div>
     </div>
 </div>

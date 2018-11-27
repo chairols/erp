@@ -69,7 +69,7 @@ class Log_model extends CI_Model {
         $this->db->from('log');
         $this->db->join('usuarios', 'log.idusuario = usuarios.idusuario');
         $this->db->where($where);
-        $this->db->like($where);
+        $this->db->like($like);
         
         $query = $this->db->count_all_results();
         return $query;

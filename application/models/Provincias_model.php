@@ -18,6 +18,18 @@ class Provincias_model extends CI_Model {
     }
     
     /*
+     *  Retenciones/agregar
+     */
+    public function gets_order_by($order_by) {
+        $query = $this->db->query("SELECT *
+                                    FROM
+                                        provincias
+                                    ORDER BY
+                                        $order_by");
+        return $query->result_array();
+    }
+    
+    /*
      *  Provincias/get_provincia_ajax
      */
     public function get_where($where) {

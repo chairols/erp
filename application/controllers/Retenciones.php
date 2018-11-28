@@ -38,7 +38,7 @@ class Retenciones extends CI_Controller {
         );
         $data['view'] = 'retenciones/agregar';
 
-        $data['jurisdicciones'] = $this->provincias_model->gets();
+        $data['jurisdicciones'] = $this->provincias_model->gets_order_by('idjurisdiccion_afip');
 
         $this->load->view('layout/app', $data);
     }

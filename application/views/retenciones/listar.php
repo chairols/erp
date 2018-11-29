@@ -41,16 +41,15 @@
                                 </button>
                             </a>
                             <a href="/retenciones/pdf/<?=$retencion['idretencion']?>/" class="hint--top hint--bounce hint--error" aria-label="Ver PDF">
-                                
-                            </a>
-                            <a href="/retenciones/pdf/<?= $retencion['idretencion'] ?>/" target="_blank" data-pacement="top" data-toggle="tooltip" data-original-title="Ver PDF" class="tooltips">
                                 <button class="btn btn-google btn-xs">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </button>
                             </a>
-                            <button class="btn btn-danger btn-xs borrar_retencion" idretencion="<?= $retencion['idretencion'] ?>" retencion="<?= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT) ?>-<?= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT) ?>" proveedor="<?= $retencion['proveedor'] ?>" data-pacement="top" data-toggle="tooltip" data-original-title="Eliminar" class="tooltips">
-                                <i class="fa fa-trash-o"></i>
-                            </button>
+                            <a class="hint--top-left hint--bounce hint--error" aria-label="Eliminar">
+                                <button class="btn btn-danger btn-xs borrar_retencion" idretencion="<?= $retencion['idretencion'] ?>" retencion="<?= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT) ?>-<?= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT) ?>" proveedor="<?= $retencion['proveedor'] ?>">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 <?php } ?>

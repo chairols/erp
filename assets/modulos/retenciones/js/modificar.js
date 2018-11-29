@@ -141,6 +141,7 @@ $("#agregar").click(function () {
                 $("#div-boton-agregar").show();
                 get_items_tabla();
             }
+            $("#punto_de_venta").focus();
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,

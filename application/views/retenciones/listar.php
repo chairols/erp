@@ -40,7 +40,7 @@
                                     <i class="fa fa-edit"></i>
                                 </button>
                             </a>
-                            <a href="/retenciones/pdf/<?=$retencion['idretencion']?>/" class="hint--top hint--bounce hint--error" aria-label="Ver PDF">
+                            <a href="/retenciones/pdf/<?=$retencion['idretencion']?>/" class="hint--top hint--bounce hint--error" aria-label="Ver PDF" target="_blank">
                                 <button class="btn btn-google btn-xs">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </button>

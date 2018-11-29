@@ -184,11 +184,34 @@ class Articulos_genericos extends CI_Controller {
 
             $resultado = $this->articulos_genericos_model->get_where($datos);
             if ($resultado) {
-                $json = array(
-                    'status' => 'error',
-                    'data' => '<p>El artículo genérico ' . $resultado['articulo_generico'] . ' ya existe.</p>'
-                );
-                echo json_encode($json);
+                if ($resultado['estado'] == 'A') {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => '<p>El artículo genérico ' . $resultado['articulo_generico'] . ' ya existe.</p>'
+                    );
+                    echo json_encode($json);
+                } else {
+                    $datos = array(
+                        'estado' => 'A'
+                    );
+                    $where = array(
+                        'idarticulo_generico' => $resultado['idarticulo_generico']
+                    );
+                    $r = $this->articulos_genericos_model->update($datos, $where);
+                    if ($r) {
+                        $json = array(
+                            'status' => 'ok',
+                            'data' => '<p>El artículo genérico ' . $resultado['articulo_generico'] . ' se volvió a activar.</p>'
+                        );
+                        echo json_encode($json);
+                    } else {
+                        $json = array(
+                            'status' => 'error',
+                            'data' => '<p>Ocurrió un error inesperado con el artículo genérico ' . $resultado['articulo_generico'] . '.</p>'
+                        );
+                        echo json_encode($json);
+                    }
+                }
             } else {
                 $datos = array(
                     'idlinea' => $this->input->post('idlinea'),
@@ -204,14 +227,14 @@ class Articulos_genericos extends CI_Controller {
                         'idlinea' => $this->input->post('idlinea')
                     );
                     $linea = $this->lineas_model->get_where($where);
-                    
+
                     $log = array(
                         'tabla' => 'articulos_genericos',
-                        'idtabla' => $id,                     
-                        'texto' => '<h2><strong>Se cre&oacute; el art&iacute;culo gen&eacute;rico: '.$this->input->post('articulo_generico').'</strong></h2>
+                        'idtabla' => $id,
+                        'texto' => '<h2><strong>Se cre&oacute; el art&iacute;culo gen&eacute;rico: ' . $this->input->post('articulo_generico') . '</strong></h2>
 
-<p><strong>L&iacute;nea: </strong>'.$linea['linea'].'<br />
-<strong>N&uacute;mero de Orden: </strong>'.$this->input->post('numero_orden').'<br /></p>',
+<p><strong>L&iacute;nea: </strong>' . $linea['linea'] . '<br />
+<strong>N&uacute;mero de Orden: </strong>' . $this->input->post('numero_orden') . '<br /></p>',
                         'idusuario' => $session['SID'],
                         'tipo' => 'add'
                     );

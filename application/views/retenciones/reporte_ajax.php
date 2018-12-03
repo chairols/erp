@@ -86,6 +86,8 @@
 
         $("#loading").hide();
         $("#pagina").show();
+        
+        document.title = "Reporte de Retenciones - (<?=$provincia['cuenta_retenciones']?>) - <?=$provincia['provincia']?>";
     });
 
     $("#declaracion").click(function () {

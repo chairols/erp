@@ -105,7 +105,7 @@
                             ?>
                         </td>
                         <td>
-                            <a href="/importaciones/agregar_items/<?= $importacion['idimportacion'] ?>/" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">
+                            <a href="/importaciones/agregar_items/<?= $importacion['idimportacion'] ?>/" class="hint--top hint--bounce hint--info" aria-label="Modificar">
                                 <button class="btn btn-primary btn-xs">
                                     <i class="fa fa-edit"></i>
                                 </button>

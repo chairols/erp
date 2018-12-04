@@ -508,13 +508,14 @@ EOD;
 //$body = $this->email->full_html($subject, $message);
 
         $result = $this->email
-                ->from('hernan.balboa@rollerservice.com.ar')
+                ->from('hernan.balboa@rollerservice.com.ar', 'Hernan - CodeIgniter Prueba')
                 ->reply_to('hernan.balboa@rollerservice.com.ar')    // Optional, an account where a human being reads.
                 ->to('hernanbalboa@gmail.com')
                 ->subject($subject)
+                ->attach('https://erp.rollerservice.com.ar/prueba/tcpdf/', '', 'Nuevo Nombre.pdf')
                 ->message($body)
                 ->send();
-
+        
         var_dump($result);
         echo '<br />';
         echo $this->email->print_debugger();

@@ -83,22 +83,22 @@ class Prueba extends CI_Controller {
 <p style="color:#CC0000;">TO IMPROVE AND EXPAND TCPDF I NEED YOUR SUPPORT, PLEASE <a href="http://sourceforge.net/donate/index.php?group_id=128076">MAKE A DONATION!</a></p>
 EOD;
         $html = "<table>"
-                    . "<thead>"
-                        . "<tr>"
-                            . "<th>Item</th>"
-                            . "<th>Cantidad</th>"
-                            . "<th>Precio Unitario</th>"
-                        . "</tr>"
-                    . "</thead>"
-                    . "<tbody>";
-                        foreach ($items as $item) {
-                            $html .= "<tr>"
-                                    . "<td>" . $item['articulo'] . "</td>"
-                                    . "<td>" . $item['cantidad'] . "</td>"
-                                    . "<td>" . $item['costo_fob'] . "</td>"
-                                    . "</tr>";
-                        }
-                    $html .= "</tbody>"
+                . "<thead>"
+                . "<tr>"
+                . "<th>Item</th>"
+                . "<th>Cantidad</th>"
+                . "<th>Precio Unitario</th>"
+                . "</tr>"
+                . "</thead>"
+                . "<tbody>";
+        foreach ($items as $item) {
+            $html .= "<tr>"
+                    . "<td>" . $item['articulo'] . "</td>"
+                    . "<td>" . $item['cantidad'] . "</td>"
+                    . "<td>" . $item['costo_fob'] . "</td>"
+                    . "</tr>";
+        }
+        $html .= "</tbody>"
                 . "</table>";
 
 // Print text using writeHTMLCell()
@@ -396,7 +396,7 @@ EOD;
         $this->load->model(array(
             'prueba_model'
         ));
-        
+
         $where = array(
             'estado' => 'A'
         );
@@ -404,7 +404,7 @@ EOD;
         echo "<pre>";
         print_r($res);
         echo "</pre>";
-        
+
         $array = array('Alpha', 'Beta', 'Gamma', 'Sigma');
 
         function depth_picker($arr, $temp_string, &$collect) {
@@ -433,7 +433,7 @@ EOD;
         $this->load->model(array(
             'prueba_model'
         ));
-        
+
         $fp = fopen("upload/importar/CHEQUES.TXT", "r");
 
         $i = 0;
@@ -451,7 +451,7 @@ EOD;
             $fecha .= '-';
             $fecha .= substr(trim($array[2]), -6, 2);
 
-            
+
             $fecha_deposito = substr(trim($array[3]), -2, 2);
             if ($fecha_deposito > '70') {
                 $fecha_deposito = '19' . $fecha_deposito . '-';
@@ -461,8 +461,8 @@ EOD;
             $fecha_deposito .= substr(trim($array[3]), -4, 2);
             $fecha_deposito .= '-';
             $fecha_deposito .= substr(trim($array[3]), -6, 2);
-            
-            
+
+
             $datos = array(
                 'idcheque' => $array[0],
                 'fecha' => $fecha,
@@ -472,11 +472,54 @@ EOD;
                 'importe' => $array[13]
             );
             $this->prueba_model->set_cheques($datos);
-            
-            if(($array[0] % 1000) == 0) {
+
+            if (($array[0] % 1000) == 0) {
                 var_dump($datos);
             }
         }
+    }
+
+    public function email() {
+        $this->load->library(array(
+            'email'
+        ));
+
+        $subject = 'This is a test';
+        $message = '<p>This message has been sent for testing purposes.</p>';
+
+// Get full html:
+        $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
+    <title>' . html_escape($subject) . '</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, Verdana, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+' . $message . '
+</body>
+</html>';
+// Also, for getting full html you may use the following internal method:
+//$body = $this->email->full_html($subject, $message);
+
+        $result = $this->email
+                ->from('hernan.balboa@rollerservice.com.ar')
+                ->reply_to('hernan.balboa@rollerservice.com.ar')    // Optional, an account where a human being reads.
+                ->to('hernanbalboa@gmail.com')
+                ->subject($subject)
+                ->message($body)
+                ->send();
+
+        var_dump($result);
+        echo '<br />';
+        echo $this->email->print_debugger();
+
+        exit;
     }
 
 }

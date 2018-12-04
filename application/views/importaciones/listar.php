@@ -105,9 +105,14 @@
                             ?>
                         </td>
                         <td>
-                            <a href="/importaciones/agregar_items/<?= $importacion['idimportacion'] ?>/" class="hint--top hint--bounce hint--info" aria-label="Modificar">
+                            <a href="/importaciones/agregar_items/<?= $importacion['idimportacion'] ?>/" class="hint--top-right hint--bounce hint--info" aria-label="Modificar">
                                 <button class="btn btn-primary btn-xs">
                                     <i class="fa fa-edit"></i>
+                                </button>
+                            </a>
+                            <a href="/importaciones/pedido_pdf/<?=$importacion['idimportacion']?>/" class="hint--top-left hint--bounce hint--error" aria-label="Generar PDF" target="_blank">
+                                <button class="btn btn-danger btn-xs">
+                                    <i class="fa fa-file-pdf-o"></i>
                                 </button>
                             </a>
                         </td>

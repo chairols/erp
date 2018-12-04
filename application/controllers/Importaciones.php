@@ -10,6 +10,7 @@ class Importaciones extends CI_Controller {
             'session',
             'r_session',
             'form_validation',
+            'tcpdf/tcpdf',
             'pagination'
         ));
         $this->load->model(array(
@@ -662,6 +663,67 @@ class Importaciones extends CI_Controller {
                 echo json_encode($json);
             }
         }
+    }
+    
+    public function pedido_pdf($idimportacion = null) {
+        if($idimportacion == null) {
+            redirect('/importaciones/listar/', 'refresh');
+        }
+        
+        $where = array(
+            'idimportacion' => $idimportacion,
+            'importaciones_estado' => 'P'
+        );
+        $data['importacion'] = $this->importaciones_model->get_where($where);
+       
+        $where = array(
+            'idproveedor' => $data['importacion']['idproveedor']
+        );
+        $data['proveedor'] = $this->proveedores_model->get_where($where);
+        
+        $where = array(
+            'idmoneda' => $data['importacion']['idmoneda']
+        );
+        $data['moneda'] = $this->monedas_model->get_where($where);
+        
+        $datos = array(
+            'importaciones_items.idimportacion' => $idimportacion,
+            'importaciones_items.estado' => 'A'
+        );
+        $data['items'] = $this->importaciones_model->gets_items($datos);
+        
+        // create new PDF document
+        $pdf = new Tcpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('ROLLER SERVICE S.A.');
+        $pdf->SetTitle('Pedido ' . str_pad($data['importacion']['idimportacion'], 8, '0', STR_PAD_LEFT));
+        //$pdf->SetSubject('TCPDF Tutorial');
+        //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        // set default header data
+        $pdf->SetHeaderData('', '150', '', '');
+
+        // set header and footer fonts
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+
+        //$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+
+        $pdf->AddPage();
+
+        $html = $this->load->view('importaciones/pedido_pdf', $data);
+
+        // output the HTML content
+        $pdf->writeHTML($html->output->final_output, true, false, true, false, '');
+
+        //$pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
+
+
+        $pdf->Output('Pedido ' . str_pad($data['importacion']['idimportacion'], 8, '0', STR_PAD_LEFT) . '.pdf', 'I');
+        
     }
 
     private function formatear_fecha($fecha) {

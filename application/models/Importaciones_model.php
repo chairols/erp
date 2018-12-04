@@ -18,6 +18,7 @@ class Importaciones_model extends CI_Model {
     
     /*
      *  Importaciones/agregar_items
+     *  Importaciones/pedido_pdf
      */
     public function get_where($where) {
         $query = $this->db->get_where('importaciones', $where);

@@ -836,7 +836,13 @@ class Retenciones extends CI_Controller {
     }
     
     public function enviar_mail() {
-        $subject = 'This is a test';
+        $where = array(
+            'idretencion' => $this->input->post('idretencion')
+        );
+        $retencion = $this->retenciones_model->get_where($where);
+        
+        $subject = 'Se generó la retención '. str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT).'-'. str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT);
+        
         $message = '<p>This message has been sent for testing purposes.</p>';
 
 // Get full html:
@@ -853,7 +859,8 @@ class Retenciones extends CI_Controller {
     </style>
 </head>
 <body>
-' . $message . '
+' . $message . ' <br>
+    '. base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/' .'
 </body>
 </html>';
 // Also, for getting full html you may use the following internal method:

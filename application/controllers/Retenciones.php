@@ -872,7 +872,7 @@ class Retenciones extends CI_Controller {
                 ->to('hernanbalboa@gmail.com')
                 //->to($this->input->post('email'))
                 ->subject($subject)
-                ->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
+                //->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
                 ->attach(base_url().'prueba/pdf/', '', 'Prueba de PDF generico.pdf')
                 ->message($body)
                 ->send();

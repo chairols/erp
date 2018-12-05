@@ -26,7 +26,7 @@ class Retenciones extends CI_Controller {
         ));
 
         $session = $this->session->all_userdata();
-        $this->r_session->check($session);
+        //$this->r_session->check($session);
     }
 
     public function agregar() {
@@ -819,6 +819,19 @@ class Retenciones extends CI_Controller {
                 echo $string;
             }
         }
+    }
+    
+    public function get_retencion_ajax() {
+
+        $where = $this->input->post();
+        $retencion = $this->retenciones_model->get_where($where);
+        
+        $where = array(
+            'idproveedor' => $retencion['idproveedor']
+        );
+        $retencion['p'] = $this->proveedores_model->get_where($where);
+
+        echo json_encode($retencion);
     }
 
     private function formatear_fecha($fecha) {

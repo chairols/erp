@@ -1,7 +1,7 @@
 <div class="box">
     <div class="box-header">
         <form method="GET" action="/retenciones/listar/" class="input-group input-group-sm col-md-5">
-            <input class="form-control pull-left" name="proveedor" id="proveedor" placeholder="Buscar ..." type="text">
+            <input class="form-control pull-left" name="proveedor" id="proveedor" placeholder="Buscar ..." type="text" value="<?=$this->input->get('proveedor')?>">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="submit">
                     <i class="fa fa-search"></i>
@@ -43,6 +43,11 @@
                             <a href="/retenciones/pdf/<?=$retencion['idretencion']?>/" class="hint--top hint--bounce hint--error" aria-label="Ver PDF" target="_blank">
                                 <button class="btn btn-google btn-xs">
                                     <i class="fa fa-file-pdf-o"></i>
+                                </button>
+                            </a>
+                            <a onclick="enviar_mail(<?=$retencion['idretencion']?>);" class="hint--top hint--bounce hint--info" aria-label="Enviar por Email">
+                                <button class="btn btn-info btn-xs">
+                                    <i class="fa fa-envelope-o"></i>
                                 </button>
                             </a>
                             <a class="hint--top-left hint--bounce hint--error" aria-label="Eliminar">

@@ -42,7 +42,45 @@ $(".borrar_retencion").click(function () {
             });
         }
     });
-
-
-
 });
+
+function enviar_mail(idretencion) {
+
+    email = '';
+
+    datos = {
+        'idretencion': idretencion
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/retenciones/get_retencion_ajax/',
+        data: datos,
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            email = resultado['p']['email'];
+
+            alertify.confirm("<p><strong>Confirmar Correo para enviar Retención</strong></p><input type='text' value='" + email + "' class='form-control'>", function (e) {
+                if (e) {
+
+                }
+
+
+
+            });
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+        }
+    });
+
+
+
+
+}

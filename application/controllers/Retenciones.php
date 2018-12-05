@@ -862,7 +862,8 @@ class Retenciones extends CI_Controller {
         $result = $this->email
                 ->from('hernan.balboa@rollerservice.com.ar', 'Hernan - CodeIgniter Prueba')
                 ->reply_to('hernan.balboa@rollerservice.com.ar')    // Optional, an account where a human being reads.
-                ->to($this->input->post('email'))
+                ->to('hernanbalboa@gmail.com')
+                //->to($this->input->post('email'))
                 ->subject($subject)
                 ->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
                 ->message($body)

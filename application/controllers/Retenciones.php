@@ -12,7 +12,8 @@ class Retenciones extends CI_Controller {
             'form_validation',
             'pagination',
             'tcpdf/tcpdf',
-            'numeroaletras'
+            'numeroaletras',
+            'email'
         ));
         $this->load->model(array(
             'provincias_model',
@@ -26,7 +27,7 @@ class Retenciones extends CI_Controller {
         ));
 
         $session = $this->session->all_userdata();
-        //$this->r_session->check($session);
+        $this->r_session->check($session);
     }
 
     public function agregar() {
@@ -832,6 +833,46 @@ class Retenciones extends CI_Controller {
         $retencion['p'] = $this->proveedores_model->get_where($where);
 
         echo json_encode($retencion);
+    }
+    
+    public function enviar_mail() {
+        $subject = 'This is a test';
+        $message = '<p>This message has been sent for testing purposes.</p>';
+
+// Get full html:
+        $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
+    <title>' . html_escape($subject) . '</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, Verdana, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+' . $message . '
+</body>
+</html>';
+// Also, for getting full html you may use the following internal method:
+//$body = $this->email->full_html($subject, $message);
+        
+        $result = $this->email
+                ->from('hernan.balboa@rollerservice.com.ar', 'Hernan - CodeIgniter Prueba')
+                ->reply_to('hernan.balboa@rollerservice.com.ar')    // Optional, an account where a human being reads.
+                ->to($this->input->post('email'))
+                ->subject($subject)
+                ->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
+                ->message($body)
+                ->send();
+        
+        var_dump($result);
+        echo '<br />';
+        echo $this->email->print_debugger();
+
+        exit;
     }
 
     private function formatear_fecha($fecha) {

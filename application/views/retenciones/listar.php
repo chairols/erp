@@ -45,7 +45,7 @@
                                     <i class="fa fa-file-pdf-o"></i>
                                 </button>
                             </a>
-                            <a onclick="enviar_mail(<?=$retencion['idretencion']?>);" class="hint--top hint--bounce hint--info" aria-label="Enviar por Email">
+                            <a onclick="confirmar_mail(<?=$retencion['idretencion']?>);" class="hint--top hint--bounce hint--info" aria-label="Enviar por Email">
                                 <button class="btn btn-info btn-xs">
                                     <i class="fa fa-envelope-o"></i>
                                 </button>

@@ -44,7 +44,7 @@ $(".borrar_retencion").click(function () {
     });
 });
 
-function enviar_mail(idretencion) {
+function confirmar_mail(idretencion) {
 
     email = '';
 
@@ -62,9 +62,9 @@ function enviar_mail(idretencion) {
             resultado = $.parseJSON(data);
             email = resultado['p']['email'];
 
-            alertify.confirm("<p><strong>Confirmar Correo para enviar Retención</strong></p><input type='text' value='" + email + "' class='form-control'>", function (e) {
+            alertify.confirm("<p><strong>Confirmar Correo para enviar Retención</strong></p><div class='col-md-12'><input type='text' value='" + email + "' class='form-control'></div><br><br>", function (e) {
                 if (e) {
-
+                    enviar_mail(email, idretencion);
                 }
 
 
@@ -80,7 +80,31 @@ function enviar_mail(idretencion) {
         }
     });
 
+}
 
+function enviar_mail(email, idretencion) {
+    datos = {
+        'email': email,
+        'idretencion': idretencion
+    };
+    
+    $.ajax({
+        type: 'POST',
+        url: '/retenciones/enviar_mail/',
+        data: datos,
+        beforeSend: function () {
 
-
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+        }
+    });
 }

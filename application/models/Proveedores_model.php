@@ -70,6 +70,14 @@ class Proveedores_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Proveedores/modificar_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('proveedores', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

@@ -9,11 +9,16 @@ class Proveedores extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'pagination'
+            'pagination',
+            'form_validation'
         ));
         $this->load->model(array(
             'proveedores_model',
-            'parametros_model'
+            'parametros_model',
+            'provincias_model',
+            'monedas_model',
+            'paises_model',
+            'tipos_responsables_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -24,8 +29,7 @@ class Proveedores extends CI_Controller {
 
         $where = $this->input->post();
 
-        echo json_encode( $this->proveedores_model->gets_where( $where ) );
-
+        echo json_encode($this->proveedores_model->gets_where($where));
     }
 
     public function listar($pagina = 0) {
@@ -33,7 +37,7 @@ class Proveedores extends CI_Controller {
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['view'] = 'proveedores/listar';
-        
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
 
@@ -70,9 +74,83 @@ class Proveedores extends CI_Controller {
          */
 
         $data['proveedores'] = $this->proveedores_model->gets_where_limit($where, $per_page, $pagina);
-        
+
         $this->load->view('layout/app', $data);
     }
+
+    public function modificar($idproveedor = null) {
+        if ($idproveedor == null) {
+            redirect('/proveedores/listar/', 'refresh');
+        }
+        $data['title'] = 'Modificar Proveedor';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/proveedores/js/modificar.js'
+        );
+        $data['view'] = 'proveedores/modificar';
+
+        $where = array(
+            'idproveedor' => $idproveedor
+        );
+        $data['proveedor'] = $this->proveedores_model->get_where($where);
+
+        $data['provincias'] = $this->provincias_model->gets();
+
+        $data['paises'] = $this->paises_model->gets();
+
+        $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
+
+        $data['monedas'] = $this->monedas_model->gets();
+
+        $this->load->view('layout/app', $data);
+    }
+
+    public function modificar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $_POST['cuit'] = str_replace("-", "", $this->input->post('cuit'));
+
+        $this->form_validation->set_rules('idproveedor', 'ID de Proveedor', 'required|integer');
+        $this->form_validation->set_rules('proveedor', 'Proveedor', 'required');
+        $this->form_validation->set_rules('idprovincia', 'Provincia', 'required|integer');
+        $this->form_validation->set_rules('idpais', 'Pais', 'required|integer');
+        $this->form_validation->set_rules('idtipo_responsable', 'Tipo de IVA', 'required|integer');
+        $this->form_validation->set_rules('saldo_cuenta_corriente', 'Saldo Cuenta Corriente', 'required|decimal');
+        $this->form_validation->set_rules('saldo_inicial', 'Saldo Inicial', 'required|decimal');
+        $this->form_validation->set_rules('saldo_a_cuenta', 'Saldo a Cuenta', 'required|decimal');
+        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = $this->input->post();
+            $datos['actualizado_por'] = $session['SID'];
+            $where = array(
+                'idproveedor' => $this->input->post('idproveedor')
+            );
+
+            $resultado = $this->proveedores_model->update($datos, $where);
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'El proveedor ' . $this->input->post('proveedor') . ' se actualizó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el Proveedor'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
 }
 
 ?>

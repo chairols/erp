@@ -28,7 +28,13 @@
                 <tr>
                     <td><?=$proveedor['idproveedor']?></td>
                     <td><?=$proveedor['proveedor']?></td>
-                    <td></td>
+                    <td>
+                        <a href="/proveedores/modificar/<?=$proveedor['idproveedor']?>/" class="hint--top-right hint--bounce hint--info" aria-label="Modificar">
+                            <button class="btn btn-primary btn-xs">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </a>
+                    </td>
                 </tr>
                 <?php } ?>
             </tbody>

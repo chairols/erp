@@ -27,7 +27,7 @@ class Retenciones extends CI_Controller {
         ));
 
         $session = $this->session->all_userdata();
-        $this->r_session->check($session);
+        //$this->r_session->check($session);
     }
 
     public function agregar() {
@@ -872,7 +872,7 @@ class Retenciones extends CI_Controller {
                 ->to('hernanbalboa@gmail.com')
                 //->to($this->input->post('email'))
                 ->subject($subject)
-                //->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
+                ->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
                 ->attach(base_url().'prueba/tcpdf/', '', 'Prueba de PDF generico.pdf')
                 ->message($body)
                 ->send();

@@ -867,10 +867,10 @@ class Retenciones extends CI_Controller {
 //$body = $this->email->full_html($subject, $message);
         
         $result = $this->email
-                ->from('hernan.balboa@rollerservice.com.ar', 'Hernan - CodeIgniter Prueba')
-                ->reply_to('hernan.balboa@rollerservice.com.ar')    // Optional, an account where a human being reads.
-                ->to('hernanbalboa@gmail.com')
-                //->to($this->input->post('email'))
+                ->from('ventas@rollerservice.com.ar', 'Roller Service S.A.')
+                ->reply_to('ventas@rollerservice.com.ar')    // Optional, an account where a human being reads.
+                //->to('hernanbalboa@gmail.com')
+                ->to($this->input->post('email'))
                 ->subject($subject)
                 //->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
                 ->attach(base_url().'extranet/retencion/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/', '', 'Prueba de PDF generico.pdf')

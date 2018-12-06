@@ -62,9 +62,10 @@ function confirmar_mail(idretencion) {
             resultado = $.parseJSON(data);
             email = resultado['p']['email'];
 
-            alertify.confirm("<p><strong>Confirmar Correo para enviar Retención</strong></p><div class='col-md-12'><input type='text' value='" + email + "' class='form-control'></div><br><br>", function (e) {
+            alertify.confirm("<p><strong>Confirmar Correo para enviar Retención</strong></p><div class='col-md-12'><input id='email_confirmado' type='text' value='" + email + "' class='form-control'></div><br><br>", function (e) {
                 if (e) {
-                    enviar_mail(email, idretencion);
+                    enviar_mail($("#email_confirmado").val(), idretencion);
+                    
                 }
 
 

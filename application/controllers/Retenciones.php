@@ -27,7 +27,7 @@ class Retenciones extends CI_Controller {
         ));
 
         $session = $this->session->all_userdata();
-        //$this->r_session->check($session);
+        $this->r_session->check($session);
     }
 
     public function agregar() {
@@ -869,18 +869,33 @@ class Retenciones extends CI_Controller {
         $result = $this->email
                 ->from('hernan.balboa@rollerservice.com.ar', 'Hernan - CodeIgniter Prueba')
                 ->reply_to('hernan.balboa@rollerservice.com.ar')    // Optional, an account where a human being reads.
-                ->to('hernanbalboa@gmail.com')
-                //->to($this->input->post('email'))
+                //->to('hernanbalboa@gmail.com')
+                ->to($this->input->post('email'))
                 ->subject($subject)
-                ->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
-                ->attach(base_url().'prueba/tcpdf/', '', 'Prueba de PDF generico.pdf')
+                //->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
+                ->attach(base_url().'extranet/retencion/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/', '', 'Prueba de PDF generico.pdf')
                 ->message($body)
                 ->send();
         
+        /*var_dump($this->generar_hash_retencion_para_extranet($this->input->post('idretencion')));
         var_dump($result);
-        echo '<br />';
+        */
+        if($result) {
+            $json = array(
+                'status' => 'ok',
+                'data' => 'El correo se envió satisfactoriamente'
+            );
+            echo json_encode($json);
+        } else {
+            $json = array(
+                'status' => 'error',
+                'data' => 'Ocurrió el siguiente error: <br>'.$this->email->print_debugger()
+            );
+            echo json_encode($json);
+        }
+        /*echo '<br />';
         echo $this->email->print_debugger();
-
+        */
         exit;
     }
 
@@ -904,6 +919,19 @@ class Retenciones extends CI_Controller {
         $aux .= substr($fecha, 0, 4);
 
         return $aux;
+    }
+    
+    private function generar_hash_retencion_para_extranet($idretencion) {
+         // Datos de Retención
+        $where = array(
+            'idretencion' => $idretencion,
+            'estado' => 'A'
+        );
+        $data['retencion'] = $this->retenciones_model->get_where($where);
+        
+        $hash_generado = sha1($data['retencion']['idretencion'] . $data['retencion']['punto'] . $data['retencion']['numero'] . $data['retencion']['idproveedor'] . $data['retencion']['proveedor'] . $data['retencion']['direccion'] . $data['retencion']['localidad']);
+        
+        return $hash_generado;
     }
    
 }

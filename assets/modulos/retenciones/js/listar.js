@@ -87,7 +87,7 @@ function enviar_mail(email, idretencion) {
         'email': email,
         'idretencion': idretencion
     };
-    
+
     $.ajax({
         type: 'POST',
         url: '/retenciones/enviar_mail/',
@@ -97,7 +97,19 @@ function enviar_mail(email, idretencion) {
         },
         success: function (data) {
             resultado = $.parseJSON(data);
-            
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: false
+                        });
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: false
+                        });
+            }
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,

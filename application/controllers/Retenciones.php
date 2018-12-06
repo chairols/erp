@@ -843,7 +843,7 @@ class Retenciones extends CI_Controller {
         
         $subject = 'Se generó la retención '. str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT).'-'. str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT);
         
-        $message = '<p>This message has been sent for testing purposes.</p>';
+        $message = '<p>Adjunto se encuentra nueva retención.</p>';
 
 // Get full html:
         $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -860,7 +860,6 @@ class Retenciones extends CI_Controller {
 </head>
 <body>
 ' . $message . ' <br>
-    '. base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/' .'
 </body>
 </html>';
 // Also, for getting full html you may use the following internal method:

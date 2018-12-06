@@ -872,7 +872,7 @@ class Retenciones extends CI_Controller {
                 ->to($this->input->post('email'))
                 ->subject($subject)
                 //->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
-                ->attach(base_url().'extranet/retencion/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/', '', 'Prueba de PDF generico.pdf')
+                ->attach(base_url().'extranet/retencion/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/', '', 'Retención '. str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT).'-'. str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT).'.pdf')
                 ->message($body)
                 ->send();
         

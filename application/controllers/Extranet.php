@@ -112,8 +112,12 @@ class Extranet extends CI_Controller {
         if ($idretencion == null || $hash == null) {
             // No mostrar nada
         } else {
-            $retencion = $this->retenciones_model->get_where($idretencion);
-            $hash_generado = sha1($retencion['idretencion'] . $retencion['punto'] . $retencion['numero'] . $retencion['idproveedor'] . $retencion['proveedor'] . $retencion['direccion'] . $retencion['localidad']);
+            $where = array(
+                'idretencion' => $idretencion,
+                'estado' => 'A'
+            );
+            $data['retencion'] = $this->retenciones_model->get_where($where);
+            $hash_generado = sha1($data['retencion']['idretencion'] . $data['retencion']['punto'] . $data['retencion']['numero'] . $data['retencion']['idproveedor'] . $data['retencion']['proveedor'] . $data['retencion']['direccion'] . $data['retencion']['localidad']);
             
             if($hash_generado == $hash) {
                 $datos = array(

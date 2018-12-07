@@ -46,6 +46,8 @@ class Monedas_model extends CI_Model {
     }
 
     /*
+     *  Cotizaciones_proveedores/agregar
+     * 
      *  Importaciones/agregar
      * 
      *  Listas_de_precios/asociar_generico

@@ -882,6 +882,14 @@ class Retenciones extends CI_Controller {
         var_dump($result);
         */
         if($result) {
+            $datos = array(
+                'estado_mail' => 'E'
+            );
+            $where = array(
+                'idretencion' => $this->input->post('idretencion')
+            );
+            $this->retenciones_model->update($datos, $where);
+            
             $json = array(
                 'status' => 'ok',
                 'data' => 'El correo se envió satisfactoriamente'

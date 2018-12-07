@@ -110,7 +110,7 @@ function enviar_mail(email, idretencion) {
                             type: 'success',
                             allow_dismiss: false
                         });
-                        $("#estado_mail"+email).html('<span class="badge bg-yellow">Enviado</span>');
+                        $("#estado_mail"+idretencion).html('<span class="badge bg-yellow">Enviado</span>');
             }
         },
         error: function (xhr) { // if error occured

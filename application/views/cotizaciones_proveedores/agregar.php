@@ -27,6 +27,12 @@
                     <input type="text" id="fecha" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Observaciones</label>
+                <div class="col-md-6">
+                    <textarea id="observaciones" class="form-control"></textarea>
+                </div>
+            </div>
             <div class="ln_solid"></div>
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

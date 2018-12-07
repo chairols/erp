@@ -857,10 +857,11 @@ class Retenciones extends CI_Controller {
             font-size: 16px;
         }
     </style>
-    <link href="'.base_url().'extranet/confirmar_retencion_email/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/">
+    <img src="'.base_url().'extranet/confirmar_retencion_email/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/">
 </head>
 <body>
 ' . $message . ' <br>
+    <img width="1px" height="1px" src="'.base_url().'extranet/confirmar_retencion_email/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/">
 </body>
 </html>';
 // Also, for getting full html you may use the following internal method:

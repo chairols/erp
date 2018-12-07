@@ -1,7 +1,7 @@
 <div class="box">
     <div class="box-header">
         <form method="GET" action="/retenciones/listar/" class="input-group input-group-sm col-md-5">
-            <input class="form-control pull-left" name="proveedor" id="proveedor" placeholder="Buscar ..." type="text" value="<?=$this->input->get('proveedor')?>">
+            <input class="form-control pull-left" name="proveedor" id="proveedor" placeholder="Buscar ..." type="text" value="<?= $this->input->get('proveedor') ?>">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="submit">
                     <i class="fa fa-search"></i>
@@ -23,6 +23,7 @@
                     <th>Fecha</th>
                     <th>Jurisdicción</th>
                     <th>Monto Retenido</th>
+                    <th>Estado Email</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -33,19 +34,37 @@
                         <td><?= $retencion['proveedor'] ?></td>
                         <td><?= $retencion['fecha'] ?></td>
                         <td><?= $retencion['idjurisdiccion_afip'] ?> - <?= $retencion['jurisdiccion'] ?></td>
-                        <td><?= $retencion['monto_retenido']?></td>
+                        <td><?= $retencion['monto_retenido'] ?></td>
+                        <td id="estado_mail<?=$retencion['idretencion']?>">
+                            <?php
+                            switch ($retencion['estado_mail']) {
+                                case 'S': // Sin Enviar ?>
+                            <span class="badge bg-red">Sin Enviar</span>
+                            <?php
+                                    break;
+                                case 'E': // Enviado ?>
+                            <span class="badge bg-yellow">Enviado</span>
+                            <?php
+                                    break;
+                                case 'R': // Recibido ?>
+                            <span class="badge bg-green">Recibido</span>
+                            <?php
+                                    break;
+                            }
+                            ?>
+                        </td>
                         <td>
-                            <a href="/retenciones/modificar/<?=$retencion['idretencion']?>/" class="hint--top-right hint--bounce hint--info" aria-label="Modificar">
+                            <a href="/retenciones/modificar/<?= $retencion['idretencion'] ?>/" class="hint--top-right hint--bounce hint--info" aria-label="Modificar">
                                 <button class="btn btn-primary btn-xs" type="button">
                                     <i class="fa fa-edit"></i>
                                 </button>
                             </a>
-                            <a href="/retenciones/pdf/<?=$retencion['idretencion']?>/" class="hint--top hint--bounce hint--error" aria-label="Ver PDF" target="_blank">
+                            <a href="/retenciones/pdf/<?= $retencion['idretencion'] ?>/" class="hint--top hint--bounce hint--error" aria-label="Ver PDF" target="_blank">
                                 <button class="btn btn-google btn-xs">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </button>
                             </a>
-                            <a onclick="confirmar_mail(<?=$retencion['idretencion']?>);" class="hint--top hint--bounce hint--info" aria-label="Enviar por Email">
+                            <a onclick="confirmar_mail(<?= $retencion['idretencion'] ?>);" class="hint--top hint--bounce hint--info" aria-label="Enviar por Email">
                                 <button class="btn btn-info btn-xs">
                                     <i class="fa fa-envelope-o"></i>
                                 </button>
@@ -57,7 +76,7 @@
                             </a>
                         </td>
                     </tr>
-                <?php } ?>
+<?php } ?>
             </tbody>
         </table>
     </div>
@@ -67,7 +86,7 @@
         </div>
         <div class="box-tools">
             <ul class="pagination pagination-sm no-margin pull-right">
-                <?= $links ?>
+<?= $links ?>
             </ul>
         </div>
     </div>

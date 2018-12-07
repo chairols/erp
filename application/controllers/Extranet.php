@@ -107,6 +107,28 @@ class Extranet extends CI_Controller {
             show_404();
         }
     }
+    
+    public function confirmar_retencion_email($idretencion = null, $hash = null) {
+        if ($idretencion == null || $hash == null) {
+            // No mostrar nada
+        } else {
+            $retencion = $this->retenciones_model->get_where($idretencion);
+            $hash_generado = sha1($retencion['idretencion'] . $retencion['punto'] . $retencion['numero'] . $retencion['idproveedor'] . $retencion['proveedor'] . $retencion['direccion'] . $retencion['localidad']);
+            
+            if($hash_generado == $hash) {
+                $datos = array(
+                    'estado_mail' => 'R'
+                );
+                $where = array(
+                    'idretencion' => $idretencion
+                );
+                $this->retenciones_model->update($datos, $where);
+            }
+        }
+        
+        
+        
+    }
 
     private function formatear_fecha_para_mostrar($fecha) {
         $aux = '';

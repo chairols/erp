@@ -857,6 +857,7 @@ class Retenciones extends CI_Controller {
             font-size: 16px;
         }
     </style>
+    <link href="'.base_url().'extranet/confirmar_retencion_email/"'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/">
 </head>
 <body>
 ' . $message . ' <br>

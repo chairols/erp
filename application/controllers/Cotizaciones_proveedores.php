@@ -46,6 +46,8 @@ class Cotizaciones_proveedores extends CI_Controller {
                 'data' => validation_errors()
             );
             echo json_encode($json);
+        } else {
+            
         }
     }
 }

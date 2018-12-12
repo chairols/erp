@@ -130,7 +130,8 @@ class Monedas extends CI_Controller {
                     $this->log_model->set($log);
 
                     $json = array(
-                        'status' => 'ok'
+                        'status' => 'ok',
+                        'data' => 'Se agregó la moneda '.$this->input->post('moneda').' correctamente'
                     );
                     echo json_encode($json);
                 } else {

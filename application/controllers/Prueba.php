@@ -512,7 +512,7 @@ EOD;
                 ->reply_to('hernan.balboa@rollerservice.com.ar')    // Optional, an account where a human being reads.
                 ->to('hernanbalboa@gmail.com')
                 ->subject($subject)
-                ->attach('https://erp.rollerservice.com.ar/prueba/tcpdf/', '', 'Nuevo Nombre.pdf')
+                ->attach(file_get_contents('https://erp.rollerservice.com.ar/prueba/tcpdf/'), '', 'Nuevo Nombre.pdf')
                 ->message($body)
                 ->send();
         

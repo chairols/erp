@@ -892,8 +892,7 @@ class Retenciones extends CI_Controller {
             
             $json = array(
                 'status' => 'ok',
-                'data' => 'El correo se envió satisfactoriamente',
-                'url' => base_url().'extranet/retencion/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/'
+                'data' => 'El correo se envió satisfactoriamente'
             );
             echo json_encode($json);
         } else {

@@ -151,6 +151,23 @@ class Proveedores extends CI_Controller {
         }
     }
 
+    public function agregar() {
+        $data['title'] = 'Agregar Proveedor';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/proveedores/js/agregar.js'
+        );
+        $data['view'] = 'proveedores/agregar';
+        
+        $data['provincias'] = $this->provincias_model->gets();
+        $data['paises'] = $this->paises_model->gets();
+        $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
+        $data['monedas'] = $this->monedas_model->gets();
+
+        
+        $this->load->view('layout/app', $data);
+    }
 }
 
 ?>

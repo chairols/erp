@@ -1,6 +1,5 @@
-$("#modificar").click(function() {
+$("#agregar").click(function() {
     datos = {
-        'idproveedor': $("#idproveedor").val(),
         'proveedor': $("#proveedor").val(),
         'cuit': $("#cuit").val(),
         'domicilio': $("#domicilio").val(),
@@ -23,11 +22,11 @@ $("#modificar").click(function() {
     };
     $.ajax({
         type: 'POST',
-        url: '/proveedores/modificar_ajax/',
+        url: '/proveedores/agregar_ajax/',
         data: datos,
         beforeSend: function () {
-            $("#modificar").hide();
-            $("#modificar_loading").show();
+            $("#agregar").hide();
+            $("#agregar_loading").show();
         },
         success: function (data) {
             resultado = $.parseJSON(data);
@@ -44,8 +43,8 @@ $("#modificar").click(function() {
                             allow_dismiss: true
                         });
             }
-            $("#modificar_loading").hide();
-            $("#modificar").show();
+            $("#agregar_loading").hide();
+            $("#agregar").show();
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
@@ -53,8 +52,8 @@ $("#modificar").click(function() {
                         type: 'danger',
                         allow_dismiss: false
                     });
-            $("#modificar_loading").hide();
-            $("#modificar").show();        
+            $("#agregar_loading").hide();
+            $("#agregar").show();        
         }
     });
 });

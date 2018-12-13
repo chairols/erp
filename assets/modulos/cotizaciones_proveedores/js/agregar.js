@@ -29,7 +29,6 @@ $("#agregar").click(function () {
                         });
                 window.location.href = "/cotizaciones_proveedores/modificar/" + resultado['data'] + '/';
             }
-            
         },
         error: function (xhr) { // if error occured
             $("#agregar_loading").hide();

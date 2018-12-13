@@ -109,7 +109,5 @@ class Cotizaciones_proveedores extends CI_Controller {
 
         return $aux;
     }
-
 }
-
 ?>

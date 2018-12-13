@@ -3,7 +3,7 @@
     <div class="row form-group inline-form-custom">
         <div class="col-xs-12">
             <!-- Autocomplete Empresas -->
-            <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" objectauto="proveedores" actionauto="gets_proveedores_ajax" iconauto="ship">
+            <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" objectauto="proveedores" actionauto="gets_proveedores_ajax" iconauto="ship" autofocus>
             <input type="hidden" id="proveedor" name="proveedor" value="">
         </div>
     </div>

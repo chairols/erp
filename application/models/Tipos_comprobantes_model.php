@@ -22,6 +22,8 @@ class Tipos_comprobantes_model extends CI_Model {
     }
     
     /*
+     *  Proveedores/agregar_ajax
+     * 
      *  Retenciones/agregar_item_ajax
      */
     public function get_where($where) {

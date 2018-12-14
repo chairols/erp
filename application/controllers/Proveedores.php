@@ -18,7 +18,8 @@ class Proveedores extends CI_Controller {
             'provincias_model',
             'monedas_model',
             'paises_model',
-            'tipos_responsables_model'
+            'tipos_responsables_model',
+            'log_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -193,6 +194,7 @@ class Proveedores extends CI_Controller {
             echo json_encode($json);
         } else {
             $set = $this->input->post();
+            $set['cuit'] = str_replace("-", "", $set['cuit']);
             $set['fecha_creacion'] = date("Y-m-d H:i:s");
             $set['idcreador'] = $session['SID'];
             $set['actualizado_por'] = $session['SID'];
@@ -200,7 +202,60 @@ class Proveedores extends CI_Controller {
             $id = $this->proveedores_model->set($set);
 
             if ($id) {
+                $where = array(
+                    'idprovincia' => $this->input->post('idprovincia')
+                );
+                $provincia = $this->provincias_model->get_where($where);
                 
+                $where = array(
+                    'idpais' => $this->input->post('idpais')
+                );
+                $pais = $this->paises_model->get_where($where);
+                
+                $where = array(
+                    'idtipo_responsable' => $this->input->post('idtipo_responsable')
+                );
+                $tipo_responsable = $this->tipos_responsables_model->get_where($where);
+                
+                $where = array(
+                    'idmoneda' => $this->input->post('idmoneda')
+                );
+                $moneda = $this->monedas_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'proveedores',
+                    'idtabla' => $id,
+                    'texto' => "<h2><strong>Se agregó el proveedor: ".$this->input->post('proveedor')."</strong></h2>
+
+<p><strong>ID Proveedor: </strong>". $id . "<br />
+<strong>CUIT: </strong>".$this->input->post('cuit')."<br />
+<strong>Domicilio: </strong>".$this->input->post('domicilio')."<br />
+<strong>Código Postal: </strong>".$this->input->post('codigo_postal')."<br />
+<strong>Localidad: </strong>".$this->input->post('localidad')."<br />
+<strong>Provincia: </strong>".$provincia['provincia']."<br />
+<strong>País: </strong>".$pais['pais']."<br />
+<strong>Teléfono: </strong>".$this->input->post('telefono')."<br />
+<strong>Email: </strong>".$this->input->post('email')."<br />
+<strong>Contacto: </strong>".$this->input->post('contacto')."<br />
+<strong>Tipo de IVA: </strong>".$tipo_responsable['tipo_responsable']."<br />
+<strong>Ingresos Brutos: </strong>".$this->input->post('iibb')."<br />
+<strong>VAT: </strong>".$this->input->post('vat')."<br />
+<strong>Saldo Cuenta Corriente: </strong>".$this->input->post('saldo_cuenta_corriente')."<br />
+<strong>Saldo Inicial: </strong>".$this->input->post('saldo_inicial')."<br />
+<strong>Saldo a Cuenta: </strong>".$this->input->post('saldo_a_cuenta')."<br />
+<strong>Moneda: </strong>".$moneda['moneda']."<br />
+<strong>Sitio Web: </strong>".$this->input->post('web')."</strong><br />
+<strong>Observaciones: </strong>".$this->input->post('observaciones')."</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se agregó el proveedor '.$this->input->post('proveedor')
+                );
+                echo json_encode($json);
             } else {
                 $json = array(
                     'status' => 'error',
@@ -231,13 +286,13 @@ class Proveedores extends CI_Controller {
                 );
                 $parametro = $this->parametros_model->get_where($where);
                 $url = $parametro['valor_sistema'];
-                
-                
-                
+
+
+
                 $json = array(
                     'status' => 'ok',
                     'data' => 'El CUIT es válido',
-                    'url' => $url.$cuit
+                    'url' => $url . $cuit
                 );
             }
 

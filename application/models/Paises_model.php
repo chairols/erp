@@ -19,6 +19,14 @@ class Paises_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Proveedores/agregar_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('paises', $where);
+        return $query->row_array();
+    }
 }
 
 ?>

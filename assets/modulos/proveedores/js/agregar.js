@@ -42,6 +42,7 @@ $("#agregar").click(function() {
                             type: 'success',
                             allow_dismiss: true
                         });
+                limpiar_campos();
             }
             $("#agregar_loading").hide();
             $("#agregar").show();
@@ -108,12 +109,18 @@ function get_info(url) {
         },
         success: function (data) {
             resultado = $.parseJSON(data);
-            if(resultado['errorGetData'] == false) {
+            if(resultado['errorGetData']) {
                 $("#proveedor").val(resultado['Contribuyente'].nombre);
                 $("#domicilio").val(resultado['Contribuyente'].domicilioFiscal.direccion);
                 $("#codigo_postal").val(resultado['Contribuyente'].domicilioFiscal.codPostal);
                 $("#localidad").val(resultado['Contribuyente'].domicilioFiscal.localidad);
-                
+                console.log(resultado['errorGetData']);
+            } else {
+                $.notify('<strong>No se pudo traer la información desde AFIP</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
             }
             
         },
@@ -125,4 +132,22 @@ function get_info(url) {
                     });
         }
     });
+}
+
+function limpiar_campos() {
+    $("#cuit").val("");
+    $("#proveedor").val("");
+    $("#domicilio").val("");
+    $("#codigo_postal").val("");
+    $("#localidad").val("");
+    $("#telefono").val("");
+    $("#email").val("");
+    $("#contacto").val("");
+    $("#iibb").val("");
+    $("#vat").val("");
+    $("#saldo_cuenta_corriente").val("");
+    $("#saldo_inicial").val("");
+    $("#saldo_a_cuenta").val("");
+    $("#web").val("");
+    $("#observaciones").val("");
 }

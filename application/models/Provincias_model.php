@@ -30,7 +30,10 @@ class Provincias_model extends CI_Model {
     }
     
     /*
+     *  Proveedores/agregar_ajax
+     *  
      *  Provincias/get_provincia_ajax
+     * 
      */
     public function get_where($where) {
         $query = $this->db->get_where('provincias', $where);

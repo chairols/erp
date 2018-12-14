@@ -39,6 +39,9 @@ class Monedas_model extends CI_Model {
      * 
      *  Monedas/agregar_ajax
      *  Monedas/modificar
+     * 
+     *  Proveedores/agregar_ajax
+     * 
      */
     public function get_where($where) {
         $query = $this->db->get_where('monedas', $where);

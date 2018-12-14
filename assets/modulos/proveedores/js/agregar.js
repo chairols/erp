@@ -109,19 +109,12 @@ function get_info(url) {
         },
         success: function (data) {
             resultado = $.parseJSON(data);
-            if(resultado['errorGetData']) {
+            if(resultado['errorGetData'] == false) {
                 $("#proveedor").val(resultado['Contribuyente'].nombre);
                 $("#domicilio").val(resultado['Contribuyente'].domicilioFiscal.direccion);
                 $("#codigo_postal").val(resultado['Contribuyente'].domicilioFiscal.codPostal);
                 $("#localidad").val(resultado['Contribuyente'].domicilioFiscal.localidad);
-                console.log(resultado['errorGetData']);
-            } else {
-                $.notify('<strong>No se pudo traer la información desde AFIP</strong><br>' + xhr.statusText,
-                    {
-                        type: 'danger',
-                        allow_dismiss: false
-                    });
-            }
+            } 
             
         },
         error: function (xhr) { // if error occured

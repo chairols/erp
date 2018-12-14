@@ -5,15 +5,15 @@
     <div class="box-body">
         <div class="form-horizontal">
             <div class="form-group">
-                <label class="control-label col-md-3">Proveedor</label>
+                <label class="control-label col-md-3">CUIT</label>
                 <div class="col-md-6">
-                    <input type="text" id="proveedor" class="form-control" maxlength="255" autofocus>
+                    <input type="text" id="cuit" class="form-control inputMask" data-inputmask="'mask': '99-99999999-9'" autofocus>
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-3">CUIT</label>
+                <label class="control-label col-md-3">Proveedor</label>
                 <div class="col-md-6">
-                    <input type="text" id="cuit" class="form-control inputMask" data-inputmask="'mask': '99-99999999-9'">
+                    <input type="text" id="proveedor" class="form-control" maxlength="255">
                 </div>
             </div>
             <div class="form-group">

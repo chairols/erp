@@ -57,3 +57,72 @@ $("#agregar").click(function() {
         }
     });
 });
+
+$("#cuit").focusout(function() {
+    datos = {
+        'cuit': $("#cuit").val()
+    };
+    
+    $.ajax({
+        type: 'POST',
+        url: '/proveedores/checkcuit_ajax/',
+        data: datos,
+        beforeSend: function () {
+            
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: true
+                        });
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: true
+                        });
+                get_info(resultado['url']);
+            }
+            
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+                   
+        }
+    });
+});
+
+function get_info(url) {
+    $.ajax({
+        type: 'POST',
+        url: url,
+        beforeSend: function () {
+            
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if(resultado['errorGetData'] == false) {
+                $("#proveedor").val(resultado['Contribuyente'].nombre);
+                $("#domicilio").val(resultado['Contribuyente'].domicilioFiscal.direccion);
+                $("#codigo_postal").val(resultado['Contribuyente'].domicilioFiscal.codPostal);
+                $("#localidad").val(resultado['Contribuyente'].domicilioFiscal.localidad);
+                
+            }
+            
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+        }
+    });
+}

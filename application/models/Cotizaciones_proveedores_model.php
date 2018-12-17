@@ -24,5 +24,13 @@ class Cotizaciones_proveedores_model extends CI_Model {
         
         return $query->row_array();
     }
+    
+    /*
+     *  Cotizaciones_proveedores/actualizar_cabecera_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('cotizaciones_proveedores', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 ?>

@@ -21,6 +21,7 @@ $(document).ready(function() {
 
 $("#actualizar").click(function () {
     datos = {
+        'idcotizacion_proveedor': $("#idcotizacion_proveedor").val(),
         'idproveedor': $("#proveedor").val(),
         'idmoneda': $("#idmoneda").val(),
         'fecha': $("#fecha").val(),
@@ -48,7 +49,8 @@ $("#actualizar").click(function () {
                         {
                             type: 'success'
                         });
-                window.location.href = "/cotizaciones_proveedores/modificar/" + resultado['data'] + '/';
+                $("#actualizar_loading").hide();
+                $("#actualizar").show();
             }
         },
         error: function (xhr) { // if error occured

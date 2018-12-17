@@ -39,6 +39,8 @@ class Proveedores_model extends CI_Model {
     }
 
     /*
+     *  Cotizaciones_proveedores/actualizar_cabecera_ajax
+     * 
      *  Proveedores/gets_proveedores_ajax
      */
     public function gets_where($where) {

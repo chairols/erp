@@ -1,6 +1,6 @@
 <div class="box box-primary">
     <div class="box-header">
-
+        <input type="hidden" id="idcotizacion_proveedor" value="<?=$cotizacion_proveedor['idcotizacion_proveedor']?>">
     </div>
     <div class="box-body no-padding">
         <div class="form-horizontal">

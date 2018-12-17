@@ -15,5 +15,14 @@ class Cotizaciones_proveedores_model extends CI_Model {
         $this->db->insert('cotizaciones_proveedores', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Cotizaciones_proveedores/modificar
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('cotizaciones_proveedores', $where);
+        
+        return $query->row_array();
+    }
 }
 ?>

@@ -9,6 +9,8 @@ class Proveedores_model extends CI_Model {
     }
 
     /*
+     *  Cotizaciones_proveedores/modificar
+     * 
      *  Importaciones/pedido_pdf
      * 
      *  Importar/proveedores
@@ -16,7 +18,6 @@ class Proveedores_model extends CI_Model {
      *  Proveedores/checkCUIT_ajax
      * 
      */
-
     public function get_where($where)
     {
 

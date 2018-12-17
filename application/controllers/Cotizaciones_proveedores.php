@@ -98,6 +98,36 @@ class Cotizaciones_proveedores extends CI_Controller {
             }
         }
     }
+    
+    public function modificar($idcotizacion_proveedor = null) {
+        if($idcotizacion_proveedor == null) {
+            redirect('/cotizaciones_proveedores/listar/', 'refresh');
+        }
+        
+        $data['title'] = 'Modificar Cotización de Proveedores';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/cotizaciones_proveedores/js/modificar.js'
+        );
+        $data['view'] = 'cotizaciones_proveedores/modificar';
+        
+        $where = array(
+            'idcotizacion_proveedor' => $idcotizacion_proveedor
+        );
+        $data['cotizacion_proveedor'] = $this->cotizaciones_proveedores_model->get_where($where);
+        
+        $where = array(
+            'idproveedor' => $data['cotizacion_proveedor']['idproveedor']
+        );
+        $data['cotizacion_proveedor']['proveedor'] = $this->proveedores_model->get_where($where);
+        
+        $data['monedas'] = $this->monedas_model->gets();
+        
+        $data['cotizacion_proveedor']['fecha_formateada'] = $this->formatear_fecha_para_mostrar($data['cotizacion_proveedor']['fecha']);
+        
+        $this->load->view('layout/app', $data);
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';
@@ -106,6 +136,17 @@ class Cotizaciones_proveedores extends CI_Controller {
         $aux .= substr($fecha, 3, 2);
         $aux .= '-';
         $aux .= substr($fecha, 0, 2);
+
+        return $aux;
+    }
+    
+    private function formatear_fecha_para_mostrar($fecha) {
+        $aux = '';
+        $aux .= substr($fecha, 8, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 5, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 0, 4);
 
         return $aux;
     }

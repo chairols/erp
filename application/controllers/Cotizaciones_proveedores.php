@@ -223,8 +223,9 @@ class Cotizaciones_proveedores extends CI_Controller {
 
                 $config['upload_path'] = '.'.$url['valor_sistema'];
                 $config['allowed_types'] = '*';
-                $config['file_name'] = $_FILES['file']['name'];
-                $config['owerwrite'] = TRUE;
+                //$config['file_name'] = $_FILES['file']['name'];
+                $config['owerwrite'] = FALSE;
+                $config['encrypt_name'] = TRUE;
 
                 $this->load->library('upload', $config);
                 if (!$this->upload->do_upload('file')) {
@@ -232,6 +233,18 @@ class Cotizaciones_proveedores extends CI_Controller {
                     show_404();
                 } else {
                     $data = array('upload_data' => $this->upload->data());
+                    
+                    $datos = array(
+                        'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor'),
+                        'nombre' => $_FILES['file']['name'],
+                        'url' => $url['valor_sistema'].$data['upload_data']['file_name'],
+                        'fecha_creacion' => date("Y-m-d H:i:s"),
+                        'idcreador' => $session['SID'],
+                        'actualizado_por' => $session['SID']
+                    );
+                    
+                    $this->cotizaciones_proveedores_model->set_archivos($datos);
+                    
                 }
             }
         }

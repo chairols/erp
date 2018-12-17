@@ -41,5 +41,13 @@ class Cotizaciones_proveedores_model extends CI_Model {
         
         return $query->result_array();
     }
+    
+    /*
+     *  Cotizaciones_proveedores/agregar_archivos_ajax
+     */
+    public function set_archivos($datos) {
+        $this->db->insert('cotizaciones_proveedores_archivos', $datos);
+        return $this->db->insert_id();
+    }
 }
 ?>

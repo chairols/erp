@@ -1,4 +1,4 @@
-<table class="table table-condensed table-striped table-hover table-responsive">
+<table class="table table-condensed table-striped table-hover table-responsive table-bordered">
     <thead>
         <tr>
             <th>Archivo</th>

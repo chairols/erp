@@ -183,17 +183,25 @@ class Cotizaciones_proveedores extends CI_Controller {
                 
                 $json = array(
                     'status' => 'ok',
-                    'data' => 'Se actualizó la cotización'
+                    'data' => 'Se actualizó la cabecera de la cotización'
                 );
                 echo json_encode($json);
             } else {
                 $json = array(
                     'status' => 'error',
-                    'data' => 'No se pudo actualizar la cotización'
+                    'data' => 'No se pudo actualizar la cabecera de la cotización'
                 );
                 echo json_encode($json);
             }
         }
+    }
+    
+    public function agregar_archivos_ajax() {
+        
+    }
+    
+    public function listar_archivos_tabla_ajax() {
+        var_dump($this->input->post());
     }
 
     private function formatear_fecha($fecha) {

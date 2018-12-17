@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-3">Link</label>
                     <div class="col-md-6">
-                        <input type="text" maxlength="50" class="form-control" id="href" name="href" placeholder="/controlador/metodo/">
+                        <input type="text" maxlength="255" class="form-control" id="href" name="href" placeholder="/controlador/metodo/">
                     </div>
                 </div>
                 <div class="form-group">

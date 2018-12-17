@@ -1,8 +1,8 @@
 $(document).ready(function() {
     $('#dz1').dropzone({
-        url: '/modelos/agregar_fotos_ajax/',
+        url: '/cotizaciones_proveedores/agregar_archivos_ajax/',
         margin: 20,
-        allowedFileTypes: 'jpg',
+        allowedFileTypes: '*',
         params:{
             'action': 'save',
             'idmodelo': $("#idmodelo").val()
@@ -17,7 +17,28 @@ $(document).ready(function() {
             //gets_archivos();
         }
     });
+    
+    actualizar_archivos();
 });
+
+function actualizar_archivos() {
+    $.ajax({
+        type: 'POST',
+        url: '/cotizaciones_proveedores/listar_archivos_tabla_ajax/',
+        beforeSend: function () {
+            $("#archivos_adjuntos").html('<h1 class="text-center"><i class="fa fa-refresh fa-spin"></i></h1>');
+        },
+        success: function (data) {
+            $("#archivos_adjuntos").html(data);
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger'
+                    });
+        }
+    });
+}
 
 $("#actualizar").click(function () {
     datos = {

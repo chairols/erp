@@ -51,7 +51,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Archivos Adjuntos</label>
-                <div class="col-md-6">
+                <div class="col-md-6" id="archivos_adjuntos">
                     
                 </div>
             </div>
@@ -95,7 +95,7 @@
                 </div>
                 <div class="col-md-2 col-xs-12">
                     <button class="btn btn-sm btn-primary" id="agregar">Agregar</button>
-                    <button class="btn btn-sm btn-primary" id="agregar_loading">
+                    <button class="btn btn-sm btn-primary" id="agregar_loading" style="display: none;">
                         <i class="fa fa-refresh fa-spin"></i>
                     </button>
                 </div>

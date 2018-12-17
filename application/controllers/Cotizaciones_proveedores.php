@@ -255,9 +255,9 @@ class Cotizaciones_proveedores extends CI_Controller {
         $where = array(
             'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor')
         );
-        $archivos = $this->cotizaciones_proveedores_model->gets_archivos_where($where);
+        $data['archivos'] = $this->cotizaciones_proveedores_model->gets_archivos_where($where);
 
-        var_dump($archivos);
+        $this->load->view('cotizaciones_proveedores/listar_archivos_tabla_ajax', $data);
     }
 
     private function formatear_fecha($fecha) {

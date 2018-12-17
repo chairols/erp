@@ -16,7 +16,8 @@ class Cotizaciones_proveedores extends CI_Controller {
             'cotizaciones_proveedores_model',
             'proveedores_model',
             'monedas_model',
-            'log_model'
+            'log_model',
+            'parametros_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -161,26 +162,26 @@ class Cotizaciones_proveedores extends CI_Controller {
                     'idproveedor' => $this->input->post('idproveedor')
                 );
                 $proveedor = $this->proveedores_model->get_where($where);
-                
+
                 $where = array(
                     'idmoneda' => $this->input->post('idmoneda')
                 );
                 $moneda = $this->monedas_model->get_where($where);
-                
+
                 $log = array(
                     'tabla' => 'retenciones',
                     'idtabla' => $this->input->post('idcotizacion_proveedor'),
-                    'texto' => "<h2><strong>Se actualizó la cabecera de la cotización de proveedor N°: ".$this->input->post('idcotizacion_proveedor')."</strong></h2>
+                    'texto' => "<h2><strong>Se actualizó la cabecera de la cotización de proveedor N°: " . $this->input->post('idcotizacion_proveedor') . "</strong></h2>
 
-<p><strong>Proveedor: </strong>".$proveedor['proveedor']."<br />
-<strong>Moneda: </strong>".$moneda['moneda']."<br />
-<strong>Fecha de Cotizació: </strong>".$this->input->post('fecha')."<br />
-<strong>Observaciones: </strong>".$this->input->post('observaciones')."</p>",
+<p><strong>Proveedor: </strong>" . $proveedor['proveedor'] . "<br />
+<strong>Moneda: </strong>" . $moneda['moneda'] . "<br />
+<strong>Fecha de Cotizació: </strong>" . $this->input->post('fecha') . "<br />
+<strong>Observaciones: </strong>" . $this->input->post('observaciones') . "</p>",
                     'idusuario' => $session['SID'],
                     'tipo' => 'edit'
                 );
                 $this->log_model->set($log);
-                
+
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se actualizó la cabecera de la cotización'
@@ -195,13 +196,55 @@ class Cotizaciones_proveedores extends CI_Controller {
             }
         }
     }
-    
+
     public function agregar_archivos_ajax() {
+        $session = $this->session->all_userdata();
         
+        $this->form_validation->set_rules('idcotizacion_proveedor', 'ID Cotización', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            show_404();
+        } else {
+            $where = array(
+                'identificador' => 'url_files_cotiz_prov',
+                'idparametro_tipo' => 3
+            );
+            $url = $this->parametros_model->get_where($where);
+            
+            $filesCount = count($_FILES['files']['name']);
+            for ($i = 0; $i < $filesCount; $i++) {
+                $_FILES['file']['name'] = $_FILES['files']['name'][$i];
+                $_FILES['file']['type'] = $_FILES['files']['type'][$i];
+                $_FILES['file']['tmp_name'] = $_FILES['files']['tmp_name'][$i];
+                $_FILES['file']['error'] = $_FILES['files']['error'][$i];
+                $_FILES['file']['size'] = $_FILES['files']['size'][$i];
+
+                $f = explode('.', $_FILES['file']['name']);
+
+                $config['upload_path'] = '.'.$url['valor_sistema'];
+                $config['allowed_types'] = '*';
+                $config['file_name'] = $_FILES['file']['name'];
+                $config['owerwrite'] = TRUE;
+
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('file')) {
+                    $error = array('error' => $this->upload->display_errors());
+                    show_404();
+                } else {
+                    $data = array('upload_data' => $this->upload->data());
+                }
+            }
+        }
+
     }
-    
+
     public function listar_archivos_tabla_ajax() {
-        var_dump($this->input->post());
+        $where = array(
+            'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor')
+        );
+        $archivos = $this->cotizaciones_proveedores_model->gets_archivos_where($where);
+
+        var_dump($archivos);
     }
 
     private function formatear_fecha($fecha) {

@@ -32,5 +32,14 @@ class Cotizaciones_proveedores_model extends CI_Model {
         $this->db->update('cotizaciones_proveedores', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Cotizaciones_proveedores/listar_archivos_tabla_ajax
+     */
+    public function gets_archivos_where($where) {
+        $query = $this->db->get_where('cotizaciones_proveedores_archivos', $where);
+        
+        return $query->result_array();
+    }
 }
 ?>

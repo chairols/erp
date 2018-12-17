@@ -5,16 +5,15 @@ $(document).ready(function() {
         allowedFileTypes: '*',
         params:{
             'action': 'save',
-            'idmodelo': $("#idmodelo").val()
+            'idcotizacion_proveedor': $("#idcotizacion_proveedor").val()
         },
         uploadOnDrop: true,
         uploadOnPreview: false,
         success: function(res, index){
             //console.log(res, index);
-            $("#idfoto").val(res.response);
+            //$("#idfoto").val(res.response);
             console.log(res);
-            crear_thumb();
-            //gets_archivos();
+            actualizar_archivos();
         }
     });
     
@@ -22,9 +21,13 @@ $(document).ready(function() {
 });
 
 function actualizar_archivos() {
+    datos = {
+        'idcotizacion_proveedor': $("#idcotizacion_proveedor").val()
+    };
     $.ajax({
         type: 'POST',
         url: '/cotizaciones_proveedores/listar_archivos_tabla_ajax/',
+        data: datos,
         beforeSend: function () {
             $("#archivos_adjuntos").html('<h1 class="text-center"><i class="fa fa-refresh fa-spin"></i></h1>');
         },

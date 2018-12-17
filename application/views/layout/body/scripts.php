@@ -28,7 +28,8 @@
 <script src="/assets/vendors/jquery-mask/src/jquery.mask.js"></script>
 <script src="/assets/vendors/inputmask3/jquery.inputmask.bundle.min.js"></script>
 <!-- Dropzone -->
-<script src="/assets/vendors/dropzone/dropzone.min.js"></script>
+<!--<script src="/assets/vendors/dropzone/dropzone.min.js"></script>-->
+<script src="/assets/vendors/dropzone2/dropzone.js"></script>
 
 <!-- Treemultiselect -->
 <script src="/assets/vendors/treemultiselect/logger.min.js"></script>

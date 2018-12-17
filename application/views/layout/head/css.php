@@ -23,7 +23,8 @@
 <!-- DatePicker -->
 <link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">
 <!-- Dropzone -->
-<link rel="stylesheet" href="/assets/vendors/dropzone/dropzone.min.css">
+<!--<link rel="stylesheet" href="/assets/vendors/dropzone/dropzone.min.css">-->
+<link rel="stylesheet" href="/assets/vendors/dropzone2/dropzone.css">
 <!-- Hint -->
 <link rel="stylesheet" href="/assets/vendors/hint/hint.min.css">
 <!-- Sistema -->

@@ -88,3 +88,55 @@ $("#actualizar").click(function () {
         }
     });
 });
+
+$("#agregar").click(function() {
+    datos = {
+        'idcotizacion_proveedor': $("#idcotizacion_proveedor").val(),
+        'idarticulo': $("#articulo").val(),
+        'precio': $("#precio").val(),
+        'cantidad': $("#cantidad").val(),
+        'fecha': $("#fecha_articulo").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/cotizaciones_proveedores/agregar_articulo_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#agregar").hide();
+            $("#agregar_loading").show();
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger'
+                        });
+                $("#agregar_loading").hide();
+                $("#agregar").show();
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success'
+                        });
+                $("#agregar_loading").hide();
+                $("#agregar").show();
+                
+                $("#TextAutoCompletearticulo").val("");
+                $("#articulo").val("");
+                $("#precio").val("");
+                $("#cantidad").val("");
+                $("#TextAutoCompletearticulo").focus();
+            }
+        },
+        error: function (xhr) { // if error occured
+            $("#agregar_loading").hide();
+            $("#agregar").show();
+
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger'
+                    });
+        }
+    });
+});

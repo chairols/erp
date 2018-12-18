@@ -78,7 +78,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-4 col-xs-12">
-                    <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo inexistente" class="form-control input-sm TextAutoComplete" value="" validateEmpty="Seleccione un Artículo" objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="ship" autofocus>
+                    <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo inexistente" class="form-control input-sm TextAutoComplete" objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="ship" autofocus>
                     <input type="hidden" id="articulo" name="articulo" value="">
                 </div>
                 <div class="col-md-2 col-xs-12">
@@ -88,7 +88,7 @@
                     <input type="text" id="cantidad" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,8}'">
                 </div>
                 <div class="col-md-2 col-xs-12">
-                    <input type="text" id="fecha" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha">
+                    <input type="text" id="fecha_articulo" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha">
                 </div>
                 <div class="col-md-1 col-xs-12">
                     

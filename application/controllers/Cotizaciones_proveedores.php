@@ -17,7 +17,9 @@ class Cotizaciones_proveedores extends CI_Controller {
             'proveedores_model',
             'monedas_model',
             'log_model',
-            'parametros_model'
+            'parametros_model',
+            'articulos_model',
+            'marcas_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -199,7 +201,7 @@ class Cotizaciones_proveedores extends CI_Controller {
 
     public function agregar_archivos_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idcotizacion_proveedor', 'ID Cotización', 'required|integer');
 
         if ($this->form_validation->run() == FALSE) {
@@ -210,7 +212,7 @@ class Cotizaciones_proveedores extends CI_Controller {
                 'idparametro_tipo' => 3
             );
             $url = $this->parametros_model->get_where($where);
-            
+
             $filesCount = count($_FILES['files']['name']);
             for ($i = 0; $i < $filesCount; $i++) {
                 $_FILES['file']['name'] = $_FILES['files']['name'][$i];
@@ -221,7 +223,7 @@ class Cotizaciones_proveedores extends CI_Controller {
 
                 $f = explode('.', $_FILES['file']['name']);
 
-                $config['upload_path'] = '.'.$url['valor_sistema'];
+                $config['upload_path'] = '.' . $url['valor_sistema'];
                 $config['allowed_types'] = '*';
                 //$config['file_name'] = $_FILES['file']['name'];
                 $config['owerwrite'] = FALSE;
@@ -233,22 +235,91 @@ class Cotizaciones_proveedores extends CI_Controller {
                     show_404();
                 } else {
                     $data = array('upload_data' => $this->upload->data());
-                    
+
                     $datos = array(
                         'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor'),
                         'nombre' => $_FILES['file']['name'],
-                        'url' => $url['valor_sistema'].$data['upload_data']['file_name'],
+                        'url' => $url['valor_sistema'] . $data['upload_data']['file_name'],
                         'fecha_creacion' => date("Y-m-d H:i:s"),
                         'idcreador' => $session['SID'],
                         'actualizado_por' => $session['SID']
                     );
-                    
+
                     $this->cotizaciones_proveedores_model->set_archivos($datos);
-                    
                 }
             }
         }
+    }
 
+    public function agregar_articulo_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idcotizacion_proveedor', 'ID Cotizacion Proveedor', 'required|integer');
+        $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
+        $this->form_validation->set_rules('precio', 'Precio', 'required|decimal');
+        $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
+        $this->form_validation->set_rules('fecha', 'Fecha', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $set = array(
+                'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor'),
+                'idarticulo' => $this->input->post('idarticulo'),
+                'precio' => $this->input->post('precio'),
+                'cantidad' => $this->input->post('cantidad'),
+                'fecha' => $this->formatear_fecha($this->input->post('fecha')),
+                'idcreador' => $session['SID'],
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'actualizado_por' => $session['SID']
+            );
+
+            $id = $this->cotizaciones_proveedores_model->set_item($set);
+
+            if ($id) {
+                $where = array(
+                    'idarticulo' => $this->input->post('idarticulo')
+                );
+                $articulo = $this->articulos_model->get_where($where);
+                
+                $where = array(
+                    'idmarca' => $articulo['idmarca']
+                );
+                $marca = $this->marcas_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'cotizaciones_proveedores',
+                    'idtabla' => $id,
+                    'texto' => "<h2><strong>Se agregó item a la cotización de proveedor número: " . $this->input->post('idcotizacion_proveedor') . "</strong></h2>
+
+<p>
+<strong>Artículo: </strong>" . $articulo['articulo'] . "<br />
+<strong>Marca: </strong>" . $marca['marca'] . "<br />
+<strong>Precio: </strong>" . $this->input->post('precio') . "<br />
+<strong>Fecha de Entrega: </strong>" . $this->input->post('fecha') . "<br />
+</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+                $this->log_model->set($log);
+                
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se agregó el artículo'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo agregar el artículo'
+                );
+                echo json_encode($json);
+            }
+        }
     }
 
     public function listar_archivos_tabla_ajax() {

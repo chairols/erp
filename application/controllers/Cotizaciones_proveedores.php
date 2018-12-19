@@ -334,7 +334,8 @@ class Cotizaciones_proveedores extends CI_Controller {
     
     public function listar_articulos_tabla_ajax() {
         $where = array(
-            'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor')
+            'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor'),
+            'estado' => 'A'
         );
         
         $data['articulos'] = $this->cotizaciones_proveedores_model->gets_articulos_where($where);

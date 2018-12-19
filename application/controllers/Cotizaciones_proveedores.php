@@ -324,7 +324,8 @@ class Cotizaciones_proveedores extends CI_Controller {
 
     public function listar_archivos_tabla_ajax() {
         $where = array(
-            'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor')
+            'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor'),
+            'estado' => 'A'
         );
         $data['archivos'] = $this->cotizaciones_proveedores_model->gets_archivos_where($where);
 
@@ -352,6 +353,31 @@ class Cotizaciones_proveedores extends CI_Controller {
         }
         
         $this->load->view('cotizaciones_proveedores/listar_articulos_tabla_ajax', $data);
+    }
+    
+    public function borrar_archivo_ajax() {
+        $datos = array(
+            'estado' => 'I'
+        );
+        $where = array(
+            'idcotizacion_proveedor_archivo' => $this->input->post('idcotizacion_proveedor_archivo')
+        );
+        
+        $resultado = $this->cotizaciones_proveedores_model->update_archivo($datos, $where);
+        
+        if($resultado) {
+            $json = array(
+                'status' => 'ok',
+                'data' => 'Se borró el archivo adjunto'
+            );
+            echo json_encode($json);
+        } else {
+            $json = array(
+                'status' => 'error',
+                'data' => 'No se pudo borrar el archivo'
+            );
+            echo json_encode($json);
+        }
     }
 
     private function formatear_fecha($fecha) {

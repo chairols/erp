@@ -59,12 +59,20 @@ class Cotizaciones_proveedores_model extends CI_Model {
     }
     
     /*
-     * 
+     *  Cotizaciones_proveedores/listar_articulos_tabla_ajax
      */
     public function gets_articulos_where($where) {
         $query = $this->db->get_where('cotizaciones_proveedores_items', $where);
         
         return $query->result_array();
+    }
+    
+    /*
+     *  Cotizaciones_proveedores/borrar_archivo_ajax
+     */
+    public function update_archivo($datos, $where) {
+        $this->db->update('cotizaciones_proveedores_archivos', $datos, $where);
+        return $this->db->affected_rows();
     }
 }
 ?>

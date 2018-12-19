@@ -100,26 +100,7 @@
                     </button>
                 </div>
             </div>
-            <div class="row form-group inline-form-custom bg-brown">
-                <div class="col-md-4 col-xs-12 text-center">
-                    <label class="control-label">Artículo</label>
-                </div>
-                <div class="col-md-2 col-xs-12 text-center">
-                    <label class="control-label">Precio</label>
-                </div>
-                <div class="col-md-2 col-xs-12 text-center">
-                    <label class="control-label">Cantidad</label>
-                </div>
-                <div class="col-md-2 col-xs-12 text-center">
-                    <label class="control-label">Fecha de Entrega</label>
-                </div>
-                <div class="col-md-1 col-xs-12 text-center">
-                    
-                </div>
-                <div class="col-md-2 col-xs-12 text-center">
-                    <label class="control-label">Acciones</label>
-                </div>
-            </div>
+            
             <div class="form-group" id="articulos_agregados">
                 
             </div>

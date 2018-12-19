@@ -18,6 +18,7 @@ $(document).ready(function() {
     });
     
     actualizar_archivos();
+    actualizar_articulos();
 });
 
 function actualizar_archivos() {
@@ -33,6 +34,29 @@ function actualizar_archivos() {
         },
         success: function (data) {
             $("#archivos_adjuntos").html(data);
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger'
+                    });
+        }
+    });
+}
+
+function actualizar_articulos() {
+    datos = {
+        'idcotizacion_proveedor': $("#idcotizacion_proveedor").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/cotizaciones_proveedores/listar_articulos_tabla_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#articulos_agregados").html('<h1 class="text-center"><i class="fa fa-refresh fa-spin"></i></h1>');
+        },
+        success: function (data) {
+            $("#articulos_agregados").html(data);
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
@@ -127,6 +151,8 @@ $("#agregar").click(function() {
                 $("#precio").val("");
                 $("#cantidad").val("");
                 $("#TextAutoCompletearticulo").focus();
+                
+                actualizar_articulos();
             }
         },
         error: function (xhr) { // if error occured

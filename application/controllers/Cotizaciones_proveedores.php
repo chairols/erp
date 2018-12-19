@@ -330,6 +330,29 @@ class Cotizaciones_proveedores extends CI_Controller {
 
         $this->load->view('cotizaciones_proveedores/listar_archivos_tabla_ajax', $data);
     }
+    
+    public function listar_articulos_tabla_ajax() {
+        $where = array(
+            'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor')
+        );
+        
+        $data['articulos'] = $this->cotizaciones_proveedores_model->gets_articulos_where($where);
+        foreach($data['articulos'] as $key => $value) {
+            $where = array(
+                'idarticulo' => $value['idarticulo']
+            );
+            $data['articulos'][$key]['articulo'] = $this->articulos_model->get_where($where);
+            
+            $where = array(
+                'idmarca' => $data['articulos'][$key]['articulo']['idmarca']
+            );
+            $data['articulos'][$key]['marca'] = $this->marcas_model->get_where($where);
+            
+            $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+        }
+        
+        $this->load->view('cotizaciones_proveedores/listar_articulos_tabla_ajax', $data);
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';

@@ -44,6 +44,7 @@ class Marcas_model extends CI_Model {
      *  Artículos/gets_articulos_ajax
      * 
      *  Cotizaciones_proveedores/agregar_articulo_ajax
+     *  Cotizaciones_proveedores/listar_articulos_tabla_ajax
      * 
      *  Importaciones/modificar_item
      */

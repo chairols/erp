@@ -71,7 +71,7 @@ class Articulos extends CI_Controller {
 
     public function gets_articulos_ajax() {
         $where = $this->input->post();
-        $articulos = $this->articulos_model->gets_where_para_ajax($where, 100);
+        $articulos = $this->articulos_model->gets_where_para_ajax($where, 255);
 
         foreach($articulos as $key => $value) {
             $articulos[$key]['text'] = $value['text']." - ";

@@ -74,5 +74,13 @@ class Cotizaciones_proveedores_model extends CI_Model {
         $this->db->update('cotizaciones_proveedores_archivos', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Cotizaciones_proveedores/borrar_articulo_ajax
+     */
+    public function update_item($datos, $where) {
+        $this->db->update('cotizaciones_proveedores_items', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 ?>

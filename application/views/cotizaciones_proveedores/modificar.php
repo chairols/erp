@@ -1,8 +1,15 @@
 <div class="box box-primary">
-    <div class="box-header">
+    <div class="box-header bg-light-blue-gradient">
         <input type="hidden" id="idcotizacion_proveedor" value="<?=$cotizacion_proveedor['idcotizacion_proveedor']?>">
+        <h3 class="box-title">Cabecera</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" style="margin-right: 5px;">
+                  <i class="fa fa-minus"></i>
+            </button>
+        </div>
     </div>
     <div class="box-body no-padding">
+        <br>
         <div class="form-horizontal">
             <div class="form-group">
                 <label class="control-label col-md-3">Proveedor</label>
@@ -42,6 +49,22 @@
                     </button>
                 </div>
             </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="box box-primary">
+    <div class="box-header bg-light-blue-gradient">
+        <h3 class="box-title">Archivos Adjuntos</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" style="margin-right: 5px;">
+                  <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body no-padding">
+        <div class="form-horizontal">
             <hr>
             <div class="form-group">
                 <label class="control-label col-md-3">Adjuntar Archivos</label>
@@ -55,8 +78,23 @@
                     
                 </div>
             </div>
-            <hr>
-            <div class="row form-group inline-form-custom bg-brown">
+        </div>
+    </div>
+</div>
+
+<div class="box box-primary">
+    <div class="box-header bg-light-blue-gradient">
+        <h3 class="box-title">Artículos</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" style="margin-right: 5px;">
+                  <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="form-horizontal">
+            <br>
+            <div class="row bg-brown">
                 <div class="col-md-4 col-xs-12 text-center">
                     <label class="control-label">Artículo</label>
                 </div>
@@ -76,7 +114,7 @@
                     <label class="control-label">Acciones</label>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group bg-brown" style="padding-bottom: 10px">
                 <div class="col-md-4 col-xs-12">
                     <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo inexistente" class="form-control input-sm TextAutoComplete" objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="ship" autofocus>
                     <input type="hidden" id="articulo" name="articulo" value="">

@@ -285,12 +285,12 @@ class Cotizaciones_proveedores extends CI_Controller {
                     'idarticulo' => $this->input->post('idarticulo')
                 );
                 $articulo = $this->articulos_model->get_where($where);
-                
+
                 $where = array(
                     'idmarca' => $articulo['idmarca']
                 );
                 $marca = $this->marcas_model->get_where($where);
-                
+
                 $log = array(
                     'tabla' => 'cotizaciones_proveedores',
                     'idtabla' => $id,
@@ -306,10 +306,10 @@ class Cotizaciones_proveedores extends CI_Controller {
                     'tipo' => 'add'
                 );
                 $this->log_model->set($log);
-                
+
                 $json = array(
                     'status' => 'ok',
-                    'data' => 'Se agregó el artículo'
+                    'data' => 'Se agregó el artículo ' . $articulo['articulo'] . ' - ' . $marca['marca']
                 );
                 echo json_encode($json);
             } else {
@@ -331,31 +331,31 @@ class Cotizaciones_proveedores extends CI_Controller {
 
         $this->load->view('cotizaciones_proveedores/listar_archivos_tabla_ajax', $data);
     }
-    
+
     public function listar_articulos_tabla_ajax() {
         $where = array(
             'idcotizacion_proveedor' => $this->input->post('idcotizacion_proveedor'),
             'estado' => 'A'
         );
-        
+
         $data['articulos'] = $this->cotizaciones_proveedores_model->gets_articulos_where($where);
-        foreach($data['articulos'] as $key => $value) {
+        foreach ($data['articulos'] as $key => $value) {
             $where = array(
                 'idarticulo' => $value['idarticulo']
             );
             $data['articulos'][$key]['articulo'] = $this->articulos_model->get_where($where);
-            
+
             $where = array(
                 'idmarca' => $data['articulos'][$key]['articulo']['idmarca']
             );
             $data['articulos'][$key]['marca'] = $this->marcas_model->get_where($where);
-            
+
             $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
         }
-        
+
         $this->load->view('cotizaciones_proveedores/listar_articulos_tabla_ajax', $data);
     }
-    
+
     public function borrar_archivo_ajax() {
         $datos = array(
             'estado' => 'I'
@@ -363,10 +363,10 @@ class Cotizaciones_proveedores extends CI_Controller {
         $where = array(
             'idcotizacion_proveedor_archivo' => $this->input->post('idcotizacion_proveedor_archivo')
         );
-        
+
         $resultado = $this->cotizaciones_proveedores_model->update_archivo($datos, $where);
-        
-        if($resultado) {
+
+        if ($resultado) {
             $json = array(
                 'status' => 'ok',
                 'data' => 'Se borró el archivo adjunto'
@@ -378,6 +378,43 @@ class Cotizaciones_proveedores extends CI_Controller {
                 'data' => 'No se pudo borrar el archivo'
             );
             echo json_encode($json);
+        }
+    }
+
+    public function borrar_articulo_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idcotizacion_proveedor_item', 'ID Cotización Item', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idcotizacion_proveedor_item' => $this->input->post('idcotizacion_proveedor_item')
+            );
+
+            $resultado = $this->cotizaciones_proveedores_model->update_item($datos, $where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se eliminó correctamente el artículo'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo eliminar el artículo'
+                );
+                echo json_encode($json);
+            }
         }
     }
 

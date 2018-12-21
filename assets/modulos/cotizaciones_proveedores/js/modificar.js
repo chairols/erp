@@ -166,3 +166,71 @@ $("#agregar").click(function() {
         }
     });
 });
+
+$("#creararticulo").click(function() {
+    datos = {
+        'articulo': $("#articulo_agregar").val(),
+        'idmarca': $("#marca").val(),
+        'numero_orden': $("#numero_orden").val(),
+        'idlinea': $("#linea").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/articulos/agregar_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#creararticulo").hide();
+            $("#creararticulo_loading").show();
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger'
+                        });
+                $("#creararticulo_loading").hide();
+                $("#creararticulo").show();
+                notificarErrorEnModal(resultado['data']);
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success'
+                        });
+                notificarOKEnModal(resultado['data']);
+                $("#creararticulo_loading").hide();
+                $("#creararticulo").show();
+                
+                $("#articulo_agregar").val("");
+                $("#TextAutoCompletemarca").val("");
+                $("#marca").val("");
+                $("#numero_orden").val("");
+                $("#TextAutoCompletelinea").val("");
+                $("#linea").val("");
+                $("#articulo_agregar").focus();
+            }
+        },
+        error: function (xhr) { // if error occured
+            $("#creararticulo_loading").hide();
+            $("#creararticulo").show();
+            notificarErrorEnModal('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText);
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger'
+                    });
+                    
+        }
+    });
+});
+
+function notificarErrorEnModal(mensaje) {
+    $("#notificaciones").show();
+    $("#notificaciones").html("<div class='alert alert-danger'>" + mensaje + "</div>");
+    $("#notificaciones").fadeOut(5000);
+}
+
+function notificarOKEnModal(mensaje) {
+    $("#notificaciones").show();
+    $("#notificaciones").html("<div class='alert alert-success'>" + mensaje + "</div>");
+    $("#notificaciones").fadeOut(5000);
+}

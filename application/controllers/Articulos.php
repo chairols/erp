@@ -9,7 +9,8 @@ class Articulos extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'pagination'
+            'pagination',
+            'form_validation'
         ));
         $this->load->model(array(
             'parametros_model',
@@ -73,8 +74,8 @@ class Articulos extends CI_Controller {
         $where = $this->input->post();
         $articulos = $this->articulos_model->gets_where_para_ajax($where, 255);
 
-        foreach($articulos as $key => $value) {
-            $articulos[$key]['text'] = $value['text']." - ";
+        foreach ($articulos as $key => $value) {
+            $articulos[$key]['text'] = $value['text'] . " - ";
             $where = array(
                 'idmarca' => $value['idmarca']
             );
@@ -85,16 +86,92 @@ class Articulos extends CI_Controller {
         echo json_encode($articulos);
     }
 
-    public function borrar_ajax()
-    {
-      $where = $this->input->post();
-      $this->articulos_model->update(array('estado'=>'I'),$where['idarticulo']);
+    public function borrar_ajax() {
+        $where = $this->input->post();
+        $this->articulos_model->update(array('estado' => 'I'), $where['idarticulo']);
     }
 
-    public function activar_ajax()
-    {
-      $where = $this->input->post();
-      $this->articulos_model->update(array('estado'=>'A'),$where['idarticulo']);
+    public function activar_ajax() {
+        $where = $this->input->post();
+        $this->articulos_model->update(array('estado' => 'A'), $where['idarticulo']);
+    }
+
+    public function agregar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('articulo', 'Artículo', 'required');
+        $this->form_validation->set_rules('idmarca', 'Marca', 'required|integer');
+        $this->form_validation->set_rules('numero_orden', 'Número de Orden', 'required|integer');
+        $this->form_validation->set_rules('idlinea', 'Línea', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            /*
+             * Busco si existe el articulo
+             */
+            $where = array(
+                'articulo' => $this->input->post('articulo'),
+                'idmarca' => $this->input->post('idmarca')
+            );
+            $articulo = $this->articulos_model->get_where($where);
+
+            if ($articulo) { // Si existe
+                if ($articulo['estado'] == 'A') { // Si existe y está activo
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'El artículo ' . $articulo['articulo'] . ' ya existe'
+                    );
+                    echo json_encode($json);
+                } elseif ($articulo['estado'] == 'I') {  // Si existe y está inactivo
+                    $datos = array(
+                        'estado' => 'A'
+                    );
+                    $where = array(
+                        'idarticulo' => $articulo['idarticulo']
+                    );
+
+                    $resultado = $this->articulos_model->update($datos, $where);
+                    if ($resultado) {
+                        $json = array(
+                            'status' => 'ok',
+                            'data' => 'El artículo ' . $articulo['articulo'] . ' se volvió a activar'
+                        );
+                        echo json_encode($json);
+                    } else {
+                        $json = array(
+                            'status' => 'error',
+                            'data' => 'No se pudo volver al estado activo al artículo ' . $articulo['articulo']
+                        );
+                        echo json_encode($json);
+                    }
+                }
+            } else { // Si no existe el artículo
+                $datos = array(
+                    'articulo' => $this->input->post('articulo'),
+                    'idmarca' => $this->input->post('idmarca'),
+                    'numero_orden' => $this->input->post('numero_orden'),
+                    'idlinea' => $this->input->post('idlinea'),
+                    'fecha_creacion' => date("Y-m-d H:i:s"),
+                    'idcreador' => $session['SID'],
+                    'actualizado_por' => $session['SID']
+                );
+
+                $id = $this->articulos_model->set($datos);
+
+                if ($id) {
+                    $json = array(
+                        'status' => 'ok',
+                        'data' => 'El creó el artículo ' . $this->input->post('articulo')
+                    );
+                    echo json_encode($json);
+                }
+            }
+        }
     }
 
 }

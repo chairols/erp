@@ -1,10 +1,10 @@
 <div class="box box-primary">
     <div class="box-header bg-light-blue-gradient">
-        <input type="hidden" id="idcotizacion_proveedor" value="<?=$cotizacion_proveedor['idcotizacion_proveedor']?>">
+        <input type="hidden" id="idcotizacion_proveedor" value="<?= $cotizacion_proveedor['idcotizacion_proveedor'] ?>">
         <h3 class="box-title">Cabecera</h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" style="margin-right: 5px;">
-                  <i class="fa fa-minus"></i>
+                <i class="fa fa-minus"></i>
             </button>
         </div>
     </div>
@@ -49,7 +49,7 @@
                     </button>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -59,7 +59,7 @@
         <h3 class="box-title">Archivos Adjuntos</h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" style="margin-right: 5px;">
-                  <i class="fa fa-minus"></i>
+                <i class="fa fa-minus"></i>
             </button>
         </div>
     </div>
@@ -75,7 +75,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Archivos Adjuntos</label>
                 <div class="col-md-6" id="archivos_adjuntos">
-                    
+
                 </div>
             </div>
         </div>
@@ -87,7 +87,7 @@
         <h3 class="box-title">Artículos</h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" style="margin-right: 5px;">
-                  <i class="fa fa-minus"></i>
+                <i class="fa fa-minus"></i>
             </button>
         </div>
     </div>
@@ -108,7 +108,7 @@
                     <label class="control-label">Fecha de Entrega</label>
                 </div>
                 <div class="col-md-1 col-xs-12 text-center">
-                    
+
                 </div>
                 <div class="col-md-2 col-xs-12 text-center">
                     <label class="control-label">Acciones</label>
@@ -129,7 +129,7 @@
                     <input type="text" id="fecha_articulo" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha">
                 </div>
                 <div class="col-md-1 col-xs-12">
-                    
+
                 </div>
                 <div class="col-md-2 col-xs-12">
                     <button class="btn btn-sm btn-primary" id="agregar">Agregar</button>
@@ -138,9 +138,74 @@
                     </button>
                 </div>
             </div>
-            
+            <div class="row">
+                <div class="col-md-2 col-md-offset-5">
+                    <button type="button" class="btn btn-primary hint--top hint--bounce hint--info" data-toggle="modal" data-target=".bs-example-modal-lg" aria-label="Agregar Artículo">
+                        <i class="fa fa-cubes"></i> Crear Artículo
+                    </button>
+                </div>
+            </div>
+            <br>
+
             <div class="form-group" id="articulos_agregados">
-                
+
+            </div>
+        </div>
+    </div>
+</div
+
+
+
+
+<!-- Large modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="box">
+                <div class="box-header bg-light-blue-gradient">
+                    <h3 class="box-title">
+                        <i class="fa fa-certificate"></i> Administrar Artículos
+                    </h3>
+                    <div class="row">
+                        <div id="notificaciones" class="col-md-offset-2 col-md-8">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="box-title"><strong><h4>Crear Artículo</h4></strong></div>
+                            <div class="form-group">
+                                <strong>Artículo</strong>
+                                <input type="text" id="articulo_agregar" maxlength="255" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <strong>Marca</strong>
+                                <input type="text" id="TextAutoCompletemarca" name="TextAutoCompletemarca" placeholder="Seleccionar Marca" placeholderauto="Marca inexistente" class="form-control TextAutoComplete" value="" objectauto="marcas" actionauto="gets_marcas_ajax" varsauto="estado:=A">
+                                <input type="hidden" id="marca" name="marca" value="">
+                            </div>
+                            <div class="form-group">
+                                <strong>Número de Orden</strong>
+                                <input type="text" id="numero_orden" maxlength="9" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <strong>Línea</strong>
+                                <input type="text" id="TextAutoCompletelinea" name="TextAutoCompletelinea" placeholder="Seleccionar Línea" placeholderauto="Línea inexistente" class="form-control TextAutoComplete" value="" objectauto="Lineas" actionauto="gets_lineas_ajax" varsauto="estado:=A" iconauto="ship">
+                                <input type="hidden" id="linea" name="linea" value="">
+                            </div>
+                            <div class="box-footer txC">
+                                <button class="btn btn-primary" id="creararticulo" type="button">
+                                    Crear Artículo
+                                </button>
+                                <button class="btn btn-primary" id="creararticulo_loading" type="button" style="display: none;">
+                                    <i class="fa fa-refresh fa-spin"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

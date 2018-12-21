@@ -42,6 +42,8 @@ class Articulos_model extends CI_Model {
 
 
     /*
+     *  Articulos/agregar_ajax
+     * 
      *  Cotizaciones_proveedores/agregar_articulo_ajax
      *  Cotizaciones_proveedores/listar_articulos_tabla_ajax
      * 
@@ -56,12 +58,21 @@ class Articulos_model extends CI_Model {
 
         return $query->row_array();
     }
-    public function update($datos, $idarticulo) {
-        $id = array('idarticulo' => $idarticulo);
-        $this->db->update('articulos', $datos, $id);
+    
+    /*
+     *  Articulos/agregar_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('articulos', $datos, $where);
+        return $this->db->affected_rows();
     }
+    
+    /*
+     *  Articulos/agregar_ajax
+     */
     public function set($array) {
         $this->db->insert('articulos', $array);
+        return $this->db->insert_id();
     }
 
 

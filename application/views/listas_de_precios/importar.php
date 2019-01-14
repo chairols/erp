@@ -13,14 +13,14 @@
         <div class="box-body">
             <div class="row">
                 <div class="col-xs-12 col-sm-5 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-                    <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Seleccionar Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="proveedores" actionauto="gets_proveedores_ajax" varsauto="" iconauto="ship">
+                    <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Seleccionar Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione un proveedor." objectauto="proveedores" actionauto="gets_proveedores_ajax" varsauto="estado:=A" iconauto="ship">
                     <input type="hidden" id="proveedor" name="proveedor" value="">
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="col-xs-12 col-sm-5 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-                    <input type="text" id="TextAutoCompletemarca" name="TextAutoCompletemarca" placeholder="Seleccionar Marca" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" objectauto="marcas" actionauto="gets_marcas_ajax" iconauto="ship">
+                    <input type="text" id="TextAutoCompletemarca" name="TextAutoCompletemarca" placeholder="Seleccionar Marca" placeholderauto="Marca inexistente" class="form-control TextAutoComplete" objectauto="marcas" actionauto="gets_marcas_ajax" iconauto="ship">
                     <input type="hidden" id="marca" name="marca" value="">
                 </div>
             </div>

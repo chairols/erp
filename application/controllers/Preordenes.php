@@ -17,7 +17,7 @@ class Preordenes extends CI_Controller {
             'listas_de_precios_model',
             'parametros_model',
             'proveedores_model',
-            'ordenes_model',
+            'importaciones_model',
             'monedas_model',
             'articulos_model'
         ));
@@ -284,14 +284,16 @@ class Preordenes extends CI_Controller {
             $preorden = $this->preordenes_model->gets_where($where);
 
             if (count($preorden)) {  //  Si existen items
-                $set = array(  
+                $set = array(
                     'idproveedor' => $proveedor['idproveedor'],
                     'idmoneda' => $preorden[0]['idmoneda'],
-                    'idcreador' => $session['SID'],
+                    'fecha_pedido' => date("Y-m-d"),
                     'fecha_creacion' => date("Y-m-d H:i:s"),
+                    'idcreador' => $session['SID'],
                     'actualizado_por' => $session['SID']
                 );
-                $idorden = $this->ordenes_model->set($set);  // Creo la orden
+                
+                $idimportacion = $this->importaciones_model->set($set);  // Creo el pedido de importación
                 
                 foreach ($preorden as $item) {  // Recorro los items para agregar a la orden y borrar de la preorden
                     $where = array(
@@ -302,9 +304,10 @@ class Preordenes extends CI_Controller {
                     $articulo = $this->articulos_model->get_where($where);  // Busco a que artículo asociar
                     
                     $item = array(
-                        'idorden' => $idorden,
-                        'cantidad' => $item['cantidad'],
+                        'idimportacion' => $idimportacion,
                         'articulo' => $item['articulo'],
+                        'cantidad' => $item['cantidad'],
+                        'cantidad_pendiente' => $item['cantidad'],
                         'precio' => $item['precio'],
                         'idmarca' => $item['idmarca'],
                         'marca' => $item['marca'],
@@ -317,7 +320,7 @@ class Preordenes extends CI_Controller {
                         $item['idarticulo'] = $articulo['idarticulo'];
                     }
                     
-                    $iditem = $this->ordenes_model->set_item($item);  // Agrego artículo a la orden
+                    $iditem = $this->importaciones_model->set_item($item);  // Agrego artículo a la orden
                     
                     $datos = array(
                         'estado' => 'I'

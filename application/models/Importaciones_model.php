@@ -10,6 +10,8 @@ class Importaciones_model extends CI_Model {
 
     /*
      *  Importaciones/agregar_ajax
+     * 
+     *  Preordenes/generar_orden_ajax
      */
     public function set($datos) {
         $this->db->insert('importaciones', $datos);
@@ -54,6 +56,8 @@ class Importaciones_model extends CI_Model {
     
     /*
      *  Importaciones/agregar_item_ajax
+     * 
+     *  Preordenes/generar_orden_ajax
      */
     public function set_item($datos) {
         $this->db->insert('importaciones_items', $datos);

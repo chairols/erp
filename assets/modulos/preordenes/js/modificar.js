@@ -49,7 +49,8 @@ $(".cantidad").change(function() {
 
 $("#generar_orden").click(function() {
     datos = {
-        'idproveedor': $("#idproveedor").val()
+        'idproveedor': $("#idproveedor").val(),
+        'idmoneda': $("#idmoneda").val()
     };
     
     $.ajax({

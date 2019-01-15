@@ -15,6 +15,14 @@ class Ordenes_model extends CI_Model {
         $this->db->insert('ordenes', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Preordenes/generar_orden_ajax
+     */
+    public function set_item($datos) {
+        $this->db->insert('ordenes_items', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

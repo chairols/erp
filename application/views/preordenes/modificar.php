@@ -1,6 +1,7 @@
 <div class="box box-primary">
     <div class="box-header">
         <input type="hidden" id="idproveedor" value="<?=$idproveedor?>">
+        <input type="hidden" id="idmoneda" value="<?=$idmoneda?>">
         <div class="col-xs-12">
             <?php if (count($preorden)) { ?>
                 <h2 class="text-center"><?= $preorden[0]['proveedor'] ?></h2>

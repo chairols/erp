@@ -27,7 +27,7 @@
                         <td><div class="badge bg-purple-gradient"><?= $preorden['moneda']['moneda'] ?></div></td>
                         <td><div class="badge bg-green-gradient"><?= $preorden['total'] ?></div></td>
                         <td>
-                            <a href="/preordenes/modificar/<?=$preorden['idproveedor']?>/" class="hint--top-left hint--bounce hint--info" aria-label="Modificar Preorden">
+                            <a href="/preordenes/modificar/<?=$preorden['idproveedor']?>/<?=$preorden['idmoneda']?>/" class="hint--top-left hint--bounce hint--info" aria-label="Modificar Preorden">
                                 <button class="btn btn-info btn-xs" type="button">
                                     <i class="fa fa-edit"></i>
                                 </button>

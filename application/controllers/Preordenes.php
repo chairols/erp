@@ -18,7 +18,8 @@ class Preordenes extends CI_Controller {
             'parametros_model',
             'proveedores_model',
             'ordenes_model',
-            'monedas_model'
+            'monedas_model',
+            'articulos_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -178,7 +179,7 @@ class Preordenes extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
-    public function modificar($idproveedor = null) {
+    public function modificar($idproveedor = null, $idmoneda = null) {
         $data['title'] = 'Modificar Preorden';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
@@ -187,12 +188,13 @@ class Preordenes extends CI_Controller {
         );
         $data['view'] = 'preordenes/modificar';
 
-        if ($idproveedor == null) {
+        if ($idproveedor == null || $idmoneda == null) {
             redirect('/preordenes/listar/', 'refresh');
         }
 
         $where = array(
             'idproveedor' => $idproveedor,
+            'idmoneda' => $idmoneda,
             'estado' => 'A'
         );
         $data['preorden'] = $this->preordenes_model->gets_where($where);
@@ -200,6 +202,7 @@ class Preordenes extends CI_Controller {
         $data['total'] = $this->preordenes_model->get_total($where);
 
         $data['idproveedor'] = $idproveedor;
+        $data['idmoneda'] = $idmoneda;
 
         $this->load->view('layout/app', $data);
     }
@@ -258,6 +261,7 @@ class Preordenes extends CI_Controller {
         $session = $this->session->all_userdata();
         
         $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|integer');
+        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
 
         if ($this->form_validation->run() == FALSE) {
             $json = array(
@@ -273,23 +277,55 @@ class Preordenes extends CI_Controller {
 
             $where = array(
                 'idproveedor' => $proveedor['idproveedor'],
+                'idmoneda' => $this->input->post('idmoneda'),
                 'estado' => 'A',
                 'cantidad >=' => 0
             );
             $preorden = $this->preordenes_model->gets_where($where);
 
             if (count($preorden)) {  //  Si existen items
-                $set = array(
+                $set = array(  
                     'idproveedor' => $proveedor['idproveedor'],
                     'idmoneda' => $preorden[0]['idmoneda'],
                     'idcreador' => $session['SID'],
                     'fecha_creacion' => date("Y-m-d H:i:s"),
                     'actualizado_por' => $session['SID']
                 );
-                $idorden = $this->ordenes_model->set($set);
+                $idorden = $this->ordenes_model->set($set);  // Creo la orden
                 
-                foreach ($preorden as $item) {
+                foreach ($preorden as $item) {  // Recorro los items para agregar a la orden y borrar de la preorden
+                    $where = array(
+                        'idarticulo_generico' => $item['idarticulo_generico'],
+                        'idmarca' => $item['idmarca'],
+                        'estado' => 'A'
+                    );
+                    $articulo = $this->articulos_model->get_where($where);  // Busco a que artículo asociar
                     
+                    $item = array(
+                        'idorden' => $idorden,
+                        'cantidad' => $item['cantidad'],
+                        'articulo' => $item['articulo'],
+                        'precio' => $item['precio'],
+                        'idmarca' => $item['idmarca'],
+                        'marca' => $item['marca'],
+                        'idpre_orden' => $item['idpre_orden'],
+                        'idcreador' => $session['SID'],
+                        'fecha_creacion' => date("Y-m-d H:i:s"),
+                        'modificado_por' => $session['SID']
+                    );
+                    if($articulo) {
+                        $item['idarticulo'] = $articulo['idarticulo'];
+                    }
+                    
+                    $iditem = $this->ordenes_model->set_item($item);  // Agrego artículo a la orden
+                    
+                    $datos = array(
+                        'estado' => 'I'
+                    );
+                    $where = array(
+                        'idpre_orden' => $item['idpre_orden']
+                    );
+                    $this->preordenes_model->update($datos, $where); // Borrado lógico de item
                 } 
                 $json = array(
                     'status' => 'ok',

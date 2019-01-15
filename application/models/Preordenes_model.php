@@ -45,7 +45,7 @@ class Preordenes_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('pre_ordenes');
         $this->db->where($where);
-        $this->db->group_by('idproveedor');
+        $this->db->group_by(array('idproveedor', 'idmoneda'));
         
         $query = $this->db->count_all_results();
         return $query;
@@ -58,7 +58,7 @@ class Preordenes_model extends CI_Model {
         $this->db->select('*, sum(cantidad) as cantidad_items, count(*) as cantidad_registros, sum(cantidad*precio) as total');
         $this->db->from('pre_ordenes');
         $this->db->where($where);
-        $this->db->group_by('idproveedor');
+        $this->db->group_by(array('idproveedor', 'idmoneda'));
         $this->db->order_by('proveedor');
         $this->db->limit($per_page, $pagina);
         

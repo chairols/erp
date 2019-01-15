@@ -13,6 +13,7 @@
                     <th>Proveedor</th>
                     <th>Artículos</th>
                     <th>Registros</th>
+                    <th>Moneda</th>
                     <th>Monto Total</th>
                     <th>Acciones</th>
                 </tr>
@@ -23,6 +24,7 @@
                         <td><div class="badge bg-aqua"><?= $preorden['proveedor'] ?></div></td>
                         <td><div class="badge bg-fuchsia"><?= $preorden['cantidad_items'] ?></div></td>
                         <td><div class="badge bg-maroon-active"><?= $preorden['cantidad_registros'] ?></div></td>
+                        <td><div class="badge bg-purple-gradient"><?= $preorden['moneda']['moneda'] ?></div></td>
                         <td><div class="badge bg-green-gradient"><?= $preorden['total'] ?></div></td>
                         <td>
                             <a href="/preordenes/modificar/<?=$preorden['idproveedor']?>/" class="hint--top-left hint--bounce hint--info" aria-label="Modificar Preorden">

@@ -43,6 +43,8 @@ class Monedas_model extends CI_Model {
      *  Monedas/agregar_ajax
      *  Monedas/modificar
      * 
+     *  Preordenes/listar
+     * 
      *  Proveedores/agregar_ajax
      * 
      */

@@ -15,6 +15,8 @@ class Proveedores_model extends CI_Model {
      * 
      *  Importar/proveedores
      * 
+     *  Preordenes/generar_orden_ajax
+     * 
      *  Proveedores/checkCUIT_ajax
      * 
      */

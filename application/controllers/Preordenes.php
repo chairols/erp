@@ -15,7 +15,10 @@ class Preordenes extends CI_Controller {
         $this->load->model(array(
             'preordenes_model',
             'listas_de_precios_model',
-            'parametros_model'
+            'parametros_model',
+            'proveedores_model',
+            'ordenes_model',
+            'monedas_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -165,6 +168,12 @@ class Preordenes extends CI_Controller {
          */
 
         $data['preordenes'] = $this->preordenes_model->gets_where_limit($where, $per_page, $pagina);
+        foreach($data['preordenes'] as $key => $value) {
+            $where = array(
+                'idmoneda' => $value['idmoneda']
+            );
+            $data['preordenes'][$key]['moneda'] = $this->monedas_model->get_where($where);
+        }
 
         $this->load->view('layout/app', $data);
     }
@@ -187,9 +196,10 @@ class Preordenes extends CI_Controller {
             'estado' => 'A'
         );
         $data['preorden'] = $this->preordenes_model->gets_where($where);
-        
+
         $data['total'] = $this->preordenes_model->get_total($where);
 
+        $data['idproveedor'] = $idproveedor;
 
         $this->load->view('layout/app', $data);
     }
@@ -220,16 +230,16 @@ class Preordenes extends CI_Controller {
                     'idpre_orden' => $this->input->post('idpreorden')
                 );
                 $item = $this->preordenes_model->get_where($where); // Obtengo el total del item
-                
+
                 $where = array(
                     'idproveedor' => $item['idproveedor'],
                     'estado' => 'A'
                 );
                 $total = $this->preordenes_model->get_total($where);
-                
+
                 $json = array(
                     'status' => 'ok',
-                    'subtotal' => number_format($item['cantidad']*$item['precio'], 2),
+                    'subtotal' => number_format($item['cantidad'] * $item['precio'], 2),
                     'total' => number_format($total['total'], 2),
                     'data' => 'Se actualizó correctamente la cantidad'
                 );
@@ -238,6 +248,58 @@ class Preordenes extends CI_Controller {
                 $json = array(
                     'status' => 'error',
                     'data' => 'Ocurrió un error inesperado'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
+    public function generar_orden_ajax() {
+        $session = $this->session->all_userdata();
+        
+        $this->form_validation->set_rules('idproveedor', 'Proveedor', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'idproveedor' => $this->input->post('idproveedor')
+            );
+            $proveedor = $this->proveedores_model->get_where($where);
+
+            $where = array(
+                'idproveedor' => $proveedor['idproveedor'],
+                'estado' => 'A',
+                'cantidad >=' => 0
+            );
+            $preorden = $this->preordenes_model->gets_where($where);
+
+            if (count($preorden)) {  //  Si existen items
+                $set = array(
+                    'idproveedor' => $proveedor['idproveedor'],
+                    'idmoneda' => $preorden[0]['idmoneda'],
+                    'idcreador' => $session['SID'],
+                    'fecha_creacion' => date("Y-m-d H:i:s"),
+                    'actualizado_por' => $session['SID']
+                );
+                $idorden = $this->ordenes_model->set($set);
+                
+                foreach ($preorden as $item) {
+                    
+                } 
+                $json = array(
+                    'status' => 'ok',
+                    'data' => count($preorden)
+                );
+                echo json_encode($json);
+            } else {  // No hay items para el proveedor
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo generar una orden sin items'
                 );
                 echo json_encode($json);
             }

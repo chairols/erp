@@ -1,7 +1,3 @@
-$(document).ready(function() {
-    
-});
-
 $(".cantidad").change(function() {
     datos = {
         'idpreorden': this.attributes.idpreorden.value,
@@ -49,17 +45,22 @@ $(".cantidad").change(function() {
                     });
         }
     });
+});
+
+$("#generar_orden").click(function() {
+    datos = {
+        'idproveedor': $("#idproveedor").val()
+    };
     
-    /*
     $.ajax({
         type: 'POST',
-        url: '/retenciones/agregar_ajax/',
+        url: '/preordenes/generar_orden_ajax/',
         data: datos,
-        beforeSend: function () {
-            $("#div-boton-agregar").hide();
-            $("#div-boton-loading").show();
+        beforeSend: function() {
+            $("#generar_orden").hide();
+            $("#generar_orden_loading").show();
         },
-        success: function (data) {
+        success: function(data) {
             resultado = $.parseJSON(data);
             if (resultado['status'] == 'error') {
                 $.notify('<strong>' + resultado['data'] + '</strong>',
@@ -67,11 +68,15 @@ $(".cantidad").change(function() {
                             type: 'danger',
                             allow_dismiss: false
                         });
-                $("#div-boton-loading").hide();
-                $("#div-boton-agregar").show();
             } else if (resultado['status'] == 'ok') {
-                window.location.href = "/retenciones/modificar/" + resultado['data'] + '/';
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: false
+                        });
             }
+            $("#generar_orden_loading").hide();
+            $("#generar_orden").show();
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
@@ -79,8 +84,8 @@ $(".cantidad").change(function() {
                         type: 'danger',
                         allow_dismiss: false
                     });
-            $("#div-boton-loading").hide();
-            $("#div-boton-agregar").show();
+            $("#generar_orden_loading").hide();
+            $("#generar_orden").show();
         }
-    });*/
+    });
 });

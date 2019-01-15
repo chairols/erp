@@ -1,5 +1,6 @@
 <div class="box box-primary">
     <div class="box-header">
+        <input type="hidden" id="idproveedor" value="<?=$idproveedor?>">
         <div class="col-xs-12">
             <?php if (count($preorden)) { ?>
                 <h2 class="text-center"><?= $preorden[0]['proveedor'] ?></h2>
@@ -52,7 +53,7 @@
             <button type="button" id="generar_orden" class="btn btn-success">
                 Generar Orden
             </button>
-            <button type="button" id="loading" class="btn btn-success">
+            <button type="button" id="generar_orden_loading" class="btn btn-success" style="display: none;">
                 <i class="fa fa-spin fa-refresh"></i>
             </button>
         </div>

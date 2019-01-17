@@ -13,6 +13,7 @@
             <thead>
                 <tr>
                     <th class="text-right">Cantidad</th>
+                    <th class="text-right">Stock Disponible</th>
                     <th class="text-right">Artículo</th>
                     <th class="text-right">Marca</th>
                     <th class="text-right">Precio Unitario</th>
@@ -25,6 +26,7 @@
                     <td class="pull-right">
                         <input type="text" idpreorden="<?=$p['idpre_orden']?>" class="form-control text-right cantidad" id="cantidad-<?=$p['idpre_orden']?>" value="<?=$p['cantidad']?>">
                     </td>
+                    <td><?=$p['stock']?></td>
                     <td><?=$p['articulo']?></td>
                     <td><?=$p['marca']?></td>
                     <td>

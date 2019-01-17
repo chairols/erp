@@ -54,6 +54,8 @@ class Listas_de_precios_model extends CI_Model {
      *  Listas_de_precios/update_item_articulo_generico
      * 
      *  Preordenes/agregar_modificar_item_ajax
+     *  Preordenes/modificar
+     * 
      */
     public function get_where_item($where) {
         $query = $this->db->get_where('listas_de_precios_items', $where);

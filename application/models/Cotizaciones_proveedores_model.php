@@ -82,5 +82,35 @@ class Cotizaciones_proveedores_model extends CI_Model {
         $this->db->update('cotizaciones_proveedores_items', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Cotizaciones_proveedores/listar
+     */
+    public function get_cantidad_where($where) {
+        $this->db->select('*');
+        $this->db->from('cotizaciones_proveedores');
+        $this->db->join('monedas', 'cotizaciones_proveedores.idmoneda = monedas.idmoneda');
+        $this->db->like($where);
+        
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+    
+    /*
+     *  Cotizaciones_proveedores/listar
+     */
+    public function gets_where_limit($where, $per_page, $pagina) {
+        $this->db->select('cotizaciones_proveedores.*, monedas.moneda');
+        $this->db->from('cotizaciones_proveedores');
+        $this->db->join('monedas', 'cotizaciones_proveedores.idmoneda = monedas.idmoneda');
+        $this->db->join('cotizaciones_proveedores_items', 'cotizaciones_proveedores.idcotizacion_proveedor = cotizaciones_proveedores_items.idcotizacion_proveedor');
+        $this->db->join('articulos', 'cotizaciones_proveedores_items.idarticulo = articulos.idarticulo');
+        $this->db->like($where);
+        $this->db->order_by('cotizaciones_proveedores.idcotizacion_proveedor DESC');
+        $this->db->limit($per_page, $pagina);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 ?>

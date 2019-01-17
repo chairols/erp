@@ -252,11 +252,12 @@ class Listas_de_precios_model extends CI_Model {
      *  Listas_de_precios/ver_comparacion
      */
     public function get_cantidad_comparaciones_items_where($where, $like) {
-        $this->db->select('*');
+        $this->db->select('listas_de_precios_comparaciones_items.*');
         $this->db->from('listas_de_precios_comparaciones_items');
+        $this->db->join('articulos_genericos', 'listas_de_precios_comparaciones_items.idarticulo_generico = articulos_genericos.idarticulo_generico');
         $this->db->where($where);
         $this->db->like($like);
-        $this->db->group_by('idarticulo_generico');
+        $this->db->group_by('listas_de_precios_comparaciones_items.idarticulo_generico');
 
         $query = $this->db->count_all_results();
         return $query;

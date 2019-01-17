@@ -697,7 +697,8 @@ class Listas_de_precios extends CI_Controller {
         $where = array();
         $like = array();
         $where['listas_de_precios_comparaciones_items.estado'] = 'A';
-
+        $like = $this->input->get();
+        
         /*
          * inicio paginador
          */

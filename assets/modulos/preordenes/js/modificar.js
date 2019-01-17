@@ -75,6 +75,7 @@ $("#generar_orden").click(function() {
                             type: 'success',
                             allow_dismiss: false
                         });
+                window.location.href = "/importaciones/agregar_items/"+resultado['id']+'/';
             }
             $("#generar_orden_loading").hide();
             $("#generar_orden").show();

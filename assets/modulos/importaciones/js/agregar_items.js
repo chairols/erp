@@ -77,15 +77,15 @@ $("#agregar_item").click(function () {
                             type: 'success',
                             allow_dismiss: false
                         });
+                gets_items();
+                $("#TextAutoCompletearticulo").val("");
+                $("#articulo").val("");
+                $("#cantidad").val("");
+                $("#costo_fob").val("");
+                $("#TextAutoCompletearticulo").focus();
             }
-            gets_items();
             $("#agregar_item").show();
             $("#agregar_item_loading").hide();
-            $("#TextAutoCompletearticulo").val("");
-            $("#articulo").val("");
-            $("#cantidad").val("");
-            $("#costo_fob").val("");
-            $("#TextAutoCompletearticulo").focus();
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
@@ -130,7 +130,7 @@ $(document).ready(function () {
 });
 
 function borrar_item(articulo, id) {
-    
+
     alertify.confirm("Se eliminará el artículo <strong>" + articulo + "</strong><br><strong>¿Desea confirmar?</strong>", function (e) {
         if (e) {
             datos = {

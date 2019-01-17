@@ -22,7 +22,7 @@
 <?php $total = 0; ?>
 <?php foreach ($items as $item) { ?>
     <?php $cantidad += $item['cantidad'] ?>
-    <?php $total += ($item['cantidad'] * $item['costo_fob']) ?>
+    <?php $total += ($item['cantidad'] * $item['precio']) ?>
     <div class="row form-group inline-form-custom">
         <div class="col-xs-4 txC">
             <input type="text" value="<?= $item['articulo'] ?> - <?= $item['marca'] ?>" class="form-control" disabled="">
@@ -31,10 +31,10 @@
             <input type="text" value="<?= $item['cantidad'] ?>" class="form-control txR" disabled="">
         </div> 
         <div class="col-xs-2 txC">
-            <input type="text" value="<?= number_format($item['costo_fob'], 2) ?>" class="form-control txR" disabled="">
+            <input type="text" value="<?= number_format($item['precio'], 2) ?>" class="form-control txR" disabled="">
         </div> 
         <div class="col-xs-2 txC">
-            <input type="text" value="<?= number_format($item['cantidad'] * $item['costo_fob'], 2) ?>" class="form-control txR" disabled="">
+            <input type="text" value="<?= number_format($item['cantidad'] * $item['precio'], 2) ?>" class="form-control txR" disabled="">
         </div>
         <div class="col-xs-2 txC">
             <a href="/importaciones/modificar_item/<?= $item['idimportacion_item'] ?>/" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar <?= $item['articulo'] ?>" class="tooltips">

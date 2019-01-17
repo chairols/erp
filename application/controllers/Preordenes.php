@@ -332,7 +332,8 @@ class Preordenes extends CI_Controller {
                 } 
                 $json = array(
                     'status' => 'ok',
-                    'data' => count($preorden)
+                    'data' => 'Se generó el pedido de Importación N° '.$idimportacion,
+                    'id' => $idimportacion
                 );
                 echo json_encode($json);
             } else {  // No hay items para el proveedor

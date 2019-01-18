@@ -9,6 +9,7 @@ class Proveedores_model extends CI_Model {
     }
 
     /*
+     *  Cotizaciones_proveedores/listar
      *  Cotizaciones_proveedores/modificar
      * 
      *  Importaciones/pedido_pdf

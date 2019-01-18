@@ -87,11 +87,22 @@ class Cotizaciones_proveedores_model extends CI_Model {
      *  Cotizaciones_proveedores/listar
      */
     public function get_cantidad_where($where) {
+        $this->db->select('cotizaciones_proveedores.*');
+        $this->db->from('cotizaciones_proveedores');
+        $this->db->join('monedas', 'cotizaciones_proveedores.idmoneda = monedas.idmoneda');
+        $this->db->join('cotizaciones_proveedores_items', 'cotizaciones_proveedores.idcotizacion_proveedor = cotizaciones_proveedores_items.idcotizacion_proveedor');
+        $this->db->join('articulos', 'cotizaciones_proveedores_items.idarticulo = articulos.idarticulo');
+        $this->db->like($where);
+        $this->db->group_by('cotizaciones_proveedores.idcotizacion_proveedor');
+        
+        
+        /*
         $this->db->select('*');
         $this->db->from('cotizaciones_proveedores');
         $this->db->join('monedas', 'cotizaciones_proveedores.idmoneda = monedas.idmoneda');
+        $this->db->group_by('cotizaciones_proveedores.idcotizacion_proveedor');
         $this->db->like($where);
-        
+        */
         $query = $this->db->count_all_results();
         return $query;
     }
@@ -106,6 +117,7 @@ class Cotizaciones_proveedores_model extends CI_Model {
         $this->db->join('cotizaciones_proveedores_items', 'cotizaciones_proveedores.idcotizacion_proveedor = cotizaciones_proveedores_items.idcotizacion_proveedor');
         $this->db->join('articulos', 'cotizaciones_proveedores_items.idarticulo = articulos.idarticulo');
         $this->db->like($where);
+        $this->db->group_by('cotizaciones_proveedores.idcotizacion_proveedor');
         $this->db->order_by('cotizaciones_proveedores.idcotizacion_proveedor DESC');
         $this->db->limit($per_page, $pagina);
         

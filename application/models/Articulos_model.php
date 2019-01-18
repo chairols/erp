@@ -45,6 +45,7 @@ class Articulos_model extends CI_Model {
      *  Articulos/agregar_ajax
      * 
      *  Cotizaciones_proveedores/agregar_articulo_ajax
+     *  Cotizaciones_proveedores/listar
      *  Cotizaciones_proveedores/listar_articulos_tabla_ajax
      * 
      *  Importaciones/modificar_item

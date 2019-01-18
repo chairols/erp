@@ -1,7 +1,7 @@
 <div class="box">
     <div class="box-header">
-        <form method="GET" action="/retenciones/listar/" class="input-group input-group-sm col-md-5">
-            <input class="form-control pull-left" name="proveedor" id="proveedor" placeholder="Buscar ..." type="text" value="<?= $this->input->get('proveedor') ?>">
+        <form method="GET" action="/cotizaciones_proveedores/listar/" class="input-group input-group-sm col-md-5">
+            <input class="form-control pull-left" name="articulo" id="articulo" placeholder="Buscar ..." type="text" value="<?= $this->input->get('articulo') ?>">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="submit">
                     <i class="fa fa-search"></i>
@@ -15,70 +15,78 @@
         </div>
     </div>
     <div class="box-body no-padding">
-        <table class="table table-bordered table-hover table-striped">
-            <thead>
-                <tr>
-                    <th>Comprobante</th>
-                    <th>Proveedor</th>
-                    <th>Fecha</th>
-                    <th>Jurisdicción</th>
-                    <th>Monto Retenido</th>
-                    <th>Estado Email</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($retenciones as $retencion) { ?>
-                    <tr>
-                        <td><?= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT) ?>-<?= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT) ?></td>
-                        <td><?= $retencion['proveedor'] ?></td>
-                        <td><?= $retencion['fecha'] ?></td>
-                        <td><?= $retencion['idjurisdiccion_afip'] ?> - <?= $retencion['jurisdiccion'] ?></td>
-                        <td><?= $retencion['monto_retenido'] ?></td>
-                        <td id="estado_mail<?=$retencion['idretencion']?>">
-                            <?php
-                            switch ($retencion['estado_mail']) {
-                                case 'S': // Sin Enviar ?>
-                            <span class="badge bg-red">Sin Enviar</span>
-                            <?php
-                                    break;
-                                case 'E': // Enviado ?>
-                            <span class="badge bg-yellow">Enviado</span>
-                            <?php
-                                    break;
-                                case 'R': // Recibido ?>
-                            <span class="badge bg-green">Recibido</span>
-                            <?php
-                                    break;
-                            }
-                            ?>
-                        </td>
-                        <td>
-                            <a href="/retenciones/modificar/<?= $retencion['idretencion'] ?>/" class="hint--top-right hint--bounce hint--info" aria-label="Modificar">
-                                <button class="btn btn-primary btn-xs" type="button">
+        <?php foreach ($cotizaciones as $cotizacion) { ?>
+            <div class="row listRow listRow2 txC">
+                <div class="col-lg-4 col-md-5 col-sm-5 col-xs-3">
+                    <div class="listRowInner">
+                        <span class="listTextStrong"><?=$cotizacion['proveedor']['proveedor']?></span>
+                        <span class="smallTitle">(ID: <?=$cotizacion['idproveedor']?>)</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-2 col-sm-2 col-xs-3">
+                    <div class="listRowInner">
+                        <span class="smallTitle">Total</span>
+                        <span class="listTextStrong">
+                            <?php $total = 0; ?>
+                            <?php foreach($cotizacion['items'] as $item) {
+                                $total += ($item['cantidad'] * $item['precio']);
+                            } ?>
+                            <span class="label label-brown"><?=$cotizacion['moneda']['simbolo']?> <?=number_Format($total, 2)?></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-3">
+                    <div class="listRowInner">
+                        <span class="smallTitle">Fecha</span>
+                        <span class="listTextStrong">
+                            <span class="label label-info"><?=$cotizacion['fecha_formateada']?></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 hideMobile990"></div>
+                <div class="animated DetailedInformation col-md-12">
+                    <div class="list-margin-top">
+                        <?php foreach($cotizacion['items'] as $item) { ?>
+                        <div class="row bg-gray" style="padding: 5px">
+                            <div class="col-lg-4 col-sm-5 col-xs-12">
+                                <div class="listRowInner">
+                                    <span class="listTextStrong"><?=$item['articulo']['articulo']?></span>
+                                    <span class="smallTitle"><?=$item['articulo']['linea']['linea']?> (<?=$item['articulo']['marca']['marca']?>)</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-xs-12">
+                                <div class="listRowInner">
+                                    <span class="smallTitle">Precio</span>
+                                    <span class="listTextStrong">
+                                        <span class="label label-brown"><?=$cotizacion['moneda']['simbolo']?> <?=$item['precio']?></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="listRowInner">
+                                    <span class="smallTitle">Cantidad</span>
+                                    <span class="listTextStrong">
+                                        <span class="label bg-navy"><?=$item['cantidad']?></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } ?>
+                    </div>
+                </div>
+                <div class="listActions flex-justify-center">
+                    <div>
+                        <span class="roundItemActionsGroup">
+                            <a class="hint--top hint--bounce hint--info" href="/cotizaciones_proveedores/modificar/<?=$cotizacion['idcotizacion_proveedor']?>/" aria-label="Modificar">
+                                <button class="btn btn-primary" type="button">
                                     <i class="fa fa-edit"></i>
                                 </button>
                             </a>
-                            <a href="/retenciones/pdf/<?= $retencion['idretencion'] ?>/" class="hint--top hint--bounce hint--error" aria-label="Ver PDF" target="_blank">
-                                <button class="btn btn-google btn-xs">
-                                    <i class="fa fa-file-pdf-o"></i>
-                                </button>
-                            </a>
-                            <a onclick="confirmar_mail(<?= $retencion['idretencion'] ?>);" class="hint--top hint--bounce hint--info" aria-label="Enviar por Email">
-                                <button class="btn btn-info btn-xs">
-                                    <i class="fa fa-envelope-o"></i>
-                                </button>
-                            </a>
-                            <a class="hint--top-left hint--bounce hint--error" aria-label="Eliminar">
-                                <button class="btn btn-danger btn-xs borrar_retencion" idretencion="<?= $retencion['idretencion'] ?>" retencion="<?= str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT) ?>-<?= str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT) ?>" proveedor="<?= $retencion['proveedor'] ?>">
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
-                            </a>
-                        </td>
-                    </tr>
-<?php } ?>
-            </tbody>
-        </table>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
     </div>
     <div class="box-footer clearfix">
         <div class="pull-left">
@@ -86,7 +94,7 @@
         </div>
         <div class="box-tools">
             <ul class="pagination pagination-sm no-margin pull-right">
-<?= $links ?>
+                <?= $links ?>
             </ul>
         </div>
     </div>

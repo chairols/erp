@@ -432,6 +432,8 @@ class Cotizaciones_proveedores extends CI_Controller {
         $per_page = $per_page['valor'];
 
         $where = $this->input->get();
+        $where['cotizaciones_proveedores.estado'] = 'A';
+        $where['cotizaciones_proveedores_items.estado'] = 'A';
 
         /*
          * inicio paginador

@@ -834,6 +834,14 @@ class Listas_de_precios extends CI_Controller {
              */
 
             $data['items'] = $this->listas_de_precios_model->get_minimo_precio_comparacion_item($idlista_de_precios_comparacion, $this->input->get('idproveedor'), $per_page, $pagina);
+            
+            foreach($data['items'] as $key => $value) {
+                $where = array(
+                    'listas_de_precios_comparaciones_items.idarticulo_generico' => $value['idarticulo_generico'],
+                    'listas_de_precios_comparaciones_items.idlista_de_precios_comparacion' => $idlista_de_precios_comparacion
+                );
+                $data['items'][$key]['items'] = $this->listas_de_precios_model->gets_comparaciones_items($where);
+            }
         }
 
         $where = array(

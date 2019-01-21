@@ -280,6 +280,7 @@ class Listas_de_precios_model extends CI_Model {
     }
     
     /*
+     *  Listas_de_precios/precios_por_proveedor
      *  Listas_de_precios/ver_comparacion
      */
     public function gets_comparaciones_items($where) {
@@ -374,6 +375,7 @@ class Listas_de_precios_model extends CI_Model {
         
         return $query->row_array();
     }
+    
 }
 
 ?>

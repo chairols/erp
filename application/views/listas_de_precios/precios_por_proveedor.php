@@ -43,7 +43,7 @@
                     </td>
                     <td>
                         <?php foreach($item['items'] as $i) { ?>
-                        <span class="label label-danger hint--top hint--bounce hint--error" aria-label="<?=$i['proveedor']?> - <?=$i['articulo']?> <?=$i['marca']?>">
+                        <span class="label label-danger hint--top hint--bounce hint--error" aria-label="<?=$i['proveedor']?> - <?=$i['articulo']?> - <?=$i['marca']?>">
                             <?=$i['precio']?>
                         </span>
                         <?php } ?>

@@ -297,6 +297,9 @@ class Listas_de_precios_model extends CI_Model {
         return $query->result_array();
     }
     
+    /*
+     *  Listas_de_precios/precios_por_proveedor
+     */
     public function get_minimo_precio_comparacion_item_cantidad($idlista_de_precios_comparacion, $idproveedor) {
         $query = $this->db->query("SELECT count(*) as cantidad
                                     FROM 
@@ -328,15 +331,17 @@ class Listas_de_precios_model extends CI_Model {
         return $query->row_array();
     }
     
+    /*
+     *  Listas_de_precios/precios_por_proveedor
+     */
     public function get_minimo_precio_comparacion_item($idlista_de_precios_comparacion, $idproveedor, $per_page, $pagina) {
-        $query = $this->db->query("SELECT minPrecio.*, lp.* 
+        $query = $this->db->query("SELECT lp.*, lpi.*, minPrecio.minimo_precio
                                     FROM 
                                         (SELECT 
                                             lpci2.idlista_de_precios_comparacion_item, 
                                             min(lpci2.precio) as minimo_precio, 
                                             lpci2.articulo, 
                                             lpci2.marca,
-                                            lpci2.stock,
                                             lpci2.idarticulo_generico
                                         FROM
                                             listas_de_precios_comparaciones_items lpci2

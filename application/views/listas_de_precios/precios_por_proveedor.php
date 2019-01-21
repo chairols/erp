@@ -44,7 +44,7 @@
     </div>
     <div class="box-footer clearfix">
         <div class="pull-left">
-            <strong>Total <?=(isset($items))?count($items):"0"?> registros.</strong>
+            <strong>Total <?=(isset($total_rows))?$total_rows:"0"?> registros.</strong>
         </div>
         <div class="box-tools">
             <ul class="pagination pagination-sm no-margin pull-right">

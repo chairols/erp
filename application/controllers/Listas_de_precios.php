@@ -347,7 +347,7 @@ class Listas_de_precios extends CI_Controller {
 
     public function update_item_articulo_generico() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idarticulo_generico', 'Artículo Genérico', 'required|integer');
         $this->form_validation->set_rules('idlista_de_precios_item', 'ID Item', 'required|integer');
 
@@ -372,21 +372,21 @@ class Listas_de_precios extends CI_Controller {
                     'idlista_de_precios_item' => $this->input->post('idlista_de_precios_item')
                 );
                 $lista_de_precios_item = $this->listas_de_precios_model->get_where_item($where);
-                
+
                 $where = array(
                     'idarticulo_generico' => $this->input->post('idarticulo_generico')
                 );
                 $articulo_generico = $this->articulos_genericos_model->get_where($where);
-                
+
                 $log = array(
                     'tabla' => 'listas_de_precios',
                     'idtabla' => $lista_de_precios_item['idlista_de_precios_item'],
-                    'texto' => '<h2><strong>Se asoci&oacute; el art&iacute;culo '.$lista_de_precios_item['articulo'].' </strong></h2>
+                    'texto' => '<h2><strong>Se asoci&oacute; el art&iacute;culo ' . $lista_de_precios_item['articulo'] . ' </strong></h2>
 
-<p><strong>Al Art&iacute;culo Gen&eacute;rico: </strong>'.$articulo_generico['articulo_generico'].'</p>
+<p><strong>Al Art&iacute;culo Gen&eacute;rico: </strong>' . $articulo_generico['articulo_generico'] . '</p>
 
-<p><strong>ID Lista de Precios Item: </strong>'.$lista_de_precios_item['idlista_de_precios_item'].'<br />
-<strong>ID Art&iacute;culo Gen&eacute;rico: </strong>'.$articulo_generico['idarticulo_generico'].'</p>',
+<p><strong>ID Lista de Precios Item: </strong>' . $lista_de_precios_item['idlista_de_precios_item'] . '<br />
+<strong>ID Art&iacute;culo Gen&eacute;rico: </strong>' . $articulo_generico['idarticulo_generico'] . '</p>',
                     'idusuario' => $session['SID'],
                     'tipo' => 'edit'
                 );
@@ -698,7 +698,7 @@ class Listas_de_precios extends CI_Controller {
         $like = array();
         $where['listas_de_precios_comparaciones_items.estado'] = 'A';
         $like = $this->input->get();
-        
+
         /*
          * inicio paginador
          */
@@ -786,6 +786,63 @@ class Listas_de_precios extends CI_Controller {
             );
             echo json_encode($json);
         }
+    }
+
+    public function precios_por_proveedor($idlista_de_precios_comparacion = null, $pagina = 0) {
+        if ($idlista_de_precios_comparacion == null) {
+            redirect('/listas_de_precios/comparaciones/', 'refresh');
+        }
+        $data['title'] = 'Mejores Precios por Proveedor';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+
+        $data['links'] = "";
+
+
+        if (is_numeric($this->input->get('idproveedor'))) {
+            $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+            $per_page = $per_page['valor'];
+
+            /*
+             * inicio paginador
+             */
+            $total_rows = $this->listas_de_precios_model->get_minimo_precio_comparacion_item_cantidad($idlista_de_precios_comparacion, $this->input->get('idproveedor'));
+            $total_rows = $total_rows['cantidad'];
+            $config['reuse_query_string'] = TRUE;
+            $config['base_url'] = '/listas_de_precios/precios_por_proveedor/'.$idlista_de_precios_comparacion.'/';
+            $config['total_rows'] = $total_rows;
+            $config['per_page'] = $per_page;
+            $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+            $config['first_tag_open'] = '<li>';
+            $config['first_tag_close'] = '</li>';
+            $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+            $config['last_tag_open'] = '<li>';
+            $config['last_tag_close'] = '</li>';
+            $config['next_tag_open'] = '<li>';
+            $config['next_tag_close'] = '</li>';
+            $config['prev_tag_open'] = '<li>';
+            $config['prev_tag_close'] = '</li>';
+            $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+            $config['cur_tag_close'] = '</b></a></li>';
+            $config['num_tag_open'] = '<li>';
+            $config['num_tag_close'] = '</li>';
+            $this->pagination->initialize($config);
+            $data['links'] = $this->pagination->create_links();
+            $data['total_rows'] = $total_rows;
+            /*
+             * fin paginador
+             */
+
+            $data['items'] = $this->listas_de_precios_model->get_minimo_precio_comparacion_item($idlista_de_precios_comparacion, $this->input->get('idproveedor'), $per_page, $pagina);
+        }
+
+        $where = array(
+            'idlista_de_precios_comparacion' => $idlista_de_precios_comparacion
+        );
+        $data['proveedores'] = $this->listas_de_precios_model->gets_proveedores_comparaciones($where);
+
+        $data['view'] = 'listas_de_precios/precios_por_proveedor';
+        $this->load->view('layout/app', $data);
     }
 
     private function formatear_fecha($fecha) {

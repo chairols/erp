@@ -222,7 +222,7 @@ class Listas_de_precios_model extends CI_Model {
      *  Listas_de_precios/comparaciones
      */
     public function gets_proveedores_comparaciones($where) {
-        $this->db->select("proveedores.proveedor");
+        $this->db->select("proveedores.*");
         $this->db->from('listas_de_precios_comparaciones_items');
         $this->db->join('listas_de_precios_items', 'listas_de_precios_comparaciones_items.idlista_de_precios_item = listas_de_precios_items.idlista_de_precios_item');
         $this->db->join('listas_de_precios', 'listas_de_precios.idlista_de_precios = listas_de_precios_items.idlista_de_precios');
@@ -283,7 +283,7 @@ class Listas_de_precios_model extends CI_Model {
      *  Listas_de_precios/ver_comparacion
      */
     public function gets_comparaciones_items($where) {
-        $this->db->select("listas_de_precios.idproveedor, listas_de_precios_comparaciones_items.idlista_de_precios_comparacion_item, listas_de_precios_comparaciones_items.articulo, listas_de_precios_comparaciones_items.precio, listas_de_precios_comparaciones_items.stock, proveedores.proveedor, marcas.marca, marcas.idmarca");
+        $this->db->select("listas_de_precios.idproveedor, listas_de_precios_comparaciones_items.idlista_de_precios_comparacion_item, listas_de_precios_comparaciones_items.articulo, listas_de_precios_comparaciones_items.precio, listas_de_precios_comparaciones_items.stock, proveedores.proveedor, marcas.marca, marcas.idmarca, listas_de_precios_items.idarticulo_generico");
         $this->db->from("listas_de_precios_comparaciones_items");
         $this->db->join("listas_de_precios_items", "listas_de_precios_comparaciones_items.idlista_de_precios_item = listas_de_precios_items.idlista_de_precios_item");
         $this->db->join("listas_de_precios", "listas_de_precios_items.idlista_de_precios = listas_de_precios.idlista_de_precios");
@@ -294,6 +294,70 @@ class Listas_de_precios_model extends CI_Model {
         $this->db->order_by("listas_de_precios_comparaciones_items.precio");
         
         $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    public function get_minimo_precio_comparacion_item_cantidad($idlista_de_precios_comparacion, $idproveedor) {
+        $query = $this->db->query("SELECT count(*) as cantidad
+                                    FROM 
+                                        (SELECT 
+                                            lpci2.idlista_de_precios_comparacion_item, 
+                                            min(lpci2.precio) as minimo_precio, 
+                                            lpci2.articulo, 
+                                            lpci2.marca,
+                                            lpci2.stock,
+                                            lpci2.idarticulo_generico
+                                        FROM
+                                            listas_de_precios_comparaciones_items lpci2
+                                        WHERE
+                                            lpci2.estado = 'A' AND
+                                            lpci2.idlista_de_precios_comparacion = '$idlista_de_precios_comparacion'
+                                        GROUP BY
+                                            lpci2.idarticulo_generico) as minPrecio,
+                                        listas_de_precios_comparaciones_items lpci,
+                                        listas_de_precios_items lpi,
+                                        listas_de_precios lp
+                                    WHERE
+                                        minPrecio.minimo_precio = lpci.precio AND
+                                        minPrecio.idarticulo_generico = lpci.idarticulo_generico AND
+                                        lpci.idlista_de_precios_item = lpi.idlista_de_precios_item AND
+                                        lpi.idlista_de_precios = lp.idlista_de_precios AND
+                                        lp.idproveedor = '$idproveedor'");
+        
+        
+        return $query->row_array();
+    }
+    
+    public function get_minimo_precio_comparacion_item($idlista_de_precios_comparacion, $idproveedor, $per_page, $pagina) {
+        $query = $this->db->query("SELECT minPrecio.*, lp.* 
+                                    FROM 
+                                        (SELECT 
+                                            lpci2.idlista_de_precios_comparacion_item, 
+                                            min(lpci2.precio) as minimo_precio, 
+                                            lpci2.articulo, 
+                                            lpci2.marca,
+                                            lpci2.stock,
+                                            lpci2.idarticulo_generico
+                                        FROM
+                                            listas_de_precios_comparaciones_items lpci2
+                                        WHERE
+                                            lpci2.estado = 'A' AND
+                                            lpci2.idlista_de_precios_comparacion = '$idlista_de_precios_comparacion'
+                                        GROUP BY
+                                            lpci2.idarticulo_generico) as minPrecio,
+                                        listas_de_precios_comparaciones_items lpci,
+                                        listas_de_precios_items lpi,
+                                        listas_de_precios lp
+                                    WHERE
+                                        minPrecio.minimo_precio = lpci.precio AND
+                                        minPrecio.idarticulo_generico = lpci.idarticulo_generico AND
+                                        lpci.idlista_de_precios_item = lpi.idlista_de_precios_item AND
+                                        lpi.idlista_de_precios = lp.idlista_de_precios AND
+                                        lp.idproveedor = '$idproveedor'
+                                    LIMIT
+                                        $pagina, $per_page");
+        
+        
         return $query->result_array();
     }
     

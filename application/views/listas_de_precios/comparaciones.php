@@ -117,12 +117,17 @@
                                         <a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" url="../../../core/resources/processes/proc.core.php" id="store_">
                                           <button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button>
                                         </a> -->
-                                        <a href="/listas_de_precios/ver_comparacion/<?=$comparacion['idlista_de_precios_comparacion']?>/" class="hint--bottom hint--bounce hint--info" aria-label="Ver Comparación">
+                                        <a href="/listas_de_precios/ver_comparacion/<?=$comparacion['idlista_de_precios_comparacion']?>/" class="hint--top hint--bounce hint--info" aria-label="Ver Comparación">
                                             <button class="btn btnBlue" type="button">
                                                 <i class="fa fa-eye"></i>
                                             </button>
                                         </a>
-                                        <a class="hint--bottom hint--bounce hint--error" aria-label="Eliminar" url="#" campo="idsucursal" success="" error="" id="delete_<?=$comparacion['idlista_de_precios_comparacion']?>">
+                                        <a href="/listas_de_precios/precios_por_proveedor/<?=$comparacion['idlista_de_precios_comparacion']?>/" class="hint--top hint--bounce hint--warning" aria-label="Ver Precios por Proveedor">
+                                            <button class="btn btn-warning" type="button">
+                                                <i class="fa fa-arrow-down"></i>
+                                            </button>
+                                        </a>
+                                        <a class="hint--top hint--bounce hint--error" aria-label="Eliminar" url="#" campo="idsucursal" success="" error="" id="delete_<?=$comparacion['idlista_de_precios_comparacion']?>">
                                             <button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button>
                                         </a>
                                     </span>

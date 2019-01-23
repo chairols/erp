@@ -198,6 +198,9 @@ class Preordenes extends CI_Controller {
             'estado' => 'A'
         );
         $data['preorden'] = $this->preordenes_model->gets_where($where);
+        
+        $data['total'] = $this->preordenes_model->get_total($where);
+        
         foreach($data['preorden'] as $key => $value) {
             $where = array(
                 'idlista_de_precios_item' => $value['idlista_de_precios_item']
@@ -206,7 +209,6 @@ class Preordenes extends CI_Controller {
             $data['preorden'][$key]['stock'] = $item['stock'];
         }
 
-        $data['total'] = $this->preordenes_model->get_total($where);
 
         $data['idproveedor'] = $idproveedor;
         $data['idmoneda'] = $idmoneda;

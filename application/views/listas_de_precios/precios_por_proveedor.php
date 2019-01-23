@@ -27,6 +27,7 @@
                     <th>Cantidad</th>
                     <th>Precio</th>
                     <th>Otros Precios</th>
+                    <th>Ordenar</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,6 +48,9 @@
                             <?=$i['precio']?>
                         </span>
                         <?php } ?>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control text-center cantidad_pedida" value="<?=(isset($item['cantidad_preorden']['cantidad']))?$item['cantidad_preorden']['cantidad']:''?>" iditem="<?=$item['idlista_de_precios_comparacion_item']?>">
                     </td>
                 </tr>
                     <?php } ?>

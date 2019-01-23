@@ -795,6 +795,9 @@ class Listas_de_precios extends CI_Controller {
         $data['title'] = 'Mejores Precios por Proveedor';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/listas_de_precios/js/precios_por_proveedor.js'
+        );
 
         $data['links'] = "";
 
@@ -841,6 +844,12 @@ class Listas_de_precios extends CI_Controller {
                     'listas_de_precios_comparaciones_items.idlista_de_precios_comparacion' => $idlista_de_precios_comparacion
                 );
                 $data['items'][$key]['items'] = $this->listas_de_precios_model->gets_comparaciones_items($where);
+                
+                $where = array(
+                    'idlista_de_precios_comparacion_item' => $value['idlista_de_precios_comparacion_item'],
+                    'estado' => 'A'
+                );
+                $data['items'][$key]['cantidad_preorden'] = $this->preordenes_model->get_where($where);
             }
         }
 

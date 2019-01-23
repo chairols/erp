@@ -336,7 +336,7 @@ class Listas_de_precios_model extends CI_Model {
      *  Listas_de_precios/precios_por_proveedor
      */
     public function get_minimo_precio_comparacion_item($idlista_de_precios_comparacion, $idproveedor, $per_page, $pagina) {
-        $query = $this->db->query("SELECT lp.*, lpi.*, minPrecio.minimo_precio
+        $query = $this->db->query("SELECT lp.*, lpi.*, minPrecio.minimo_precio, minPrecio.idlista_de_precios_comparacion_item
                                     FROM 
                                         (SELECT 
                                             lpci2.idlista_de_precios_comparacion_item, 

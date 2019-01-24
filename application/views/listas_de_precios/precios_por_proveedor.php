@@ -58,6 +58,9 @@
             </tbody>
         </table>
     </div>
+    <pre>
+        <?php print_r($items); ?>
+    </pre>
     <div class="box-footer clearfix">
         <div class="pull-left">
             <strong>Total <?=(isset($total_rows))?$total_rows:"0"?> registros.</strong>

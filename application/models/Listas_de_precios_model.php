@@ -326,7 +326,8 @@ class Listas_de_precios_model extends CI_Model {
                                         minPrecio.idarticulo_generico = lpci.idarticulo_generico AND
                                         lpci.idlista_de_precios_item = lpi.idlista_de_precios_item AND
                                         lpi.idlista_de_precios = lp.idlista_de_precios AND
-                                        lp.idproveedor = '$idproveedor'");
+                                        lp.idproveedor = '$idproveedor' AND
+                                        lpci.idlista_de_precios_comparacion = '$idlista_de_precios_comparacion'");
         
         
         return $query->row_array();
@@ -336,7 +337,7 @@ class Listas_de_precios_model extends CI_Model {
      *  Listas_de_precios/precios_por_proveedor
      */
     public function get_minimo_precio_comparacion_item($idlista_de_precios_comparacion, $idproveedor, $per_page, $pagina) {
-        $query = $this->db->query("SELECT lp.*, lpi.*, minPrecio.minimo_precio, minPrecio.idlista_de_precios_comparacion_item
+        $query = $this->db->query("SELECT lp.*, lpi.*, minPrecio.minimo_precio, lpci.idlista_de_precios_comparacion_item
                                     FROM 
                                         (SELECT 
                                             lpci2.idlista_de_precios_comparacion_item, 
@@ -359,7 +360,8 @@ class Listas_de_precios_model extends CI_Model {
                                         minPrecio.idarticulo_generico = lpci.idarticulo_generico AND
                                         lpci.idlista_de_precios_item = lpi.idlista_de_precios_item AND
                                         lpi.idlista_de_precios = lp.idlista_de_precios AND
-                                        lp.idproveedor = '$idproveedor'
+                                        lp.idproveedor = '$idproveedor' AND
+                                        lpci.idlista_de_precios_comparacion = '$idlista_de_precios_comparacion'
                                     LIMIT
                                         $pagina, $per_page");
         

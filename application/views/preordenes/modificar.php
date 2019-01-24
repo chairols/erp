@@ -22,6 +22,7 @@
             </thead>
             <tbody>
                 <?php foreach($preorden as $p) { ?>
+                <?php if($p['cantidad'] > 0) { ?>
                 <tr class="text-right">
                     <td class="pull-right">
                         <input type="text" idpreorden="<?=$p['idpre_orden']?>" class="form-control text-right cantidad" id="cantidad-<?=$p['idpre_orden']?>" value="<?=$p['cantidad']?>">
@@ -39,6 +40,7 @@
                         </div>
                     </td>
                 </tr>
+                <?php } ?>
                 <?php } ?>
             </tbody>
         </table>

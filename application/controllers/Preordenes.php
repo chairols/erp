@@ -138,6 +138,7 @@ class Preordenes extends CI_Controller {
 
         $where = $this->input->get();
         $where['pre_ordenes.estado'] = 'A';
+        $where['pre_ordenes.cantidad >'] = 0;
 
         /*
          * inicio paginador

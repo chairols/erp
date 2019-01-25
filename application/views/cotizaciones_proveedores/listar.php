@@ -62,6 +62,14 @@
                                     </span>
                                 </div>
                             </div>
+                            <div class="col-sm-2 col-xs-12">
+                                <div class="listRowInner">
+                                    <span class="smallTitle">Precio en Dólares</span>
+                                    <span class="listTextStrong">
+                                        <span class="label label-success">U$S <?=number_format($item['precio']/$cotizacion['cotizacion_dolar']['valor']*$cotizacion['cotizacion_moneda']['valor'], 2)?></span>
+                                    </span>
+                                </div>
+                            </div>
                             <div class="col-sm-3 col-xs-12">
                                 <div class="listRowInner">
                                     <span class="smallTitle">Cantidad</span>
@@ -99,3 +107,7 @@
         </div>
     </div>
 </div>
+
+<pre>
+                            <?php print_r($cotizaciones); ?>
+                        </pre>

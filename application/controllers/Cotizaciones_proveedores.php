@@ -479,6 +479,9 @@ class Cotizaciones_proveedores extends CI_Controller {
             );
             $data['cotizaciones'][$key]['moneda'] = $this->monedas_model->get_where($where);
             
+            $data['cotizaciones'][$key]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
+            $data['cotizaciones'][$key]['cotizacion_moneda'] = $this->monedas_model->get_ultima_cotizacion_por_monedas($data['cotizaciones'][$key]['idmoneda']);
+            
             $where = array(
                 'idcotizacion_proveedor' => $value['idcotizacion_proveedor'],
                 'estado' => 'A'
@@ -499,6 +502,8 @@ class Cotizaciones_proveedores extends CI_Controller {
                     'idmarca' => $data['cotizaciones'][$key]['items'][$key2]['articulo']['idmarca']
                 );
                 $data['cotizaciones'][$key]['items'][$key2]['articulo']['marca'] = $this->marcas_model->get_where($where);
+                
+                $data['cotizaciones'][$key]['items'][$key2]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
             }
         }
 

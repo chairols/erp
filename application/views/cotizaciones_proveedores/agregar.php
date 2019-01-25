@@ -7,7 +7,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Proveedor</label>
                 <div class="col-md-6">
-                    <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" objectauto="proveedores" actionauto="gets_proveedores_ajax" iconauto="ship">
+                    <input type="text" id="TextAutoCompleteproveedor" name="TextAutoCompleteproveedor" placeholder="Proveedor" placeholderauto="Proveedor inexistente" class="form-control TextAutoComplete" value="" objectauto="proveedores" actionauto="gets_proveedores_ajax" varsauto="estado:=A" iconauto="ship">
                     <input type="hidden" id="proveedor" name="proveedor" value="">
                 </div>
             </div>

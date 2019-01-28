@@ -21,6 +21,7 @@
 <?php $cantidad = 0; ?>
 <?php $total = 0; ?>
 <?php foreach ($items as $item) { ?>
+    <?php if($item['cantidad'] > 0) { ?>
     <?php $cantidad += $item['cantidad'] ?>
     <?php $total += ($item['cantidad'] * $item['precio']) ?>
     <div class="row form-group inline-form-custom">
@@ -47,6 +48,7 @@
             </button>
         </div>
     </div>
+    <?php } ?>
 <?php } ?>
 
 <div class="row form-group inline-form-custom bg-brown">

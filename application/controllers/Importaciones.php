@@ -211,7 +211,8 @@ class Importaciones extends CI_Controller {
     public function gets_items_pedido_ajax() {
         $datos = array(
             'importaciones_items.idimportacion' => $this->input->post('idimportacion'),
-            'importaciones_items.estado' => 'A'
+            'importaciones_items.estado' => 'A',
+            'importaciones_items.cantidad >' => 0
         );
         $data['items'] = $this->importaciones_model->gets_items($datos);
 

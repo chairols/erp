@@ -1,5 +1,8 @@
 <div class="row form-group inline-form-custom bg-brown">
-    <div class="col-xs-4 txC">
+    <div class="col-xs-2 txC">
+        <strong>Artículo Proveedor</strong>
+    </div>
+    <div class="col-xs-2 txC">
         <strong>Artículo</strong>
     </div>
     <div class="col-xs-2 txC">
@@ -21,12 +24,14 @@
 <?php $cantidad = 0; ?>
 <?php $total = 0; ?>
 <?php foreach ($items as $item) { ?>
-    <?php if($item['cantidad'] > 0) { ?>
     <?php $cantidad += $item['cantidad'] ?>
     <?php $total += ($item['cantidad'] * $item['precio']) ?>
     <div class="row form-group inline-form-custom">
-        <div class="col-xs-4 txC">
+        <div class="col-xs-2 txC">
             <input type="text" value="<?= $item['articulo'] ?> - <?= $item['marca'] ?>" class="form-control" disabled="">
+        </div>
+        <div class="col-xs-2 txC">
+            <input type="text" value="<?=$item['art']?>" class="form-control" disabled="">
         </div>
         <div class="col-xs-2 txC">
             <input type="text" value="<?= $item['cantidad'] ?>" class="form-control txR" disabled="">
@@ -48,7 +53,6 @@
             </button>
         </div>
     </div>
-    <?php } ?>
 <?php } ?>
 
 <div class="row form-group inline-form-custom bg-brown">
@@ -65,4 +69,3 @@
         <strong>Total: <?= number_format($total, 2) ?></strong>
     </div>
 </div>
-

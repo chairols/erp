@@ -68,11 +68,11 @@ class Importaciones_model extends CI_Model {
      *  Importaciones/agregar_items
      */
     public function gets_items($where) {
-        $this->db->select('importaciones_items.*, articulos.articulo, marcas.marca');
+        $this->db->select('importaciones_items.*, articulos.articulo as art, marcas.marca as mar');
         $this->db->from('importaciones_items');
-        $this->db->join('articulos', 'importaciones_items.idarticulo = articulos.idarticulo');
-        $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca');
-        $this->db->like($where);
+        $this->db->join('articulos', 'importaciones_items.idarticulo = articulos.idarticulo', 'left');
+        $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca', 'left');
+        $this->db->where($where);
         $this->db->order_by('idimportacion_item');
         
         

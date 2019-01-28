@@ -160,7 +160,7 @@ class Importar extends CI_Controller {
 
                 $update = array(
                     'idlinea' => $array[2],
-                    'order_number' => $array[3],
+                    'numero_orden' => $array[3],
                     'rack' => $array[4],
                     'precio' => $array[6],
                     'price_fob' => $array[9],

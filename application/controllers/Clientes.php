@@ -10,11 +10,16 @@ class Clientes extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'pagination'
+            'pagination',
+            'form_validation'
         ));
         $this->load->model(array(
             'clientes_model',
-            'parametros_model'
+            'parametros_model',
+            'provincias_model',
+            'monedas_model',
+            'paises_model',
+            'tipos_responsables_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -72,6 +77,81 @@ class Clientes extends CI_Controller {
         $data['clientes'] = $this->clientes_model->gets_where_limit($where, $per_page, $pagina);
 
         $this->load->view('layout/app', $data);
+    }
+
+    public function modificar($idcliente = null) {
+        if ($idcliente == null) {
+            redirect('/clientes/listar/', 'refresh');
+        }
+        $data['title'] = 'Modificar Cliente';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/clientes/js/modificar.js'
+        );
+        $data['view'] = 'clientes/modificar';
+
+        $where = array(
+            'idcliente' => $idcliente
+        );
+        $data['cliente'] = $this->clientes_model->get_where($where);
+
+        $data['provincias'] = $this->provincias_model->gets();
+
+        $data['paises'] = $this->paises_model->gets();
+
+        $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
+
+        $data['monedas'] = $this->monedas_model->gets();
+
+        $this->load->view('layout/app', $data);
+    }
+
+    public function modificar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $_POST['cuit'] = str_replace("-", "", $this->input->post('cuit'));
+
+        $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
+        $this->form_validation->set_rules('domicilio_fiscal', 'Domicilio Fiscal', 'required');
+        $this->form_validation->set_rules('localidad', 'Localidad', 'required');
+        $this->form_validation->set_rules('cliente', 'Cliente', 'required');
+        $this->form_validation->set_rules('idprovincia', 'Provincia', 'required|integer');
+        // $this->form_validation->set_rules('idpais', 'Pais', 'required|integer');
+        $this->form_validation->set_rules('idtipo_responsable', 'Tipo de IVA', 'required|integer');
+        $this->form_validation->set_rules('saldo_cuenta_corriente', 'Saldo Cuenta Corriente', 'required|decimal');
+        $this->form_validation->set_rules('saldo_inicial', 'Saldo Inicial', 'required|decimal');
+        $this->form_validation->set_rules('saldo_a_cuenta', 'Saldo a Cuenta', 'required|decimal');
+        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = $this->input->post();
+            $datos['actualizado_por'] = $session['SID'];
+            $where = array(
+                'idcliente' => $this->input->post('idcliente')
+            );
+
+            $resultado = $this->clientes_model->update($datos, $where);
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'El cliente ' . $this->input->post('cliente') . ' se actualizó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el Cliente'
+                );
+                echo json_encode($json);
+            }
+        }
     }
 
     public function gets_clientes_ajax() {

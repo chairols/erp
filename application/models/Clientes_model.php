@@ -35,6 +35,14 @@ class Clientes_model extends CI_Model {
     }
 
     /*
+     *  Clientes/modificar_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('clientes', $datos, $where);
+        return $this->db->affected_rows();
+    }
+
+    /*
      *  Importar/clientes
      */
     public function get_where($where) {

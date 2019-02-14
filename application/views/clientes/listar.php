@@ -1,6 +1,6 @@
 <div class="box">
     <div class="box-header">
-        <form method="GET" action="/proveedores/listar/" class="input-group input-group-sm col-md-5">
+        <form method="GET" action="/clientes/listar/" class="input-group input-group-sm col-md-5">
             <input class="form-control pull-left" name="cliente" id="cliente" placeholder="Buscar ..." type="text" value="<?=$this->input->get('cliente')?>">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="submit">

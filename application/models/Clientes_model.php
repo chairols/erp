@@ -21,6 +21,20 @@ class Clientes_model extends CI_Model {
     }
 
     /*
+     *  Clientes/listar
+     */
+    public function gets_where_limit($where, $per_page, $pagina) {
+        $this->db->select('*');
+        $this->db->from('clientes');
+        $this->db->like($where);
+        $this->db->order_by('cliente');
+        $this->db->limit($per_page, $pagina);
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    /*
      *  Importar/clientes
      */
     public function get_where($where) {

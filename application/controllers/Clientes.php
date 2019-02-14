@@ -9,10 +9,12 @@ class Clientes extends CI_Controller {
 
         $this->load->library(array(
             'session',
-            'r_session'
+            'r_session',
+            'pagination'
         ));
         $this->load->model(array(
-            'clientes_model'
+            'clientes_model',
+            'parametros_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -41,7 +43,7 @@ class Clientes extends CI_Controller {
         /*
          * inicio paginador
          */
-        $total_rows = $this->proveedores_model->get_cantidad_where($where);
+        $total_rows = $this->clientes_model->get_cantidad_where($where);
         $config['reuse_query_string'] = TRUE;
         $config['base_url'] = '/clientes/listar/';
         $config['total_rows'] = $total_rows;
@@ -67,7 +69,7 @@ class Clientes extends CI_Controller {
          * fin paginador
          */
 
-        $data['clientes'] = $this->proveedores_model->gets_where_limit($where, $per_page, $pagina);
+        $data['clientes'] = $this->clientes_model->gets_where_limit($where, $per_page, $pagina);
 
         $this->load->view('layout/app', $data);
     }

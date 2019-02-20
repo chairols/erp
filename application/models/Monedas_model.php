@@ -35,7 +35,10 @@ class Monedas_model extends CI_Model {
     }
 
     /*
+     *  Cotizaciones_clientes/agregar_ajax
+     * 
      *  Cotizaciones_proveedores/actualizar_cabecera_ajax
+     *  Cotizaciones_proveedores/agregar_ajax
      *  Cotizaciones_proveedores/listar
      *  Cotizaciones_proveedores/modificar
      * 
@@ -55,7 +58,10 @@ class Monedas_model extends CI_Model {
     }
 
     /*
+     *  Cotizaciones_clientes/modificar
+     * 
      *  Cotizaciones_proveedores/agregar
+     *  Cotizaciones_proveedores/modificar
      * 
      *  Importaciones/agregar
      * 

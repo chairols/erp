@@ -9,6 +9,9 @@ class Clientes_model extends CI_Model {
     }
 
     /*
+     *  Cotizaciones_clientes/agregar_ajax
+     *  Cotizaciones_clientes/modificar
+     * 
      *  Importar/clientes
      */
     public function get_where($where) {

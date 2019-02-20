@@ -23,6 +23,14 @@ class Cotizaciones_clientes_model extends CI_Model {
         $query = $this->db->get_where('cotizaciones_clientes', $where);
         return $query->row_array();
     }
+    
+    /*
+     *  Cotizaciones_clientes/actualizar_cabecera_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('cotizaciones_clientes', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

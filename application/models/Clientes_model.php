@@ -9,6 +9,7 @@ class Clientes_model extends CI_Model {
     }
 
     /*
+     *  Cotizaciones_clientes/actualizar_cabecera_ajax
      *  Cotizaciones_clientes/agregar_ajax
      *  Cotizaciones_clientes/modificar
      * 

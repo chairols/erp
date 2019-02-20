@@ -128,6 +128,73 @@ class Cotizaciones_clientes extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
     
+    public function actualizar_cabecera_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idcliente', 'Cliente', 'required|integer');
+        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
+        $this->form_validation->set_rules('fecha', 'Fecha', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'idcliente' => $this->input->post('idcliente'),
+                'idmoneda' => $this->input->post('idmoneda'),
+                'fecha' => $this->formatear_fecha($this->input->post('fecha')),
+                'observaciones' => $this->input->post('observaciones'),
+                'actualizado_por' => $session['SID']
+            );
+            $where = array(
+                'idcotizacion_cliente' => $this->input->post('idcotizacion_cliente')
+            );
+
+            $resultado = $this->cotizaciones_clientes_model->update($datos, $where);
+
+            if ($resultado) {
+                $where = array(
+                    'idcliente' => $this->input->post('idcliente')
+                );
+                $cliente = $this->clientes_model->get_where($where);
+
+                $where = array(
+                    'idmoneda' => $this->input->post('idmoneda')
+                );
+                $moneda = $this->monedas_model->get_where($where);
+
+                $log = array(
+                    'tabla' => 'cotizaciones_clientes',
+                    'idtabla' => $this->input->post('idcotizacion_cliente'),
+                    'texto' => "<h2><strong>Se actualizó la cabecera de la cotización de cliente N°: " . $this->input->post('idcotizacion_cliente') . "</strong></h2>
+
+<p><strong>Proveedor: </strong>" . $cliente['cliente'] . "<br />
+<strong>Moneda: </strong>" . $moneda['moneda'] . "<br />
+<strong>Fecha de Cotizació: </strong>" . $this->input->post('fecha') . "<br />
+<strong>Observaciones: </strong>" . $this->input->post('observaciones') . "</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'edit'
+                );
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizó la cabecera de la cotización'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar la cabecera de la cotización'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+    
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);

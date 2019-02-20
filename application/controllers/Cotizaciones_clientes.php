@@ -195,6 +195,30 @@ class Cotizaciones_clientes extends CI_Controller {
         }
     }
     
+    public function listar_articulos_tabla_ajax() {
+        $where = array(
+            'idcotizacion_cliente' => $this->input->post('idcotizacion_cliente'),
+            'estado' => 'A'
+        );
+
+        $data['articulos'] = $this->cotizaciones_clientes_model->gets_articulos_where($where);
+        foreach ($data['articulos'] as $key => $value) {
+            $where = array(
+                'idarticulo' => $value['idarticulo']
+            );
+            $data['articulos'][$key]['articulo'] = $this->articulos_model->get_where($where);
+
+            $where = array(
+                'idmarca' => $data['articulos'][$key]['articulo']['idmarca']
+            );
+            $data['articulos'][$key]['marca'] = $this->marcas_model->get_where($where);
+
+            $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+        }
+
+        $this->load->view('cotizaciones_clientes/listar_articulos_tabla_ajax', $data);
+    }
+    
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);

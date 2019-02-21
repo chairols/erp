@@ -12,7 +12,7 @@
     ghostTime: 100,
     maxProgressPerFrame: 20,
     easeFactor: 1.25,
-    startOnPageLoad: true,
+    startOnPageLoad: false,
     restartOnPushState: true,
     restartOnRequestAfter: 500,
     target: 'body',

@@ -15,7 +15,8 @@ class Articulos extends CI_Controller {
         $this->load->model(array(
             'parametros_model',
             'articulos_model',
-            'marcas_model'
+            'marcas_model',
+            'lineas_model'
         ));
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
@@ -173,7 +174,41 @@ class Articulos extends CI_Controller {
             }
         }
     }
+    
+    public function get_where_json() {
+        $where = $this->input->post();
+        $articulo = $this->articulos_model->get_where($where);
 
+        $where = array(
+            'idmarca' => $articulo['idmarca']
+        );
+        $articulo['marca'] = $this->marcas_model->get_where($where);
+        
+        $where = array(
+            'idlinea' => $articulo['idlinea']
+        );
+        $articulo['linea'] = $this->lineas_model->get_where($where);
+        
+        echo json_encode($articulo);
+    }
+
+    public function gets_articulos_ajax_stock_y_precio() {
+        $where = $this->input->post();
+        $articulos = $this->articulos_model->gets_where_para_ajax_con_stock_y_precio($where, 255);
+
+        foreach ($articulos as $key => $value) {
+            $articulos[$key]['text'] = $value['text'] . " - ";
+            $where = array(
+                'idmarca' => $value['idmarca']
+            );
+            $resultado = $this->marcas_model->get_where($where);
+
+            $articulos[$key]['text'] .= "<b>".$resultado['marca']."</b>";
+            $articulos[$key]['text'] .= " - ".$value['stock'];
+            $articulos[$key]['text'] .= ' - <b>U$S '.$value['precio']."</b>";
+        }
+        echo json_encode($articulos);
+    }
 }
 
 ?>

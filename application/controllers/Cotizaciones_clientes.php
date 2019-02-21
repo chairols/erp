@@ -15,7 +15,9 @@ class Cotizaciones_clientes extends CI_Controller {
             'monedas_model',
             'cotizaciones_clientes_model',
             'clientes_model',
-            'log_model'
+            'log_model',
+            'articulos_model',
+            'marcas_model'
         ));
         
         $session = $this->session->all_userdata();
@@ -213,10 +215,86 @@ class Cotizaciones_clientes extends CI_Controller {
             );
             $data['articulos'][$key]['marca'] = $this->marcas_model->get_where($where);
 
-            $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+            $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_entrega']);
         }
 
         $this->load->view('cotizaciones_clientes/listar_articulos_tabla_ajax', $data);
+    }
+    
+    public function agregar_articulo_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idcotizacion_cliente', 'ID Cotizacion Cliente', 'required|integer');
+        $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
+        $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
+        $this->form_validation->set_rules('descripcion', 'Descripción', 'required');
+        $this->form_validation->set_rules('precio', 'Precio', 'required|decimal');
+        $this->form_validation->set_rules('fecha', 'Fecha', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $set = array(
+                'idcotizacion_cliente' => $this->input->post('idcotizacion_cliente'),
+                'cantidad' => $this->input->post('cantidad'),
+                'idarticulo' => $this->input->post('idarticulo'),
+                'descripcion' => $this->input->post('descripcion'),
+                'precio' => $this->input->post('precio'),
+                'fecha_entrega' => $this->formatear_fecha($this->input->post('fecha')),
+                'observaciones_item' => $this->input->post('observaciones_item'),
+                'idcreador' => $session['SID'],
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'modificado_por' => $session['SID']
+            );
+
+            $id = $this->cotizaciones_clientes_model->set_item($set);
+
+            if ($id) {
+                $where = array(
+                    'idarticulo' => $this->input->post('idarticulo')
+                );
+                $articulo = $this->articulos_model->get_where($where);
+
+                $where = array(
+                    'idmarca' => $articulo['idmarca']
+                );
+                $marca = $this->marcas_model->get_where($where);
+
+                $log = array(
+                    'tabla' => 'cotizaciones_clientes',
+                    'idtabla' => $id,
+                    'texto' => "<h2><strong>Se agregó item a la cotización de cliente número: " . $this->input->post('idcotizacion_cliente') . "</strong></h2>
+
+<p>
+<strong>Artículo: </strong>" . $articulo['articulo'] . "<br />
+<strong>Marca: </strong>" . $marca['marca'] . "<br />
+<strong>Descripcion: </strong>".$this->input->post('descripcion')."<br />
+<strong>Precio: </strong>" . $this->input->post('precio') . "<br />
+<strong>Fecha de Entrega: </strong>" . $this->input->post('fecha') . "<br />
+<strong>Observaciones: </strong>" . $this->input->post('observaciones_item')."<br />
+</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se agregó el artículo ' . $articulo['articulo'] . ' - ' . $marca['marca']
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo agregar el artículo'
+                );
+                echo json_encode($json);
+            }
+        }
     }
     
     private function formatear_fecha($fecha) {

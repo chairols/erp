@@ -43,6 +43,7 @@ class Articulos_model extends CI_Model {
 
     /*
      *  Articulos/agregar_ajax
+     *  Artículos/get_where_json
      * 
      *  Cotizaciones_proveedores/agregar_articulo_ajax
      *  Cotizaciones_proveedores/listar
@@ -120,6 +121,21 @@ class Articulos_model extends CI_Model {
 
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    /*
+     *  Importaciones/agregar_items
+     */
+    public function gets_where_para_ajax_con_stock_y_precio($where, $limit)
+    {
+      $this->db->select('idarticulo as id, articulo as text, idmarca, stock, precio');
+      $this->db->from('articulos');
+      $this->db->like($where);
+      $this->db->order_by('articulo');
+      $this->db->limit($limit);
+
+      $query = $this->db->get();
+      return $query->result_array();
     }
 }
 

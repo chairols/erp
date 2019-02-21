@@ -85,7 +85,7 @@
                     <input type="text" id="cantidad" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,8}'">
                 </div>
                 <div class="col-lg-4 col-xs-12">
-                    <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo inexistente" class="form-control input-sm TextAutoComplete" objectauto="articulos" actionauto="gets_articulos_ajax" varsauto="estado:=A" iconauto="ship" autofocus>
+                    <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo inexistente" class="form-control input-sm TextAutoComplete" objectauto="articulos" actionauto="gets_articulos_ajax_stock_y_precio" varsauto="estado:=A" iconauto="ship" autofocus>
                     <input type="hidden" id="articulo" name="articulo" value="">
                 </div>
                 <div class="col-lg-4 col-xs-12">
@@ -111,7 +111,7 @@
                     <input type="text" id="fecha_articulo" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker text-center" placeholder="Seleccione una fecha">
                 </div>
                 <div class="col-lg-8 col-xs-12">
-                    <textarea id="observaciones" class="form-control"></textarea>
+                    <textarea id="observaciones_item" class="form-control"></textarea>
                 </div>
                 <div class="col-lg-2 col-xs-12 text-center">
                     <button class="btn btn-sm btn-primary" id="agregar">Agregar Artículo</button>

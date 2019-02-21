@@ -14,13 +14,15 @@
     <tbody>
         <?php foreach ($articulos as $articulo) { ?>
             <tr>
-                <td class="text-right"><?= $articulo['articulo']['articulo'] ?> - <?= $articulo['marca']['marca'] ?></td>
-                <td class="text-right"><?= $articulo['precio'] ?></td>
                 <td class="text-right"><?= $articulo['cantidad'] ?></td>
+                <td class="text-right"><?= $articulo['articulo']['articulo'] ?> - <?= $articulo['marca']['marca'] ?></td>
+                <td class="text-right"><?=$articulo['descripcion']?></td>
+                <td class="text-right"><?= $articulo['precio'] ?></td>
                 <td class="text-right"><?= $articulo['fecha_formateada'] ?></td>
                 <td class="text-right"><?= number_format($articulo['precio'] * $articulo['cantidad'], 2) ?></td>
+                <td class="text-right"><?=$articulo['observaciones_item']?></td>
                 <td class="text-right">
-                    <a class="hint--top hint--bounce hint--error borrar_articulo" id="<?= $articulo['idcotizacion_proveedor_item']?>" aria-label="Eliminar">
+                    <a class="hint--top hint--bounce hint--error borrar_articulo" id="<?= $articulo['idcotizacion_cliente_item']?>" aria-label="Eliminar">
                         <button class="btn btn-danger btn-xs" type="button">
                             <i class="fa fa-trash-o"></i>
                         </button>

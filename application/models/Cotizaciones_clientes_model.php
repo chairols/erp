@@ -39,6 +39,14 @@ class Cotizaciones_clientes_model extends CI_Model {
         $query = $this->db->get_where('cotizaciones_clientes_items', $where);
         return $query->result_array();
     }
+    
+    /*
+     *  Cotizaciones_clientes/agregar_articulo_ajax
+     */
+    public function set_item($datos) {
+        $this->db->insert('cotizaciones_clientes_items', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

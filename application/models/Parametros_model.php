@@ -152,6 +152,7 @@ class Parametros_model extends CI_Model {
     }
     
     /*
+     *  Parametros/get_parametros_empresa_json
      *  Parametros/sistema
      */
     public function get_parametros_empresa() {

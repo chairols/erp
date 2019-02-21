@@ -47,6 +47,14 @@ class Cotizaciones_clientes_model extends CI_Model {
         $this->db->insert('cotizaciones_clientes_items', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Cotizaciones_clientes/borrar_articulo_ajax
+     */
+    public function update_item($datos, $where) {
+        $this->db->update('cotizaciones_clientes_items', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

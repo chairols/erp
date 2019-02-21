@@ -297,6 +297,43 @@ class Cotizaciones_clientes extends CI_Controller {
         }
     }
     
+    public function borrar_articulo_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idcotizacion_cliente_item', 'ID Cotización Item', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idcotizacion_cliente_item' => $this->input->post('idcotizacion_cliente_item')
+            );
+
+            $resultado = $this->cotizaciones_clientes_model->update_item($datos, $where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se eliminó correctamente el artículo'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo eliminar el artículo'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+    
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);

@@ -123,9 +123,24 @@
             
             
             <div class="row">
-                <div class="col-md-2 col-md-offset-5">
+                <div class="col-lg-2 col-xs-12 col-lg-offset-2">
                     <button type="button" class="btn btn-primary hint--top hint--bounce hint--info" data-toggle="modal" data-target=".bs-example-modal-lg" aria-label="Agregar Artículo">
                         <i class="fa fa-cubes"></i> Crear Artículo
+                    </button>
+                </div>
+                <div class="col-lg-2 col-xs-12">
+                    <button type="button" class="btn btn-primary hint--top hint--bounce hint--info" data-toggle="Generar PDF" data-target="" aria-label="Generar PDF">
+                        <i class="fa fa-file-pdf-o"></i> Generar PDF
+                    </button>
+                </div>
+                <div class="col-lg-2 col-xs-12">
+                    <button type="button" class="btn btn-primary hint--top hint--bounce hint--info" data-toggle="Generar PDF" data-target="" aria-label="Descargar PDF">
+                        <i class="fa fa-download"></i> Descargar PDF
+                    </button>
+                </div>
+                <div class="col-lg-2 col-xs-12">
+                    <button type="button" class="btn btn-warning hint--top hint--bounce hint--warning" data-toggle="Generar PDF" data-target="" aria-label="Enviar por Correo">
+                        <i class="fa fa-envelope-o"></i> Enviar por Correo
                     </button>
                 </div>
             </div>

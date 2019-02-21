@@ -36,13 +36,12 @@
 <script type="text/javascript">
     $(".borrar_articulo").click(function () {
         datos = {
-            'idcotizacion_proveedor_item': this.id
+            'idcotizacion_cliente_item': this.id
         };
-        console.log(datos);
         
         $.ajax({
             type: 'POST',
-            url: '/cotizaciones_proveedores/borrar_articulo_ajax/',
+            url: '/cotizaciones_clientes/borrar_articulo_ajax/',
             data: datos,
             beforeSend: function () {
                 

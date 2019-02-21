@@ -150,12 +150,15 @@ $("#agregar").click(function() {
                 $("#agregar").show();
                 
                 $("#TextAutoCompletearticulo").val("");
-                $("#articulo").val("");
-                $("#precio").val("");
                 $("#cantidad").val("");
+                $("#articulo").val("");
+                $("#descripcion").val("");
+                $("#precio").val("");
                 $("#TextAutoCompletearticulo").focus();
                 
                 actualizar_articulos();
+                
+                $("#cantidad").focus();
             }
             Pace.stop();
         },

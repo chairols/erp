@@ -9,7 +9,8 @@ class Cotizaciones_clientes extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
-            'form_validation'
+            'form_validation',
+            'pagination'
         ));
         $this->load->model(array(
             'monedas_model',
@@ -17,7 +18,9 @@ class Cotizaciones_clientes extends CI_Controller {
             'clientes_model',
             'log_model',
             'articulos_model',
-            'marcas_model'
+            'marcas_model',
+            'parametros_model',
+            'lineas_model'
         ));
         
         $session = $this->session->all_userdata();
@@ -332,6 +335,96 @@ class Cotizaciones_clientes extends CI_Controller {
                 echo json_encode($json);
             }
         }
+    }
+    
+    public function listar($pagina = 0) {
+        $data['title'] = 'Listar Cotizaciones a Clientes';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'cotizaciones_clientes/listar';
+        
+        
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+
+        $where = $this->input->get();
+        $where['cotizaciones_clientes.estado'] = 'A';
+        $where['cotizaciones_clientes_items.estado'] = 'A';
+
+        /*
+         * inicio paginador
+         */
+        $total_rows = $this->cotizaciones_clientes_model->get_cantidad_where($where);
+        $config['reuse_query_string'] = TRUE;
+        $config['base_url'] = '/cotizaciones_clientes/listar/';
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        $data['links'] = $this->pagination->create_links();
+        $data['total_rows'] = $total_rows;
+        /*
+         * fin paginador
+         */
+
+        $data['cotizaciones'] = $this->cotizaciones_clientes_model->gets_where_limit($where, $per_page, $pagina);
+        
+        foreach($data['cotizaciones'] as $key => $value) {
+            $data['cotizaciones'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+            
+            $where = array(
+                'idproveedor' => $value['idcliente']
+            );
+            $data['cotizaciones'][$key]['cliente'] = $this->clientes_model->get_where($where);
+            
+            $where = array(
+                'idmoneda' => $value['idmoneda']
+            );
+            $data['cotizaciones'][$key]['moneda'] = $this->monedas_model->get_where($where);
+            
+            $data['cotizaciones'][$key]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
+            $data['cotizaciones'][$key]['cotizacion_moneda'] = $this->monedas_model->get_ultima_cotizacion_por_monedas($data['cotizaciones'][$key]['idmoneda']);
+            
+            $where = array(
+                'idcotizacion_cliente' => $value['idcotizacion_cliente'],
+                'estado' => 'A'
+            );
+            $data['cotizaciones'][$key]['items'] = $this->cotizaciones_clientes_model->gets_articulos_where($where);
+            foreach($data['cotizaciones'][$key]['items'] as $key2 => $value2) {
+                $where = array(
+                    'idarticulo' => $value2['idarticulo']
+                );
+                $data['cotizaciones'][$key]['items'][$key2]['articulo'] = $this->articulos_model->get_where($where);
+                
+                $where = array(
+                    'idlinea' => $data['cotizaciones'][$key]['items'][$key2]['articulo']['idlinea']
+                );
+                $data['cotizaciones'][$key]['items'][$key2]['articulo']['linea'] = $this->lineas_model->get_where($where);
+                
+                $where = array(
+                    'idmarca' => $data['cotizaciones'][$key]['items'][$key2]['articulo']['idmarca']
+                );
+                $data['cotizaciones'][$key]['items'][$key2]['articulo']['marca'] = $this->marcas_model->get_where($where);
+                
+                $data['cotizaciones'][$key]['items'][$key2]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
+            }
+        }
+
+        $this->load->view('layout/app', $data);
     }
     
     private function formatear_fecha($fecha) {

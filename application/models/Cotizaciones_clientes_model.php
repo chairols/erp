@@ -55,6 +55,40 @@ class Cotizaciones_clientes_model extends CI_Model {
         $this->db->update('cotizaciones_clientes_items', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Cotizaciones_clientes/listar
+     */
+    public function get_cantidad_where($where) {
+        $this->db->select('cotizaciones_clientes.*');
+        $this->db->from('cotizaciones_clientes');
+        $this->db->join('monedas', 'cotizaciones_clientes.idmoneda = monedas.idmoneda');
+        $this->db->join('cotizaciones_clientes_items', 'cotizaciones_clientes.idcotizacion_cliente = cotizaciones_clientes_items.idcotizacion_cliente');
+        $this->db->join('articulos', 'cotizaciones_clientes_items.idarticulo = articulos.idarticulo');
+        $this->db->like($where);
+        $this->db->group_by('cotizaciones_clientes.idcotizacion_cliente');
+        
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+    
+    /*
+     *  Cotizaciones_clientes/listar
+     */
+    public function gets_where_limit($where, $per_page, $pagina) {
+        $this->db->select('cotizaciones_clientes.*, monedas.moneda');
+        $this->db->from('cotizaciones_clientes');
+        $this->db->join('monedas', 'cotizaciones_clientes.idmoneda = monedas.idmoneda');
+        $this->db->join('cotizaciones_clientes_items', 'cotizaciones_clientes.idcotizacion_cliente = cotizaciones_clientes_items.idcotizacion_cliente');
+        $this->db->join('articulos', 'cotizaciones_clientes_items.idarticulo = articulos.idarticulo');
+        $this->db->like($where);
+        $this->db->group_by('cotizaciones_clientes.idcotizacion_cliente');
+        $this->db->order_by('cotizaciones_clientes.idcotizacion_cliente DESC');
+        $this->db->limit($per_page, $pagina);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

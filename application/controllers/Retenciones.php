@@ -127,12 +127,12 @@ class Retenciones extends CI_Controller {
 
             if ($this->input->post('idjurisdiccion') == "901") { // Si la retención es de CABA
                 $where = array(
-                    'idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
-                    'cuit' => $proveedor['cuit'],
-                    'fecha_desde <=' => $this->formatear_fecha($this->input->post('fecha')),
-                    'fecha_hasta >=' => $this->formatear_fecha($this->input->post('fecha'))
+                    'padrones.idjurisdiccion_afip' => $this->input->post('idjurisdiccion'),
+                    'padrones_items.cuit' => $proveedor['cuit'],
+                    'padrones.fecha_desde <=' => $this->formatear_fecha($this->input->post('fecha')),
+                    'padrones.fecha_hasta >=' => $this->formatear_fecha($this->input->post('fecha'))
                 );
-                $resultado = $this->padrones_model->get_where($where);
+                $resultado = $this->padrones_model->get_where_join($where);
 
                 if ($resultado) {
                     $set['alicuota'] = $resultado['retencion'];

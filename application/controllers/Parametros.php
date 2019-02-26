@@ -278,6 +278,12 @@ class Parametros extends CI_Controller {
             }
         }
     }
+    
+    public function get_parametros_empresa_json() {
+        $parametro = $this->parametros_model->get_parametros_empresa();
+        
+        echo json_encode($parametro);
+    }
 
 }
 

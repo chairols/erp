@@ -95,14 +95,6 @@ class Cotizaciones_proveedores_model extends CI_Model {
         $this->db->like($where);
         $this->db->group_by('cotizaciones_proveedores.idcotizacion_proveedor');
         
-        
-        /*
-        $this->db->select('*');
-        $this->db->from('cotizaciones_proveedores');
-        $this->db->join('monedas', 'cotizaciones_proveedores.idmoneda = monedas.idmoneda');
-        $this->db->group_by('cotizaciones_proveedores.idcotizacion_proveedor');
-        $this->db->like($where);
-        */
         $query = $this->db->count_all_results();
         return $query;
     }

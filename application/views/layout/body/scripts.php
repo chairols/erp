@@ -30,6 +30,8 @@
 <!-- Dropzone -->
 <!--<script src="/assets/vendors/dropzone/dropzone.min.js"></script>-->
 <script src="/assets/vendors/dropzone2/dropzone.js"></script>
+<!-- Pace Style -->
+<script src="/assets/vendors/pace/pace.js"></script>
 
 <!-- Treemultiselect -->
 <script src="/assets/vendors/treemultiselect/logger.min.js"></script>

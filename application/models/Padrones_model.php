@@ -18,6 +18,7 @@ class Padrones_model extends CI_Model {
     
     /*
      *  Padrones/jurisdiccion_901
+     *  Padrones/jurisdiccion_902
      */
     public function set_item($datos) {
         $this->db->insert('padrones_items', $datos);
@@ -65,10 +66,22 @@ class Padrones_model extends CI_Model {
     /*
      *  Retenciones/agregar_ajax
      */
-    public function get_where($where) {
+    public function get_where_join($where) {
         $this->db->select("*");
         $this->db->from("padrones");
         $this->db->join("padrones_items", "padrones.idpadron = padrones_items.idpadron");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+    
+    /*
+     *  Padrones/jurisdiccion_902
+     */
+    public function get_where($where) {
+        $this->db->select("*");
+        $this->db->from("padrones");
         $this->db->where($where);
         
         $query = $this->db->get();
@@ -93,6 +106,14 @@ class Padrones_model extends CI_Model {
         $this->db->delete('padrones_items', $where);
         $this->db->delete('padrones', $where);
         
+        return $this->db->affected_rows();
+    }
+    
+    /*
+     *  Padrones/jurisdiccion_902
+     */
+    public function update_item($datos, $where) {
+        $this->db->update('padrones_items', $datos, $where);
         return $this->db->affected_rows();
     }
 }

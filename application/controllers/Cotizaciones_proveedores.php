@@ -173,7 +173,7 @@ class Cotizaciones_proveedores extends CI_Controller {
                 $moneda = $this->monedas_model->get_where($where);
 
                 $log = array(
-                    'tabla' => 'retenciones',
+                    'tabla' => 'cotizaciones_proveedores',
                     'idtabla' => $this->input->post('idcotizacion_proveedor'),
                     'texto' => "<h2><strong>Se actualizó la cabecera de la cotización de proveedor N°: " . $this->input->post('idcotizacion_proveedor') . "</strong></h2>
 

@@ -25,6 +25,8 @@
 <!-- Dropzone -->
 <!--<link rel="stylesheet" href="/assets/vendors/dropzone/dropzone.min.css">-->
 <link rel="stylesheet" href="/assets/vendors/dropzone2/dropzone.css">
+<!-- Pace Style -->
+<link rel="stylesheet" href="/assets/vendors/pace/pace.min.css">
 <!-- Hint -->
 <link rel="stylesheet" href="/assets/vendors/hint/hint.min.css">
 <!-- Sistema -->

@@ -563,10 +563,11 @@ class Cotizaciones_clientes extends CI_Controller {
                 $total += $item['cantidad'] * $item['precio'];
             }
             
+            /*
             $this->pdf->SetFont('Courier','B',11);
             $this->pdf->SetXY(180, $Y);
             $this->pdf->Cell(0, 8, str_pad(number_format($total, 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
-            
+            */
             /*
             $this->pdf->SetFont('Courier','B',12);
             $this->pdf->SetXY(105, 185);
@@ -608,7 +609,7 @@ class Cotizaciones_clientes extends CI_Controller {
             
             $this->pdf->SetFont('Courier', 'B', 9);
             $this->pdf->SetXY(10, 240);
-            $this->pdf->Cell(0,0,'SON '.$numeroaletras,0,0,'L');
+            $this->pdf->Cell(0,0,'',0,0,'L');
 
             /*
             $this->pdf->SetXY(10, 244);

@@ -1,12 +1,24 @@
 <div class="box">
     <div class="box-header">
-        <form method="GET" action="/cotizaciones_clientes/listar/" class="input-group input-group-sm col-md-5">
-            <input class="form-control pull-left" name="articulo" id="articulo" placeholder="Buscar ..." type="text" value="<?= $this->input->get('articulo') ?>">
+        <form method="GET" action="/cotizaciones_clientes/listar/" class="input-group input-group-sm col-lg-12">
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <input class="form-control" name="cliente" id="cliente" placeholder="Cliente" type="text" value="<?=$this->input->get('cliente')?>">
+                </div>
+                <div class="form-group col-lg-4">
+                    <input class="form-control col-lg-3" name="articulo" id="articulo" placeholder="Artículo" type="text" value="<?= $this->input->get('articulo') ?>">
+                </div>
+                <div class="form-group col-lg-2">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+            
+            <!--<input class="form-control pull-left" name="articulo" id="articulo" placeholder="Buscar ..." type="text" value="<?= $this->input->get('articulo') ?>">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="submit">
                     <i class="fa fa-search"></i>
                 </button>
-            </div>
+            </div>-->
         </form>
         <div class="box-tools">
             <ul class="pagination pagination-sm no-margin pull-right">

@@ -51,6 +51,14 @@ class Usuarios extends CI_Controller {
                 );
                 $this->usuarios_model->update($datos, $usuario['idusuario']);
 
+                if (!empty($this->input->post('remember'))) {
+                    setcookie("login_usuario", $this->input->post('usuario'), time() + (10 * 365 * 24 * 60 * 60));
+                    setcookie("login_password", $this->input->post('password'), time() + (10 * 365 * 24 * 60 * 60));
+                } else {
+                    setcookie("login_usuario", "", time() - 100);
+                    setcookie("login_password", "", time() - 100);
+                }
+
                 redirect('/dashboard/', 'refresh');
             }
         }
@@ -301,15 +309,14 @@ class Usuarios extends CI_Controller {
 
         $config['upload_path'] = './upload/usuarios/perfil/';
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
-        /*$config['max_size'] = '100';
-        $config['max_width'] = '1024';
-        $config['max_height'] = '768';*/
+        /* $config['max_size'] = '100';
+          $config['max_width'] = '1024';
+          $config['max_height'] = '768'; */
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('archivo')) {
             $error = array('error' => $this->upload->display_errors());
             //var_dump($error);
             show_404();
-            
         } else {
             $data = $this->upload->data();
             $datos = array(
@@ -358,8 +365,8 @@ class Usuarios extends CI_Controller {
         $this->form_validation->set_rules('apellido', 'Apellido', 'required');
         $this->form_validation->set_rules('email', 'E-mail', 'required|valid_email');
         $this->form_validation->set_rules('idperfil', 'Perfil', 'required|integer');
-        
-        
+
+
         if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
@@ -378,7 +385,7 @@ class Usuarios extends CI_Controller {
             }
             $flag = 0;
             $resultado = $this->usuarios_model->update($datos, $this->input->post('idusuario'));
-            
+
             if ($resultado) {
                 $flag = 1;
             }
@@ -390,7 +397,7 @@ class Usuarios extends CI_Controller {
                 'idusuario' => $this->input->post('idusuario')
             );
             $resultado = $this->usuarios_model->update_perfil($datos, $where);
-            
+
             if ($resultado) {
                 $flag = 1;
             }

@@ -59,8 +59,14 @@ class Cotizaciones_clientes extends CI_Controller {
             );
             echo json_encode($json);
         } else {
+            $where = array(
+                'idcliente' => $this->input->post('idcliente')
+            );
+            $cliente = $this->clientes_model->get_where($where);
+            
             $set = array(
                 'idcliente' => $this->input->post('idcliente'),
+                'cliente' => $cliente['cliente'],
                 'idmoneda' => $this->input->post('idmoneda'),
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
                 'observaciones' => $this->input->post('observaciones'),
@@ -72,11 +78,6 @@ class Cotizaciones_clientes extends CI_Controller {
             $id = $this->cotizaciones_clientes_model->set($set);
             
             if ($id) {
-                $where = array(
-                    'idcliente' => $this->input->post('idcliente')
-                );
-                $cliente = $this->clientes_model->get_where($where);
-
                 $where = array(
                     'idmoneda' => $this->input->post('idmoneda')
                 );
@@ -497,7 +498,7 @@ class Cotizaciones_clientes extends CI_Controller {
             
             $this->pdf->SetFont('Arial','B',9);
             $this->pdf->SetXY(15, 58);
-            $this->pdf->Cell(0,0, utf8_decode($cliente['cliente']),0,0,'L');
+            $this->pdf->Cell(0,0, utf8_decode($cotizacion_cliente['cliente']),0,0,'L');
 
             /*
             $this->pdf->SetFont('Arial','B',9);
@@ -622,7 +623,7 @@ class Cotizaciones_clientes extends CI_Controller {
             $this->pdf->Pie($cotizacion_cliente);
             
             
-            $this->pdf->Output('Comprobante '.$idcotizacion_cliente.'.pdf', $modo);
+            $this->pdf->Output('COTIZACION '.str_pad($idcotizacion_cliente, 8, '0', STR_PAD_LEFT).'.pdf', $modo);
         } 
     }
     

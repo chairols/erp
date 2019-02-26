@@ -7,7 +7,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Cliente</label>
                 <div class="col-md-6">
-                    <input type="text" id="TextAutoCompletecliente" name="TextAutoCompletecliente" placeholder="Cliente" placeholderauto="Cliente inexistente" class="form-control TextAutoComplete" value="" objectauto="clientes" actionauto="gets_clientes_ajax" varsauto="estado:=A" iconauto="ship">
+                    <input type="text" id="TextAutoCompletecliente" name="TextAutoCompletecliente" placeholder="Cliente" placeholderauto="Cliente inexistente" class="form-control TextAutoComplete" value="" objectauto="clientes" actionauto="gets_clientes_ajax" varsauto="estado:=A" iconauto="ship" autofocus="">
                     <input type="hidden" id="cliente" name="cliente" value="">
                 </div>
             </div>

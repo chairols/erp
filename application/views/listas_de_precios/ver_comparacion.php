@@ -7,7 +7,7 @@
                 <input id="view_page" name="view_page" value="1" type="hidden">
                 <!-- <input id="view_order_field" name="view_order_field" type="hidden">
                 <input id="view_order_mode" name="view_order_mode" value="DESC" type="hidden"> -->
-                <form id="CoreSearcherForm" name="CoreSearcherForm" method="GET">
+                <form id="CoreSearcherForm" name="CoreSearcherForm" method="GET" target="/listas_de_precios/ver_comparacion/">
                     <!-- ////////////////////////////   Formulario de Búsqueda //////////////////////////// -->
                     <div class="row">
                         <div class="input-group col-lg-5 col-md-6 col-sm-5 col-xs-11" style="margin:2px;">

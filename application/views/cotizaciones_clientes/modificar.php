@@ -120,8 +120,8 @@
                     </button>
                 </div>
             </div>
-            
-            
+
+
             <div class="row">
                 <div class="col-lg-2 col-xs-12 col-lg-offset-2">
                     <button type="button" class="btn btn-primary hint--top hint--bounce hint--info" data-toggle="modal" data-target=".bs-example-modal-lg" aria-label="Agregar Artículo">
@@ -129,14 +129,18 @@
                     </button>
                 </div>
                 <div class="col-lg-2 col-xs-12">
-                    <button type="button" class="btn btn-primary hint--top hint--bounce hint--info" data-toggle="Generar PDF" data-target="" aria-label="Generar PDF">
-                        <i class="fa fa-file-pdf-o"></i> Generar PDF
-                    </button>
+                    <a class="hint--top hint--bounce hint--info" href="/cotizaciones_clientes/pdf/<?=$cotizacion_cliente['idcotizacion_cliente'] ?>/I/" aria-label="Generar PDF" target="_blank">
+                        <button class="btn btn-primary" type="button">
+                            <i class="fa fa-file-pdf-o"></i> Generar PDF
+                        </button>
+                    </a>
                 </div>
                 <div class="col-lg-2 col-xs-12">
-                    <button type="button" class="btn btn-primary hint--top hint--bounce hint--info" data-toggle="Generar PDF" data-target="" aria-label="Descargar PDF">
-                        <i class="fa fa-download"></i> Descargar PDF
-                    </button>
+                    <a class="hint--top hint--bounce hint--info" href="/cotizaciones_clientes/pdf/<?=$cotizacion_cliente['idcotizacion_cliente'] ?>/D/" aria-label="Descargar PDF" target="_blank">
+                        <button class="btn btn-primary" type="button">
+                            <i class="fa fa-download"></i> Descargar PDF
+                        </button>
+                    </a>
                 </div>
                 <div class="col-lg-2 col-xs-12">
                     <button type="button" class="btn btn-warning hint--top hint--bounce hint--warning" data-toggle="Generar PDF" data-target="" aria-label="Enviar por Correo">

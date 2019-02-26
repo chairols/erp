@@ -33,6 +33,14 @@ class Condiciones_de_venta_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Cotizaciones_clientes/pdf
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('condiciones_de_venta', $where);
+        return $query->row_array();
+    }
 }
 
 ?>

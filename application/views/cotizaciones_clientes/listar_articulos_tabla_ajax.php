@@ -12,6 +12,7 @@
         </tr>
     </thead>
     <tbody>
+        <?php $total = 0; ?>
         <?php foreach ($articulos as $articulo) { ?>
             <tr>
                 <td class="text-right"><?= $articulo['cantidad'] ?></td>
@@ -28,8 +29,19 @@
                         </button>
                     </a>
                 </td>
+                <?php $total += $articulo['precio'] * $articulo['cantidad']; ?>
             </tr>
         <?php } ?>
+            <tr>
+                <td class="text-right">&nbsp;</td>
+                <td class="text-right">&nbsp;</td>
+                <td class="text-right">&nbsp;</td>
+                <td class="text-right">&nbsp;</td>
+                <td class="text-right">&nbsp;</td>
+                <td class="text-right"><strong><?= number_format($total, 2) ?></strong></td>
+                <td class="text-right">&nbsp;</td>
+                <td class="text-right">&nbsp;</td>
+            </tr>
     </tbody>
 </table>
 

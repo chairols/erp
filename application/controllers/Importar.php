@@ -54,7 +54,7 @@ class Importar extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
-    public function actualizar_articulos($archivo = null) {
+    public function actualizar_articulos_original($archivo = null) {
         /*
           $data['title'] = 'Listado de Artículos';
           $data['session'] = $this->session->all_userdata();
@@ -79,7 +79,7 @@ class Importar extends CI_Controller {
              */
             $linea = fgets($fp);
             $linea = fgets($fp);
-            
+
             while (!feof($fp)) {
                 $linea = fgets($fp);
                 $array = preg_split('/;/', $linea);
@@ -195,6 +195,126 @@ class Importar extends CI_Controller {
             //var_dump($count);
 
             $this->benchmark->mark('fin');
+
+            $array = array(
+                'status' => 'ok'
+            );
+            echo json_encode($array);
+            //echo $this->benchmark->elapsed_time('inicio', 'fin');
+        }
+
+        //$data['archivos'] = get_dir_file_info('upload/importar/');
+        //$this->load->view('layout/app', $data);
+    }
+
+    public function actualizar_articulos($archivo = null) {
+
+        if ($archivo) {
+
+            $this->importar_model->crear_tabla('articulos', 'articulos_auxiliar');
+            $this->importar_model->copiar_tabla_y_registros('articulos', 'articulos_auxiliar');
+            //$this->importar_model->truncate('articulos');
+
+            $fp = fopen("upload/importar/" . $archivo, "r");
+            $count = 0;
+            $init = 0;
+            $porcentaje = 0;
+            /*
+             * Elimino las 2 filas extras
+             */
+            $linea = fgets($fp);
+            $linea = fgets($fp);
+            $idarticulo = 100000;
+            while (!feof($fp)) {
+                $linea = fgets($fp);
+                $array = preg_split('/;/', $linea);
+
+
+
+                //  CARACTERES AL FINAL DEL VALOR
+                //  { = POSITIVO
+                //  } = NEGATIVO
+                //  
+                //  [0] = ARTICULO
+                //  [1] = MARCA
+                //  [2] = LINEA
+                //  [3] = NUMERO DE ORDEN
+                //  [4] = ESTANTERIA  
+                //  [6] = PRECIO Lista 1   
+                //  [9] = COSTO FOB   
+                //  [11] = COSTO DESPACHADO 
+                //  [13] = STOCK MINIMO  
+                //  [19] = STOCK ALMACEN 1
+                //  [20] = STOCK ALMACEN 2
+                //  [21] = PEDIDO DE IMPORTACION
+                //  [41] = OBSERVACIONES
+                //  [42] = DESCRIPCION
+                //if($array[0] == "6206 C3             ") {
+
+                $convmap = array(0x80, 0x10ffff, 0, 0xffffff);
+                $array[4] = preg_replace('/\x{EF}\x{BF}\x{BD}/u', '', mb_encode_numericentity(trim($array[4]), $convmap, "UTF-8"));
+
+                $array[0] = preg_replace('/\x{EF}\x{BF}\x{BD}/u', '', mb_encode_numericentity(trim($array[0]), $convmap, "UTF-8"));
+
+                //$array[4] = utf8_encode(trim($array[4]));
+                //$array[4] = trim($array[4]);
+                $array[6] = ($array[6] / 1000);  //  price
+                $array[9] = ($array[9] / 1000);  //  price_fob
+                $array[11] = ($array[11] / 1000); //  price_dispatch
+                $array[13] = ($array[13] / 1000);  // stock_min
+                $array[14] = ($array[14] / 1000);  // stock_max
+
+                $signo = null;
+                if ($array[19][9] == '}') {
+                    $signo = -1;
+                } else {
+                    $signo = 1;
+                }
+                $array[19] = ((substr($array[19], 0, 9) / 100) * $signo);
+
+                $signo = null;
+                if ($array[20][9] == '}') {
+                    $signo = -1;
+                } else {
+                    $signo = 1;
+                }
+                $array[20] = ((substr($array[20], 0, 9) / 100) * $signo);
+
+                if ($array[21][9] == '}') {
+                    $signo = -1;
+                } else {
+                    $signo = 1;
+                }
+                $array[21] = ((substr($array[21], 0, 9) / 100) * $signo);
+
+                $array[41] = trim($array[41]);
+                $array[42] = trim($array[42]);
+
+                
+                $update = array(
+                    'idarticulo' => $idarticulo,
+                    'articulo' => trim($array[0]),
+                    'idmarca' => trim($array[1]),
+                    'idlinea' => $array[2],
+                    'numero_orden' => $array[3],
+                    'rack' => $array[4],
+                    'precio' => $array[6],
+                    'price_fob' => $array[9],
+                    'price_dispatch' => $array[11],
+                    'stock2' => $array[19],
+                    'stock' => $array[20],
+                    'stock_pending' => $array[21],
+                    'stock_min' => $array[13],
+                    'stock_max' => $array[14],
+                    'observations' => $array[41],
+                    'description' => $array[42]
+                );
+
+                $this->articulos_model->set($update);
+
+               $idarticulo++;
+            }
+
 
             $array = array(
                 'status' => 'ok'
@@ -591,7 +711,7 @@ class Importar extends CI_Controller {
             $linea = fgets($fp);  // Leo la segunda linea de cabeceras
 
             $this->importar_model->truncate('proveedores');
-            
+
             while (!feof($fp)) {
                 $linea = fgets($fp);
                 $array = preg_split('/;/', $linea);

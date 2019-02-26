@@ -107,3 +107,7 @@
         </div>
     </div>
 </div>
+
+<pre>
+    <?php print_r($cotizaciones); ?>
+</pre>

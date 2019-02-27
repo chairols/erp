@@ -213,35 +213,42 @@
 
             <div class="row">
 
-                <div class="col-md-3 no-float txC" style="border-right:1px solid #eee;display: table-cell;float: none;padding-right:0px;">
+                <div class="col-md-3 no-float txC" id="menu_sucursales" style="border-right:1px solid #eee;display: table-cell;float: none;padding-right:0px;">
 
-                    <div class="" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">
+                    <?php foreach( $sucursales as $key => $sucursal ){ ?>
 
-                        <strong>Sucursal Central</strong>
 
-                    </div>
+                        <?php if( $key == 0 ) { ?>
 
-                    <div class="" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">
+                            <div class="boton_sucursal_menu info-box-number" sucursal="<?=$sucursal[ 'idcliente_sucursal' ]?>" id="boton_sucursal_menu_<?=$sucursal[ 'idcliente_sucursal' ]?>" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">
 
-                        Sucursal 2
+                                <?= $sucursal[ 'sucursal' ] ?>
 
-                    </div>
+                            </div>
 
-                    <div class="" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">
+                        <?php }else{ ?>
 
-                        Sucursal 3
+                            <div class="boton_sucursal_menu" sucursal="<?=$sucursal[ 'idcliente_sucursal' ]?>" id="boton_sucursal_menu_<?=$sucursal[ 'idcliente_sucursal' ]?>" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">
 
-                    </div>
+                                <?= $sucursal[ 'sucursal' ] ?>
+
+                            </div>
+
+                        <?php } ?>
+
+                    <?php } ?>
 
                     <!-- <button type="button" id="agregar_sucursal" class="btn bg-purple btn-flat margin"><i class="fa fa-map"></i> Agregar Sucursal</button> -->
 
-                    <div class="input-group margin">
+                    <div class="input-group margin" id="contenedor_nueva_sucursal">
 
-                      <input type="text" class="form-control">
+                      <input type="text" class="form-control" id="nombre_nueva_sucursal">
 
                           <span class="input-group-btn">
 
-                              <button type="button" class="btn bg-purple btn-flat"><i class="fa fa-plus"></i></button>
+                              <button type="button" id="agregar_sucursal" class="btn bg-purple btn-flat"><i class="fa fa-plus"></i></button>
+
+                              <button type="button" id="agregar_sucursal_loading" class="btn bg-purple btn-flat" style="display: none;"><i class="fa fa-refresh fa-spin"></i></button>
 
                           </span>
 
@@ -249,7 +256,7 @@
 
                 </div>
 
-                <div class="col-md-9 no-float" style="display: table-cell;float: none;">
+                <div class="col-md-9 no-float" id="sucursales" style="display: table-cell;float: none;">
 
                     <?php $this->view( 'clientes/sucursal' ); ?>
 

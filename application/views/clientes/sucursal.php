@@ -1,4 +1,8 @@
-<div class="" id="">
+<?php foreach( $sucursales as $key => $sucursal ){ ?>
+
+<div class="contenedor-sucursal" id="<?=$sucursal[ 'idcliente_sucursal' ]?>" <?php if( $key > 0 ) { ?> style="display:none;" <?php } ?> >
+
+    <input type="hidden" id="idcliente_sucursal" value="<?=$sucursal[ 'idcliente_sucursal' ]?>">
 
     <div class="row form-group">
 
@@ -6,7 +10,7 @@
 
         <div class="col-md-6">
 
-            <input type="text" id="sucursal" class="form-control" value="">
+            <input type="text" id="sucursal_<?=$sucursal[ 'idcliente_sucursal' ]?>" class="form-control" value="<?=$sucursal[ 'sucursal' ]?>">
 
         </div>
 
@@ -18,11 +22,11 @@
 
         <div class="col-md-6">
 
-            <select class="form-control chosenSelect" id="sucursal_idprovincia">
+            <select class="form-control chosenSelect" id="sucursal_idpais_<?=$sucursal[ 'idcliente_sucursal' ]?>">
 
                 <?php foreach($paises as $pais) { ?>
 
-                <option value="<?=$pais[ 'idpais' ]?>"><?=$pais['pais']?></option>
+                <option value="<?=$pais[ 'idpais' ]?>" <?php if( $pais[ 'idpais' ] == $sucursal[ 'idpais' ] ) echo 'selected="selected"'; ?> ><?=$pais[ 'pais' ]?></option>
 
                 <?php } ?>
 
@@ -38,11 +42,11 @@
 
         <div class="col-md-6">
 
-            <select class="form-control chosenSelect" id="sucursal_idprovincia">
+            <select class="form-control chosenSelect" id="sucursal_idprovincia_<?=$sucursal[ 'idcliente_sucursal' ]?>">
 
                 <?php foreach($provincias as $provincia) { ?>
 
-                <option value="<?=$provincia['idprovincia']?>"<?=($provincia['idprovincia']==$cliente['idprovincia'])?" selected":""?>><?=$provincia['provincia']?></option>
+                <option value="<?=$provincia['idprovincia']?>"<?=($provincia['idprovincia']==$sucursal['idprovincia'])?" selected":""?>><?=$provincia['provincia']?></option>
 
                 <?php } ?>
 
@@ -58,7 +62,19 @@
 
         <div class="col-md-6">
 
-            <input type="text" id="localidad" class="form-control" value="<?=$cliente['localidad']?>" maxlength="255">
+            <input type="text" id="sucursal_localidad_<?=$sucursal[ 'idcliente_sucursal' ]?>" class="form-control" value="<?=$sucursal[ 'localidad' ]?>" maxlength="255">
+
+        </div>
+
+    </div>
+
+    <div class="row form-group">
+
+        <label class="control-label col-md-3 txR">Dirección</label>
+
+        <div class="col-md-6">
+
+            <input type="text" id="sucursal_direccion_<?=$sucursal[ 'idcliente_sucursal' ]?>" class="form-control" value="<?=$sucursal[ 'direccion' ]?>" maxlength="255">
 
         </div>
 
@@ -70,9 +86,30 @@
 
         <div class="col-md-6">
 
-            <input type="text" id="codigo_postal" class="form-control" value="<?=$cliente['codigo_postal']?>" maxlength="10">
+            <input type="text" id="sucursal_codigo_postal_<?=$sucursal[ 'idcliente_sucursal' ]?>" class="form-control" value="<?=$sucursal[ 'codigo_postal' ]?>" maxlength="10">
 
         </div>
     </div>
 
+    <div class="row form-group txC">
+
+        <div class="col-md-6 col-sm-6 col-xs-12 txR">
+
+            <button type="button" id="modificar_sucursal_<?=$sucursal[ 'idcliente_sucursal' ]?>" sucursal="<?=$sucursal[ 'idcliente_sucursal' ]?>" class="modificarSucursal btn btn-primary">Modificar</button>
+
+            <button type="button" id="modificar_sucursal_loading_<?=$sucursal[ 'idcliente_sucursal' ]?>" class="btn btn-primary" style="display: none;"><i class="fa fa-refresh fa-spin"></i></button>
+
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-12 txL">
+
+            <button type="button" id="eliminar_sucursal_<?=$sucursal[ 'idcliente_sucursal' ]?>" sucursal="<?=$sucursal[ 'idcliente_sucursal' ]?>" class="eliminarSucursal btn btn-danger">Eliminar</button>
+
+            <button type="button" id="eliminar_sucursalr_loading_<?=$sucursal[ 'idcliente_sucursal' ]?>" class="eliminarSucursal btn btn-danger" style="display: none;"><i class="fa fa-refresh fa-spin"></i></button>
+
+        </div>
+
+    </div>
+
 </div>
+<?php } ?>

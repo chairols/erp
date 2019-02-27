@@ -15,6 +15,7 @@ class Clientes extends CI_Controller {
         ));
         $this->load->model(array(
             'clientes_model',
+            'sucursales_model',
             'parametros_model',
             'provincias_model',
             'monedas_model',
@@ -79,32 +80,52 @@ class Clientes extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
-    public function modificar($idcliente = null) {
-        if ($idcliente == null) {
-            redirect('/clientes/listar/', 'refresh');
+    public function modificar( $idcliente = null )
+    {
+
+        if( $idcliente == null )
+        {
+
+            redirect( '/clientes/listar/', 'refresh' );
+
         }
-        $data['title'] = 'Modificar Cliente';
-        $data['session'] = $this->session->all_userdata();
-        $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array(
+
+        $data[ 'title' ] = 'Modificar Cliente';
+
+        $data[ 'session' ] = $this->session->all_userdata();
+
+        $data[ 'menu' ] = $this->r_session->get_menu();
+
+        $data[ 'javascript' ] = array(
+
             '/assets/modulos/clientes/js/modificar.js'
+
         );
-        $data['view'] = 'clientes/modificar';
+
+        $data[ 'view' ] = 'clientes/modificar';
 
         $where = array(
+
             'idcliente' => $idcliente
+
         );
-        $data['cliente'] = $this->clientes_model->get_where($where);
 
-        $data['provincias'] = $this->provincias_model->gets();
+        $data[ 'cliente' ] = $this->clientes_model->get_where( $where );
 
-        $data['paises'] = $this->paises_model->gets();
+        $where[ 'estado' ] = 'A';
 
-        $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
+        $data[ 'sucursales' ] = $this->sucursales_model->gets_where( $where );
 
-        $data['monedas'] = $this->monedas_model->gets();
+        $data[ 'provincias' ] = $this->provincias_model->gets();
 
-        $this->load->view('layout/app', $data);
+        $data[ 'paises' ] = $this->paises_model->gets();
+
+        $data[ 'tipos_responsables' ] = $this->tipos_responsables_model->gets();
+
+        $data[ 'monedas' ] = $this->monedas_model->gets();
+
+        $this->load->view( 'layout/app', $data );
+
     }
 
     public function modificar_ajax() {
@@ -152,6 +173,283 @@ class Clientes extends CI_Controller {
                 echo json_encode($json);
             }
         }
+    }
+
+    public function nueva_sucursal_ajax()
+    {
+
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules( 'idcliente', 'ID de Cliente', 'required|integer' );
+
+        $this->form_validation->set_rules( 'nombre', 'Nombre Sucursal', 'required' );
+
+        if( $this->form_validation->run() == FALSE )
+        {
+
+            $json = array(
+
+                'status' => 'error',
+
+                'data' => validation_errors()
+
+            );
+
+            echo json_encode( $json );
+
+        } else {
+
+            $datos = array(
+
+                'idcliente' => $this->input->post( 'idcliente' ),
+
+                'sucursal' => $this->input->post( 'nombre' ),
+
+                'estado' => 'P',
+
+                'creado_por' => $session[ 'SID' ]
+
+            );
+
+            $resultado = $this->sucursales_model->set( $datos );
+
+            if( $resultado )
+            {
+
+                $where = array( 'idcliente' => $this->input->post( 'idcliente' ) );
+
+                $data[ 'cliente' ] = $this->clientes_model->get_where( $where );
+
+                $where[ 'idcliente_sucursal' ] = $resultado;
+
+                $data[ 'sucursales' ] = $this->sucursales_model->gets_where( $where );
+
+                $data[ 'provincias' ] = $this->provincias_model->gets();
+
+                $data[ 'paises' ] = $this->paises_model->gets();
+
+                $html = $this->load->view( 'clientes/sucursal', $data, TRUE );
+
+                $json = array(
+
+                    'html' => $html,
+
+                    'menu_html' => '<div class="boton_sucursal_menu info-box-number" id="boton_sucursal_menu_' . $resultado . '" sucursal="' . $resultado . '" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">' . $this->input->post( 'nombre' ) . '</div>',
+
+                    'status' => 'ok',
+
+                    'data' => 'La sucursal ' . $this->input->post( 'nombre' ) . ' se creó correctamente'
+
+                );
+
+                echo json_encode( $json );
+
+            } else {
+
+                $json = array(
+
+                    'status' => 'error',
+
+                    'data' => 'No se pudo crear la Sucursal'
+
+                );
+
+                echo json_encode( $json );
+
+            }
+
+        }
+
+    }
+
+    public function modificar_sucursal_ajax()
+    {
+
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules( 'idcliente', 'ID de Cliente', 'required|integer' );
+
+        $this->form_validation->set_rules( 'idcliente_sucursal', 'ID de Sucursal de Cliente', 'required|integer' );
+
+        $this->form_validation->set_rules( 'sucursal', 'Nombre Sucursal', 'required' );
+
+        if( $this->form_validation->run() == FALSE )
+        {
+
+            $json = array(
+
+                'status' => 'error',
+
+                'data' => validation_errors()
+
+            );
+
+            echo json_encode( $json );
+
+        } else {
+
+            $where = array(
+
+                'idcliente' => $this->input->post( 'idcliente' ),
+
+                'idcliente_sucursal' => $this->input->post( 'idcliente_sucursal' )
+
+            );
+
+            $datos = array(
+
+                'sucursal' => $this->input->post( 'sucursal' ),
+
+                'estado' => 'A',
+
+                'actualizado_por' => $session[ 'SID' ]
+
+            );
+
+            if( $this->input->post( 'idpais' ) )
+            {
+
+                $datos[ 'idpais' ] = $this->input->post( 'idpais' );
+
+            }
+
+            if( $this->input->post( 'idprovincia' ) )
+            {
+
+                $datos[ 'idprovincia' ] = $this->input->post( 'idprovincia' );
+
+            }
+
+            if( $this->input->post( 'localidad' ) )
+            {
+
+                $datos[ 'localidad' ] = $this->input->post( 'localidad' );
+
+            }
+
+            if( $this->input->post( 'direccion' ) )
+            {
+
+                $datos[ 'direccion' ] = $this->input->post( 'direccion' );
+
+            }
+
+            if( $this->input->post( 'codigo_postal' ) )
+            {
+
+                $datos[ 'codigo_postal' ] = $this->input->post( 'codigo_postal' );
+
+            }
+
+            $resultado = $this->sucursales_model->update( $datos, $where );
+
+            if( intval( $resultado ) >= 0 )
+            {
+
+                $json = array(
+
+                    'registros_modificados' => $resultado,
+
+                    'status' => 'ok',
+
+                    'data' => 'La sucursal ' . $this->input->post( 'sucursal' ) . ' se modificó correctamente'
+
+                );
+
+                echo json_encode( $json );
+
+            } else {
+
+                $json = array(
+
+                    'status' => 'error',
+
+                    'data' => 'No se pudo modificar la Sucursal ' . $this->input->post( 'sucursal' )
+
+                );
+
+                echo json_encode( $json );
+
+            }
+
+        }
+
+    }
+
+    public function eliminar_sucursal_ajax()
+    {
+
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules( 'idcliente', 'ID de Cliente', 'required|integer' );
+
+        $this->form_validation->set_rules( 'idcliente_sucursal', 'ID de Sucursal de Cliente', 'required|integer' );
+
+        if( $this->form_validation->run() == FALSE )
+        {
+
+            $json = array(
+
+                'status' => 'error',
+
+                'data' => validation_errors()
+
+            );
+
+            echo json_encode( $json );
+
+        } else {
+
+            $where = array(
+
+                'idcliente' => $this->input->post( 'idcliente' ),
+
+                'idcliente_sucursal' => $this->input->post( 'idcliente_sucursal' )
+
+            );
+
+
+            $datos = array(
+
+                'estado' => 'I'
+
+            );
+
+            $resultado = $this->sucursales_model->update( $datos, $where );
+
+            if( intval( $resultado ) > 0 )
+            {
+
+                $json = array(
+
+                    'registros_modificados' => $resultado,
+
+                    'status' => 'ok',
+
+                    'data' => 'La sucursal ' . $this->input->post( 'sucursal' ) . ' se eliminó correctamente'
+
+                );
+
+                echo json_encode( $json );
+
+            } else {
+
+                $json = array(
+
+                    'status' => 'error',
+
+                    'data' => 'No se pudo eliminar la Sucursal ' . $this->input->post( 'sucursal' ),
+
+                    'where' => $where
+
+                );
+
+                echo json_encode( $json );
+
+            }
+
+        }
+
     }
 
     public function gets_clientes_ajax() {

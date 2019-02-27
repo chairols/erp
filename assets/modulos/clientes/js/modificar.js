@@ -58,3 +58,393 @@ $("#modificar").click(function() {
         }
     });
 });
+
+$( '#agregar_sucursal' ).click( function()
+{
+
+    if( $( '#nombre_nueva_sucursal' ).val() )
+    {
+
+        var datos =
+        {
+
+            'idcliente' : $( '#idcliente' ).val(),
+
+            'nombre' : $( '#nombre_nueva_sucursal' ).val()
+
+        };
+
+        $.ajax(
+        {
+
+            type: 'POST',
+
+            url: '/clientes/nueva_sucursal_ajax/',
+
+            data: datos,
+
+            beforeSend: function()
+            {
+
+                $( '#agregar_sucursal' ).hide();
+
+                $( '#agregar_sucursal_loading' ).show();
+
+            },
+
+            success: function( data )
+            {
+
+                resultado = $.parseJSON( data );
+
+                if ( resultado[ 'status' ] == 'error' )
+                {
+
+                    console.log( resultado );
+
+                    $.notify( '<strong>' + resultado[ 'data' ] + '</strong>',
+                    {
+
+                        type: 'danger',
+
+                        allow_dismiss: true
+
+                    });
+
+                } else if ( resultado[ 'status' ] == 'ok' ) {
+
+                    $( '.contenedor-sucursal' ).each( function()
+                    {
+
+                        $( this ).hide();
+
+                    });
+
+                    $( '.boton_sucursal_menu' ).each( function()
+                    {
+
+                        $( this ).removeClass( 'info-box-number' );
+
+                    });
+
+                    $( '#sucursales' ).append( resultado[ 'html' ] );
+
+                    $( '#contenedor_nueva_sucursal' ).before( resultado[ 'menu_html' ] );
+
+                    $.notify( '<strong>' + resultado[ 'data' ] + '</strong>',
+                    {
+
+                        type: 'success',
+
+                        allow_dismiss: true
+
+                    });
+
+                }
+
+                cambiarSucursal();
+
+                modificarSucursal();
+
+                eliminarSucursal();
+
+                $( '#nombre_nueva_sucursal' ).val( '' );
+
+                $( '#agregar_sucursal_loading' ).hide();
+
+                $( '#agregar_sucursal' ).show();
+
+            },
+            error: function( xhr )
+            { // if error occured
+
+                console.log( xhr.statusText );
+
+                $.notify( '<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                {
+
+                    type: 'danger',
+
+                    allow_dismiss: false
+
+                });
+
+                $( '#agregar_sucursal_loading' ).hide();
+
+                $( '#agregar_sucursal' ).show();
+            }
+
+        });
+
+    }
+
+});
+
+$( document ).ready( function()
+{
+
+    cambiarSucursal();
+
+    modificarSucursal();
+
+    eliminarSucursal();
+
+});
+
+function cambiarSucursal()
+{
+
+    $( '.boton_sucursal_menu' ).click( function()
+    {
+
+        var sucursal = $( this ).attr( 'sucursal' );
+
+        $( '.boton_sucursal_menu' ).each( function()
+        {
+
+            $( this ).removeClass( 'info-box-number' );
+
+        });
+
+        $( this ).addClass( 'info-box-number' );
+
+        $( '.contenedor-sucursal' ).hide();
+
+        $( '#' + sucursal ).show();
+
+    });
+
+}
+
+function modificarSucursal()
+{
+
+    $( '.modificarSucursal' ).click( function()
+    {
+
+        var sucursal = $( this ).attr( 'sucursal' );
+
+        var datos =
+        {
+
+            'idcliente' : $( '#idcliente' ).val(),
+
+            'idcliente_sucursal' : sucursal,
+
+            'sucursal' : $( '#sucursal_' + sucursal ).val(),
+
+            'idpais' : $( '#sucursal_idpais_' + sucursal ).val(),
+
+            'idprovincia' : $( '#sucursal_idprovincia_' + sucursal ).val(),
+
+            'localidad' : $( '#sucursal_localidad_' + sucursal ).val(),
+
+            'direccion' : $( '#sucursal_direccion_' + sucursal ).val(),
+
+            'codigo_postal' : $( '#sucursal_codigo_postal_' + sucursal ).val()
+
+        };
+
+        $.ajax(
+        {
+
+            type: 'POST',
+
+            url: '/clientes/modificar_sucursal_ajax/',
+
+            data: datos,
+
+            beforeSend: function()
+            {
+
+                $( '#modificar_sucursal_' + sucursal ).hide();
+
+                $( '#modificar_sucursal_loading_' + sucursal ).show();
+
+            },
+
+            success: function( data )
+            {
+
+                resultado = $.parseJSON( data );
+
+                if ( resultado[ 'status' ] == 'error' )
+                {
+
+                    console.log( resultado );
+
+                    $.notify( '<strong>' + resultado[ 'data' ] + '</strong>',
+                    {
+
+                        type: 'danger',
+
+                        allow_dismiss: true
+
+                    });
+
+                } else if ( resultado[ 'status' ] == 'ok' ) {
+
+                    $.notify( '<strong>' + resultado[ 'data' ] + '</strong>',
+                    {
+
+                        type: 'success',
+
+                        allow_dismiss: true
+
+                    });
+
+                }
+
+                $( '#modificar_sucursal_loading_' + sucursal ).hide();
+
+                $( '#modificar_sucursal_' + sucursal ).show();
+
+            },
+            error: function( xhr )
+            { // if error occured
+
+                console.log( xhr.statusText );
+
+                $.notify( '<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                {
+
+                    type: 'danger',
+
+                    allow_dismiss: false
+
+                });
+
+                $( '#modificar_sucursal_loading_' + sucursal ).hide();
+
+                $( '#modificar_sucursal_' + sucursal ).show();
+            }
+
+        });
+
+
+    });
+
+}
+
+
+function eliminarSucursal()
+{
+
+    $( '.eliminarSucursal' ).click( function()
+    {
+
+        var id = $( this ).attr( 'sucursal' );
+
+        var sucursal = $( '#sucursal_' + id ).val();
+
+        alertify.confirm( 'Está a punto de eliminar la sucursal <strong>' + sucursal + '</strong><br><strong>¿Desea continuar?</strong>', function( e )
+        {
+
+            if( e )
+            {
+
+                var datos =
+                {
+
+                    'idcliente' : $( '#idcliente' ).val(),
+
+                    'idcliente_sucursal' : id,
+
+                    'sucursal' : sucursal
+
+                };
+
+                $.ajax(
+                {
+
+                    type: 'POST',
+
+                    url: '/clientes/eliminar_sucursal_ajax/',
+
+                    data: datos,
+
+                    beforeSend: function()
+                    {
+
+                        $( '#eliminar_sucursal_' + id ).hide();
+
+                        $( '#eliminar_sucursal_loading_' + id ).show();
+
+                    },
+
+                    success: function( data )
+                    {
+
+                        resultado = $.parseJSON( data );
+
+                        if ( resultado[ 'status' ] == 'error' )
+                        {
+
+                            console.log( resultado );
+
+                            $.notify( '<strong>' + resultado[ 'data' ] + '</strong>',
+                            {
+
+                                type: 'danger',
+
+                                allow_dismiss: true
+
+                            });
+
+                            $( '#eliminar_sucursal_loading_' + id ).hide();
+
+                            $( '#eliminar_sucursal_' + id ).show();
+
+                        } else if ( resultado[ 'status' ] == 'ok' ) {
+
+                            $.notify( '<strong>' + resultado[ 'data' ] + '</strong>',
+                            {
+
+                                type: 'success',
+
+                                allow_dismiss: true
+
+                            });
+
+                            $( '#boton_sucursal_menu_' + id ).remove();
+
+                            $( '#' + id ).remove();
+
+                            $( '.boton_sucursal_menu' ).first().addClass( 'info-box-number' );
+
+                            id = $( '.boton_sucursal_menu' ).first().attr( 'sucursal' );
+
+                            $( '#' + id ).show();
+
+                        }
+
+                    },
+
+                    error: function( xhr )
+                    { // if error occured
+
+                        console.log( xhr.statusText );
+
+                        $.notify( '<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                        {
+
+                            type: 'danger',
+
+                            allow_dismiss: false
+
+                        });
+
+                        $( '#eliminar_sucursal_loading_' + id ).hide();
+
+                        $( '#eliminar_sucursal_' + id ).show();
+                    }
+
+                });
+
+            }
+
+        });
+
+    });
+
+}

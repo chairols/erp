@@ -64,9 +64,20 @@ class Cotizaciones_clientes extends CI_Controller {
             );
             $cliente = $this->clientes_model->get_where($where);
             
+            $this->load->model(array(
+                'prueba_model'
+            ));
+            $where = array(
+                'idcliente_sucursal' => $this->input->post('idsucursal')
+            );
+            $sucursal = $this->prueba_model->get_sucursal_where($where);
+            
             $set = array(
                 'idcliente' => $this->input->post('idcliente'),
                 'cliente' => $cliente['cliente'],
+                'idsucursal' => $sucursal['idcliente_sucursal'],
+                'domicilio' => $sucursal['direccion'],
+                'localidad' => $sucursal['localidad'],
                 'idmoneda' => $this->input->post('idmoneda'),
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
                 'observaciones' => $this->input->post('observaciones'),
@@ -516,11 +527,11 @@ class Cotizaciones_clientes extends CI_Controller {
 
             $this->pdf->SetFont('Arial','',9);
             $this->pdf->SetXY(35, 64);
-            $this->pdf->Cell(0,0,$sucursales[0]['direccion'],0,0,'L');
+            $this->pdf->Cell(0,0,$cotizacion_cliente['domicilio'],0,0,'L');
 
             $this->pdf->SetFont('Arial','',9);
             $this->pdf->SetXY(35, 68);
-            $this->pdf->Cell(0,0,$sucursales[0]['localidad'],0,0,'L');
+            $this->pdf->Cell(0,0,$cotizacion_cliente['localidad'],0,0,'L');
 
             $this->pdf->SetFont('Arial','',9);
             $this->pdf->SetXY(15, 74);

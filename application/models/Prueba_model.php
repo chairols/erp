@@ -80,6 +80,15 @@ class Prueba_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    public function get_sucursal_where($where) {
+        $this->db->select("*");
+        $this->db->from("clientes_sucursales");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->row_array();
+    }
 }
 
 ?>

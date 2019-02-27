@@ -25,7 +25,7 @@
             //Número de página
             //$this->Cell(0,10,'Página '.$this->PageNo().'/{nb}',0,0,'C');
             $this->SetXY(10, -30);
-            $this->Cell(0,10,'',0,0,'');
+            $this->Cell(0,10,'No incluye impuestos',0,0,'');
 
             //$this->SetFont('i2of5','',24);
             //$this->SetFont('ccode39','',10);

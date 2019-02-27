@@ -11,8 +11,7 @@ class Cotizaciones_clientes extends CI_Controller {
             'r_session',
             'form_validation',
             'pagination',
-            'pdf_cotizacion_cliente',
-            'numeroaletras'
+            'pdf_cotizacion_cliente'
         ));
         $this->load->model(array(
             'monedas_model',
@@ -606,8 +605,6 @@ class Cotizaciones_clientes extends CI_Controller {
             $this->pdf->SetXY(180, 220);
             $this->pdf->Cell(0, 0, str_pad(number_format($total, 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
 
-            $numeroaletras = $this->numeroaletras->convertir($total, $moneda['moneda'], 'centavos');
-            
             $this->pdf->SetFont('Courier', 'B', 9);
             $this->pdf->SetXY(10, 240);
             $this->pdf->Cell(0,0,'',0,0,'L');

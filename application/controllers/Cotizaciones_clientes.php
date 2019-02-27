@@ -48,6 +48,7 @@ class Cotizaciones_clientes extends CI_Controller {
         $session = $this->session->all_userdata();
         
         $this->form_validation->set_rules('idcliente', 'Cliente', 'required|integer');
+        $this->form_validation->set_rules('idsucursal', 'Sucursal', 'required|integer');
         $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');
         

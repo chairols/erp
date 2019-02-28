@@ -11,15 +11,15 @@ class Proveedores_model extends CI_Model {
     /*
      *  Cotizaciones_proveedores/listar
      *  Cotizaciones_proveedores/modificar
-     * 
+     *
      *  Importaciones/pedido_pdf
-     * 
+     *
      *  Importar/proveedores
-     * 
+     *
      *  Preordenes/generar_orden_ajax
-     * 
+     *
      *  Proveedores/checkCUIT_ajax
-     * 
+     *
      */
     public function get_where($where)
     {
@@ -32,7 +32,7 @@ class Proveedores_model extends CI_Model {
 
     /*
      *  Importar/proveedores
-     * 
+     *
      *  Proveedores/agregar_ajax
      */
 
@@ -43,7 +43,7 @@ class Proveedores_model extends CI_Model {
 
     /*
      *  Cotizaciones_proveedores/actualizar_cabecera_ajax
-     * 
+     *
      *  Proveedores/gets_proveedores_ajax
      */
     public function gets_where($where) {
@@ -63,11 +63,11 @@ class Proveedores_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('proveedores');
         $this->db->like($where);
-        
+
         $query = $this->db->count_all_results();
         return $query;
     }
-    
+
     /*
      *  Proveedores/listar
      */
@@ -77,11 +77,11 @@ class Proveedores_model extends CI_Model {
         $this->db->like($where);
         $this->db->order_by('proveedor');
         $this->db->limit($per_page, $pagina);
-        
+
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
     /*
      *  Proveedores/modificar_ajax
      */

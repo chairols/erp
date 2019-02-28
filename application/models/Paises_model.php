@@ -10,16 +10,17 @@ class Paises_model extends CI_Model {
 
     /*
      *  Proveedores/modificar
+     *  Clientes/modificar
      */
     public function gets() {
         $this->db->select('*');
         $this->db->from('paises');
         $this->db->order_by('pais');
-        
+
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
     /*
      *  Proveedores/agregar_ajax
      */

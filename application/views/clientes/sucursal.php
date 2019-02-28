@@ -89,6 +89,23 @@
             <input type="text" id="sucursal_codigo_postal_<?=$sucursal[ 'idcliente_sucursal' ]?>" class="form-control" value="<?=$sucursal[ 'codigo_postal' ]?>" maxlength="10">
 
         </div>
+
+    </div>
+
+    <div class="row form-group">
+
+        <label class="control-label col-md-3 txR">Es Casa Central</label>
+
+        <div class="col-md-6">
+
+
+
+                <input type="checkbox" id="sucursal_casa_central_<?=$sucursal[ 'idcliente_sucursal' ]?>" <?php if( $sucursal[ 'casa_central' ] == 'S' ) echo 'checked' ?> class="iCheckbox casaCentral" value="S">
+
+
+
+        </div>
+
     </div>
 
     <div class="row form-group txC">

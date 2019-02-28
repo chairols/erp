@@ -22,6 +22,8 @@
 <script src="/assets/vendors/bootstrap-notify/notify.js"></script>
 <!-- Chosen JS -->
 <script src="/assets/vendors/chosen-js/chosen.jquery.js"></script>
+<!-- Chosen JS -->
+<script src="/assets/vendors/iCheck/icheck.min.js"></script>
 <!-- Autocomplete -->
 <script src="/assets/vendors/autocomplete/jquery.auto-complete.min.js"></script>
 <!-- Input Mask -->

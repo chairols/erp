@@ -20,6 +20,7 @@ class Clientes extends CI_Controller {
             'provincias_model',
             'monedas_model',
             'paises_model',
+            'log_model',
             'tipos_responsables_model'
         ));
 
@@ -78,6 +79,108 @@ class Clientes extends CI_Controller {
         $data['clientes'] = $this->clientes_model->gets_where_limit($where, $per_page, $pagina);
 
         $this->load->view('layout/app', $data);
+    }
+
+    public function agregar()
+    {
+
+        $data[ 'title' ] = 'Agregar Cliente';
+
+        $data[ 'session' ] = $this->session->all_userdata();
+
+        $data[ 'menu' ] = $this->r_session->get_menu();
+
+        $data[ 'javascript' ] = array(
+
+            '/assets/modulos/clientes/js/agregar.js'
+
+        );
+
+        $data[ 'view' ] = 'clientes/agregar';
+
+        $this->load->view('layout/app', $data);
+    }
+
+    public function agregar_ajax()
+    {
+
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules( 'cliente', 'Cliente', 'required' );
+
+        $this->form_validation->set_rules( 'cuit', 'CUIT', 'required' );
+
+        if( $this->form_validation->run() == FALSE )
+        {
+
+            $json = array(
+
+                'status' => 'error',
+
+                'data' => validation_errors()
+
+            );
+
+            echo json_encode( $json );
+
+        } else {
+
+            $set = $this->input->post();
+
+            $set[ 'cuit' ] = str_replace( "-", "", $set[ 'cuit' ] );
+
+            $set[ 'fecha_creacion' ] = date( "Y-m-d H:i:s" );
+
+            $set[ 'idcreador' ] = $session['SID'];
+
+            $set[ 'actualizado_por' ] = $session['SID'];
+
+            $id = $this->clientes_model->set( $set );
+
+            if ( $id )
+            {
+
+
+                $log = array(
+
+                    'tabla' => 'clientes',
+                    'idtabla' => $id,
+                    'texto' => "<h2><strong>Se agregó el cliente: ".$this->input->post( 'cliente' )."</strong></h2>
+                    <p><strong>ID Cliente: </strong>" . $id . "<br />
+                    <strong>CUIT: </strong>" . $this->input->post( 'cuit' ) . "<br />",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+
+                $this->log_model->set($log);
+
+                $json = array(
+
+                    'status' => 'ok',
+
+                    'data' => 'Se agregó el cliente ' . $this->input->post( 'cliente' ),
+
+                    'id' => $id
+
+                );
+
+                echo json_encode( $json );
+
+            } else {
+
+                $json = array(
+
+                    'status' => 'error',
+
+                    'data' => 'No se pudo agregar'
+
+                );
+
+                echo json_encode( $json );
+            }
+
+        }
+
     }
 
     public function modificar( $idcliente = null )
@@ -341,6 +444,20 @@ class Clientes extends CI_Controller {
 
             }
 
+            if( $this->input->post( 'casa_central' ) )
+            {
+
+                $datos[ 'casa_central' ] = $this->input->post( 'casa_central' );
+
+                if( $datos[ 'casa_central' ] == 'S' )
+                {
+
+                    $this->sucursales_model->update( array( 'casa_central' => 'N' ), array( 'idcliente' => $this->input->post( 'idcliente' ) ) );
+
+                }
+
+            }
+
             $resultado = $this->sucursales_model->update( $datos, $where );
 
             if( intval( $resultado ) >= 0 )
@@ -466,6 +583,40 @@ class Clientes extends CI_Controller {
         $data['sucursales'] = $this->clientes_model->gets_sucursales($where);
 
         $this->load->view('clientes/gets_sucursales_select', $data);
+    }
+
+    public function validar_cuit_ajax()
+    {
+
+        $where = array(
+
+            'cuit' => str_replace( '-', '', $this->input->post( 'cuit' ) )
+
+        );
+
+        $clientes = $this->clientes_model->gets_where( $where );
+
+        if( count( $clientes ) > 0 )
+        {
+
+            $json = array(
+
+                'valid' => false
+
+            );
+
+        }else{
+
+            $json = array(
+
+                'valid' => true
+
+            );
+
+        }
+
+        echo json_encode( $json );
+
     }
 }
 

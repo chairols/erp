@@ -148,6 +148,10 @@ $( '#agregar_sucursal' ).click( function()
 
                 eliminarSucursal();
 
+                iCheck();
+
+                actualizarCheckboxes();
+
                 $( '#nombre_nueva_sucursal' ).val( '' );
 
                 $( '#agregar_sucursal_loading' ).hide();
@@ -189,6 +193,8 @@ $( document ).ready( function()
 
     eliminarSucursal();
 
+    actualizarCheckboxes();
+
 });
 
 function cambiarSucursal()
@@ -224,6 +230,15 @@ function modificarSucursal()
 
         var sucursal = $( this ).attr( 'sucursal' );
 
+        var casa_central = 'N';
+
+        if( $( '#sucursal_casa_central_' + sucursal ).is( ':checked' ) )
+        {
+
+            casa_central = 'S';
+
+        }
+
         var datos =
         {
 
@@ -241,7 +256,9 @@ function modificarSucursal()
 
             'direccion' : $( '#sucursal_direccion_' + sucursal ).val(),
 
-            'codigo_postal' : $( '#sucursal_codigo_postal_' + sucursal ).val()
+            'codigo_postal' : $( '#sucursal_codigo_postal_' + sucursal ).val(),
+
+            'casa_central' : casa_central
 
         };
 
@@ -444,6 +461,30 @@ function eliminarSucursal()
             }
 
         });
+
+    });
+
+}
+
+function actualizarCheckboxes()
+{
+
+    $( '.casaCentral' ).on( 'ifChecked', function( event )
+    {
+
+        var id = $( this ).attr( 'id' );
+
+        $( '.casaCentral' ).each( function()
+        {
+
+            if( $( this ).attr( 'id' ) != id )
+            {
+
+                $( this ).iCheck( 'uncheck' );
+
+            }
+
+        })
 
     });
 

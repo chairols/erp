@@ -284,52 +284,80 @@ VALIDATION ATRIBUTES:
 
 	ValidateFields.prototype.fromFile = function(object)
 	{
-		var fromfile	= false;
 
-		if($(object).attr("validateFromFile"))
-		{
-			fromfile	= ValidateFields.prototype.validateFromFile(object);
-		}
-		return fromfile;
+			var fromfile	= false;
+
+			if( $( object ).attr( "validateFromFile" ) )
+			{
+
+					fromfile	= ValidateFields.prototype.validateFromFile( object );
+
+			}
+
+			return fromfile;
+
 	}
 
-	ValidateFields.prototype.validateFromFile = function(object)
+	ValidateFields.prototype.validateFromFile = function( object )
 	{
 
 		var validatefromfile	= false;
-		var properties	= $(object).attr("validateFromFile").split(validateDelimiter);
-		var value		= $(object).val();
-		var id			= $(object).attr("id");
-		var file		= properties[0];
-		var text		= properties[1];
-		var string		= id+'='+value;
+
+		var properties	= $( object ).attr( "validateFromFile" ).split( validateDelimiter );
+
+		var value		= $( object ).val();
+
+		var id			= $( object ).attr( "id" );
+
+		var file		= properties[ 0 ];
+
+		var text		= properties[ 1 ];
+
+		var string		= id + '=' + value;
+
 		var field;
 
-		for(var i=2;i<properties.length;i++)
+		for( var i = 2; i < properties.length; i++ )
 		{
-			field = properties[i].split(":=");
-			if(field[1])
-				string	= string + "&" + field[0] + "=" + field[1];
-			else
-				string	= string + "&" + properties[i] + "=" + $("#"+properties[i]).val();
+
+				field = properties[ i ].split( ":=" );
+
+				if( field[ 1 ] )
+				{
+					string	= string + "&" + field[ 0 ] + "=" + field[ 1 ];
+
+				}else{
+
+					string	= string + "&" + properties[ i ] + "=" + $( "#" + properties[ i ] ).val();
+
+				}
 		}
 
-		$.ajax({
+		$.ajax(
+		{
+
 				type: "POST",
+
 				url: file,
+
 				data: string,
+
 				cache: true,
+
 				async: false,
-				success: function(data){
-					if(!data)
-						validatefromfile = false;
-					else
-						validatefromfile = true;
+
+				success: function( data )
+				{
+
+						result = $.parseJSON( data );
+
+						validatefromfile = !result[ 'valid' ];
+
 				}
+
 		});
 
 		return validatefromfile;
-
 
 	}
 
@@ -490,12 +518,18 @@ VALIDATION ATRIBUTES:
 				//$("#"+$(object).attr("id")+"ErrorDiv").html(text);
 			}
 
-			if(valid && ValidateFields.prototype.fromFile(object))
+			console.log( valid && ValidateFields.prototype.fromFile(object) );
+
+			if( valid && ValidateFields.prototype.fromFile( object ) )
 			{
-				valid		= false;
-				var text	= $(object).attr("validateFromFile").substring($(object).attr("validateFromFile").indexOf(validateDelimiter)+validateDelimiter.length);
-				text		= text.substring(0,text.indexOf(validateDelimiter))
-				$("#"+$(object).attr("id")+"ErrorDiv").html(text);
+					valid		= false;
+
+					var text	= $( object).attr( "validateFromFile" ).substring( $( object ).attr( "validateFromFile" ).indexOf( validateDelimiter ) + validateDelimiter.length );
+
+					text		= text.substring( 0, text.indexOf( validateDelimiter ) )
+
+					$( "#" + $( object ).attr( "id" ) + "ErrorDiv" ).html( text );
+					
 			}
 
 			if(!valid) ValidateFields.prototype.showDiv(object);

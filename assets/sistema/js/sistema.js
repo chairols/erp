@@ -532,15 +532,32 @@ function SidebarMenu()
   });
 }
 /////////////////////////////////////////////////// iCheckbox /////////////////////////////////////////////
-// $(function(){
-//   $('.iCheckbox').iCheck({
-//     inheritID: true,
-//     cursor: true,
-//     checkboxClass: 'iCheckbox_changeable icheckbox_'+iCheckSkin(),
-//     radioClass: 'iRadio_changeable iradio_'+iCheckSkin()
-//     //increaseArea: '10%' // optional
-//   });
-// });
+$( function()
+{
+
+    iCheck();
+
+});
+
+function iCheck()
+{
+
+    $( '.iCheckbox' ).iCheck(
+    {
+
+        inheritID: true,
+
+        cursor: true,
+
+        checkboxClass: 'iCheckbox_changeable icheckbox_square-purple',
+
+        radioClass: 'iRadio_changeable iradio_square-purple'
+
+        //increaseArea: '10%' // optional
+
+    });
+
+}
 
 function iCheckSkin()
 {

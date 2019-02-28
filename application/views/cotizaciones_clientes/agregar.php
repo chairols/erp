@@ -12,6 +12,14 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-md-3">Sucursal</label>
+                <div class="col-md-6" id="sucursal">
+                    <select id="idsucursal" class="form-control chosenSelect">
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label col-md-3">Moneda</label>
                 <div class="col-md-6">
                     <select id="idmoneda" class="form-control chosenSelect">

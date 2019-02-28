@@ -48,6 +48,7 @@ class Cotizaciones_clientes extends CI_Controller {
         $session = $this->session->all_userdata();
         
         $this->form_validation->set_rules('idcliente', 'Cliente', 'required|integer');
+        $this->form_validation->set_rules('idsucursal', 'Sucursal', 'required|integer');
         $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');
         
@@ -63,9 +64,20 @@ class Cotizaciones_clientes extends CI_Controller {
             );
             $cliente = $this->clientes_model->get_where($where);
             
+            $this->load->model(array(
+                'prueba_model'
+            ));
+            $where = array(
+                'idcliente_sucursal' => $this->input->post('idsucursal')
+            );
+            $sucursal = $this->prueba_model->get_sucursal_where($where);
+            
             $set = array(
                 'idcliente' => $this->input->post('idcliente'),
                 'cliente' => $cliente['cliente'],
+                'idsucursal' => $sucursal['idcliente_sucursal'],
+                'domicilio' => $sucursal['direccion'],
+                'localidad' => $sucursal['localidad'],
                 'idmoneda' => $this->input->post('idmoneda'),
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
                 'observaciones' => $this->input->post('observaciones'),
@@ -515,11 +527,11 @@ class Cotizaciones_clientes extends CI_Controller {
 
             $this->pdf->SetFont('Arial','',9);
             $this->pdf->SetXY(35, 64);
-            $this->pdf->Cell(0,0,$sucursales[0]['direccion'],0,0,'L');
+            $this->pdf->Cell(0,0,$cotizacion_cliente['domicilio'],0,0,'L');
 
             $this->pdf->SetFont('Arial','',9);
             $this->pdf->SetXY(35, 68);
-            $this->pdf->Cell(0,0,$sucursales[0]['localidad'],0,0,'L');
+            $this->pdf->Cell(0,0,$cotizacion_cliente['localidad'],0,0,'L');
 
             $this->pdf->SetFont('Arial','',9);
             $this->pdf->SetXY(15, 74);
@@ -622,6 +634,36 @@ class Cotizaciones_clientes extends CI_Controller {
             
             $this->pdf->Output('COTIZACION '.str_pad($idcotizacion_cliente, 8, '0', STR_PAD_LEFT).'.pdf', $modo);
         } 
+    }
+    
+    public function gets_antecedentes_ajax_tabla() {
+        $this->form_validation->set_rules('idcliente', 'Cliente', 'required|integer');
+        $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
+        
+        if($this->form_validation->run() == FALSE) {
+            echo "No entró";
+        } else {
+            $where = array(
+                'idarticulo' => $this->input->post('idarticulo')
+            );
+            $articulo = $this->articulos_model->get_where($where);
+            
+            if($articulo['idarticulo_generico'] > 0) {
+                $where = array(
+                    'articulos.idarticulo_generico' => $articulo['idarticulo_generico'],
+                    'cotizaciones_clientes.idcliente' => $this->input->post('idcliente'),
+                    'cotizaciones_clientes.estado' => 'A',
+                    'cotizaciones_clientes_items.estado' => 'A'
+                );
+                
+                $data['articulos'] = $this->cotizaciones_clientes_model->gets_articulos_trazabilidad_where($where);
+                
+                foreach($data['articulos'] as $key => $value) {
+                    $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+                }
+                $this->load->view('cotizaciones_clientes/gets_antecedentes_ajax_tabla', $data);
+            }
+        }
     }
     
     private function formatear_fecha($fecha) {

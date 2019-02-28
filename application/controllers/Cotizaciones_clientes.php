@@ -636,6 +636,36 @@ class Cotizaciones_clientes extends CI_Controller {
         } 
     }
     
+    public function gets_antecedentes_ajax_tabla() {
+        $this->form_validation->set_rules('idcliente', 'Cliente', 'required|integer');
+        $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
+        
+        if($this->form_validation->run() == FALSE) {
+            echo "No entró";
+        } else {
+            $where = array(
+                'idarticulo' => $this->input->post('idarticulo')
+            );
+            $articulo = $this->articulos_model->get_where($where);
+            
+            if($articulo['idarticulo_generico'] > 0) {
+                $where = array(
+                    'articulos.idarticulo_generico' => $articulo['idarticulo_generico'],
+                    'cotizaciones_clientes.idcliente' => $this->input->post('idcliente'),
+                    'cotizaciones_clientes.estado' => 'A',
+                    'cotizaciones_clientes_items.estado' => 'A'
+                );
+                
+                $data['articulos'] = $this->cotizaciones_clientes_model->gets_articulos_trazabilidad_where($where);
+                
+                foreach($data['articulos'] as $key => $value) {
+                    $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+                }
+                $this->load->view('cotizaciones_clientes/gets_antecedentes_ajax_tabla', $data);
+            }
+        }
+    }
+    
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);

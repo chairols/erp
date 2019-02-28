@@ -89,6 +89,21 @@ class Cotizaciones_clientes_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    public function gets_articulos_trazabilidad_where($where) {
+        $this->db->select("cotizaciones_clientes.fecha, cotizaciones_clientes.idcotizacion_cliente, cotizaciones_clientes_items.cantidad, cotizaciones_clientes_items.descripcion, monedas.simbolo, cotizaciones_clientes_items.precio");
+        $this->db->from('cotizaciones_clientes_items');
+        $this->db->join('cotizaciones_clientes', 'cotizaciones_clientes_items.idcotizacion_cliente = cotizaciones_clientes.idcotizacion_cliente');
+        $this->db->join('monedas', 'cotizaciones_clientes.idmoneda = monedas.idmoneda');
+        $this->db->join('articulos', 'cotizaciones_clientes_items.idarticulo = articulos.idarticulo');
+        $this->db->order_by('cotizaciones_clientes.fecha DESC, cotizaciones_clientes.idcotizacion_cliente DESC');
+        
+        
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

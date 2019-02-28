@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $("#cantidad").focus();
     actualizar_articulos();
 });
@@ -78,11 +78,11 @@ function actualizar_articulos() {
     });
 }
 
-$("#TextAutoCompletearticulo").keyup(function() {
+$("#TextAutoCompletearticulo").keyup(function () {
     $("#descripcion").val($("#TextAutoCompletearticulo").val());
 });
 
-$("#TextAutoCompletearticulo").focusout(function() {
+$("#TextAutoCompletearticulo").focusout(function () {
     datos = {
         'idarticulo': $("#articulo").val(),
         'estado': 'A'
@@ -96,10 +96,10 @@ $("#TextAutoCompletearticulo").focusout(function() {
         },
         success: function (data) {
             resultado = $.parseJSON(data);
-            $("#descripcion").val(resultado['linea']['nombre_corto']+" "+resultado['articulo']+" - "+resultado['marca']['marca']);
+            $("#descripcion").val(resultado['linea']['nombre_corto'] + " " + resultado['articulo'] + " - " + resultado['marca']['marca']);
             $("#precio").val(resultado['precio']);
             Pace.stop();
-            if($("#idmoneda").val() == '2') {
+            if ($("#idmoneda").val() == '2') {
                 get_factor_correccion();
             }
         },
@@ -113,7 +113,7 @@ $("#TextAutoCompletearticulo").focusout(function() {
     });
 });
 
-$("#agregar").click(function() {
+$("#agregar").click(function () {
     datos = {
         'idcotizacion_cliente': $("#idcotizacion_cliente").val(),
         'cantidad': $("#cantidad").val(),
@@ -148,16 +148,16 @@ $("#agregar").click(function() {
                         });
                 $("#agregar_loading").hide();
                 $("#agregar").show();
-                
+
                 $("#TextAutoCompletearticulo").val("");
                 $("#cantidad").val("");
                 $("#articulo").val("");
                 $("#descripcion").val("");
                 $("#precio").val("");
                 $("#TextAutoCompletearticulo").focus();
-                
+
                 actualizar_articulos();
-                
+
                 $("#cantidad").focus();
             }
             Pace.stop();
@@ -185,7 +185,7 @@ function get_factor_correccion() {
         success: function (data) {
             resultado = $.parseJSON(data);
             nuevo_precio = $("#precio").val() * resultado['factor_correccion'];
-            
+
             $("#precio").val(Number(nuevo_precio).toFixed(2));
             Pace.stop();
         },
@@ -197,5 +197,34 @@ function get_factor_correccion() {
             Pace.stop();
         }
     });
-    
+
 }
+
+$("#trazabilidad").click(function () {
+    datos = {
+        'idcliente': $("#cliente").val(),
+        'idarticulo': $("#articulo").val()
+    };
+    $.ajax({
+        data: datos,
+        type: 'POST',
+        url: '/cotizaciones_clientes/gets_antecedentes_ajax_tabla/',
+        beforeSend: function () {
+            $("#trazabilidad-cotizaciones-loading").show();
+            $("#trazabilidad-cotizaciones").hide();
+        },
+        success: function (data) {
+            //resultado = $.parseJSON(data);
+            $("#trazabilidad-cotizaciones-loading").hide();
+            $("#trazabilidad-cotizaciones").html(data);
+            $("#trazabilidad-cotizaciones").show();
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger'
+                    });
+            Pace.stop();
+        }
+    });
+});

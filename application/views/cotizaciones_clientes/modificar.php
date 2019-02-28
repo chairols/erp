@@ -118,6 +118,11 @@
                     <button class="btn btn-sm btn-primary" id="agregar_loading" style="display: none;">
                         <i class="fa fa-refresh fa-spin"></i>
                     </button>
+                    <br>
+                    <div style="padding: 5px;"></div>
+                    <button type="button" id="trazabilidad" class="btn btn-sm btn-success" data-toggle="modal" data-target="#trazabilidad-ajax">Trazabilidad</button>
+
+
                 </div>
             </div>
 
@@ -129,14 +134,14 @@
                     </button>
                 </div>
                 <div class="col-lg-2 col-xs-12">
-                    <a class="hint--top hint--bounce hint--info" href="/cotizaciones_clientes/pdf/<?=$cotizacion_cliente['idcotizacion_cliente'] ?>/I/" aria-label="Generar PDF" target="_blank">
+                    <a class="hint--top hint--bounce hint--info" href="/cotizaciones_clientes/pdf/<?= $cotizacion_cliente['idcotizacion_cliente'] ?>/I/" aria-label="Generar PDF" target="_blank">
                         <button class="btn btn-primary" type="button">
                             <i class="fa fa-file-pdf-o"></i> Generar PDF
                         </button>
                     </a>
                 </div>
                 <div class="col-lg-2 col-xs-12">
-                    <a class="hint--top hint--bounce hint--info" href="/cotizaciones_clientes/pdf/<?=$cotizacion_cliente['idcotizacion_cliente'] ?>/D/" aria-label="Descargar PDF" target="_blank">
+                    <a class="hint--top hint--bounce hint--info" href="/cotizaciones_clientes/pdf/<?= $cotizacion_cliente['idcotizacion_cliente'] ?>/D/" aria-label="Descargar PDF" target="_blank">
                         <button class="btn btn-primary" type="button">
                             <i class="fa fa-download"></i> Descargar PDF
                         </button>
@@ -210,6 +215,38 @@
                 </div>
 
             </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="trazabilidad-ajax" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+    <div class="modal-dialog modal-lg" role="document" style="width: 100%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">Trazabilidad</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-2 col-xs-12">
+                        <h4>Costo</h4>
+                    </div>
+                    <div class="col-lg-5 col-xs-12">
+                        <h4>Cotizaciones Anteriores</h4>
+                        <div id="trazabilidad-cotizaciones-loading" class="text-center" style="display: none;">
+                            <h2>
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </h2>
+                        </div>
+                        <div id="trazabilidad-cotizaciones"></div>
+                    </div>
+                    <div class="col-lg-5 col-xs-12">
+                        <h4>Ventas Anteriores</h4>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

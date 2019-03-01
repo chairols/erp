@@ -641,7 +641,7 @@ class Cotizaciones_clientes extends CI_Controller {
         $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
         
         if($this->form_validation->run() == FALSE) {
-            echo "No entró";
+            echo "No se realizó la consulta correctamente";
         } else {
             $where = array(
                 'idarticulo' => $this->input->post('idarticulo')
@@ -651,6 +651,20 @@ class Cotizaciones_clientes extends CI_Controller {
             if($articulo['idarticulo_generico'] > 0) {
                 $where = array(
                     'articulos.idarticulo_generico' => $articulo['idarticulo_generico'],
+                    'cotizaciones_clientes.idcliente' => $this->input->post('idcliente'),
+                    'cotizaciones_clientes.estado' => 'A',
+                    'cotizaciones_clientes_items.estado' => 'A'
+                );
+                
+                $data['articulos'] = $this->cotizaciones_clientes_model->gets_articulos_trazabilidad_where($where);
+                
+                foreach($data['articulos'] as $key => $value) {
+                    $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+                }
+                $this->load->view('cotizaciones_clientes/gets_antecedentes_ajax_tabla', $data);
+            } else if($articulo['idarticulo_generico'] == 0) {
+                $where = array(
+                    'articulos.idarticulo' => $this->input->post('idarticulo'),
                     'cotizaciones_clientes.idcliente' => $this->input->post('idcliente'),
                     'cotizaciones_clientes.estado' => 'A',
                     'cotizaciones_clientes_items.estado' => 'A'

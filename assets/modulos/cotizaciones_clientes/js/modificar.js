@@ -224,7 +224,47 @@ $("#trazabilidad").click(function () {
                     {
                         type: 'danger'
                     });
-            Pace.stop();
+            console.log(xhr);
         }
     });
+
+    datos = {
+        'idarticulo': $("#articulo").val()
+    };
+
+    if ($("#articulo").val() > 0) {
+        $.ajax({
+            data: datos,
+            type: 'POST',
+            url: '/articulos/get_where_json/',
+            beforeSend: function () {
+                $("#trazabilidad-costo-loading").show();
+                $("#trazabilidad-costo").hide();
+            },
+            success: function (data) {
+                resultado = $.parseJSON(data);
+                if (resultado['idarticulo'] > 0) {
+                    html = "<p>Precio FOB: <strong>U$S "+resultado['price_fob']+"</strong></p>";
+                    html += "<p>Precio Despachado: <strong>U$S "+resultado['price_dispatch']+"</strong></p>";
+                    $("#trazabilidad-costo").html(html);
+                } else {
+                    $("#trazabilidad-costo").html("No se realizó la consulta correctamente");
+                }
+                $("#trazabilidad-costo-loading").hide();
+                $("#trazabilidad-costo").show();
+            },
+            error: function (xhr) { // if error occured
+                $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                        {
+                            type: 'danger'
+                        });
+                console.log(xhr);
+            }
+        });
+    } else {
+        $("#trazabilidad-costo").html("No se realizó la consulta correctamente");
+        $("#trazabilidad-costo-loading").hide();
+        $("#trazabilidad-costo").show();
+    }
+
 });

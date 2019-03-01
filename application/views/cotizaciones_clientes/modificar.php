@@ -231,6 +231,12 @@
                 <div class="row">
                     <div class="col-lg-2 col-xs-12">
                         <h4>Costo</h4>
+                        <div id="trazabilidad-costo-loading" class="text-center" style="display: none;">
+                            <h2>
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </h2>
+                        </div>
+                        <div id="trazabilidad-costo"></div>
                     </div>
                     <div class="col-lg-5 col-xs-12">
                         <h4>Cotizaciones Anteriores</h4>

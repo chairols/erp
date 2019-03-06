@@ -43,6 +43,16 @@
                 </div>
             </div>
             <div class="row form-group">
+                <label class="control-label col-md-3">Condición de Venta</label>
+                <div class="col-md-6 txL">
+                    <select class="form-control chosenSelect" id="condicion">
+                        <?php foreach($condiciones as $condicion) { ?>
+                        <option value="<?=$condicion['idcondicion_de_venta']?>"<?=($cliente['idcondicion_de_venta']==$condicion['idcondicion_de_venta'])?" selected":""?>><?=$condicion['condicion_de_venta']?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
                 <label class="control-label col-md-3">Sitio Web</label>
                 <div class="col-md-6">
                     <input type="text" id="web" class="form-control" value="<?= $cliente['web'] ?>" maxlength="255">

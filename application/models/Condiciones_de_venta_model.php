@@ -41,6 +41,18 @@ class Condiciones_de_venta_model extends CI_Model {
         $query = $this->db->get_where('condiciones_de_venta', $where);
         return $query->row_array();
     }
+    
+    /*
+     *  Clientes/modificar
+     */
+    public function gets() {
+        $this->db->select('*');
+        $this->db->from('condiciones_de_venta');
+        $this->db->order_by('condicion_de_venta');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

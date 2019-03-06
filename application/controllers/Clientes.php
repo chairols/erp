@@ -21,7 +21,8 @@ class Clientes extends CI_Controller {
             'monedas_model',
             'paises_model',
             'log_model',
-            'tipos_responsables_model'
+            'tipos_responsables_model',
+            'condiciones_de_venta_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -159,7 +160,6 @@ class Clientes extends CI_Controller {
         $where = array(
             'idcliente' => $idcliente
         );
-
         $data['cliente'] = $this->clientes_model->get_where($where);
 
         $where['estado'] = 'A';
@@ -172,6 +172,8 @@ class Clientes extends CI_Controller {
         $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
 
         $data['monedas'] = $this->monedas_model->gets();
+        
+        $data['condiciones'] = $this->condiciones_de_venta_model->gets();
 
         $this->load->view('layout/app', $data);
     }
@@ -183,7 +185,6 @@ class Clientes extends CI_Controller {
 
         $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
         $this->form_validation->set_rules('cliente', 'Cliente', 'required');
-        // $this->form_validation->set_rules('idpais', 'Pais', 'required|integer');
         $this->form_validation->set_rules('idtipo_responsable', 'Tipo de IVA', 'required|integer');
         $this->form_validation->set_rules('saldo_cuenta_corriente', 'Saldo Cuenta Corriente', 'required|decimal');
         $this->form_validation->set_rules('saldo_inicial', 'Saldo Inicial', 'required|decimal');

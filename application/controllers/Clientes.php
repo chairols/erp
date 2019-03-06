@@ -22,7 +22,8 @@ class Clientes extends CI_Controller {
             'paises_model',
             'log_model',
             'tipos_responsables_model',
-            'condiciones_de_venta_model'
+            'condiciones_de_venta_model',
+            'transportes_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -174,6 +175,8 @@ class Clientes extends CI_Controller {
         $data['monedas'] = $this->monedas_model->gets();
         
         $data['condiciones'] = $this->condiciones_de_venta_model->gets();
+        
+        $data['transportes'] = $this->transportes_model->gets();
 
         $this->load->view('layout/app', $data);
     }
@@ -338,6 +341,10 @@ class Clientes extends CI_Controller {
             if ($this->input->post('codigo_postal')) {
 
                 $datos['codigo_postal'] = $this->input->post('codigo_postal');
+            }
+            
+            if($this->input->post('idtransporte')) {
+                $datos['idtransporte'] = $this->input->post('idtransporte');
             }
 
             if ($this->input->post('casa_central')) {

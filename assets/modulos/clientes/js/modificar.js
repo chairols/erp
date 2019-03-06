@@ -4,10 +4,6 @@ $("#modificar").click(function() {
         'cliente': $("#cliente").val(),
         'cuit': $("#cuit").val(),
         'codigo_postal' : $("#codigo_postal").val(),
-        // 'idpais': $("#idpais").val(),
-        // 'telefono': $("#telefono").val(),
-        // 'email': $("#email").val(),
-        // 'contacto': $("#contacto").val(),
         'idtipo_responsable': $("#idtipo_responsable").val(),
         'iibb': $("#iibb").val(),
         'vat': $("#vat").val(),
@@ -18,7 +14,6 @@ $("#modificar").click(function() {
         'web': $("#web").val(),
         'idcondicion_de_venta': $("#condicion").val(),
         'observaciones': $("#observaciones").val()
-        // 'observaciones': $("#observaciones").val()
     };
     $.ajax({
         type: 'POST',
@@ -58,8 +53,7 @@ $("#modificar").click(function() {
     });
 });
 
-$( '#agregar_sucursal' ).click( function()
-{
+$( '#agregar_sucursal' ).click( function() {
 
     if( $( '#nombre_nueva_sucursal' ).val() )
     {
@@ -238,27 +232,17 @@ function modificarSucursal()
 
         }
 
-        var datos =
-        {
-
+        var datos = {
             'idcliente' : $( '#idcliente' ).val(),
-
             'idcliente_sucursal' : sucursal,
-
             'sucursal' : $( '#sucursal_' + sucursal ).val(),
-
             'idpais' : $( '#sucursal_idpais_' + sucursal ).val(),
-
             'idprovincia' : $( '#sucursal_idprovincia_' + sucursal ).val(),
-
             'localidad' : $( '#sucursal_localidad_' + sucursal ).val(),
-
             'direccion' : $( '#sucursal_direccion_' + sucursal ).val(),
-
             'codigo_postal' : $( '#sucursal_codigo_postal_' + sucursal ).val(),
-
+            'idtransporte': $("#sucursal_idtransporte_" + sucursal).val(),
             'casa_central' : casa_central
-
         };
 
         $.ajax(

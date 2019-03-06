@@ -167,50 +167,27 @@
 
         <!-- /.tab-pane -->
         <div class="tab-pane" id="tab_branches" style="padding:-10px;">
-
             <div class="row">
-
                 <div class="col-md-3 no-float txC" id="menu_sucursales" style="border-right:1px solid #eee;display: table-cell;float: none;padding-right:0px;">
-
                     <?php foreach ($sucursales as $key => $sucursal) { ?>
-
-
                         <?php if ($key == 0) { ?>
-
                             <div class="boton_sucursal_menu info-box-number" sucursal="<?= $sucursal['idcliente_sucursal'] ?>" id="boton_sucursal_menu_<?= $sucursal['idcliente_sucursal'] ?>" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">
-
                                 <?= $sucursal['sucursal'] ?>
-
                             </div>
-
                         <?php } else { ?>
-
                             <div class="boton_sucursal_menu" sucursal="<?= $sucursal['idcliente_sucursal'] ?>" id="boton_sucursal_menu_<?= $sucursal['idcliente_sucursal'] ?>" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">
-
                                 <?= $sucursal['sucursal'] ?>
-
                             </div>
-
                         <?php } ?>
-
                     <?php } ?>
-
                     <!-- <button type="button" id="agregar_sucursal" class="btn bg-purple btn-flat margin"><i class="fa fa-map"></i> Agregar Sucursal</button> -->
-
                     <div class="input-group margin" id="contenedor_nueva_sucursal">
-
                         <input type="text" class="form-control" id="nombre_nueva_sucursal">
-
                         <span class="input-group-btn">
-
                             <button type="button" id="agregar_sucursal" class="btn bg-purple btn-flat"><i class="fa fa-plus"></i></button>
-
                             <button type="button" id="agregar_sucursal_loading" class="btn bg-purple btn-flat" style="display: none;"><i class="fa fa-refresh fa-spin"></i></button>
-
                         </span>
-
                     </div>
-
                 </div>
 
                 <div class="col-md-9 no-float" id="sucursales" style="display: table-cell;float: none;">

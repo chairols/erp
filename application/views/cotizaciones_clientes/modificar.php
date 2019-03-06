@@ -148,9 +148,12 @@
                     </a>
                 </div>
                 <div class="col-lg-2 col-xs-12">
-                    <button type="button" class="btn btn-warning hint--top hint--bounce hint--warning" data-toggle="Generar PDF" data-target="" aria-label="Enviar por Correo">
-                        <i class="fa fa-envelope-o"></i> Enviar por Correo
-                    </button>
+                    <a onclick="confirmar_mail();">
+                        <button type="button" class="btn btn-warning hint--top hint--bounce hint--warning"  aria-label="Enviar PDF por Correo">
+                            <i class="fa fa-envelope-o"></i> Enviar por Correo
+                        </button>
+                    </a>
+
                 </div>
             </div>
             <br>

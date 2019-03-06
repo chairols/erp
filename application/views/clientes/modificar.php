@@ -23,57 +23,37 @@
                 </div>
             </div>
             <div class="row form-group">
-
                 <label class="control-label col-md-3">Tipo de IVA</label>
-
                 <div class="col-md-6 txL">
-
                     <select class="form-control chosenSelect" id="idtipo_responsable">
-
                         <?php foreach ($tipos_responsables as $tipo_responsable) { ?>
-
                             <option value="<?= $tipo_responsable['idtipo_responsable'] ?>"<?= ($tipo_responsable['idtipo_responsable'] == $cliente['idtipo_responsable']) ? " selected" : "" ?>><?= $tipo_responsable['tipo_responsable'] ?></option>
-
                         <?php } ?>
-
                     </select>
-
                 </div>
-
             </div>
-
             <div class="row form-group">
-
                 <label class="control-label col-md-3">Moneda</label>
-
                 <div class="col-md-6 txL">
-
                     <select class="form-control chosenSelect" id="idmoneda">
-
                         <?php foreach ($monedas as $moneda) { ?>
-
                             <option value="<?= $moneda['idmoneda'] ?>"<?= ($moneda['idmoneda'] == $cliente['idmoneda']) ? " selected" : "" ?>><?= $moneda['moneda'] ?></option>
-
                         <?php } ?>
-
                     </select>
-
                 </div>
-
             </div>
-
             <div class="row form-group">
-
                 <label class="control-label col-md-3">Sitio Web</label>
-
                 <div class="col-md-6">
-
                     <input type="text" id="web" class="form-control" value="<?= $cliente['web'] ?>" maxlength="255">
-
                 </div>
-
             </div>
-
+            <div class="row form-group">
+                <label class="control-label col-md-3">Observaciones</label>
+                <div class="col-md-6">
+                    <textarea id="observaciones" class="form-control"><?=$cliente['observaciones']?></textarea>
+                </div>
+            </div>
             <div class="row form-group txL">
 
                 <label class="control-label col-md-3 txR">Estado</label>

@@ -15,7 +15,8 @@ $("#modificar").click(function() {
         'saldo_inicial': $("#saldo_inicial").val(),
         'saldo_a_cuenta': $("#saldo_a_cuenta").val(),
         'idmoneda': $("#idmoneda").val(),
-        'web': $("#web").val()
+        'web': $("#web").val(),
+        'observaciones': $("#observaciones").val()
         // 'observaciones': $("#observaciones").val()
     };
     $.ajax({

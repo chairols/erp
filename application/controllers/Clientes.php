@@ -24,7 +24,9 @@ class Clientes extends CI_Controller {
             'tipos_responsables_model',
             'condiciones_de_venta_model',
             'transportes_model',
-            'empresas_tipos_model'
+            'empresas_tipos_model',
+            'dias_model',
+            'tipos_horarios_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -172,12 +174,16 @@ class Clientes extends CI_Controller {
         $data['paises'] = $this->paises_model->gets();
 
         $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
-        
+
         $data['empresas_tipos'] = $this->empresas_tipos_model->gets();
 
         $data['monedas'] = $this->monedas_model->gets();
 
         $data['condiciones'] = $this->condiciones_de_venta_model->gets();
+
+        $data['dias'] = $this->dias_model->gets();
+
+        $data['tipos_horarios'] = $this->tipos_horarios_model->gets();
 
         $data['transportes'] = $this->transportes_model->gets();
 
@@ -314,7 +320,7 @@ class Clientes extends CI_Controller {
 
             $datos = $this->input->post();
             $datos['actualizado_por'] = $session['SID'];
-            
+
             $resultado = $this->sucursales_model->update($datos, $where);
 
             if ($resultado) {
@@ -423,6 +429,67 @@ class Clientes extends CI_Controller {
         }
 
         echo json_encode($json);
+    }
+
+    public function agregar_horario_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
+        $this->form_validation->set_rules('iddia', 'Día de la Semana', 'required|integer');
+        $this->form_validation->set_rules('desde', 'Horario Desde', 'required');
+        $this->form_validation->set_rules('hasta', 'Horario Hasta', 'required');
+        $this->form_validation->set_rules('idtipo_horario', 'Tipo de Horario', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $set = array(
+                'idcliente' => $this->input->post('idcliente'),
+                'iddia' => $this->input->post('iddia'),
+                'desde' => $this->input->post('desde'),
+                'hasta' => $this->input->post('hasta'),
+                'idtipo_horario' => $this->input->post('idtipo_horario'),
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'idcreador' => $session['SID'],
+                'actualizado_por' => $session['SID']
+            );
+
+            
+            $hora_desde = substr($this->input->post('desde'), 0, 2);
+            $am_pm = substr($this->input->post('desde'), 6, 2);
+            if($am_pm == 'PM') {
+                $hora_desde += 12;
+            }
+            $set['desde'] = $hora_desde.":".substr($this->input->post('desde'), 3, 2).":00";
+            
+            $hora_hasta = substr($this->input->post('hasta'), 0, 2);
+            $am_pm = substr($this->input->post('hasta'), 6, 2);
+            if($am_pm == 'PM') {
+                $hora_hasta += 12;
+            }
+            $set['hasta'] = $hora_hasta.":".substr($this->input->post('hasta'), 3, 2).":00";
+            
+            
+            $resultado = $this->clientes_model->set_horario($set);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se agregó el horario'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo agregar el horario'
+                );
+                echo json_encode($json);
+            }
+        }
     }
 
 }

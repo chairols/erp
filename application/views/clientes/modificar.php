@@ -5,6 +5,7 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_data" data-toggle="tab" aria-expanded="true"><i class="fa fa-id-card"></i> Datos Principales</a></li>
         <li class=""><a href="#tab_accounting" data-toggle="tab" aria-expanded="false"><i class="fa fa-dollar"></i> Datos Impositivos</a></li>
+        <li class=""><a href="#tab_horarios" data-toggle="tab" aria-expanded="false"><i class="fa fa-clock-o"></i> Horarios</a></li>
         <li class=""><a href="#tab_branches" data-toggle="tab" aria-expanded="false"><i class="fa fa-globe"></i> Sucursales</a></li>
         <li class="pull-right header"><i class="fa fa-user"></i> <?= $cliente['cliente'] ?></li>
     </ul>
@@ -36,8 +37,8 @@
                 <label class="control-label col-md-3">Tipo de Cliente</label>
                 <div class="col-md-6 txL">
                     <select class="form-control chosenSelect" id="idempresa_tipo">
-                        <?php foreach($empresas_tipos as $tipo) { ?>
-                        <option value="<?=$tipo['idempresa_tipo']?>"<?=($tipo['idempresa_tipo']==$cliente['idempresa_tipo'])?" selected":""?>><?=$tipo['empresa_tipo']?></option>
+                        <?php foreach ($empresas_tipos as $tipo) { ?>
+                            <option value="<?= $tipo['idempresa_tipo'] ?>"<?= ($tipo['idempresa_tipo'] == $cliente['idempresa_tipo']) ? " selected" : "" ?>><?= $tipo['empresa_tipo'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -56,8 +57,8 @@
                 <label class="control-label col-md-3">Condición de Venta</label>
                 <div class="col-md-6 txL">
                     <select class="form-control chosenSelect" id="condicion">
-                        <?php foreach($condiciones as $condicion) { ?>
-                        <option value="<?=$condicion['idcondicion_de_venta']?>"<?=($cliente['idcondicion_de_venta']==$condicion['idcondicion_de_venta'])?" selected":""?>><?=$condicion['condicion_de_venta']?></option>
+                        <?php foreach ($condiciones as $condicion) { ?>
+                            <option value="<?= $condicion['idcondicion_de_venta'] ?>"<?= ($cliente['idcondicion_de_venta'] == $condicion['idcondicion_de_venta']) ? " selected" : "" ?>><?= $condicion['condicion_de_venta'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -66,13 +67,13 @@
                 <label class="control-label col-md-3">Límite de Crédito</label>
                 <div class="col-md-3 txL">
                     <select id="idmoneda_limite" class="form-control chosenSelect">
-                        <?php foreach($monedas as $moneda) { ?>
-                        <option value="<?=$moneda['idmoneda']?>"<?=($moneda['idmoneda']==$cliente['idmoneda_limite'])?" selected":""?>><?=$moneda['moneda']?></option>
+                        <?php foreach ($monedas as $moneda) { ?>
+                            <option value="<?= $moneda['idmoneda'] ?>"<?= ($moneda['idmoneda'] == $cliente['idmoneda_limite']) ? " selected" : "" ?>><?= $moneda['moneda'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <input type="text" id="limite_credito" class="form-control inputMask" value="<?=$cliente['limite_credito']?>" data-inputmask="'mask': '9{1,17}.99'">
+                    <input type="text" id="limite_credito" class="form-control inputMask" value="<?= $cliente['limite_credito'] ?>" data-inputmask="'mask': '9{1,17}.99'">
                 </div>
             </div>
             <div class="row form-group">
@@ -84,7 +85,7 @@
             <div class="row form-group">
                 <label class="control-label col-md-3">Observaciones</label>
                 <div class="col-md-6">
-                    <textarea id="observaciones" class="form-control"><?=$cliente['observaciones']?></textarea>
+                    <textarea id="observaciones" class="form-control"><?= $cliente['observaciones'] ?></textarea>
                 </div>
             </div>
             <div class="row form-group txL">
@@ -189,6 +190,49 @@
         </div>
 
         <!-- /.tab-pane -->
+        <div class="tab-pane txR" id="tab_horarios" style="padding:10px;">
+            <div class="row form-group">
+                <label class="control-label col-md-3">Día de la Semana</label>
+                <div class="col-md-6 txL">
+                    <select id="iddia" class="form-control chosenSelect">
+                        <?php foreach($dias as $dia) { ?>
+                        <option value="<?=$dia['iddia']?>"><?=$dia['dia']?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="control-label col-md-3">Horario Desde</label>
+                <div class="col-md-6 txL bootstrap-timepicker">
+                    <input type="text" id="horario_desde" class="form-control timepicker">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="control-label col-md-3">Horario Hasta</label>
+                <div class="col-md-6 txL bootstrap-timepicker">
+                    <input type="text" id="horario_hasta" class="form-control timepicker">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="control-label col-md-3">Tipo de Horario</label>
+                <div class="col-md-6 txL">
+                    <select id="idtipo_horario" class="form-control chosenSelect">
+                        <?php foreach($tipos_horarios as $tipo_horario) { ?>
+                        <option value="<?=$tipo_horario['idtipo_horario']?>"><?=$tipo_horario['tipo_horario']?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group txL">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <button type="button" id="agregar_horario" class="btn btn-primary">Agregar</button>
+                    <button type="button" id="agregar_horario_loading" class="btn btn-primary" style="display: none;">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- /.tab-pane -->
         <div class="tab-pane" id="tab_branches" style="padding:-10px;">
             <div class="row">
                 <div class="col-md-3 no-float txC" id="menu_sucursales" style="border-right:1px solid #eee;display: table-cell;float: none;padding-right:0px;">
@@ -203,7 +247,7 @@
                             </div>
                         <?php } ?>
                     <?php } ?>
-                    <!-- <button type="button" id="agregar_sucursal" class="btn bg-purple btn-flat margin"><i class="fa fa-map"></i> Agregar Sucursal</button> -->
+<!-- <button type="button" id="agregar_sucursal" class="btn bg-purple btn-flat margin"><i class="fa fa-map"></i> Agregar Sucursal</button> -->
                     <div class="input-group margin" id="contenedor_nueva_sucursal">
                         <input type="text" class="form-control" id="nombre_nueva_sucursal">
                         <span class="input-group-btn">
@@ -258,7 +302,7 @@
                 <div class="col-md-6">
                     <select class="form-control chosenSelect" id="idprovincia">
 <?php foreach ($provincias as $provincia) { ?>
-                            <option value="<?= $provincia['idprovincia'] ?>"<?= ($provincia['idprovincia'] == $cliente['idprovincia']) ? " selected" : "" ?>><?= $provincia['provincia'] ?></option>
+                                        <option value="<?= $provincia['idprovincia'] ?>"<?= ($provincia['idprovincia'] == $cliente['idprovincia']) ? " selected" : "" ?>><?= $provincia['provincia'] ?></option>
 <?php } ?>
                     </select>
                 </div>

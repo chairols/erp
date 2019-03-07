@@ -104,6 +104,14 @@ class Clientes_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Clientes/agregar_horario_ajax
+     */
+    public function set_horario($datos) {
+        $this->db->insert('clientes_horarios', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

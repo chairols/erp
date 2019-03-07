@@ -11,6 +11,8 @@
 <link rel="stylesheet" href="/assets/vendors/iCheck/all.css">
 <!-- Date Picker -->
 <link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">
+<!-- Time Picker -->
+<link rel="stylesheet" href="/assets/vendors/timepicker/bootstrap-timepicker.min.css">
 <!-- Alertify -->
 <!-- <link rel="stylesheet" href="/assets/vendors/alertifyjs/css/alertify.min.css">
 <link rel="stylesheet" href="/assets/vendors/alertifyjs/css/themes/bootstrap.min.css"> -->

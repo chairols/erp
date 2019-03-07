@@ -9,8 +9,10 @@
 </script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/assets/template/js/bootstrap.min.js"></script>
-<!-- datepicker -->
+<!-- Date Picker -->
 <script src="/assets/vendors/datepicker/bootstrap-datepicker.js"></script>
+<!-- Time Picker -->
+<script src="/assets/vendors/timepicker/bootstrap-timepicker.min.js"></script>
 <!-- Slimscroll -->
 <script src="/assets/vendors/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->

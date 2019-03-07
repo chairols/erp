@@ -14,6 +14,8 @@ $("#modificar").click(function() {
         'idmoneda': $("#idmoneda").val(),
         'web': $("#web").val(),
         'idcondicion_de_venta': $("#condicion").val(),
+        'idmoneda_limite': $("#idmoneda_limite").val(),
+        'limite_credito': $("#limite_credito").val(),
         'observaciones': $("#observaciones").val()
     };
     $.ajax({

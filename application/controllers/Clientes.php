@@ -196,6 +196,9 @@ class Clientes extends CI_Controller {
         $this->form_validation->set_rules('saldo_inicial', 'Saldo Inicial', 'required|decimal');
         $this->form_validation->set_rules('saldo_a_cuenta', 'Saldo a Cuenta', 'required|decimal');
         $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
+        $this->form_validation->set_rules('idcondicion_de_venta', 'Condición de Venta', 'required|integer');
+        $this->form_validation->set_rules('idmoneda_limite', 'Moneda Límite de Crédito', 'required|integer');
+        $this->form_validation->set_rules('limite_credito', 'Límite de Crédito', 'required|decimal');
 
         if ($this->form_validation->run() == FALSE) {
             $json = array(

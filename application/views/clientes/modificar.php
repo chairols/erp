@@ -64,6 +64,16 @@
             </div>
             <div class="row form-group">
                 <label class="control-label col-md-3">Límite de Crédito</label>
+                <div class="col-md-3 txL">
+                    <select id="idmoneda_limite" class="form-control chosenSelect">
+                        <?php foreach($monedas as $moneda) { ?>
+                        <option value="<?=$moneda['idmoneda']?>"<?=($moneda['idmoneda']==$cliente['idmoneda_limite'])?" selected":""?>><?=$moneda['moneda']?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="limite_credito" class="form-control inputMask" value="<?=$cliente['limite_credito']?>" data-inputmask="'mask': '9{1,17}.99'">
+                </div>
             </div>
             <div class="row form-group">
                 <label class="control-label col-md-3">Sitio Web</label>

@@ -235,7 +235,8 @@ function modificarSucursal() {
             'codigo_postal' : $( '#sucursal_codigo_postal_' + sucursal ).val(),
             'telefono': $("#sucursal_telefono_" + sucursal).val(),
             'idtransporte': $("#sucursal_idtransporte_" + sucursal).val(),
-            'casa_central' : casa_central
+            'casa_central' : casa_central,
+            'observaciones': $("#sucursal_observaciones_"+sucursal).val()
         };
 
         $.ajax({

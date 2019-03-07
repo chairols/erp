@@ -67,6 +67,12 @@
                 <input type="checkbox" id="sucursal_casa_central_<?=$sucursal[ 'idcliente_sucursal' ]?>" <?php if( $sucursal[ 'casa_central' ] == 'S' ) echo 'checked' ?> class="iCheckbox casaCentral" value="S">
         </div>
     </div>
+    <div class="row form-group">
+        <label class="control-label col-md-3 txR">Observaciones</label>
+        <div class="col-md-6">
+            <textarea id="sucursal_observaciones_<?=$sucursal['idcliente_sucursal']?>" class="form-control"><?=$sucursal['observaciones']?></textarea>
+        </div>
+    </div>
     <div class="row form-group txC">
         <div class="col-md-6 col-sm-6 col-xs-12 txR">
             <button type="button" id="modificar_sucursal_<?=$sucursal[ 'idcliente_sucursal' ]?>" sucursal="<?=$sucursal[ 'idcliente_sucursal' ]?>" class="modificarSucursal btn btn-primary">Modificar</button>

@@ -33,6 +33,16 @@
                 </div>
             </div>
             <div class="row form-group">
+                <label class="control-label col-md-3">Tipo de Cliente</label>
+                <div class="col-md-6 txL">
+                    <select class="form-control chosenSelect" id="idempresa_tipo">
+                        <?php foreach($empresas_tipos as $tipo) { ?>
+                        <option value="<?=$tipo['idempresa_tipo']?>"<?=($tipo['idempresa_tipo']==$cliente['idempresa_tipo'])?" selected":""?>><?=$tipo['empresa_tipo']?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
                 <label class="control-label col-md-3">Moneda</label>
                 <div class="col-md-6 txL">
                     <select class="form-control chosenSelect" id="idmoneda">
@@ -51,6 +61,9 @@
                         <?php } ?>
                     </select>
                 </div>
+            </div>
+            <div class="row form-group">
+                <label class="control-label col-md-3">Límite de Crédito</label>
             </div>
             <div class="row form-group">
                 <label class="control-label col-md-3">Sitio Web</label>

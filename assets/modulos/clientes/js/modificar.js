@@ -5,6 +5,7 @@ $("#modificar").click(function() {
         'cuit': $("#cuit").val(),
         'codigo_postal' : $("#codigo_postal").val(),
         'idtipo_responsable': $("#idtipo_responsable").val(),
+        'idempresa_tipo': $("#idempresa_tipo").val(),
         'iibb': $("#iibb").val(),
         'vat': $("#vat").val(),
         'saldo_cuenta_corriente': $("#saldo_cuenta_corriente").val(),

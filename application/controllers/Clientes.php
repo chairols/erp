@@ -23,7 +23,8 @@ class Clientes extends CI_Controller {
             'log_model',
             'tipos_responsables_model',
             'condiciones_de_venta_model',
-            'transportes_model'
+            'transportes_model',
+            'empresas_tipos_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -171,6 +172,8 @@ class Clientes extends CI_Controller {
         $data['paises'] = $this->paises_model->gets();
 
         $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
+        
+        $data['empresas_tipos'] = $this->empresas_tipos_model->gets();
 
         $data['monedas'] = $this->monedas_model->gets();
 

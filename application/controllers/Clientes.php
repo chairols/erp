@@ -173,9 +173,9 @@ class Clientes extends CI_Controller {
         $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
 
         $data['monedas'] = $this->monedas_model->gets();
-        
+
         $data['condiciones'] = $this->condiciones_de_venta_model->gets();
-        
+
         $data['transportes'] = $this->transportes_model->gets();
 
         $this->load->view('layout/app', $data);
@@ -288,93 +288,41 @@ class Clientes extends CI_Controller {
     }
 
     public function modificar_sucursal_ajax() {
-
         $session = $this->session->all_userdata();
 
         $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
-
         $this->form_validation->set_rules('idcliente_sucursal', 'ID de Sucursal de Cliente', 'required|integer');
-
         $this->form_validation->set_rules('sucursal', 'Nombre Sucursal', 'required');
 
         if ($this->form_validation->run() == FALSE) {
-
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
             );
-
             echo json_encode($json);
         } else {
-
             $where = array(
                 'idcliente' => $this->input->post('idcliente'),
                 'idcliente_sucursal' => $this->input->post('idcliente_sucursal')
             );
 
-            $datos = array(
-                'sucursal' => $this->input->post('sucursal'),
-                'estado' => 'A',
-                'actualizado_por' => $session['SID']
-            );
-
-            if ($this->input->post('idpais')) {
-
-                $datos['idpais'] = $this->input->post('idpais');
-            }
-
-            if ($this->input->post('idprovincia')) {
-
-                $datos['idprovincia'] = $this->input->post('idprovincia');
-            }
-
-            if ($this->input->post('localidad')) {
-
-                $datos['localidad'] = $this->input->post('localidad');
-            }
-
-            if ($this->input->post('direccion')) {
-
-                $datos['direccion'] = $this->input->post('direccion');
-            }
-
-            if ($this->input->post('codigo_postal')) {
-
-                $datos['codigo_postal'] = $this->input->post('codigo_postal');
-            }
+            $datos = $this->input->post();
+            $datos['actualizado_por'] = $session['SID'];
             
-            if($this->input->post('idtransporte')) {
-                $datos['idtransporte'] = $this->input->post('idtransporte');
-            }
-
-            if ($this->input->post('casa_central')) {
-
-                $datos['casa_central'] = $this->input->post('casa_central');
-
-                if ($datos['casa_central'] == 'S') {
-
-                    $this->sucursales_model->update(array('casa_central' => 'N'), array('idcliente' => $this->input->post('idcliente')));
-                }
-            }
-
             $resultado = $this->sucursales_model->update($datos, $where);
 
-            if (intval($resultado) >= 0) {
-
+            if ($resultado) {
                 $json = array(
                     'registros_modificados' => $resultado,
                     'status' => 'ok',
                     'data' => 'La sucursal ' . $this->input->post('sucursal') . ' se modificó correctamente'
                 );
-
                 echo json_encode($json);
             } else {
-
                 $json = array(
                     'status' => 'error',
                     'data' => 'No se pudo modificar la Sucursal ' . $this->input->post('sucursal')
                 );
-
                 echo json_encode($json);
             }
         }

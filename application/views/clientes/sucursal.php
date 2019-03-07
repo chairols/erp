@@ -46,6 +46,12 @@
         </div>
     </div>
     <div class="row form-group">
+        <label class="control-label col-md-3 txR">Teléfono</label>
+        <div class="col-md-6">
+            <input type="text" id="sucursal_telefono_<?=$sucursal['idcliente_sucursal']?>" class="form-control" value="<?=$sucursal['telefono']?>" maxlength="255">
+        </div>
+    </div>
+    <div class="row form-group">
         <label class="control-label col-md-3 txR">Transporte</label>
         <div class="col-md-6">
             <select class="form-control chosenSelect" id="sucursal_idtransporte_<?=$sucursal[ 'idcliente_sucursal' ]?>">

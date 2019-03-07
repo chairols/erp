@@ -215,21 +215,13 @@ function cambiarSucursal()
 
 }
 
-function modificarSucursal()
-{
-
-    $( '.modificarSucursal' ).click( function()
-    {
-
+function modificarSucursal() {
+    $( '.modificarSucursal' ).click( function() {
         var sucursal = $( this ).attr( 'sucursal' );
 
         var casa_central = 'N';
-
-        if( $( '#sucursal_casa_central_' + sucursal ).is( ':checked' ) )
-        {
-
+        if( $( '#sucursal_casa_central_' + sucursal ).is( ':checked' ) ) {
             casa_central = 'S';
-
         }
 
         var datos = {
@@ -241,89 +233,51 @@ function modificarSucursal()
             'localidad' : $( '#sucursal_localidad_' + sucursal ).val(),
             'direccion' : $( '#sucursal_direccion_' + sucursal ).val(),
             'codigo_postal' : $( '#sucursal_codigo_postal_' + sucursal ).val(),
+            'telefono': $("#sucursal_telefono_" + sucursal).val(),
             'idtransporte': $("#sucursal_idtransporte_" + sucursal).val(),
             'casa_central' : casa_central
         };
 
-        $.ajax(
-        {
-
+        $.ajax({
             type: 'POST',
-
             url: '/clientes/modificar_sucursal_ajax/',
-
             data: datos,
-
-            beforeSend: function()
-            {
-
-                $( '#modificar_sucursal_' + sucursal ).hide();
-
-                $( '#modificar_sucursal_loading_' + sucursal ).show();
-
+            beforeSend: function() {
+                $('#modificar_sucursal_'+sucursal).hide();
+                $('#modificar_sucursal_loading_'+sucursal).show();
             },
-
-            success: function( data )
-            {
-
+            success: function( data ) {
                 resultado = $.parseJSON( data );
 
-                if ( resultado[ 'status' ] == 'error' )
-                {
-
-                    console.log( resultado );
-
+                if (resultado[ 'status' ] == 'error') {
                     $.notify( '<strong>' + resultado[ 'data' ] + '</strong>',
                     {
-
                         type: 'danger',
-
                         allow_dismiss: true
-
                     });
-
                 } else if ( resultado[ 'status' ] == 'ok' ) {
-
                     $.notify( '<strong>' + resultado[ 'data' ] + '</strong>',
                     {
-
                         type: 'success',
-
                         allow_dismiss: true
-
                     });
-
                 }
-
-                $( '#modificar_sucursal_loading_' + sucursal ).hide();
-
-                $( '#modificar_sucursal_' + sucursal ).show();
-
+                $('#modificar_sucursal_loading_'+sucursal).hide();
+                $('#modificar_sucursal_'+sucursal).show();
             },
             error: function( xhr )
             { // if error occured
-
                 console.log( xhr.statusText );
-
                 $.notify( '<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
                 {
-
                     type: 'danger',
-
                     allow_dismiss: false
-
                 });
-
-                $( '#modificar_sucursal_loading_' + sucursal ).hide();
-
-                $( '#modificar_sucursal_' + sucursal ).show();
+                $('#modificar_sucursal_loading_'+sucursal).hide();
+                $('#modificar_sucursal_'+sucursal).show();
             }
-
         });
-
-
     });
-
 }
 
 

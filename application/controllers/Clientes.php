@@ -80,17 +80,12 @@ class Clientes extends CI_Controller {
     }
 
     public function agregar() {
-
         $data['title'] = 'Agregar Cliente';
-
         $data['session'] = $this->session->all_userdata();
-
         $data['menu'] = $this->r_session->get_menu();
-
         $data['javascript'] = array(
             '/assets/modulos/clientes/js/agregar.js'
         );
-
         $data['view'] = 'clientes/agregar';
 
         $this->load->view('layout/app', $data);

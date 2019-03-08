@@ -223,6 +223,12 @@
                     </select>
                 </div>
             </div>
+            <div class="row form-group">
+                <label class="control-label col-md-3">Observaciones</label>
+                <div class="col-md-6 txL">
+                    <textarea class="form-control" id="horario_observaciones"></textarea>
+                </div>
+            </div>
             <div class="row form-group txL">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <button type="button" id="agregar_horario" class="btn btn-primary">Agregar</button>
@@ -230,6 +236,9 @@
                         <i class="fa fa-refresh fa-spin"></i>
                     </button>
                 </div>
+            </div>
+            <div class="row form-group txL" id="horarios">
+                
             </div>
         </div>
         <!-- /.tab-pane -->
@@ -247,7 +256,6 @@
                             </div>
                         <?php } ?>
                     <?php } ?>
-<!-- <button type="button" id="agregar_sucursal" class="btn bg-purple btn-flat margin"><i class="fa fa-map"></i> Agregar Sucursal</button> -->
                     <div class="input-group margin" id="contenedor_nueva_sucursal">
                         <input type="text" class="form-control" id="nombre_nueva_sucursal">
                         <span class="input-group-btn">
@@ -274,71 +282,3 @@
 </div>
 <!-- nav-tabs-custom -->
 
-
-
-<!-- <div class="box box-primary">
-    <div class="box-header">
-
-    </div>
-    <div class="box-body">
-        <div class="form-horizontal">
-
-
-
-            <div class="form-group">
-                <label class="control-label col-md-3">Código Postal</label>
-                <div class="col-md-6">
-                    <input type="text" id="codigo_postal" class="form-control" value="<?= $cliente['codigo_postal'] ?>" maxlength="10">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Localidad</label>
-                <div class="col-md-6">
-                    <input type="text" id="localidad" class="form-control" value="<?= $cliente['localidad'] ?>" maxlength="255">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Provincia</label>
-                <div class="col-md-6">
-                    <select class="form-control chosenSelect" id="idprovincia">
-<?php foreach ($provincias as $provincia) { ?>
-                                        <option value="<?= $provincia['idprovincia'] ?>"<?= ($provincia['idprovincia'] == $cliente['idprovincia']) ? " selected" : "" ?>><?= $provincia['provincia'] ?></option>
-<?php } ?>
-                    </select>
-                </div>
-            </div> -->
-
-<!-- <div class="form-group">
-    <label class="control-label col-md-3">Teléfono</label>
-    <div class="col-md-6">
-        <input type="text" id="telefono" class="form-control" value="<?//=$cliente['telefono']?>" maxlength="255">
-    </div>
-</div> -->
-
-<!-- <div class="form-group">
-    <label class="control-label col-md-3">Contacto</label>
-    <div class="col-md-6">
-        <input type="text" id="contacto" class="form-control" value="<?//=$cliente['contacto']?>" maxlength="255">
-    </div>
-</div> -->
-
-
-
-
-
-<!-- <div class="form-group">
-    <label class="control-label col-md-3">Observaciones</label>
-    <div class="col-md-6">
-        <textarea class="form-control" id="observaciones"><?//=$cliente['observaciones']?></textarea>
-    </div>
-</div> -->
-
-
-
-
-
-<!-- <div class="ln_solid"></div>
-
-</div>
-</div>
-</div> -->

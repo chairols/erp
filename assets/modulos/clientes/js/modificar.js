@@ -372,7 +372,8 @@ $("#agregar_horario").click(function () {
         'iddia': $("#iddia").val(),
         'desde': $("#horario_desde").val(),
         'hasta': $("#horario_hasta").val(),
-        'idtipo_horario': $("#idtipo_horario").val()
+        'idtipo_horario': $("#idtipo_horario").val(),
+        'observaciones': $("#horario_observaciones").val()
     };
 
     $.ajax({

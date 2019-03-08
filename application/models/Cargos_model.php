@@ -24,6 +24,32 @@ class Cargos_model extends CI_Model {
         $this->db->insert('cargos', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Cargos/listar
+     */
+    public function get_cantidad_where($where) {
+        $this->db->select('*');
+        $this->db->from('cargos');
+        $this->db->like($where);
+        
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+    
+    /*
+     *  Cargos/listar
+     */
+    public function gets_where_limit($where, $per_page, $pagina) {
+        $this->db->select('*');
+        $this->db->from('cargos');
+        $this->db->like($where);
+        $this->db->order_by('cargo');
+        $this->db->limit($per_page, $pagina);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

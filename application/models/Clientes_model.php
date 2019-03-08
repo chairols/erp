@@ -152,6 +152,14 @@ class Clientes_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Clientes/borrar_agente_ajax
+     */
+    public function update_agente($datos, $where) {
+        $this->db->update('clientes_agentes', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

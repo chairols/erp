@@ -581,3 +581,46 @@ function actualizar_agentes() {
         }
     });
 }
+
+function borrar_agente(id) {
+    datos = {
+        'idcliente_agente': id
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/clientes/borrar_agente_ajax/',
+        data: datos,
+        beforeSend: function () {
+            Pace.restart();
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado[ 'status' ] == 'error') {
+                console.log(resultado);
+                $.notify('<strong>' + resultado[ 'data' ] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: true
+                        });
+            } else if (resultado[ 'status' ] == 'ok') {
+                $.notify('<strong>' + resultado[ 'data' ] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: true
+                        });
+                actualizar_agentes();
+            }
+            Pace.stop();
+        },
+        error: function (xhr) { // if error occured
+            console.log(xhr.statusText);
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            Pace.stop();
+        }
+    });
+}

@@ -72,6 +72,8 @@ class Clientes_model extends CI_Model {
     }
 
     /*
+     *  Clientes/agregar_agente_ajax
+     * 
      *  Importar/clientes
      */
     public function set_agente($datos) {

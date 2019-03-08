@@ -26,7 +26,8 @@ class Clientes extends CI_Controller {
             'transportes_model',
             'empresas_tipos_model',
             'dias_model',
-            'tipos_horarios_model'
+            'tipos_horarios_model',
+            'cargos_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -181,6 +182,8 @@ class Clientes extends CI_Controller {
         $data['tipos_horarios'] = $this->tipos_horarios_model->gets();
 
         $data['transportes'] = $this->transportes_model->gets();
+        
+        $data['cargos'] = $this->cargos_model->gets();
 
         $this->load->view('layout/app', $data);
     }
@@ -532,6 +535,56 @@ class Clientes extends CI_Controller {
                 echo json_encode($json);
             }
         }
+    }
+    
+    public function agregar_agente_ajax() {
+        $session = $this->session->all_userdata();
+        
+        $this->form_validation->set_rules('idcliente', 'Cliente', 'required|integer');
+        $this->form_validation->set_rules('idcliente_sucursal', 'Sucursal', 'required|integer');
+        $this->form_validation->set_rules('idcargo', 'Cargo', 'required|integer');
+        $this->form_validation->set_rules('agente', 'Nombre', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'valid_email');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $set = array(
+                'idcliente' => $this->input->post('idcliente'),
+                'idcliente_sucursal' => $this->input->post('idcliente_sucursal'),
+                'agente' => $this->input->post('agente'),
+                'idcargo' => $this->input->post('idcargo'),
+                'email' => $this->input->post('email'),
+                'telefono' => $this->input->post('telefono'),
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'idcreador' => $session['SID'],
+                'actualizado_por' => $session['SID']
+            );
+            
+            $resultado = $this->clientes_model->set_agente($set);
+            
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se agregó el agente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo agregar el agente'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+    
+    public function gets_agentes_tabla() {
+        
     }
 }
 

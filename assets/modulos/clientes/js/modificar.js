@@ -195,6 +195,8 @@ $(document).ready(function ()
     actualizarCheckboxes();
 
     actualizar_horarios();
+    
+    actualizar_agentes();
 
     $('.timepicker').timepicker({
         showInputs: false
@@ -492,4 +494,65 @@ function borrar_horario(id) {
             Pace.stop();
         }
     });
+}
+
+$("#agregar_agente").click(function() {
+    datos = {
+        'idcliente': $("#idcliente").val(),
+        'idcliente_sucursal': $("#agentes_sucursal").val(),
+        'idcargo': $("#agentes_cargo").val(),
+        'agente': $("#agente_nombre").val(),
+        'email': $("#agente_email").val(),
+        'telefono': $("#agente_telefono").val()
+    };
+    
+    $.ajax({
+        type: 'POST',
+        url: '/clientes/agregar_agente_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $('#agregar_agente').hide();
+            $('#agregar_agente_loading').show();
+            Pace.restart();
+        },
+        success: function (data) {
+            $('#agregar_agente_loading').hide();
+            $('#agregar_agente').show();
+            Pace.stop();
+            resultado = $.parseJSON(data);
+            if (resultado[ 'status' ] == 'error') {
+                console.log(resultado);
+                $.notify('<strong>' + resultado[ 'data' ] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: true
+                        });
+            } else if (resultado[ 'status' ] == 'ok') {
+                $.notify('<strong>' + resultado[ 'data' ] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: true
+                        });
+                $("#agente_nombre").val("");
+                $("#agente_email").val("");
+                $("#agente_telefono").val("");
+                actualizar_agentes();
+            }
+        },
+        error: function (xhr) { // if error occured
+            console.log(xhr.statusText);
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            $('#agregar_agente_loading').hide();
+            $('#agregar_agente').show();
+            Pace.stop();
+        }
+    });
+});
+
+function actualizar_agentes() {
+    
 }

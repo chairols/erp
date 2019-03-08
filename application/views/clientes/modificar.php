@@ -7,6 +7,7 @@
         <li class=""><a href="#tab_accounting" data-toggle="tab" aria-expanded="false"><i class="fa fa-dollar"></i> Datos Impositivos</a></li>
         <li class=""><a href="#tab_horarios" data-toggle="tab" aria-expanded="false"><i class="fa fa-clock-o"></i> Horarios</a></li>
         <li class=""><a href="#tab_branches" data-toggle="tab" aria-expanded="false"><i class="fa fa-globe"></i> Sucursales</a></li>
+        <li class=""><a href="#tab_agentes" data-toggle="tab" aria-expanded="false"><i class="fa fa-black-tie"></i> Agentes</a></li>
         <li class="pull-right header"><i class="fa fa-user"></i> <?= $cliente['cliente'] ?></li>
     </ul>
     <div class="tab-content" style="padding:0px;">
@@ -195,8 +196,8 @@
                 <label class="control-label col-md-3">Día de la Semana</label>
                 <div class="col-md-6 txL">
                     <select id="iddia" class="form-control chosenSelect">
-                        <?php foreach($dias as $dia) { ?>
-                        <option value="<?=$dia['iddia']?>"><?=$dia['dia']?></option>
+                        <?php foreach ($dias as $dia) { ?>
+                            <option value="<?= $dia['iddia'] ?>"><?= $dia['dia'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -217,8 +218,8 @@
                 <label class="control-label col-md-3">Tipo de Horario</label>
                 <div class="col-md-6 txL">
                     <select id="idtipo_horario" class="form-control chosenSelect">
-                        <?php foreach($tipos_horarios as $tipo_horario) { ?>
-                        <option value="<?=$tipo_horario['idtipo_horario']?>"><?=$tipo_horario['tipo_horario']?></option>
+                        <?php foreach ($tipos_horarios as $tipo_horario) { ?>
+                            <option value="<?= $tipo_horario['idtipo_horario'] ?>"><?= $tipo_horario['tipo_horario'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -238,7 +239,7 @@
                 </div>
             </div>
             <div class="row form-group txL" id="horarios">
-                
+
             </div>
         </div>
         <!-- /.tab-pane -->
@@ -273,6 +274,60 @@
 
             </div>
 
+        </div>
+        <!-- /.tab-pane -->
+        <div class="tab-pane txR" id="tab_agentes" style="padding:10px;">
+            <div class="row form-group">
+                <label class="control-label col-md-3">Sucursal</label>
+                <div class="col-md-6 txL">
+                    <select id="agentes_sucursal" class="form-control chosenSelect">
+                        <?php foreach($sucursales as $sucursal) { ?>
+                        <option value="<?=$sucursal['idcliente_sucursal']?>"><?=$sucursal['sucursal']?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="control-label col-md-3">Cargo</label>
+                <div class="col-md-6 txL">
+                    <select id="agentes_cargo" class="form-control chosenSelect">
+                        <?php foreach ($cargos as $cargo) { ?>
+                            <option value="<?= $cargo['idcargo'] ?>"><?= $cargo['cargo'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="control-label col-md-3">Nombre</label>
+                <div class="col-md-6 txL">
+                    <input type="text" id="agente_nombre" class="form-control" maxlength="255">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="control-label col-md-3">Email</label>
+                <div class="col-md-6 txL">
+                    <input type="text" id="agente_email" class="form-control" maxlength="255">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="control-label col-md-3">Teléfono</label>
+                <div class="col-md-6 txL">
+                    <input type="text" id="agente_telefono" class="form-control" maxlength="50">
+                </div>
+            </div>
+
+
+            <div class="row form-group txL">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <button type="button" id="agregar_agente" class="btn btn-primary">Agregar</button>
+                    <button type="button" id="agregar_agente_loading" class="btn btn-primary" style="display: none;">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row form-group txL" id="agentes">
+
+            </div>
         </div>
         <!-- /.tab-pane -->
 

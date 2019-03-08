@@ -50,6 +50,18 @@ class Cargos_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Clientes/modificar
+     */
+    public function gets() {
+        $this->db->select('*');
+        $this->db->from('cargos');
+        $this->db->order_by('cargo');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

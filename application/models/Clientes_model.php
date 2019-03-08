@@ -113,6 +113,9 @@ class Clientes_model extends CI_Model {
         return $this->db->insert_id();
     }
     
+    /*
+     *  Clientes/gets_horarios_tabla
+     */
     public function gets_horarios_where($where) {
         $this->db->select('*');
         $this->db->from('clientes_horarios');
@@ -123,6 +126,14 @@ class Clientes_model extends CI_Model {
         
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    /*
+     *  Clientes/borrar_horario_ajax
+     */
+    public function update_horario($datos, $where) {
+        $this->db->update('clientes_horarios', $datos, $where);
+        return $this->db->affected_rows();
     }
 }
 

@@ -507,6 +507,37 @@ class Clientes extends CI_Controller {
             $this->load->view('clientes/gets_horarios_tabla', $data);
         }
     }
+    
+    public function borrar_horario_ajax() {
+        $this->form_validation->set_rules('idcliente_horario', 'ID Horario de Cliente', 'required|integer');
+        
+        if($this->form_validation->run() == FALSE) {
+            echo "<h3 class='txC'><strong>ERROR - No se hace referencia al Cliente</strong></h3>";
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idcliente_horario' => $this->input->post('idcliente_horario')
+            );
+            
+            $resultado = $this->clientes_model->update_horario($datos, $where);
+            
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se eliminó el horario'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo borrar el horario'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
 }
 
 ?>

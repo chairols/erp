@@ -193,6 +193,8 @@ $(document).ready(function ()
     eliminarSucursal();
 
     actualizarCheckboxes();
+    
+    actualizar_horarios();
 
     $('.timepicker').timepicker({
         showInputs: false
@@ -400,6 +402,7 @@ $("#agregar_horario").click(function () {
                             type: 'success',
                             allow_dismiss: true
                         });
+                actualizar_horarios();
             }
             $('#agregar_horario_loading').hide();
             $('#agregar_horario').show();
@@ -418,3 +421,32 @@ $("#agregar_horario").click(function () {
         }
     });
 });
+
+function actualizar_horarios() {
+    datos = {
+        'idcliente': $("#idcliente").val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/clientes/gets_horarios_tabla/',
+        data: datos,
+        beforeSend: function () {
+            $("#horarios").html("<h2 class='txC'><i class='fa fa-refresh fa-spin'></i></h2>");
+            Pace.restart();
+        },
+        success: function (data) {
+            $("#horarios").html(data);
+            Pace.stop();
+        },
+        error: function (xhr) { // if error occured
+            console.log(xhr.statusText);
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            Pace.stop();
+        }
+    });
+} 

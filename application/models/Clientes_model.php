@@ -112,6 +112,18 @@ class Clientes_model extends CI_Model {
         $this->db->insert('clientes_horarios', $datos);
         return $this->db->insert_id();
     }
+    
+    public function gets_horarios_where($where) {
+        $this->db->select('*');
+        $this->db->from('clientes_horarios');
+        $this->db->join('tipos_horarios', 'clientes_horarios.idtipo_horario = tipos_horarios.idtipo_horario');
+        $this->db->join('dias', 'clientes_horarios.iddia = dias.iddia');
+        $this->db->where($where);
+        $this->db->order_by('dias.iddia, clientes_horarios.desde');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

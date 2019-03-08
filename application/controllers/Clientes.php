@@ -584,7 +584,19 @@ class Clientes extends CI_Controller {
     }
     
     public function gets_agentes_tabla() {
+        $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
         
+        if($this->form_validation->run() == FALSE) {
+            echo "<h3 class='txC'><strong>ERROR - No se hace referencia al Cliente</strong></h3>";
+        } else {
+            $where = array(
+                'clientes_agentes.idcliente' => $this->input->post('idcliente'),
+                'clientes_agentes.estado' => 'A'
+            );
+            $data['agentes'] = $this->clientes_model->gets_agentes_where($where);
+            
+            $this->load->view('clientes/gets_agentes_tabla', $data);
+        }
     }
 }
 

@@ -554,5 +554,30 @@ $("#agregar_agente").click(function() {
 });
 
 function actualizar_agentes() {
-    
+    datos = {
+        'idcliente': $("#idcliente").val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/clientes/gets_agentes_tabla/',
+        data: datos,
+        beforeSend: function () {
+            $("#agentes").html("<h2 class='txC'><i class='fa fa-refresh fa-spin'></i></h2>");
+            Pace.restart();
+        },
+        success: function (data) {
+            $("#agentes").html(data);
+            Pace.stop();
+        },
+        error: function (xhr) { // if error occured
+            console.log(xhr.statusText);
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            Pace.stop();
+        }
+    });
 }

@@ -137,6 +137,21 @@ class Clientes_model extends CI_Model {
         $this->db->update('clientes_horarios', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Clientes/gets_agentes_tabla
+     */
+    public function gets_agentes_where($where) {
+        $this->db->select('clientes_agentes.*, clientes_sucursales.sucursal, cargos.cargo');
+        $this->db->from('clientes_agentes');
+        $this->db->join('clientes_sucursales', 'clientes_agentes.idcliente_sucursal = clientes_sucursales.idcliente_sucursal');
+        $this->db->join('cargos', 'clientes_agentes.idcargo = cargos.idcargo');
+        $this->db->where($where);
+        $this->db->order_by('clientes_agentes.idcliente_agente');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

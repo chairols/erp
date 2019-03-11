@@ -95,13 +95,16 @@ $("#TextAutoCompletearticulo").focusout(function () {
             Pace.restart();
         },
         success: function (data) {
+            Pace.stop();
             resultado = $.parseJSON(data);
             $("#descripcion").val(resultado['linea']['nombre_corto'] + " " + resultado['articulo'] + " - " + resultado['marca']['marca']);
+            
+            /*
             $("#precio").val(resultado['precio']);
-            Pace.stop();
             if ($("#idmoneda").val() == '2') {
                 get_factor_correccion();
             }
+            */
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,

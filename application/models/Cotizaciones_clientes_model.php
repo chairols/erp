@@ -104,6 +104,14 @@ class Cotizaciones_clientes_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Cotizaciones_clientes/borrar_articulo_ajax
+     */
+    public function get_where_item($where) {
+        $query = $this->db->get_where('cotizaciones_clientes_items', $where);
+        return $query->row_array();
+    }
 }
 
 ?>

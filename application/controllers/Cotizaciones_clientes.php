@@ -25,7 +25,7 @@ class Cotizaciones_clientes extends CI_Controller {
             'tipos_responsables_model',
             'condiciones_de_venta_model'
         ));
-        
+
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
     }
@@ -38,7 +38,7 @@ class Cotizaciones_clientes extends CI_Controller {
             '/assets/modulos/cotizaciones_clientes/js/agregar.js'
         );
         $data['view'] = 'cotizaciones_clientes/agregar';
-        
+
         $data['monedas'] = $this->monedas_model->gets();
 
         $this->load->view('layout/app', $data);
@@ -46,12 +46,12 @@ class Cotizaciones_clientes extends CI_Controller {
 
     public function agregar_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idcliente', 'Cliente', 'required|integer');
         $this->form_validation->set_rules('idsucursal', 'Sucursal', 'required|integer');
         $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');
-        
+
         if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
@@ -63,7 +63,7 @@ class Cotizaciones_clientes extends CI_Controller {
                 'idcliente' => $this->input->post('idcliente')
             );
             $cliente = $this->clientes_model->get_where($where);
-            
+
             $this->load->model(array(
                 'prueba_model'
             ));
@@ -71,7 +71,7 @@ class Cotizaciones_clientes extends CI_Controller {
                 'idcliente_sucursal' => $this->input->post('idsucursal')
             );
             $sucursal = $this->prueba_model->get_sucursal_where($where);
-            
+
             $set = array(
                 'idcliente' => $this->input->post('idcliente'),
                 'cliente' => $cliente['cliente'],
@@ -87,7 +87,7 @@ class Cotizaciones_clientes extends CI_Controller {
             );
 
             $id = $this->cotizaciones_clientes_model->set($set);
-            
+
             if ($id) {
                 $where = array(
                     'idmoneda' => $this->input->post('idmoneda')
@@ -118,12 +118,12 @@ class Cotizaciones_clientes extends CI_Controller {
             }
         }
     }
-    
+
     public function modificar($idcotizacion_cliente = null) {
         if ($idcotizacion_cliente == null) {
             redirect('/cotizaciones_clientes/listar/', 'refresh');
         }
-        
+
         $data['title'] = 'Modificar Cotización a Cliente';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
@@ -148,7 +148,7 @@ class Cotizaciones_clientes extends CI_Controller {
 
         $this->load->view('layout/app', $data);
     }
-    
+
     public function actualizar_cabecera_ajax() {
         $session = $this->session->all_userdata();
 
@@ -215,7 +215,7 @@ class Cotizaciones_clientes extends CI_Controller {
             }
         }
     }
-    
+
     public function listar_articulos_tabla_ajax() {
         $where = array(
             'idcotizacion_cliente' => $this->input->post('idcotizacion_cliente'),
@@ -239,7 +239,7 @@ class Cotizaciones_clientes extends CI_Controller {
 
         $this->load->view('cotizaciones_clientes/listar_articulos_tabla_ajax', $data);
     }
-    
+
     public function agregar_articulo_ajax() {
         $session = $this->session->all_userdata();
 
@@ -291,10 +291,10 @@ class Cotizaciones_clientes extends CI_Controller {
 <p>
 <strong>Artículo: </strong>" . $articulo['articulo'] . "<br />
 <strong>Marca: </strong>" . $marca['marca'] . "<br />
-<strong>Descripcion: </strong>".$this->input->post('descripcion')."<br />
+<strong>Descripcion: </strong>" . $this->input->post('descripcion') . "<br />
 <strong>Precio: </strong>" . $this->input->post('precio') . "<br />
 <strong>Fecha de Entrega: </strong>" . $this->input->post('fecha') . "<br />
-<strong>Observaciones: </strong>" . $this->input->post('observaciones_item')."<br />
+<strong>Observaciones: </strong>" . $this->input->post('observaciones_item') . "<br />
 </p>",
                     'idusuario' => $session['SID'],
                     'tipo' => 'add'
@@ -315,7 +315,7 @@ class Cotizaciones_clientes extends CI_Controller {
             }
         }
     }
-    
+
     public function borrar_articulo_ajax() {
         $session = $this->session->all_userdata();
 
@@ -334,10 +334,31 @@ class Cotizaciones_clientes extends CI_Controller {
             $where = array(
                 'idcotizacion_cliente_item' => $this->input->post('idcotizacion_cliente_item')
             );
-
+            
             $resultado = $this->cotizaciones_clientes_model->update_item($datos, $where);
 
             if ($resultado) {
+                
+                $where = array(
+                    'idcotizacion_cliente_item' => $this->input->post('idcotizacion_cliente_item')
+                );
+                $item = $this->cotizaciones_clientes_model->get_where_item($where);
+                $log = array(
+                    'tabla' => 'cotizaciones_clientes',
+                    'idtabla' => $item['idcotizacion_cliente'],
+                    'texto' => "<h2><strong>Se eliminó el item: " . $item['descripcion'] . "</strong></h2>
+
+<p>
+<strong>Cantidad: </strong>" . $item['cantidad'] . "<br />
+<strong>Precio: </strong>" . $item['precio'] . "<br />
+<strong>Fecha de Entrega: </strong>" . $item['fecha_entrega'] . "<br />
+<strong>Observaciones: </strong>" . $item['observaciones_item'] . "<br />
+</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'del'
+                );
+                $this->log_model->set($log);
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se eliminó correctamente el artículo'
@@ -352,15 +373,15 @@ class Cotizaciones_clientes extends CI_Controller {
             }
         }
     }
-    
+
     public function listar($pagina = 0) {
         $data['title'] = 'Listar Cotizaciones a Clientes';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
         $data['javascript'] = array();
         $data['view'] = 'cotizaciones_clientes/listar';
-        
-        
+
+
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
 
@@ -398,288 +419,288 @@ class Cotizaciones_clientes extends CI_Controller {
          */
 
         $data['cotizaciones'] = $this->cotizaciones_clientes_model->gets_where_limit($where, $per_page, $pagina);
-        
-        foreach($data['cotizaciones'] as $key => $value) {
+
+        foreach ($data['cotizaciones'] as $key => $value) {
             $data['cotizaciones'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
-            
+
             $where = array(
                 'idcliente' => $value['idcliente']
             );
             $data['cotizaciones'][$key]['cliente'] = $this->clientes_model->get_where($where);
-            
+
             $where = array(
                 'idmoneda' => $value['idmoneda']
             );
             $data['cotizaciones'][$key]['moneda'] = $this->monedas_model->get_where($where);
-            
+
             $data['cotizaciones'][$key]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
             $data['cotizaciones'][$key]['cotizacion_moneda'] = $this->monedas_model->get_ultima_cotizacion_por_monedas($data['cotizaciones'][$key]['idmoneda']);
-            
+
             $where = array(
                 'idcotizacion_cliente' => $value['idcotizacion_cliente'],
                 'estado' => 'A'
             );
             $data['cotizaciones'][$key]['items'] = $this->cotizaciones_clientes_model->gets_articulos_where($where);
-            foreach($data['cotizaciones'][$key]['items'] as $key2 => $value2) {
+            foreach ($data['cotizaciones'][$key]['items'] as $key2 => $value2) {
                 $where = array(
                     'idarticulo' => $value2['idarticulo']
                 );
                 $data['cotizaciones'][$key]['items'][$key2]['articulo'] = $this->articulos_model->get_where($where);
-                
+
                 $where = array(
                     'idlinea' => $data['cotizaciones'][$key]['items'][$key2]['articulo']['idlinea']
                 );
                 $data['cotizaciones'][$key]['items'][$key2]['articulo']['linea'] = $this->lineas_model->get_where($where);
-                
+
                 $where = array(
                     'idmarca' => $data['cotizaciones'][$key]['items'][$key2]['articulo']['idmarca']
                 );
                 $data['cotizaciones'][$key]['items'][$key2]['articulo']['marca'] = $this->marcas_model->get_where($where);
-                
+
                 $data['cotizaciones'][$key]['items'][$key2]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
             }
         }
 
         $this->load->view('layout/app', $data);
     }
-    
+
     public function pdf($idcotizacion_cliente = null, $modo = null) {
-        
-        if($idcotizacion_cliente != null && $modo != null) {
+
+        if ($idcotizacion_cliente != null && $modo != null) {
             $this->pdf = new Pdf_cotizacion_cliente;
             $this->pdf->AddPage();
             $this->pdf->AliasNbPages();
-            
+
             $where = array(
                 'idcotizacion_cliente' => $idcotizacion_cliente,
                 'estado' => 'A'
             );
             $cotizacion_cliente = $this->cotizaciones_clientes_model->get_where($where);
             $items = $this->cotizaciones_clientes_model->gets_articulos_where($where);
-            
+
             $where = array(
                 'idcliente' => $cotizacion_cliente['idcliente']
             );
             $cliente = $this->clientes_model->get_where($where);
-            
+
             $where = array(
                 'idcliente' => $cliente['idcliente']
             );
             $sucursales = $this->clientes_model->gets_sucursales($where);
-            
+
             $where = array(
                 'idtipo_responsable' => $cliente['idtipo_responsable']
             );
             $tipo_responsable = $this->tipos_responsables_model->get_where($where);
-            
+
             $where = array(
                 'idcondicion_de_venta' => $cliente['idcondicion_de_venta']
             );
             $condicion_de_venta = $this->condiciones_de_venta_model->get_where($where);
-            
+
             $where = array(
                 'idmoneda' => $cotizacion_cliente['idmoneda']
             );
             $moneda = $this->monedas_model->get_where($where);
-            
-            
-            $this->pdf->SetTextColor(0,0,0);
-            $this->pdf->SetFont('Arial','B',12);
-            /*
-            $this->pdf->SetFont('Arial','B',18);
-            $this->pdf->SetXY(115, 16);
-            $this->pdf->Cell(0,0,'A',0,0,'L');
-            
-            $this->pdf->SetFont('Arial','B', 8);
-            $this->pdf->SetXY(113, 20);
-            $this->pdf->Cell(0,0,'CODIGO',0,0,'L');
 
-            
-            $this->pdf->SetFont('Arial','',8);
-            $this->pdf->SetXY(130, 10);
-            $this->pdf->Cell(0,0,'comprobanteDescripcion',0,0,'L');
-            */
-            
+
+            $this->pdf->SetTextColor(0, 0, 0);
+            $this->pdf->SetFont('Arial', 'B', 12);
+            /*
+              $this->pdf->SetFont('Arial','B',18);
+              $this->pdf->SetXY(115, 16);
+              $this->pdf->Cell(0,0,'A',0,0,'L');
+
+              $this->pdf->SetFont('Arial','B', 8);
+              $this->pdf->SetXY(113, 20);
+              $this->pdf->Cell(0,0,'CODIGO',0,0,'L');
+
+
+              $this->pdf->SetFont('Arial','',8);
+              $this->pdf->SetXY(130, 10);
+              $this->pdf->Cell(0,0,'comprobanteDescripcion',0,0,'L');
+             */
+
             $this->pdf->SetXY(114, 15);
-            $this->pdf->Cell(0,0, utf8_decode('COTIZACIÓN: ').str_pad($idcotizacion_cliente, 8, '0', STR_PAD_LEFT),0,0,'L');
+            $this->pdf->Cell(0, 0, utf8_decode('COTIZACIÓN: ') . str_pad($idcotizacion_cliente, 8, '0', STR_PAD_LEFT), 0, 0, 'L');
 
             $this->pdf->SetXY(165, 15);
-            $this->pdf->Cell(0,0,'FECHA: '.$this->formatear_fecha_para_mostrar($cotizacion_cliente['fecha']),0,0,'L');
-            
-            
-            $this->pdf->SetFont('Arial','B',9);
+            $this->pdf->Cell(0, 0, 'FECHA: ' . $this->formatear_fecha_para_mostrar($cotizacion_cliente['fecha']), 0, 0, 'L');
+
+
+            $this->pdf->SetFont('Arial', 'B', 9);
             $this->pdf->SetXY(15, 58);
-            $this->pdf->Cell(0,0, utf8_decode($cotizacion_cliente['cliente']),0,0,'L');
+            $this->pdf->Cell(0, 0, utf8_decode($cotizacion_cliente['cliente']), 0, 0, 'L');
 
             /*
-            $this->pdf->SetFont('Arial','B',9);
-            $this->pdf->SetXY(15, 61);
-            $this->pdf->Cell(0,0,'razonSocial2',0,0,'L');
-            
-            
+              $this->pdf->SetFont('Arial','B',9);
+              $this->pdf->SetXY(15, 61);
+              $this->pdf->Cell(0,0,'razonSocial2',0,0,'L');
+
+
+              $this->pdf->SetFont('Arial', '', 9);
+              $this->pdf->SetXY(124, 61);
+              $this->pdf->Cell(0,0,'ordenDeCompra',0,0,'L');
+             */
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(124, 61);
-            $this->pdf->Cell(0,0,'ordenDeCompra',0,0,'L');
-            */
-            $this->pdf->SetFont('Arial','',9);
             $this->pdf->SetXY(15, 64);
-            $this->pdf->Cell(0,0,'DOMICILIO: ',0,0,'L');
+            $this->pdf->Cell(0, 0, 'DOMICILIO: ', 0, 0, 'L');
 
-            $this->pdf->SetFont('Arial','',9);
+            $this->pdf->SetFont('Arial', '', 9);
             $this->pdf->SetXY(35, 64);
-            $this->pdf->Cell(0,0,$cotizacion_cliente['domicilio'],0,0,'L');
+            $this->pdf->Cell(0, 0, $cotizacion_cliente['domicilio'], 0, 0, 'L');
 
-            $this->pdf->SetFont('Arial','',9);
+            $this->pdf->SetFont('Arial', '', 9);
             $this->pdf->SetXY(35, 68);
-            $this->pdf->Cell(0,0,$cotizacion_cliente['localidad'],0,0,'L');
+            $this->pdf->Cell(0, 0, $cotizacion_cliente['localidad'], 0, 0, 'L');
 
-            $this->pdf->SetFont('Arial','',9);
+            $this->pdf->SetFont('Arial', '', 9);
             $this->pdf->SetXY(15, 74);
-            $this->pdf->Cell(0,0,'CONDICION IVA: '. $tipo_responsable['tipo_responsable'],0,0,'L');
+            $this->pdf->Cell(0, 0, 'CONDICION IVA: ' . $tipo_responsable['tipo_responsable'], 0, 0, 'L');
 
-            $this->pdf->SetFont('Courier','B',10);
+            $this->pdf->SetFont('Courier', 'B', 10);
             $this->pdf->SetXY(55, 80);
-            $this->pdf->Cell(0,0, utf8_decode($condicion_de_venta['condicion_de_venta']),0,0,'L');
+            $this->pdf->Cell(0, 0, utf8_decode($condicion_de_venta['condicion_de_venta']), 0, 0, 'L');
 
-            
-            $this->pdf->SetFont('Courier','B',10);
+
+            $this->pdf->SetFont('Courier', 'B', 10);
             $this->pdf->SetXY(140, 80);
-            $this->pdf->Cell(0,0,'MONEDA: '. utf8_decode($moneda['moneda']),0,0,'L');
-            
+            $this->pdf->Cell(0, 0, 'MONEDA: ' . utf8_decode($moneda['moneda']), 0, 0, 'L');
+
             /*
-            $this->pdf->SetFont('Courier','',9);
-            $this->pdf->SetXY(35, 88);
-            $this->pdf->Cell(0,0,'condicion2',0,0,'L');
-            */
+              $this->pdf->SetFont('Courier','',9);
+              $this->pdf->SetXY(35, 88);
+              $this->pdf->Cell(0,0,'condicion2',0,0,'L');
+             */
 
             //Salto de línea
             $this->pdf->Ln(10);
-            
+
             $Y = 96;
-            $this->pdf->SetFont('Courier','',11);
+            $this->pdf->SetFont('Courier', '', 11);
             $total = 0;
-            foreach($items as $item) {
+            foreach ($items as $item) {
                 $this->pdf->SetXY(5, $Y);
                 $this->pdf->Cell(0, 8, str_pad($item['cantidad'], 5, ' ', STR_PAD_LEFT), 0, 1, 'L');
-                
+
                 $this->pdf->SetXY(30, $Y);
                 $this->pdf->Cell(0, 8, $item['descripcion'], 0, 1, 'L');
-                
+
                 $this->pdf->SetXY(146, $Y);
                 $this->pdf->Cell(0, 8, str_pad($item['precio'], 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
-                
+
                 $this->pdf->SetXY(180, $Y);
-                $this->pdf->Cell(0, 8, str_pad(number_format($item['cantidad']*$item['precio'], 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
-                
+                $this->pdf->Cell(0, 8, str_pad(number_format($item['cantidad'] * $item['precio'], 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
+
                 $Y = $Y + 4;
                 $total += $item['cantidad'] * $item['precio'];
             }
-            
+
             /*
-            $this->pdf->SetFont('Courier','B',11);
-            $this->pdf->SetXY(180, $Y);
-            $this->pdf->Cell(0, 8, str_pad(number_format($total, 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
-            */
+              $this->pdf->SetFont('Courier','B',11);
+              $this->pdf->SetXY(180, $Y);
+              $this->pdf->Cell(0, 8, str_pad(number_format($total, 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
+             */
             /*
-            $this->pdf->SetFont('Courier','B',12);
-            $this->pdf->SetXY(105, 185);
-            $this->pdf->Cell(0,0,'subtotal',0,0,'L');
-            
-            $this->pdf->SetFont('Courier','B',12);
-            $this->pdf->SetXY(105, 190);
-            $this->pdf->Cell(0,0,'bonificacion',0,0,'L');
+              $this->pdf->SetFont('Courier','B',12);
+              $this->pdf->SetXY(105, 185);
+              $this->pdf->Cell(0,0,'subtotal',0,0,'L');
 
-            $this->pdf->SetFont('Courier','B',12);
-            $this->pdf->SetXY(105, 195);
-            $this->pdf->Cell(0,0,'gravado',0,0,'L');
+              $this->pdf->SetFont('Courier','B',12);
+              $this->pdf->SetXY(105, 190);
+              $this->pdf->Cell(0,0,'bonificacion',0,0,'L');
 
-            
-            $this->pdf->SetFont('Courier','B',12);
-            $this->pdf->SetXY(105, 200);
-            $this->pdf->Cell(0,0,'exento',0,0,'L');
+              $this->pdf->SetFont('Courier','B',12);
+              $this->pdf->SetXY(105, 195);
+              $this->pdf->Cell(0,0,'gravado',0,0,'L');
 
-            $this->pdf->SetFont('Courier','B',12);
-            $this->pdf->SetXY(105, 205);
-            $this->pdf->Cell(0,0,'importeIva',0,0,'L');
 
-            $this->pdf->SetFont('Courier','B',12);
-            $this->pdf->SetXY(105, 210);
-            $this->pdf->Cell(0,0,'iibb',0,0,'L');
-            
-            $this->pdf->SetFont('Courier','B',12);
-            $this->pdf->SetXY(105, 215);
-            $this->pdf->Cell(0,0,'iibb2',0,0,'L');
-            */
-            
-            $this->pdf->SetFont('Courier','B',11);
+              $this->pdf->SetFont('Courier','B',12);
+              $this->pdf->SetXY(105, 200);
+              $this->pdf->Cell(0,0,'exento',0,0,'L');
+
+              $this->pdf->SetFont('Courier','B',12);
+              $this->pdf->SetXY(105, 205);
+              $this->pdf->Cell(0,0,'importeIva',0,0,'L');
+
+              $this->pdf->SetFont('Courier','B',12);
+              $this->pdf->SetXY(105, 210);
+              $this->pdf->Cell(0,0,'iibb',0,0,'L');
+
+              $this->pdf->SetFont('Courier','B',12);
+              $this->pdf->SetXY(105, 215);
+              $this->pdf->Cell(0,0,'iibb2',0,0,'L');
+             */
+
+            $this->pdf->SetFont('Courier', 'B', 11);
             $this->pdf->SetXY(105, 220);
-            $this->pdf->Cell(0,0,'Total:',0,0,'L');
+            $this->pdf->Cell(0, 0, 'Total:', 0, 0, 'L');
             $this->pdf->SetXY(180, 220);
             $this->pdf->Cell(0, 0, str_pad(number_format($total, 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
 
             $this->pdf->SetFont('Courier', 'B', 9);
             $this->pdf->SetXY(10, 240);
-            $this->pdf->Cell(0,0,'',0,0,'L');
+            $this->pdf->Cell(0, 0, '', 0, 0, 'L');
 
             /*
-            $this->pdf->SetXY(10, 244);
-            $this->pdf->Cell(0,0,'dolar2',0,0,'L');
-            
-            $this->pdf->SetXY(10, 248);
-            $this->pdf->Cell(0,0,'dolar3',0,0,'L');
-            */
+              $this->pdf->SetXY(10, 244);
+              $this->pdf->Cell(0,0,'dolar2',0,0,'L');
+
+              $this->pdf->SetXY(10, 248);
+              $this->pdf->Cell(0,0,'dolar3',0,0,'L');
+             */
             // Footer
             $this->pdf->Pie($cotizacion_cliente);
-            
-            
-            $this->pdf->Output('COTIZACION '.str_pad($idcotizacion_cliente, 8, '0', STR_PAD_LEFT).'.pdf', $modo);
-        } 
+
+
+            $this->pdf->Output('COTIZACION ' . str_pad($idcotizacion_cliente, 8, '0', STR_PAD_LEFT) . '.pdf', $modo);
+        }
     }
-    
+
     public function gets_antecedentes_ajax_tabla() {
         $this->form_validation->set_rules('idcliente', 'Cliente', 'required|integer');
         $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             echo "No se realizó la consulta correctamente";
         } else {
             $where = array(
                 'idarticulo' => $this->input->post('idarticulo')
             );
             $articulo = $this->articulos_model->get_where($where);
-            
-            if($articulo['idarticulo_generico'] > 0) {
+
+            if ($articulo['idarticulo_generico'] > 0) {
                 $where = array(
                     'articulos.idarticulo_generico' => $articulo['idarticulo_generico'],
                     'cotizaciones_clientes.idcliente' => $this->input->post('idcliente'),
                     'cotizaciones_clientes.estado' => 'A',
                     'cotizaciones_clientes_items.estado' => 'A'
                 );
-                
+
                 $data['articulos'] = $this->cotizaciones_clientes_model->gets_articulos_trazabilidad_where($where);
-                
-                foreach($data['articulos'] as $key => $value) {
+
+                foreach ($data['articulos'] as $key => $value) {
                     $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
                 }
                 $this->load->view('cotizaciones_clientes/gets_antecedentes_ajax_tabla', $data);
-            } else if($articulo['idarticulo_generico'] == 0) {
+            } else if ($articulo['idarticulo_generico'] == 0) {
                 $where = array(
                     'articulos.idarticulo' => $this->input->post('idarticulo'),
                     'cotizaciones_clientes.idcliente' => $this->input->post('idcliente'),
                     'cotizaciones_clientes.estado' => 'A',
                     'cotizaciones_clientes_items.estado' => 'A'
                 );
-                
+
                 $data['articulos'] = $this->cotizaciones_clientes_model->gets_articulos_trazabilidad_where($where);
-                
-                foreach($data['articulos'] as $key => $value) {
+
+                foreach ($data['articulos'] as $key => $value) {
                     $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
                 }
                 $this->load->view('cotizaciones_clientes/gets_antecedentes_ajax_tabla', $data);
             }
         }
     }
-    
+
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);
@@ -690,7 +711,7 @@ class Cotizaciones_clientes extends CI_Controller {
 
         return $aux;
     }
-    
+
     private function formatear_fecha_para_mostrar($fecha) {
         $aux = '';
         $aux .= substr($fecha, 8, 2);
@@ -701,6 +722,7 @@ class Cotizaciones_clientes extends CI_Controller {
 
         return $aux;
     }
+
 }
 
 ?>

@@ -98,13 +98,13 @@ $("#TextAutoCompletearticulo").focusout(function () {
             Pace.stop();
             resultado = $.parseJSON(data);
             $("#descripcion").val(resultado['linea']['nombre_corto'] + " " + resultado['articulo'] + " - " + resultado['marca']['marca']);
-            
+
             /*
-            $("#precio").val(resultado['precio']);
-            if ($("#idmoneda").val() == '2') {
-                get_factor_correccion();
-            }
-            */
+             $("#precio").val(resultado['precio']);
+             if ($("#idmoneda").val() == '2') {
+             get_factor_correccion();
+             }
+             */
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
@@ -247,8 +247,8 @@ $("#trazabilidad").click(function () {
             success: function (data) {
                 resultado = $.parseJSON(data);
                 if (resultado['idarticulo'] > 0) {
-                    html = "<p>Precio FOB: <strong>U$S "+resultado['price_fob']+"</strong></p>";
-                    html += "<p>Precio Despachado: <strong>U$S "+resultado['price_dispatch']+"</strong></p>";
+                    html = "<p>Precio FOB: <strong>U$S " + resultado['price_fob'] + "</strong></p>";
+                    html += "<p>Precio Despachado: <strong>U$S " + resultado['price_dispatch'] + "</strong></p>";
                     $("#trazabilidad-costo").html(html);
                 } else {
                     $("#trazabilidad-costo").html("No se realizó la consulta correctamente");
@@ -271,3 +271,55 @@ $("#trazabilidad").click(function () {
     }
 
 });
+
+$("#creararticulo").click(function () {
+    datos = {
+        'articulo': $("#articulo_agregar").val(),
+        'idmarca': $("#marca").val(),
+        'numero_orden': $("#numero_orden").val(),
+        'idlinea': $("#linea").val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/articulos/agregar_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#creararticulo").hide();
+            $("#creararticulo_loading").show();
+        },
+        success: function (data) {
+            $("#creararticulo_loading").hide();
+            $("#creararticulo").show();
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                notificarErrorEnModal(resultado['data']);
+            } else if (resultado['status'] == 'ok') {
+                notificarOKEnModal(resultado['data']);
+                $("#articulo_agregar").val("");
+                $("#TextAutoCompletemarca").val("");
+                $("#marca").val("");
+                $("#numero_orden").val("");
+                $("#TextAutoCompletelinea").val("");
+                $("#linea").val("");
+                $("#articulo_agregar").focus();                
+            }
+        },
+        error: function (xhr) { // if error occured
+            notificarErrorEnModal(xhr.statusText);
+            console.log(xhr);
+        }
+    });
+});
+
+function notificarErrorEnModal(mensaje) {
+    $("#notificaciones").show();
+    $("#notificaciones").html("<div class='alert alert-danger'>" + mensaje + "</div>");
+    $("#notificaciones").fadeOut(5000);
+}
+
+function notificarOKEnModal(mensaje) {
+    $("#notificaciones").show();
+    $("#notificaciones").html("<div class='alert alert-success'>" + mensaje + "</div>");
+    $("#notificaciones").fadeOut(5000);
+}

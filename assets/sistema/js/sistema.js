@@ -210,7 +210,7 @@ function AutoCompleteInput(inputID,cache,icon,minChars,defaultSearchText,mode)
     {
       var object = $("#TextAutoComplete"+inputID).attr("objectauto");
 			var action = $("#TextAutoComplete"+inputID).attr("actionauto");
-      var target = "/"+object+"/"+action;
+      var target = "/"+object+"/"+action+"/";
       var tableid = inputID;
       if($("#TextAutoComplete"+inputID).attr("tableidauto"))
         tableid = $("#TextAutoComplete"+inputID).attr("tableidauto");

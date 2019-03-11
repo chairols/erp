@@ -29,24 +29,19 @@ class Padrones extends CI_Controller {
             '/assets/modulos/padrones/js/importar.js'
         );
         $data['view'] = 'padrones/importar';
-
         $data['jurisdicciones'] = $this->provincias_model->gets();
-
         $where = array(
             'identificador' => 'ruta_upload',
             'estado' => 'A'
         );
         $ruta_upload = $this->parametros_model->get_where($where);
-
         $data['archivos'] = opendir("." . $ruta_upload['valor_sistema']);
-
         $this->load->view('layout/app', $data);
     }
 
     public function procesar_ajax() {
         $this->form_validation->set_rules('jurisdiccion', 'Jurisdicción', 'required|integer');
         $this->form_validation->set_rules('archivo', 'Archivo', 'required');
-
         if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
@@ -55,7 +50,6 @@ class Padrones extends CI_Controller {
             echo json_encode($json);
         } else {
             $jurisdiccion = $this->input->post('jurisdiccion');
-
             switch ($jurisdiccion) {
                 case '901':  // CABA
                     $this->jurisdiccion_901($this->input->post('archivo'));
@@ -79,13 +73,9 @@ class Padrones extends CI_Controller {
             '/assets/modulos/padrones/js/listar.js'
         );
         $data['view'] = 'padrones/listar';
-
-
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
-
         $where = $this->input->get();
-
         /*
          * inicio paginador
          */
@@ -114,7 +104,6 @@ class Padrones extends CI_Controller {
         /*
          * fin paginador
          */
-
         $data['padrones'] = $this->padrones_model->gets_where_limit($where, $per_page, $pagina);
         foreach ($data['padrones'] as $key => $value) {
             $data['padrones'][$key]['fecha_desde_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_desde']);
@@ -124,13 +113,11 @@ class Padrones extends CI_Controller {
             );
             $data['padrones'][$key]['cantidad'] = $this->padrones_model->get_count_items_where($where);
         }
-
         $this->load->view('layout/app', $data);
     }
 
     public function borrar_ajax() {
         $this->form_validation->set_rules('idpadron', 'ID de Padrón', 'required|integer');
-
         if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
@@ -142,7 +129,6 @@ class Padrones extends CI_Controller {
                 'idpadron' => $this->input->post('idpadron')
             );
             $resultado = $this->padrones_model->borrado_fisico_padron($where);
-
             if ($resultado) {
                 $json = array(
                     'status' => 'ok',
@@ -165,9 +151,7 @@ class Padrones extends CI_Controller {
             'estado' => 'A'
         );
         $ruta_upload = $this->parametros_model->get_where($where);
-
         $url = substr($ruta_upload['valor_sistema'], 1); // Quito el primer caracter
-
         /*
          *  Código para guardar en padron
          */
@@ -185,14 +169,11 @@ class Padrones extends CI_Controller {
         /*
          *  Fin de código para guardar en padrón
          */
-
         /*
          *  Cógido para guardar items de padrón
          */
         $fp = fopen($url . $archivo, "r");
-
         while (!feof($fp)) {
-
             $linea = fgets($fp);
             $array = preg_split('/;/', $linea);
             /*
@@ -204,7 +185,6 @@ class Padrones extends CI_Controller {
              *  [8] = Retención
              *  [11] = Razon Social
              */
-
             $set = array(
                 'idpadron' => $idpadron,
                 'cuit' => $array[3],
@@ -212,13 +192,11 @@ class Padrones extends CI_Controller {
                 'retencion' => str_replace(",", ".", $array[8]),
                 'razonsocial' => trim($array[11])
             );
-
             $this->padrones_model->set_item($set);
         }
         /*
          * Fin de código para guardar items de padrón
          */
-
         $json = array(
             'status' => 'ok',
             'data' => 'Se completó el proceso correctamente'
@@ -233,7 +211,6 @@ class Padrones extends CI_Controller {
         $aux .= substr($fecha, 2, 2);
         $aux .= '-';
         $aux .= substr($fecha, 0, 2);
-
         return $aux;
     }
 
@@ -244,7 +221,6 @@ class Padrones extends CI_Controller {
         $aux .= substr($fecha, 5, 2);
         $aux .= '/';
         $aux .= substr($fecha, 0, 4);
-
         return $aux;
     }
 

@@ -145,6 +145,8 @@ class Cotizaciones_clientes extends CI_Controller {
         $data['monedas'] = $this->monedas_model->gets();
 
         $data['cotizacion_cliente']['fecha_formateada'] = $this->formatear_fecha_para_mostrar($data['cotizacion_cliente']['fecha']);
+        
+        $data['empresa'] = $this->parametros_model->get_parametros_empresa();
 
         $this->load->view('layout/app', $data);
     }

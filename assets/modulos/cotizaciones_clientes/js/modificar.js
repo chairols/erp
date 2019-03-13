@@ -1,6 +1,9 @@
+var tipo_de_cambio = 0;
+
 $(document).ready(function () {
     $("#cantidad").focus();
     actualizar_articulos();
+    get_tipo_de_cambio();
 });
 
 $("#actualizar").click(function () {
@@ -246,9 +249,12 @@ $("#trazabilidad").click(function () {
             },
             success: function (data) {
                 resultado = $.parseJSON(data);
+                
                 if (resultado['idarticulo'] > 0) {
-                    html = "<p>Precio FOB: <strong>U$S " + resultado['price_fob'] + "</strong></p>";
+                    html = "<h4><p><strong>"+resultado['articulo']+" - "+resultado['marca']['marca']+"</strong></p></h4>"
+                    html += "<p>Precio FOB: <strong>U$S " + resultado['price_fob'] + "</strong></p>";
                     html += "<p>Precio Despachado: <strong>U$S " + resultado['price_dispatch'] + "</strong></p>";
+                    html += "<p>Precio Despachado: <strong>$ " + parseFloat(resultado['price_dispatch'] * tipo_de_cambio).toFixed(2) + "</strong></p>";
                     $("#trazabilidad-costo").html(html);
                 } else {
                     $("#trazabilidad-costo").html("No se realizó la consulta correctamente");
@@ -302,7 +308,7 @@ $("#creararticulo").click(function () {
                 $("#numero_orden").val("");
                 $("#TextAutoCompletelinea").val("");
                 $("#linea").val("");
-                $("#articulo_agregar").focus();                
+                $("#articulo_agregar").focus();
             }
         },
         error: function (xhr) { // if error occured
@@ -322,4 +328,22 @@ function notificarOKEnModal(mensaje) {
     $("#notificaciones").show();
     $("#notificaciones").html("<div class='alert alert-success'>" + mensaje + "</div>");
     $("#notificaciones").fadeOut(5000);
+}
+
+function get_tipo_de_cambio() {
+    $.ajax({
+        type: 'POST',
+        url: '/parametros/get_parametros_empresa_json/',
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            tipo_de_cambio = resultado['factor_correccion'];
+        },
+        error: function (xhr) { // if error occured
+            console.log(xhr);
+        }
+    });
+
 }

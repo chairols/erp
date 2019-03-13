@@ -12,13 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/views/cotizaciones_clientes/modificar.php</file>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Clientes.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/models/Log_model.php</file>
             <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Cotizaciones_clientes.php</file>
             <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/models/Cotizaciones_clientes_model.php</file>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Articulos.php</file>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/assets/modulos/retenciones/js/listar.js</file>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/views/layout/body/scripts.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Parametros.php</file>
             <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/assets/modulos/cotizaciones_clientes/js/modificar.js</file>
         </group>
     </open-files>

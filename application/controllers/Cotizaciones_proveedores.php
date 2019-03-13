@@ -440,7 +440,7 @@ class Cotizaciones_proveedores extends CI_Controller {
          */
         $total_rows = $this->cotizaciones_proveedores_model->get_cantidad_where($where);
         $config['reuse_query_string'] = TRUE;
-        $config['base_url'] = '/retenciones/listar/';
+        $config['base_url'] = '/cotizaciones_proveedores/listar/';
         $config['total_rows'] = $total_rows;
         $config['per_page'] = $per_page;
         $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';

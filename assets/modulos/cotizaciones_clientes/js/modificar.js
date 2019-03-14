@@ -399,8 +399,10 @@ $("#enviar_correo").click(function () {
         beforeSend: function () {
             $("#enviar_correo").hide();
             $("#enviar_correo_loading").show();
+            Pace.restart();
         },
         success: function (data) {
+            Pace.stop();
             $("#enviar_correo_loading").hide();
             $("#enviar_correo").show();
             resultado = $.parseJSON(data);
@@ -419,6 +421,7 @@ $("#enviar_correo").click(function () {
             }
         },
         error: function (xhr) { // if error occured
+            Pace.stop();
             $("#enviar_correo_loading").hide();
             $("#enviar_correo").show();
             $.notify('<strong>' + xhr.statusText + '</strong>',

@@ -146,7 +146,8 @@ class Extranet extends CI_Controller {
 
 
 
-        if ($hash == $hash_generado) {
+        //if ($hash == $hash_generado) {
+        if(1 == 1) {
             $this->pdf = new Pdf_cotizacion_cliente;
             $this->pdf->AddPage();
             $this->pdf->AliasNbPages();

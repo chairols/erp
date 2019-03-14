@@ -97,19 +97,19 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Saldo Cuenta Corriente</label>
                 <div class="col-md-6">
-                    <input type="text" id="saldo_cuenta_corriente" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'">
+                    <input type="text" id="saldo_cuenta_corriente" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'" value="0.00">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Saldo Inicial</label>
                 <div class="col-md-6">
-                    <input type="text" id="saldo_inicial" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'">
+                    <input type="text" id="saldo_inicial" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'" value="0.00">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Saldo a Cuenta</label>
                 <div class="col-md-6">
-                    <input type="text" id="saldo_a_cuenta" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'">
+                    <input type="text" id="saldo_a_cuenta" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'" value="0.00">
                 </div>
             </div>
             <div class="form-group">

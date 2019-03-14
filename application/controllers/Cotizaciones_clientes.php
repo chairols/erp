@@ -755,6 +755,7 @@ class Cotizaciones_clientes extends CI_Controller {
                     ->reply_to('ventas@rollerservice.com.ar')    // Optional, an account where a human being reads.
                     //->to('hernanbalboa@gmail.com')
                     //->to($this->input->post('email'))
+                    ->bcc('ventas@rollerservice.com.ar')
                     ->subject($subject)
                     ->attach(base_url() . 'extranet/cotizacion_cliente/' . $this->input->post('idcotizacion_cliente') . '/' . $this->generar_hash_cotizacion_para_extranet($this->input->post('idcotizacion_cliente')) . '/', '', 'Cotización ' . str_pad($cotizacion['idcotizacion_cliente'], 8, '0', STR_PAD_LEFT) . '.pdf')
                     ->message($body);

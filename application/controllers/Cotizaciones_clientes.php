@@ -750,15 +750,18 @@ class Cotizaciones_clientes extends CI_Controller {
 // Also, for getting full html you may use the following internal method:
 //$body = $this->email->full_html($subject, $message);
 
-            $result = $this->email
+            $this->email
                     ->from('ventas@rollerservice.com.ar', 'Roller Service S.A.')
                     ->reply_to('ventas@rollerservice.com.ar')    // Optional, an account where a human being reads.
-                    ->to('hernanbalboa@gmail.com')
+                    //->to('hernanbalboa@gmail.com')
                     //->to($this->input->post('email'))
                     ->subject($subject)
                     ->attach(base_url() . 'extranet/cotizacion_cliente/' . $this->input->post('idcotizacion_cliente') . '/' . $this->generar_hash_cotizacion_para_extranet($this->input->post('idcotizacion_cliente')) . '/', '', 'Cotización ' . str_pad($cotizacion['idcotizacion_cliente'], 8, '0', STR_PAD_LEFT) . '.pdf')
-                    ->message($body)
-                    ->send();
+                    ->message($body);
+            foreach($this->input->post('correos') as $correo) {
+                $this->email->to($correo);
+            }
+            $result = $this->email->send();
 
             if ($result) {
                 $json = array(

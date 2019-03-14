@@ -144,10 +144,15 @@ class Extranet extends CI_Controller {
             show_404();
         }
 
+        $where = array(
+            'idcotizacion_cliente' => $idcotizacion_cliente,
+            'estado' => 'A'
+        );
+        $data['cotizacion'] = $this->cotizaciones_clientes_model->get_where($where);
 
+        $hash_generado = sha1($data['cotizacion']['idcotizacion_cliente'] . $data['cotizacion']['idcliente'] . $data['cotizacion']['cliente'] . $data['cotizacion']['idsucursal'] . $data['cotizacion']['domicilio'] . $data['cotizacion']['localidad'] . $data['cotizacion']['fecha_creacion']);
 
-        //if ($hash == $hash_generado) {
-        if(1 == 1) {
+        if ($hash == $hash_generado) {
             $this->pdf = new Pdf_cotizacion_cliente;
             $this->pdf->AddPage();
             $this->pdf->AliasNbPages();

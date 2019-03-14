@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
-        <file>
-            <url>application/views/perfiles/modificar.php</url>
-            <bookmark id="1">
-                <name/>
-                <line>9</line>
-                <key/>
-            </bookmark>
-        </file>
-    </editor-bookmarks>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/models/Log_model.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/views/cotizaciones_clientes/modificar.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Clientes.php</file>
             <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Cotizaciones_clientes.php</file>
             <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/models/Cotizaciones_clientes_model.php</file>
-            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Parametros.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/models/Clientes_model.php</file>
             <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/assets/modulos/cotizaciones_clientes/js/modificar.js</file>
         </group>
     </open-files>

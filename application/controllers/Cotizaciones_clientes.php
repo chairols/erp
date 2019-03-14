@@ -142,10 +142,16 @@ class Cotizaciones_clientes extends CI_Controller {
         );
         $data['cotizacion_cliente']['cliente'] = $this->clientes_model->get_where($where);
 
+        $where = array(
+            'clientes_agentes.idcliente' => $data['cotizacion_cliente']['idcliente'],
+            'clientes_agentes.estado' => 'A'
+        );
+        $data['cotizacion_cliente']['cliente']['agentes'] = $this->clientes_model->gets_agentes_where($where);
+
         $data['monedas'] = $this->monedas_model->gets();
 
         $data['cotizacion_cliente']['fecha_formateada'] = $this->formatear_fecha_para_mostrar($data['cotizacion_cliente']['fecha']);
-        
+
         $data['empresa'] = $this->parametros_model->get_parametros_empresa();
 
         $this->load->view('layout/app', $data);
@@ -336,11 +342,11 @@ class Cotizaciones_clientes extends CI_Controller {
             $where = array(
                 'idcotizacion_cliente_item' => $this->input->post('idcotizacion_cliente_item')
             );
-            
+
             $resultado = $this->cotizaciones_clientes_model->update_item($datos, $where);
 
             if ($resultado) {
-                
+
                 $where = array(
                     'idcotizacion_cliente_item' => $this->input->post('idcotizacion_cliente_item')
                 );
@@ -360,7 +366,7 @@ class Cotizaciones_clientes extends CI_Controller {
                     'tipo' => 'del'
                 );
                 $this->log_model->set($log);
-                
+
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se eliminó correctamente el artículo'

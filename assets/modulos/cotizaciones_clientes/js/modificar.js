@@ -249,9 +249,9 @@ $("#trazabilidad").click(function () {
             },
             success: function (data) {
                 resultado = $.parseJSON(data);
-                
+
                 if (resultado['idarticulo'] > 0) {
-                    html = "<h4><p><strong>"+resultado['articulo']+" - "+resultado['marca']['marca']+"</strong></p></h4>"
+                    html = "<h4><p><strong>" + resultado['articulo'] + " - " + resultado['marca']['marca'] + "</strong></p></h4>"
                     html += "<p>Precio FOB: <strong>U$S " + resultado['price_fob'] + "</strong></p>";
                     html += "<p>Precio Despachado: <strong>U$S " + resultado['price_dispatch'] + "</strong></p>";
                     html += "<p>Precio Despachado: <strong>$ " + parseFloat(resultado['price_dispatch'] * tipo_de_cambio).toFixed(2) + "</strong></p>";
@@ -346,4 +346,42 @@ function get_tipo_de_cambio() {
         }
     });
 
+}
+
+$("#boton_enviar_mail_modal").click(function () {
+
+});
+
+function actualizar_correo_a_enviar() {
+    var index = $("#seleccionar_correo")[0]['selectedIndex'];
+    var email = $("#seleccionar_correo")[0][index]['attributes']['email'].value;
+
+    $("#direccion_de_correo").val(email);
+}
+
+$("#seleccionar_correo").change(function () {
+
+});
+
+$("#agregar_correo").click(function () {
+    var correo = $("#direccion_de_correo").val();
+    if (correo.length > 0) {
+        if (validateEmail(correo)) {
+            $("#seleccionar_correo").append("<option value='" + correo + "' selected>" + correo + "</option>");
+            $("#seleccionar_correo").trigger("chosen:updated");
+            $("#direccion_de_correo").val("");
+            $("#direccion_de_correo").focus();
+        } else {
+            $.notify('<strong>Email no válido</strong>',
+                        {
+                            type: 'danger',
+                            z_index: 2000
+                        });
+        }
+    }
+});
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
 }

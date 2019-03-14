@@ -148,12 +148,9 @@
                     </a>
                 </div>
                 <div class="col-lg-2 col-xs-12">
-                    <a onclick="confirmar_mail();">
-                        <button type="button" class="btn btn-warning hint--top hint--bounce hint--warning"  aria-label="Enviar PDF por Correo">
-                            <i class="fa fa-envelope-o"></i> Enviar por Correo
-                        </button>
-                    </a>
-
+                    <button type="button" id="boton_enviar_mail_modal" class="btn btn-warning hint--top hint--bounce hint--warning" data-toggle="modal" data-target="#enviar_mail" aria-label="Enviar PDF por Correo">
+                        <i class="fa fa-envelope-o"></i> Enviar por Correo
+                    </button>
                 </div>
             </div>
             <br>
@@ -163,9 +160,7 @@
             </div>
         </div>
     </div>
-</div
-
-
+</div>
 
 
 <!-- Large modal -->
@@ -256,6 +251,54 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="enviar_mail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">Enviar por Correo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>Seleccionar Agente</h4>
+                        <select id="seleccionar_correo" class="form-control chosenSelect" multiple="">
+                            <?php foreach ($cotizacion_cliente['cliente']['agentes'] as $agente) { ?>
+                                <option value="<?= $agente['email'] ?>"><?= $agente['agente'] ?> - <?= $agente['cargo'] ?> - <?= $agente['email'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>Enviar al Correo</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="direccion_de_correo">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary btn-flat" id="agregar_correo">
+                                    Agregar
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-2 col-xs-12 col-lg-offset-5">
+                        <button type="button" class="btn btn-primary" id="enviar_correos">
+                            <i class="fa fa-envelope-o"></i> Enviar Correo
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

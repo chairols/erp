@@ -265,7 +265,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h4>Seleccionar Agente</h4>
+                        <h4>Seleccionar Direcciones de Correo a Enviar</h4>
                         <select id="seleccionar_correo" class="form-control chosenSelect" multiple="">
                             <?php foreach ($cotizacion_cliente['cliente']['agentes'] as $agente) { ?>
                                 <option value="<?= $agente['email'] ?>"><?= $agente['agente'] ?> - <?= $agente['cargo'] ?> - <?= $agente['email'] ?></option>
@@ -275,7 +275,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <h4>Enviar al Correo</h4>
+                        <h4>Agregar Correo</h4>
                     </div>
                 </div>
                 <div class="row">
@@ -293,8 +293,11 @@
                 <br>
                 <div class="row">
                     <div class="col-lg-2 col-xs-12 col-lg-offset-5">
-                        <button type="button" class="btn btn-primary" id="enviar_correos">
+                        <button type="button" class="btn btn-primary" id="enviar_correo">
                             <i class="fa fa-envelope-o"></i> Enviar Correo
+                        </button>
+                        <button type="button" class="btn btn-primary" id="enviar_correo_loading" style="display: none;">
+                            <i class="fa fa-refresh fa-spin"></i>
                         </button>
                     </div>
                 </div>

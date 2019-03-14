@@ -11,7 +11,8 @@ class Cotizaciones_clientes extends CI_Controller {
             'r_session',
             'form_validation',
             'pagination',
-            'pdf_cotizacion_cliente'
+            'pdf_cotizacion_cliente',
+            'email'
         ));
         $this->load->model(array(
             'monedas_model',
@@ -709,6 +710,143 @@ class Cotizaciones_clientes extends CI_Controller {
         }
     }
 
+    public function enviar_mail() {
+        $this->form_validation->set_rules('correos[]', 'Direcciones de Correo', 'required');
+        $this->form_validation->set_rules('idcotizacion_cliente', 'ID Cotización Cliente', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'idcotizacion_cliente' => $this->input->post('idcotizacion_cliente')
+            );
+            $cotizacion = $this->cotizaciones_clientes_model->get_where($where);
+
+            $subject = 'Cotización N° ' . str_pad($cotizacion['idcotizacion_cliente'], 8, '0', STR_PAD_LEFT);
+
+            $message = '<p>Adjunto se encuentra nueva cotización.</p>';
+
+// Get full html:
+            $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
+    <title>' . html_escape($subject) . '</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, Verdana, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+' . $message . ' <br>
+</body>
+</html>';
+// Also, for getting full html you may use the following internal method:
+//$body = $this->email->full_html($subject, $message);
+
+            $result = $this->email
+                    ->from('ventas@rollerservice.com.ar', 'Roller Service S.A.')
+                    ->reply_to('ventas@rollerservice.com.ar')    // Optional, an account where a human being reads.
+                    ->to('hernanbalboa@gmail.com')
+                    //->to($this->input->post('email'))
+                    ->subject($subject)
+                    ->attach(base_url() . 'extranet/cotizacion_cliente/' . $this->input->post('idcotizacion_cliente') . '/' . $this->generar_hash_cotizacion_para_extranet($this->input->post('idcotizacion_cliente')) . '/', '', 'Cotización ' . str_pad($cotizacion['idcotizacion_cliente'], 8, '0', STR_PAD_LEFT) . '.pdf')
+                    ->message($body)
+                    ->send();
+
+            if ($result) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'El correo se envió satisfactoriamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Ocurrió el siguiente error: <br>' . $this->email->print_debugger()
+                );
+                echo json_encode($json);
+            }
+        }
+
+
+        /*
+          $where = array(
+          'idretencion' => $this->input->post('idretencion')
+          );
+          $retencion = $this->retenciones_model->get_where($where);
+
+          $subject = 'Se generó la retención '. str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT).'-'. str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT);
+
+          $message = '<p>Adjunto se encuentra nueva retención.</p>';
+
+          // Get full html:
+          $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+          <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
+          <title>' . html_escape($subject) . '</title>
+          <style type="text/css">
+          body {
+          font-family: Arial, Verdana, Helvetica, sans-serif;
+          font-size: 16px;
+          }
+          </style>
+          <img src="'.base_url().'extranet/confirmar_retencion_email/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/">
+          </head>
+          <body>
+          ' . $message . ' <br>
+          <img style="display: none" width="1px" height="1px" src="'.base_url().'extranet/confirmar_retencion_email/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/">
+          </body>
+          </html>';
+          // Also, for getting full html you may use the following internal method:
+          //$body = $this->email->full_html($subject, $message);
+
+          $result = $this->email
+          ->from('ventas@rollerservice.com.ar', 'Roller Service S.A.')
+          ->reply_to('ventas@rollerservice.com.ar')    // Optional, an account where a human being reads.
+          //->to('hernanbalboa@gmail.com')
+          ->to($this->input->post('email'))
+          ->subject($subject)
+          //->attach(base_url().'retenciones/pdf/'.$this->input->post('idretencion').'/', '', 'Nuevo Nombre.pdf')
+          ->attach(base_url().'extranet/retencion/'.$this->input->post('idretencion').'/'.$this->generar_hash_retencion_para_extranet($this->input->post('idretencion')).'/', '', 'Retención '. str_pad($retencion['punto'], 4, '0', STR_PAD_LEFT).'-'. str_pad($retencion['numero'], 8, '0', STR_PAD_LEFT).'.pdf')
+          ->message($body)
+          ->send();
+
+
+          if($result) {
+          $datos = array(
+          'estado_mail' => 'E'
+          );
+          $where = array(
+          'idretencion' => $this->input->post('idretencion')
+          );
+          $this->retenciones_model->update($datos, $where);
+
+          $json = array(
+          'status' => 'ok',
+          'data' => 'El correo se envió satisfactoriamente'
+          );
+          echo json_encode($json);
+          } else {
+          $json = array(
+          'status' => 'error',
+          'data' => 'Ocurrió el siguiente error: <br>'.$this->email->print_debugger()
+          );
+          echo json_encode($json);
+          }
+
+          exit;
+         * 
+         */
+    }
+
     private function formatear_fecha($fecha) {
         $aux = '';
         $aux .= substr($fecha, 6, 4);
@@ -729,6 +867,19 @@ class Cotizaciones_clientes extends CI_Controller {
         $aux .= substr($fecha, 0, 4);
 
         return $aux;
+    }
+
+    private function generar_hash_cotizacion_para_extranet($idcotizacion_cliente) {
+        // Datos de Retención
+        $where = array(
+            'idcotizacion_cliente' => $idcotizacion_cliente,
+            'estado' => 'A'
+        );
+        $data['cotizacion'] = $this->cotizaciones_clientes_model->get_where($where);
+
+        $hash_generado = sha1($data['cotizacion']['idcotizacion_cliente'] . $data['cotizacion']['idcliente'] . $data['cotizacion']['cliente'] . $data['cotizacion']['idsucursal'] . $data['cotizacion']['domicilio'] . $data['cotizacion']['localidad'] . $data['cotizacion']['fecha_creacion']);
+
+        return $hash_generado;
     }
 
 }

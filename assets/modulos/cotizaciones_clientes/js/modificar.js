@@ -348,20 +348,14 @@ function get_tipo_de_cambio() {
 
 }
 
-$("#boton_enviar_mail_modal").click(function () {
-
-});
-
-function actualizar_correo_a_enviar() {
-    var index = $("#seleccionar_correo")[0]['selectedIndex'];
-    var email = $("#seleccionar_correo")[0][index]['attributes']['email'].value;
-
-    $("#direccion_de_correo").val(email);
-}
-
-$("#seleccionar_correo").change(function () {
-
-});
+/*
+ function actualizar_correo_a_enviar() {
+ var index = $("#seleccionar_correo")[0]['selectedIndex'];
+ var email = $("#seleccionar_correo")[0][index]['attributes']['email'].value;
+ 
+ $("#direccion_de_correo").val(email);
+ }
+ */
 
 $("#agregar_correo").click(function () {
     var correo = $("#direccion_de_correo").val();
@@ -373,11 +367,17 @@ $("#agregar_correo").click(function () {
             $("#direccion_de_correo").focus();
         } else {
             $.notify('<strong>Email no válido</strong>',
-                        {
-                            type: 'danger',
-                            z_index: 2000
-                        });
+                    {
+                        type: 'danger',
+                        z_index: 2000
+                    });
         }
+    } else {
+        $.notify('<strong>Debe ingresar un correo electrónico</strong>',
+                {
+                    type: 'danger',
+                    z_index: 2000
+                });
     }
 });
 
@@ -385,3 +385,48 @@ function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
+
+$("#enviar_correo").click(function () {
+    datos = {
+        'idcotizacion_cliente': $("#idcotizacion_cliente").val(),
+        'correos': $("#seleccionar_correo").val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/cotizaciones_clientes/enviar_mail/',
+        data: datos,
+        beforeSend: function () {
+            $("#enviar_correo").hide();
+            $("#enviar_correo_loading").show();
+        },
+        success: function (data) {
+            $("#enviar_correo_loading").hide();
+            $("#enviar_correo").show();
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            z_index: 2000
+                        });
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            z_index: 2000
+                        });
+            }
+        },
+        error: function (xhr) { // if error occured
+            $("#enviar_correo_loading").hide();
+            $("#enviar_correo").show();
+            $.notify('<strong>' + xhr.statusText + '</strong>',
+                    {
+                        type: 'danger',
+                        z_index: 2000
+                    });
+            console.log(xhr);
+        }
+    });
+});

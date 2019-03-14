@@ -99,11 +99,13 @@ VALIDATION ATRIBUTES:
 
 	ValidateFields.prototype.createErrorDivs = function()
 	{
+            /*
 		$(validateTag+'[id$="ErrorDiv"]').remove();
 
 		$(validateElements).each( function(){
 			$(this).parent().append('<'+validateTag+' id="'+$(this).attr("id")+'ErrorDiv" class="'+validateErrorClass+'"></'+validateTag+'>');
 		});
+                */
 	};
 
 	ValidateFields.prototype.empty	= function(object)

@@ -88,17 +88,17 @@
             </div>
             <div class="row bg-brown">
                 <div class="col-lg-2 col-xs-12">
-                    <input type="text" id="cantidad" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,8}'">
+                    <input type="text" id="cantidad" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,8}'" onkeyup="saltar(event, 'TextAutoCompletearticulo');">
                 </div>
                 <div class="col-lg-4 col-xs-12">
-                    <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo inexistente" class="form-control input-sm TextAutoComplete" objectauto="articulos" actionauto="gets_articulos_ajax_stock_y_precio" varsauto="estado:=A" iconauto="ship" autofocus>
+                    <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo inexistente" class="form-control input-sm TextAutoComplete" objectauto="articulos" actionauto="gets_articulos_ajax_stock_y_precio" varsauto="estado:=A" iconauto="ship" onkeyup="saltar(event, 'descripcion');">
                     <input type="hidden" id="articulo" name="articulo" value="">
                 </div>
                 <div class="col-lg-4 col-xs-12">
-                    <input type="text" id="descripcion" class="form-control input-sm">
+                    <input type="text" id="descripcion" class="form-control input-sm" onkeyup="saltar(event, 'precio');">
                 </div>
                 <div class="col-md-2 col-xs-12">
-                    <input type="text" id="precio" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,17}.99'">
+                    <input type="text" id="precio" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,17}.99'" onkeyup="saltar(event, 'agregar');">
                 </div>
             </div>
             <div class="row bg-brown">

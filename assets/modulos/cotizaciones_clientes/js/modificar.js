@@ -165,7 +165,7 @@ $("#agregar").click(function () {
                 $("#descripcion").val("");
                 $("#precio").val("");
                 $("#observaciones_item").val("");
-                
+
                 actualizar_articulos();
 
                 $("#cantidad").focus();
@@ -439,10 +439,27 @@ $("#enviar_correo").click(function () {
     });
 });
 
-/*
-$("#precio").keydown(function(e) {
-    if(e.which == 9) {
-        $("#agregar").focus();
+
+
+function saltar(e, id) {
+    // Obtenemos la tecla pulsada
+    (e.keyCode) ? k = e.keyCode : k = e.which;
+    
+    // Si la tecla pulsada es enter (codigo ascii 13)
+    if (k == 13) {
+        // Si la variable id contiene "submit" enviamos el formulario
+        console.log(k);
+        console.log(e);
+        console.log(id);
+        
+        
+        if (id == "submit") {
+            document.forms[0].submit();
+        } else {
+            // nos posicionamos en el siguiente input
+            $("#"+id).focus();
+        }
     }
-});
-*/
+}
+
+

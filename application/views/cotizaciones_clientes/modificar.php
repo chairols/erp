@@ -172,11 +172,6 @@
                     <h3 class="box-title">
                         <i class="fa fa-certificate"></i> Administrar Artículos
                     </h3>
-                    <div class="row">
-                        <div id="notificaciones" class="col-md-offset-2 col-md-8">
-
-                        </div>
-                    </div>
                 </div>
                 <div class="box-body">
                     <div class="row">

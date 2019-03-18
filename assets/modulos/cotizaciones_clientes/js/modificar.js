@@ -163,6 +163,7 @@ $("#agregar").click(function () {
                 $("#articulo").val("");
                 $("#descripcion").val("");
                 $("#precio").val("");
+                $("#observaciones_item").val("");
                 $("#TextAutoCompletearticulo").focus();
 
                 actualizar_articulos();
@@ -333,18 +334,6 @@ $("#creararticulo").click(function () {
     });
 });
 
-function notificarErrorEnModal(mensaje) {
-    $("#notificaciones").show();
-    $("#notificaciones").html("<div class='alert alert-danger'>" + mensaje + "</div>");
-    $("#notificaciones").fadeOut(5000);
-}
-
-function notificarOKEnModal(mensaje) {
-    $("#notificaciones").show();
-    $("#notificaciones").html("<div class='alert alert-success'>" + mensaje + "</div>");
-    $("#notificaciones").fadeOut(5000);
-}
-
 function get_tipo_de_cambio() {
     $.ajax({
         type: 'POST',
@@ -449,3 +438,11 @@ $("#enviar_correo").click(function () {
         }
     });
 });
+
+/*
+$("#precio").keydown(function(e) {
+    if(e.which == 9) {
+        $("#agregar").focus();
+    }
+});
+*/

@@ -558,6 +558,9 @@ class Cotizaciones_clientes extends CI_Controller {
             $this->pdf->SetXY(140, 80);
             $this->pdf->Cell(0, 0, 'MONEDA: ' . utf8_decode($moneda['moneda']), 0, 0, 'L');
 
+            $this->pdf->SetFont('Courier', 'B', 10);
+            $this->pdf->SetXY(140, 84);
+            $this->pdf->Cell(0, 0, utf8_decode('ATENCIÓN: '.$cotizacion_cliente['atencion']), 0, 0, 'L');
             //Salto de línea
             $this->pdf->Ln(10);
 

@@ -164,8 +164,7 @@ $("#agregar").click(function () {
                 $("#descripcion").val("");
                 $("#precio").val("");
                 $("#observaciones_item").val("");
-                $("#TextAutoCompletearticulo").focus();
-
+                
                 actualizar_articulos();
 
                 $("#cantidad").focus();

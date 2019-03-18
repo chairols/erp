@@ -302,9 +302,17 @@ $("#creararticulo").click(function () {
             $("#creararticulo").show();
             resultado = $.parseJSON(data);
             if (resultado['status'] == 'error') {
-                notificarErrorEnModal(resultado['data']);
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            z_index: 2000
+                        });
             } else if (resultado['status'] == 'ok') {
-                notificarOKEnModal(resultado['data']);
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            z_index: 2000
+                        });
                 $("#articulo_agregar").val("");
                 $("#TextAutoCompletemarca").val("");
                 $("#marca").val("");
@@ -315,7 +323,11 @@ $("#creararticulo").click(function () {
             }
         },
         error: function (xhr) { // if error occured
-            notificarErrorEnModal(xhr.statusText);
+            $.notify('<strong>' + xhr.statusText + '</strong>',
+                    {
+                        type: 'success',
+                        z_index: 2000
+                    });
             console.log(xhr);
         }
     });

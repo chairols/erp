@@ -29,6 +29,12 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-md-3">Atención</label>
+                <div class="col-md-6">
+                    <input type="text" id="atencion" placeholder="Sr. Juan Perez" class="form-control" value="<?=$cotizacion_cliente['atencion']?>" maxlength="100">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label col-md-3">Fecha de Cotización</label>
                 <div class="col-md-6">
                     <input type="text" id="fecha" value="<?= $cotizacion_cliente['fecha_formateada'] ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha">

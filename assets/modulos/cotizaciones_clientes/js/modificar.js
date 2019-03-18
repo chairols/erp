@@ -14,6 +14,7 @@ $("#actualizar").click(function () {
         'idcotizacion_cliente': $("#idcotizacion_cliente").val(),
         'idcliente': $("#cliente").val(),
         'idmoneda': $("#idmoneda").val(),
+        'atencion': $("#atencion").val(),
         'fecha': $("#fecha").val(),
         'observaciones': $("#observaciones").val()
     };

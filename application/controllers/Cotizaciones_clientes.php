@@ -180,6 +180,7 @@ class Cotizaciones_clientes extends CI_Controller {
             $datos = array(
                 'idcliente' => $this->input->post('idcliente'),
                 'idmoneda' => $this->input->post('idmoneda'),
+                'atencion' => $this->input->post('atencion'),
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
                 'observaciones' => $this->input->post('observaciones'),
                 'actualizado_por' => $session['SID']

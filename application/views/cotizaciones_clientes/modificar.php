@@ -292,6 +292,12 @@
                 </div>
                 <br>
                 <div class="row">
+                    <div class="col-xs-12">
+                        <textarea id="cuerpo_mensaje" class="textarea" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
                     <div class="col-lg-2 col-xs-12 col-lg-offset-5">
                         <button type="button" class="btn btn-primary" id="enviar_correo">
                             <i class="fa fa-envelope-o"></i> Enviar Correo

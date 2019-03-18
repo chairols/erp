@@ -128,7 +128,11 @@ class Cotizaciones_clientes extends CI_Controller {
         $data['title'] = 'Modificar Cotización a Cliente';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
+        $data['css'] = array(
+            '/assets/vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'
+        );
         $data['javascript'] = array(
+            '/assets/vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js',
             '/assets/modulos/cotizaciones_clientes/js/modificar.js'
         );
         $data['view'] = 'cotizaciones_clientes/modificar';
@@ -728,7 +732,7 @@ class Cotizaciones_clientes extends CI_Controller {
 
             $subject = 'Cotización N° ' . str_pad($cotizacion['idcotizacion_cliente'], 8, '0', STR_PAD_LEFT);
 
-            $message = '<p>Adjunto se encuentra nueva cotización.</p>';
+            $message = $this->input->post('cuerpo_mensaje');
 
 // Get full html:
             $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

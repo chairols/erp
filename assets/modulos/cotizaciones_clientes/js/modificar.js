@@ -2,6 +2,9 @@ var tipo_de_cambio = 0;
 
 $(document).ready(function () {
     $("#cantidad").focus();
+    $("#cuerpo_mensaje").wysihtml5({
+        language: 'es'
+    });
     actualizar_articulos();
     get_tipo_de_cambio();
 });
@@ -389,7 +392,8 @@ function validateEmail(email) {
 $("#enviar_correo").click(function () {
     datos = {
         'idcotizacion_cliente': $("#idcotizacion_cliente").val(),
-        'correos': $("#seleccionar_correo").val()
+        'correos': $("#seleccionar_correo").val(),
+        'cuerpo_mensaje': $("#cuerpo_mensaje").val()
     };
 
     $.ajax({

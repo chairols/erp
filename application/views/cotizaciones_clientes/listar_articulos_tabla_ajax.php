@@ -5,7 +5,7 @@
             <th class="text-right">Artículo</th>
             <th class="text-right">Descripción</th>
             <th class="text-right">Precio</th>
-            <th class="text-right">Fecha de Entrega</th>
+            <th class="text-right">Días de Entrega</th>
             <th class="text-right">Total</th>
             <th class="text-right">Observaciones</th>
             <th class="text-right">Acciones</th>
@@ -19,7 +19,7 @@
                 <td class="text-right"><?= $articulo['articulo']['articulo'] ?> - <?= $articulo['marca']['marca'] ?></td>
                 <td class="text-right"><?= $articulo['descripcion'] ?></td>
                 <td class="text-right"><?= $articulo['precio'] ?></td>
-                <td class="text-right"><?= $articulo['fecha_formateada'] ?></td>
+                <td class="text-right"><?= $articulo['dias_entrega'] ?></td>
                 <td class="text-right"><?= number_format($articulo['precio'] * $articulo['cantidad'], 2) ?></td>
                 <td class="text-right"><?= $articulo['observaciones_item'] ?></td>
                 <td class="text-right">

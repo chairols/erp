@@ -249,7 +249,6 @@ class Cotizaciones_clientes extends CI_Controller {
             );
             $data['articulos'][$key]['marca'] = $this->marcas_model->get_where($where);
 
-            $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_entrega']);
         }
 
         $this->load->view('cotizaciones_clientes/listar_articulos_tabla_ajax', $data);
@@ -574,6 +573,25 @@ class Cotizaciones_clientes extends CI_Controller {
                 $this->pdf->SetXY(30, $Y);
                 $this->pdf->Cell(0, 8, $item['descripcion'], 0, 1, 'L');
 
+                $texto_dias = '';
+                switch ($item['dias_entrega']) {
+                    case '0':
+                        $texto_dias = 'Inmediato';
+                        break;
+                    case '1':
+                        $texto_dias = '24 hs';
+                        break;
+                    case '2':
+                        $texto_dias = '48 hs';
+                        break;
+                    default:
+                        $texto_dias = $item['dias_entrega'].' días';
+                        break;
+                }
+                
+                $this->pdf->SetXY(120, $Y);
+                $this->pdf->Cell(0, 8, str_pad(utf8_decode($texto_dias), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
+                
                 $this->pdf->SetXY(146, $Y);
                 $this->pdf->Cell(0, 8, str_pad($item['precio'], 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
 

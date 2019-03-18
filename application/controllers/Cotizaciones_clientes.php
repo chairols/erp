@@ -263,7 +263,7 @@ class Cotizaciones_clientes extends CI_Controller {
         $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
         $this->form_validation->set_rules('descripcion', 'Descripción', 'required');
         $this->form_validation->set_rules('precio', 'Precio', 'required|decimal');
-        $this->form_validation->set_rules('fecha', 'Fecha', 'required');
+        $this->form_validation->set_rules('dias_entrega', 'Días de Entrega', 'required|integer');
 
         if ($this->form_validation->run() == FALSE) {
             $json = array(
@@ -278,7 +278,7 @@ class Cotizaciones_clientes extends CI_Controller {
                 'idarticulo' => $this->input->post('idarticulo'),
                 'descripcion' => $this->input->post('descripcion'),
                 'precio' => $this->input->post('precio'),
-                'fecha_entrega' => $this->formatear_fecha($this->input->post('fecha')),
+                'dias_entrega' => $this->input->post('dias_entrega'),
                 'observaciones_item' => $this->input->post('observaciones_item'),
                 'idcreador' => $session['SID'],
                 'fecha_creacion' => date("Y-m-d H:i:s"),
@@ -308,7 +308,7 @@ class Cotizaciones_clientes extends CI_Controller {
 <strong>Marca: </strong>" . $marca['marca'] . "<br />
 <strong>Descripcion: </strong>" . $this->input->post('descripcion') . "<br />
 <strong>Precio: </strong>" . $this->input->post('precio') . "<br />
-<strong>Fecha de Entrega: </strong>" . $this->input->post('fecha') . "<br />
+<strong>Días de Entrega: </strong>" . $this->input->post('dias_entrega') . "<br />
 <strong>Observaciones: </strong>" . $this->input->post('observaciones_item') . "<br />
 </p>",
                     'idusuario' => $session['SID'],

@@ -130,7 +130,7 @@ $("#agregar").click(function () {
         'idarticulo': $("#articulo").val(),
         'descripcion': $("#descripcion").val(),
         'precio': $("#precio").val(),
-        'fecha': $("#fecha_articulo").val(),
+        'dias_entrega': $("#dias_entrega").val(),
         'observaciones_item': $("#observaciones_item").val()
     };
     $.ajax({

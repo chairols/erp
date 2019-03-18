@@ -103,7 +103,7 @@
             </div>
             <div class="row bg-brown">
                 <div class="col-lg-2 col-xs-12 text-center">
-                    <label class="control-label">Fecha de Entrega</label>
+                    <label class="control-label">Días de Entrega</label>
                 </div>
                 <div class="col-lg-8 col-xs-12 text-center">
                     <label class="control-label">Observaciones (No se muestra)</label>
@@ -114,7 +114,8 @@
             </div>
             <div class="form-group bg-brown" style="padding-bottom: 10px">
                 <div class="col-lg-2 col-xs-12">
-                    <input type="text" id="fecha_articulo" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker text-center" placeholder="Seleccione una fecha">
+                    <!--<input type="text" id="fecha_articulo" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker text-center" placeholder="Seleccione una fecha">-->
+                    <input type="text" id="dias_entrega" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,8}'" value="0">
                 </div>
                 <div class="col-lg-8 col-xs-12">
                     <textarea id="observaciones_item" class="form-control"></textarea>

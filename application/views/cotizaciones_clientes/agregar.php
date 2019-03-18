@@ -30,9 +30,15 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-md-3">Atención</label>
+                <div class="col-md-6">
+                    <input type="text" id="atencion" class="form-control" placeholder="Sr. Juan Perez" maxlength="100">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label col-md-3">Fecha de Cotización</label>
                 <div class="col-md-6">
-                    <input type="text" id="fecha" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha">
+                    <input type="text" id="fecha" value="<?= date('d/m/Y') ?>" class="form-control datePicker" placeholder="Seleccione una fecha">
                 </div>
             </div>
             <div class="form-group">

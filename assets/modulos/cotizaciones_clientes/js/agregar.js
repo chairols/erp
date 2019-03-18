@@ -33,6 +33,7 @@ $("#agregar").click(function() {
         'idcliente': $("#cliente").val(),
         'idsucursal': $("#idsucursal").val(),
         'idmoneda': $("#idmoneda").val(),
+        'atencion': $("#atencion").val(),
         'fecha': $("#fecha").val(),
         'observaciones': $("#observaciones").val()
     };

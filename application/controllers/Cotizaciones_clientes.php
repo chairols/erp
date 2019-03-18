@@ -80,6 +80,7 @@ class Cotizaciones_clientes extends CI_Controller {
                 'domicilio' => $sucursal['direccion'],
                 'localidad' => $sucursal['localidad'],
                 'idmoneda' => $this->input->post('idmoneda'),
+                'atencion' => $this->input->post('atencion'),
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
                 'observaciones' => $this->input->post('observaciones'),
                 'fecha_creacion' => date("Y-m-d H:i:s"),

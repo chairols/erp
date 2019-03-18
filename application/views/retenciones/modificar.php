@@ -74,7 +74,7 @@
     <div class="row">
         <div class="col-xs-3 txC">
             <strong>Tipo de Comprobante</strong>
-            <select id="tipo_comprobante" class="form-control chosenSelect">
+            <select id="tipo_comprobante" class="form-control chosenSelect" onkeyup="saltar(event, 'punto_de_venta');">
                 <?php foreach($tipos_comprobantes as $tipo_comprobante) { ?>
                 <option value="<?=$tipo_comprobante['idtipo_comprobante']?>"><?=$tipo_comprobante['tipo_comprobante']?></option>
                 <?php } ?>
@@ -82,19 +82,19 @@
         </div>
         <div class="col-xs-2 txC">
             <strong>Punto de Venta</strong><br>
-            <input type="text" id="punto_de_venta" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,4}'">
+            <input type="text" id="punto_de_venta" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,4}'"  onkeyup="saltar(event, 'comprobante');">
         </div>
         <div class="col-xs-2 txC">
             <strong>Comprobante</strong><br>
-            <input type="text" id="comprobante" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,8}'">
+            <input type="text" id="comprobante" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,8}'"  onkeyup="saltar(event, 'base_imponible');">
         </div>
         <div class="col-xs-2 txC">
             <strong>Fecha</strong><br>
-            <input type="text" id="fecha" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha">
+            <input type="text" id="fecha" value="<?= date('d/m/Y') ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha"  onkeyup="saltar(event, 'base_imponible');">
         </div>
         <div class="col-xs-2 txC">
             <strong>Base Imponible</strong><br>
-            <input type="text" id="base_imponible" class="form-control input-sm inputMask" data-inputmask="'mask': '[-]9{1,17}.99'">
+            <input type="text" id="base_imponible" class="form-control input-sm inputMask" data-inputmask="'mask': '[-]9{1,17}.99'"  onkeyup="saltar(event, 'agregar');">
         </div>
         <div class="col-xs-1">
             <br>

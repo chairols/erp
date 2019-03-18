@@ -199,6 +199,27 @@ function borrar_item(idretencion_item, comprobante) {
     
 }
 
+function saltar(e, id) {
+    // Obtenemos la tecla pulsada
+    (e.keyCode) ? k = e.keyCode : k = e.which;
+    
+    // Si la tecla pulsada es enter (codigo ascii 13)
+    if (k == 13) {
+        // Si la variable id contiene "submit" enviamos el formulario
+        console.log(k);
+        console.log(e);
+        console.log(id);
+        
+        
+        if (id == "submit") {
+            document.forms[0].submit();
+        } else {
+            // nos posicionamos en el siguiente input
+            $("#"+id).focus();
+        }
+    }
+}
+
 $(document).ready(function () {
     get_items_tabla();
 });

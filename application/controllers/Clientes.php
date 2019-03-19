@@ -662,6 +662,8 @@ class Clientes extends CI_Controller {
     }
     
     public function borrar_agente_ajax() {
+        $session = $this->session->all_userdata();
+        
         $this->form_validation->set_rules('idcliente_agente', 'ID Horario de Cliente', 'required|integer');
         
         if($this->form_validation->run() == FALSE) {
@@ -677,6 +679,36 @@ class Clientes extends CI_Controller {
             $resultado = $this->clientes_model->update_agente($datos, $where);
             
             if ($resultado) {
+                $where = array(
+                    'idcliente_agente' => $this->input->post('idcliente_agente')
+                );
+                $agente = $this->clientes_model->get_where_agente($where);
+                
+                $where = array(
+                    'idcliente' => $agente['idcliente']
+                );
+                $cliente = $this->clientes_model->get_where($where);
+                
+                $where = array(
+                    'idcliente_sucursal' => $agente['idcliente_sucursal']
+                );
+                $sucursal = $this->clientes_model->get_where_sucursal($where);
+                
+                $log = array(
+                    'tabla' => 'clientes_agentes',
+                    'idtabla' => $this->input->post('idcliente_agente'),
+                    'texto' => "<h2><strong>Se eliminó el agente: " . $agente['agente'] . "</strong></h2>
+                    <p><strong>ID Agente: </strong>" . $this->input->post('idcliente_agente') . "<br />
+                    <strong>ID Cliente: </strong>".$cliente['idcliente']."<br />
+                    <strong>Cliente: </strong>".$cliente['cliente']."<br />
+                    <strong>ID Sucursal: </strong>".$sucursal['idcliente_sucursal']."<br />
+                    <strong>Sucursal: </strong>".$sucursal['sucursal'],
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'del'
+                );
+
+                $this->log_model->set($log);
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se eliminó el agente'

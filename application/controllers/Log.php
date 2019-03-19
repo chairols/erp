@@ -30,8 +30,13 @@ class Log extends CI_Controller {
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
         
-        $like['usuarios.idusuario'] = $this->input->get('idusuario');
-        $where['log.tabla'] = $this->input->get('idtabla');
+        $where = array();
+        if($this->input->get('idusuario') != "") {
+            $where['usuarios.idusuario'] = $this->input->get('idusuario');
+        }
+        if($this->input->get('idtabla') != "") {
+            $where['log.tabla'] = $this->input->get('idtabla');
+        }
         
         if($this->input->get('idtabla') == '') {
             unset($where['log.tabla']);
@@ -39,7 +44,7 @@ class Log extends CI_Controller {
         /*
          * inicio paginador
          */
-        $total_rows = $this->log_model->get_cantidad_where($where, $like);
+        $total_rows = $this->log_model->get_cantidad_where($where);
         $config['reuse_query_string'] = TRUE;
         $config['base_url'] = '/log/listar/';
         $config['total_rows'] = $total_rows;
@@ -65,7 +70,7 @@ class Log extends CI_Controller {
          * fin paginador
          */
         
-        $data['registros'] = $this->log_model->gets_where_limit($where, $like, $per_page, $pagina);
+        $data['registros'] = $this->log_model->gets_where_limit($where, $per_page, $pagina);
         
         $data['usuarios'] = $this->log_model->gets_usuarios();
         $data['tablas'] = $this->log_model->gets_tablas();

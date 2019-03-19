@@ -68,6 +68,8 @@ class Clientes_model extends CI_Model {
     }
 
     /*
+     *  Clientes/nueva_sucursal_ajax
+     * 
      *  Importar/clientes
      */
     public function set_sucursal($datos) {
@@ -100,6 +102,8 @@ class Clientes_model extends CI_Model {
 
     /*
      *  Clientes/gets_sucursales_select
+     *  Clientes/modificar
+     *  Clientes/nueva_sucursal_ajax
      */
     public function gets_sucursales($where) {
         $this->db->select('*');
@@ -191,6 +195,15 @@ class Clientes_model extends CI_Model {
         $query = $this->db->get_where('clientes_horarios', $where);
 
         return $query->row_array();
+    }
+    
+    /*
+     *  Clientes/eliminar_sucursal_ajax
+     *  Clientes/modificar_sucursal_ajax
+     */
+    public function update_sucursal($datos, $where) {
+        $this->db->update( 'clientes_sucursales', $datos, $where);
+        return $this->db->affected_rows();
     }
 }
 

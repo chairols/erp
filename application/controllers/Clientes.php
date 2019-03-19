@@ -162,8 +162,8 @@ class Clientes extends CI_Controller {
         );
         $data['cliente'] = $this->clientes_model->get_where($where);
 
-        $where['estado'] = 'A';
-        $data['sucursales'] = $this->sucursales_model->gets_where($where);
+        $where['clientes_sucursales.estado'] = 'A';
+        $data['sucursales'] = $this->clientes_model->gets_sucursales($where);
 
         $data['provincias'] = $this->provincias_model->gets();
 
@@ -250,10 +250,10 @@ class Clientes extends CI_Controller {
             $datos = array(
                 'idcliente' => $this->input->post('idcliente'),
                 'sucursal' => $this->input->post('nombre'),
-                'estado' => 'P',
+                'estado' => 'A',
                 'creado_por' => $session['SID']
             );
-            $resultado = $this->sucursales_model->set($datos);
+            $resultado = $this->clientes_model->set_sucursal($datos);
             
             if ($resultado) {
                 $where = array(
@@ -263,7 +263,7 @@ class Clientes extends CI_Controller {
 
                 $where['idcliente_sucursal'] = $resultado;
 
-                $data['sucursales'] = $this->sucursales_model->gets_where($where);
+                $data['sucursales'] = $this->clientes_model->gets_sucursales($where);
                 $data['paises'] = $this->paises_model->gets();
                 $data['provincias'] = $this->provincias_model->gets();
                 $data['transportes'] = $this->transportes_model->gets();
@@ -307,9 +307,10 @@ class Clientes extends CI_Controller {
             );
 
             $datos = $this->input->post();
+            $datos['estado'] = 'A';
             $datos['actualizado_por'] = $session['SID'];
 
-            $resultado = $this->sucursales_model->update($datos, $where);
+            $resultado = $this->clientes_model->update_sucursal($datos, $where);
 
             if ($resultado) {
                 $json = array(
@@ -348,7 +349,7 @@ class Clientes extends CI_Controller {
             $datos = array(
                 'estado' => 'I'
             );
-            $resultado = $this->sucursales_model->update($datos, $where);
+            $resultado = $this->clientes_model->update_sucursal($datos, $where);
 
             if($resultado) {
                 $where = array(

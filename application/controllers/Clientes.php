@@ -462,6 +462,9 @@ class Clientes extends CI_Controller {
             $am_pm = substr($this->input->post('desde'), 6, 2);
             if($am_pm == 'PM') {
                 $hora_desde += 12;
+                if($hora_desde == 24){
+                    $hora_desde = 12;
+                }
             }
             $set['desde'] = $hora_desde.":".substr($this->input->post('desde'), 3, 2).":00";
             
@@ -469,6 +472,9 @@ class Clientes extends CI_Controller {
             $am_pm = substr($this->input->post('hasta'), 6, 2);
             if($am_pm == 'PM') {
                 $hora_hasta += 12;
+                if($hora_hasta == 24) {
+                    $hora_hasta = 12;
+                }
             }
             $set['hasta'] = $hora_hasta.":".substr($this->input->post('hasta'), 3, 2).":00";
             
@@ -537,6 +543,8 @@ class Clientes extends CI_Controller {
     }
     
     public function borrar_horario_ajax() {
+        $session = $this->session->all_userdata();
+        
         $this->form_validation->set_rules('idcliente_horario', 'ID Horario de Cliente', 'required|integer');
         
         if($this->form_validation->run() == FALSE) {
@@ -552,6 +560,33 @@ class Clientes extends CI_Controller {
             $resultado = $this->clientes_model->update_horario($datos, $where);
             
             if ($resultado) {
+                $where = array(
+                    'idcliente_horario' => $this->input->post('idcliente_horario')
+                );
+                $cliente_horario = $this->clientes_model->get_where_horario($where);
+                
+                $where = array(
+                    'iddia' => $cliente_horario['iddia']
+                );
+                $dia = $this->dias_model->get_where($where);
+                
+                $where = array(
+                    'idcliente' => $cliente_horario['idcliente']
+                );
+                $cliente = $this->clientes_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'clientes_horarios',
+                    'idtabla' => $this->input->post('idcliente_horario'),
+                    'texto' => "<h2><strong>Se eliminó el horario: " . $dia['dia'] . "- ".$cliente_horario['desde']." - ".$cliente_horario['hasta']."</strong></h2>
+                    <p><strong>ID Cliente: </strong>".$cliente['idcliente']."<br />
+                    <strong>Cliente: </strong>".$cliente['cliente']."<br />",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'del'
+                );
+
+                $this->log_model->set($log);
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se eliminó el horario'

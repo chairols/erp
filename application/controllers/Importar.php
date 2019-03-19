@@ -290,7 +290,7 @@ class Importar extends CI_Controller {
                 $array[41] = trim($array[41]);
                 $array[42] = trim($array[42]);
 
-                
+
                 $update = array(
                     'idarticulo' => $idarticulo,
                     'articulo' => trim($array[0]),
@@ -312,7 +312,7 @@ class Importar extends CI_Controller {
 
                 $this->articulos_model->set($update);
 
-               $idarticulo++;
+                $idarticulo++;
             }
 
 
@@ -703,7 +703,7 @@ class Importar extends CI_Controller {
         echo json_encode($json);
     }
 
-    public function proveedores($archivo = null) {
+    public function proveedores_anterior($archivo = null) {
         $session = $this->session->all_userdata();
         if ($archivo) {
             $fp = fopen("upload/importar/" . $archivo, "r");
@@ -783,6 +783,102 @@ class Importar extends CI_Controller {
                     $datos['internacional'] = 'Y';
                 }
                 $idproveedor = $this->proveedores_model->set($datos);
+            }
+        }
+
+        $json = array(
+            'status' => 'ok'
+        );
+        echo json_encode($json);
+    }
+
+    public function proveedores($archivo = null) {
+        $session = $this->session->all_userdata();
+        if ($archivo) {
+            $fp = fopen("upload/importar/" . $archivo, "r");
+            $linea = fgets($fp);  // Leo la primer línea en blanco
+            $linea = fgets($fp);  // Leo la segunda linea de cabeceras
+
+
+            while (!feof($fp)) {
+                $linea = fgets($fp);
+                $array = preg_split('/;/', $linea);
+                //  CARACTERES AL FINAL DEL VALOR
+                //  { = POSITIVO
+                //  } = NEGATIVO
+                //  
+                //  [0] = ID PROVEEDOR
+                //  [1] = RAZON SOCIAL 1
+                //  [2] = RAZON SOCIAL 2
+                //  [3] = CUIT
+                //  [4] = DOMICILIO
+                //  [5] = CODIGO POSTAL
+                //  [6] = LOCALIDAD
+                //  [7] = PROVINCIA
+                //  [8] = TELEFONO
+                //  [9] = EMAIL
+                //  [10] = PAIS
+                //  [11] = CONTACTO
+                //  [12] = TIPO DE IVA
+                //  [13] = INGRESOS BRUTOS
+                //  [14] = SALDO CUENTA CORRIENTE
+                //  [15] = SALDO INICIAL
+                //  [16] = SALDO A CUENTA
+                //  [17] = 
+
+                $where = array(
+                    'idproveedor' => trim($array[0])
+                );
+                $resultado = $this->proveedores_model->get_where($where);
+
+                if (!$resultado) {
+                    $datos = array(
+                        'idproveedor' => $array[0],
+                        'proveedor' => trim($array[1]) . ' ' . trim($array[2]),
+                        'cuit' => str_replace('-', '', $array[3]),
+                        'domicilio' => trim($array[4]),
+                        'codigo_postal' => trim($array[5]),
+                        'localidad' => trim($array[6]),
+                        'idprovincia' => trim($array[7]),
+                        'telefono' => trim($array[8]),
+                        'email' => trim($array[9]),
+                        'pais' => trim($array[10]),
+                        'contacto' => trim($array[11]),
+                        //'idtipo_responsable' => OK
+                        'iibb' => trim($array[13]),
+                        //'internacional' => OK
+                        'saldo_cuenta_corriente' => $array[14],
+                        'saldo_inicial' => $array[15],
+                        'saldo_a_cuenta' => $array[16],
+                        'idmoneda' => $array[19],
+                        'fecha_creacion' => date("Y-m-d H:i:s"),
+                        'idcreador' => $session['SID'],
+                        'actualizado_por' => $session['SID']
+                    );
+                    switch ($array[12]) {
+                        case 'IN':
+                            $datos['idtipo_responsable'] = 1;
+                            break;
+                        case 'CF':
+                            $datos['idtipo_responsable'] = 5;
+                            break;
+                        case 'EX':
+                            $datos['idtipo_responsable'] = 4;
+                            break;
+                        case 'XE':
+                            $datos['idtipo_responsable'] = 9;
+                            break;
+                        default:
+                            $datos['idtipo_responsable'] = 0;
+                            break;
+                    }
+                    if (trim($array[7]) >= 25) {
+                        $datos['internacional'] = 'Y';
+                    } else {
+                        $datos['idpais'] = 200;
+                    }
+                    $idproveedor = $this->proveedores_model->set($datos);
+                }
             }
         }
 

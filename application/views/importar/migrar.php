@@ -109,7 +109,7 @@
                 <strong>Actualiza la tabla <label class="label label-success">proveedores</label> mediante archivo PROVEDOR.TXT de Sistema anterior.<br>
                     php index.php importar proveedores PROVEDOR.TXT<br>
                     Se ejecuta desde acá, no es necesario eliminar cabeceras, descarta las 2 primeras líneas por default. (totalmente transparente)<br>
-                    Hace trancate a la tabla proveedores
+                    No hace truncate, solamente agrega los proveedores donde no existe el ID.
                 </strong>
             </div>
             <div class="col-xs-2" id="boton-7">

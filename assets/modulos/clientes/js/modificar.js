@@ -60,142 +60,71 @@ $("#modificar").click(function () {
 });
 
 $('#agregar_sucursal').click(function () {
+    var datos = {
+        'idcliente': $('#idcliente').val(),
+        'nombre': $('#nombre_nueva_sucursal').val()
+    };
 
-    if ($('#nombre_nueva_sucursal').val())
-    {
-
-        var datos =
-                {
-
-                    'idcliente': $('#idcliente').val(),
-
-                    'nombre': $('#nombre_nueva_sucursal').val()
-
-                };
-
-        $.ajax(
-                {
-
-                    type: 'POST',
-
-                    url: '/clientes/nueva_sucursal_ajax/',
-
-                    data: datos,
-
-                    beforeSend: function ()
-                    {
-
-                        $('#agregar_sucursal').hide();
-
-                        $('#agregar_sucursal_loading').show();
-
-                    },
-
-                    success: function (data)
-                    {
-
-                        resultado = $.parseJSON(data);
-
-                        if (resultado[ 'status' ] == 'error')
+    $.ajax({
+        type: 'POST',
+        url: '/clientes/nueva_sucursal_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $('#agregar_sucursal').hide();
+            $('#agregar_sucursal_loading').show();
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado[ 'status' ] == 'error') {
+                console.log(resultado);
+                $.notify('<strong>' + resultado[ 'data' ] + '</strong>',
                         {
-
-                            console.log(resultado);
-
-                            $.notify('<strong>' + resultado[ 'data' ] + '</strong>',
-                                    {
-
-                                        type: 'danger',
-
-                                        allow_dismiss: true
-
-                                    });
-
-                        } else if (resultado[ 'status' ] == 'ok') {
-
-                            $('.contenedor-sucursal').each(function ()
-                            {
-
-                                $(this).hide();
-
-                            });
-
-                            $('.boton_sucursal_menu').each(function ()
-                            {
-
-                                $(this).removeClass('info-box-number');
-
-                            });
-
-                            $('#sucursales').append(resultado[ 'html' ]);
-
-                            $('#contenedor_nueva_sucursal').before(resultado[ 'menu_html' ]);
-
-                            $.notify('<strong>' + resultado[ 'data' ] + '</strong>',
-                                    {
-
-                                        type: 'success',
-
-                                        allow_dismiss: true
-
-                                    });
-
-                        }
-
-                        cambiarSucursal();
-
-                        modificarSucursal();
-
-                        eliminarSucursal();
-
-                        iCheck();
-
-                        actualizarCheckboxes();
-
-                        $('#nombre_nueva_sucursal').val('');
-
-                        $('#agregar_sucursal_loading').hide();
-
-                        $('#agregar_sucursal').show();
-
-                    },
-                    error: function (xhr)
-                    { // if error occured
-
-                        console.log(xhr.statusText);
-
-                        $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
-                                {
-
-                                    type: 'danger',
-
-                                    allow_dismiss: false
-
-                                });
-
-                        $('#agregar_sucursal_loading').hide();
-
-                        $('#agregar_sucursal').show();
-                    }
-
+                            type: 'danger',
+                            allow_dismiss: true
+                        });
+            } else if (resultado[ 'status' ] == 'ok') {
+                $('.contenedor-sucursal').each(function () {
+                    $(this).hide();
                 });
-
-    }
-
+                $('.boton_sucursal_menu').each(function () {
+                    $(this).removeClass('info-box-number');
+                });
+                $('#sucursales').append(resultado[ 'html' ]);
+                $('#contenedor_nueva_sucursal').before(resultado[ 'menu_html' ]);
+                $.notify('<strong>' + resultado[ 'data' ] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: true
+                        });
+            }
+            cambiarSucursal();
+            modificarSucursal();
+            eliminarSucursal();
+            iCheck();
+            actualizarCheckboxes();
+            $('#nombre_nueva_sucursal').val('');
+            $('#agregar_sucursal_loading').hide();
+            $('#agregar_sucursal').show();
+        },
+        error: function (xhr) { // if error occured
+            console.log(xhr.statusText);
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            $('#agregar_sucursal_loading').hide();
+            $('#agregar_sucursal').show();
+        }
+    });
 });
 
-$(document).ready(function ()
-{
-
+$(document).ready(function () {
     cambiarSucursal();
-
     modificarSucursal();
-
     eliminarSucursal();
-
     actualizarCheckboxes();
-
     actualizar_horarios();
-    
     actualizar_agentes();
 
     $('.timepicker').timepicker({
@@ -203,29 +132,17 @@ $(document).ready(function ()
     });
 });
 
-function cambiarSucursal()
-{
-
-    $('.boton_sucursal_menu').click(function ()
-    {
-
+function cambiarSucursal() {
+    $('.boton_sucursal_menu').click(function () {
         var sucursal = $(this).attr('sucursal');
-
-        $('.boton_sucursal_menu').each(function ()
-        {
-
+        $('.boton_sucursal_menu').each(function () {
             $(this).removeClass('info-box-number');
-
         });
 
         $(this).addClass('info-box-number');
-
         $('.contenedor-sucursal').hide();
-
         $('#' + sucursal).show();
-
     });
-
 }
 
 function modificarSucursal() {
@@ -496,7 +413,7 @@ function borrar_horario(id) {
     });
 }
 
-$("#agregar_agente").click(function() {
+$("#agregar_agente").click(function () {
     datos = {
         'idcliente': $("#idcliente").val(),
         'idcliente_sucursal': $("#agentes_sucursal").val(),
@@ -505,7 +422,7 @@ $("#agregar_agente").click(function() {
         'email': $("#agente_email").val(),
         'telefono': $("#agente_telefono").val()
     };
-    
+
     $.ajax({
         type: 'POST',
         url: '/clientes/agregar_agente_ajax/',

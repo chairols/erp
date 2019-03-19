@@ -235,47 +235,40 @@ class Clientes extends CI_Controller {
     }
 
     public function nueva_sucursal_ajax() {
-
         $session = $this->session->all_userdata();
-
+        
         $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
-
-        $this->form_validation->set_rules('nombre', 'Nombre Sucursal', 'required');
-
+        $this->form_validation->set_rules('nombre', 'Nombre de Sucursal', 'required');
+        
         if ($this->form_validation->run() == FALSE) {
-
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
             );
-
             echo json_encode($json);
         } else {
-
             $datos = array(
                 'idcliente' => $this->input->post('idcliente'),
                 'sucursal' => $this->input->post('nombre'),
                 'estado' => 'P',
                 'creado_por' => $session['SID']
             );
-
             $resultado = $this->sucursales_model->set($datos);
-
+            
             if ($resultado) {
-
-                $where = array('idcliente' => $this->input->post('idcliente'));
-
+                $where = array(
+                    'idcliente' => $this->input->post('idcliente')
+                );
                 $data['cliente'] = $this->clientes_model->get_where($where);
 
                 $where['idcliente_sucursal'] = $resultado;
 
                 $data['sucursales'] = $this->sucursales_model->gets_where($where);
-
-                $data['provincias'] = $this->provincias_model->gets();
-
                 $data['paises'] = $this->paises_model->gets();
+                $data['provincias'] = $this->provincias_model->gets();
+                $data['transportes'] = $this->transportes_model->gets();
 
-                $html = $this->load->view('clientes/sucursal', $data, TRUE);
+                $html = $this->load->view('clientes/nueva_sucursal_ajax', $data, TRUE);
 
                 $json = array(
                     'html' => $html,
@@ -283,15 +276,12 @@ class Clientes extends CI_Controller {
                     'status' => 'ok',
                     'data' => 'La sucursal ' . $this->input->post('nombre') . ' se creó correctamente'
                 );
-
                 echo json_encode($json);
             } else {
-
                 $json = array(
                     'status' => 'error',
                     'data' => 'No se pudo crear la Sucursal'
                 );
-
                 echo json_encode($json);
             }
         }

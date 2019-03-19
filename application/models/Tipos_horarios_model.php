@@ -19,6 +19,15 @@ class Tipos_horarios_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Clientes/agregar_horario_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('tipos_horarios', $where);
+
+        return $query->row_array();
+    }
 }
 
 ?>

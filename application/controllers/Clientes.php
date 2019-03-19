@@ -451,6 +451,7 @@ class Clientes extends CI_Controller {
                 'desde' => $this->input->post('desde'),
                 'hasta' => $this->input->post('hasta'),
                 'idtipo_horario' => $this->input->post('idtipo_horario'),
+                'observaciones' => $this->input->post('observaciones'),
                 'fecha_creacion' => date("Y-m-d H:i:s"),
                 'idcreador' => $session['SID'],
                 'actualizado_por' => $session['SID']
@@ -472,9 +473,38 @@ class Clientes extends CI_Controller {
             $set['hasta'] = $hora_hasta.":".substr($this->input->post('hasta'), 3, 2).":00";
             
             
-            $resultado = $this->clientes_model->set_horario($set);
+            $id = $this->clientes_model->set_horario($set);
 
-            if ($resultado) {
+            if ($id) {
+                $where = array(
+                    'iddia' => $this->input->post('iddia')
+                );
+                $dia = $this->dias_model->get_where($where);
+                
+                $where = array(
+                    'idcliente' => $this->input->post('idcliente')
+                );
+                $cliente = $this->clientes_model->get_where($where);
+                
+                $where = array(
+                    'idtipo_horario' => $this->input->post('idtipo_horario')
+                );
+                $tipo_horario = $this->tipos_horarios_model->get_where($where);
+                
+                
+                $log = array(
+                    'tabla' => 'clientes_horarios',
+                    'idtabla' => $id,
+                    'texto' => "<h2><strong>Se agregó el horario: " . $dia['dia'] . " ".$set['desde']." - ".$set['hasta']."</strong></h2>
+                    <p><strong>ID Cliente: </strong>" . $this->input->post('idcliente') . "<br />
+                    <strong>Cliente: </strong>".$cliente['cliente']."<br />
+                    <strong>Tipo de Horario: </strong>".$tipo_horario['tipo_horario']."<br />
+                    <strong>Observaciones: </strong>" . $this->input->post('observaciones'),
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+                $this->log_model->set($log);
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se agregó el horario'
@@ -599,6 +629,7 @@ class Clientes extends CI_Controller {
                 );
 
                 $this->log_model->set($log);
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se agregó el agente'

@@ -268,7 +268,7 @@ class Clientes extends CI_Controller {
                 $data['provincias'] = $this->provincias_model->gets();
                 $data['transportes'] = $this->transportes_model->gets();
 
-                $html = $this->load->view('clientes/nueva_sucursal_ajax', $data, TRUE);
+                $html = $this->load->view('clientes/sucursal', $data, TRUE);
 
                 $json = array(
                     'html' => $html,

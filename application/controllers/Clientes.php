@@ -339,52 +339,64 @@ class Clientes extends CI_Controller {
     }
 
     public function eliminar_sucursal_ajax() {
-
         $session = $this->session->all_userdata();
-
+        
         $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
-
         $this->form_validation->set_rules('idcliente_sucursal', 'ID de Sucursal de Cliente', 'required|integer');
-
+        
         if ($this->form_validation->run() == FALSE) {
-
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
             );
-
             echo json_encode($json);
         } else {
-
             $where = array(
                 'idcliente' => $this->input->post('idcliente'),
                 'idcliente_sucursal' => $this->input->post('idcliente_sucursal')
             );
-
-
             $datos = array(
                 'estado' => 'I'
             );
-
             $resultado = $this->sucursales_model->update($datos, $where);
 
-            if (intval($resultado) > 0) {
+            if($resultado) {
+                $where = array(
+                    'idcliente' => $this->input->post('idcliente'),
+                    'idcliente_sucursal' => $this->input->post('idcliente_sucursal')
+                );
+                $sucursal = $this->clientes_model->get_where_sucursal($where);
+                
+                $where = array(
+                    'idcliente' => $this->input->post('idcliente')
+                );
+                $cliente = $this->clientes_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'clientes_sucursales',
+                    'idtabla' => $this->input->post('idcliente_sucursal'),
+                    'texto' => "<h2><strong>Se eliminó la sucursal: " . $sucursal['sucursal'] . "</strong></h2>
+                    <p><strong>ID Sucursal: </strong>" . $this->input->post('idcliente_sucursal') . "<br />
+                    <strong>ID Cliente: </strong>".$cliente['idcliente']."<br />
+                    <strong>Cliente: </strong>".$cliente['cliente'],
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'del'
+                );
 
+                $this->log_model->set($log);
+                
                 $json = array(
                     'registros_modificados' => $resultado,
                     'status' => 'ok',
                     'data' => 'La sucursal ' . $this->input->post('sucursal') . ' se eliminó correctamente'
                 );
-
                 echo json_encode($json);
             } else {
-
                 $json = array(
                     'status' => 'error',
                     'data' => 'No se pudo eliminar la Sucursal ' . $this->input->post('sucursal'),
                     'where' => $where
                 );
-
                 echo json_encode($json);
             }
         }

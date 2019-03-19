@@ -43,6 +43,8 @@ class Clientes_model extends CI_Model {
     }
 
     /*
+     *  Clientes/agregar_agente_ajax
+     * 
      *  Cotizaciones_clientes/actualizar_cabecera_ajax
      *  Cotizaciones_clientes/agregar_ajax
      *  Cotizaciones_clientes/agregar_articulo_ajax
@@ -159,6 +161,15 @@ class Clientes_model extends CI_Model {
     public function update_agente($datos, $where) {
         $this->db->update('clientes_agentes', $datos, $where);
         return $this->db->affected_rows();
+    }
+    
+    /*
+     *  Clientes/agregar_agente_ajax
+     */
+    public function get_where_sucursal($where) {
+        $query = $this->db->get_where('clientes_sucursales', $where);
+
+        return $query->row_array();
     }
 }
 

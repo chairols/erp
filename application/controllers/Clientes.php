@@ -565,9 +565,40 @@ class Clientes extends CI_Controller {
                 'actualizado_por' => $session['SID']
             );
             
-            $resultado = $this->clientes_model->set_agente($set);
+            $id = $this->clientes_model->set_agente($set);
             
-            if ($resultado) {
+            if ($id) {
+                $where = array(
+                    'idcargo' => $this->input->post('idcargo')
+                );
+                $cargo = $this->cargos_model->get_where($where);
+                
+                $where = array(
+                    'idcliente' => $this->input->post('idcliente')
+                );
+                $cliente = $this->clientes_model->get_where($where);
+                
+                $where = array(
+                    'idcliente_sucursal' => $this->input->post('idcliente_sucursal')
+                );
+                $sucursal = $this->clientes_model->get_where_sucursal($where);
+                
+                $log = array(
+                    'tabla' => 'clientes_agentes',
+                    'idtabla' => $id,
+                    'texto' => "<h2><strong>Se agregó el agente: " . $this->input->post('agente') . "</strong></h2>
+                    <p><strong>ID Agente: </strong>" . $id . "<br />
+                    <strong>Cliente: </strong>".$cliente['cliente']."<br />
+                    <strong>ID Sucursal: </strong>" . $this->input->post('idcliente_sucursal'). "<br />
+                    <strong>Sucursal: </strong>" . $sucursal['sucursal'] ."<br />
+                    <strong>Cargo: </strong>" . $cargo['cargo'] ."<br />
+                    <strong>Email: </strong>" . $this->input->post('email'). "<br />
+                    <strong>Teléfono: </strong>" . $this->input->post('telefono'),
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+
+                $this->log_model->set($log);
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se agregó el agente'

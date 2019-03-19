@@ -703,7 +703,7 @@ class Importar extends CI_Controller {
         echo json_encode($json);
     }
 
-    public function proveedores_anterior($archivo = null) {
+    private function proveedores_anterior($archivo = null) {
         $session = $this->session->all_userdata();
         if ($archivo) {
             $fp = fopen("upload/importar/" . $archivo, "r");

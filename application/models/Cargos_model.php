@@ -10,6 +10,8 @@ class Cargos_model extends CI_Model {
     
     /*
      *  Cargos/agregar_ajax
+     * 
+     *  Clientes/agregar_agente_ajax
      */
     public function get_where($where) {
         $query = $this->db->get_where('cargos', $where);

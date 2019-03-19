@@ -4,6 +4,7 @@
             <div class="col-xs-3">
                 <label>Usuarios</label>
                 <select name="idusuario" id="idusuario" class="form-control chosenSelect">
+                    <option value="">Todos los usuarios</option>
                     <?php foreach($usuarios as $usuario) { ?>
                     <option value="<?=$usuario['idusuario']?>"<?=($this->input->get('idusuario')==$usuario['idusuario'])?" selected":""?>><?=$usuario['nombre']?> <?=$usuario['apellido']?></option>
                     <?php } ?>

@@ -12,6 +12,8 @@ class Log_model extends CI_Model {
     /*
      *  Articulos_genericos/agregar_ajax
      * 
+     *  Clientes/agregar_agente_ajax
+     * 
      *  Cotizaciones_clientes/agregar_ajax
      *  Cotizaciones_clientes/borrar_articulo_ajax
      * 
@@ -70,12 +72,11 @@ class Log_model extends CI_Model {
     /*
      *  Log/listar
      */
-    public function get_cantidad_where($where, $like) {
+    public function get_cantidad_where($where) {
         $this->db->select('*');
         $this->db->from('log');
         $this->db->join('usuarios', 'log.idusuario = usuarios.idusuario');
         $this->db->where($where);
-        $this->db->like($like);
         
         $query = $this->db->count_all_results();
         return $query;
@@ -84,12 +85,11 @@ class Log_model extends CI_Model {
     /*
      *  Log/listar
      */
-    public function gets_where_limit($where, $like, $per_page, $pagina) {
+    public function gets_where_limit($where, $per_page, $pagina) {
         $this->db->select('*');
         $this->db->from('log');
         $this->db->join('usuarios', 'log.idusuario = usuarios.idusuario');
         $this->db->where($where);
-        $this->db->like($like);
         $this->db->order_by('idlog DESC');
         $this->db->limit($per_page, $pagina);
         

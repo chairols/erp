@@ -15,7 +15,6 @@ class Clientes extends CI_Controller {
         ));
         $this->load->model(array(
             'clientes_model',
-            'sucursales_model',
             'parametros_model',
             'provincias_model',
             'monedas_model',

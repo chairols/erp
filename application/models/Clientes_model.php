@@ -36,6 +36,7 @@ class Clientes_model extends CI_Model {
 
     /*
      *  Clientes/modificar_ajax
+     *  Clientes/modificar_datos_impositivos_ajax
      */
     public function update($datos, $where) {
         $this->db->update('clientes', $datos, $where);

@@ -865,6 +865,64 @@ class Clientes extends CI_Controller {
             }
         }
     }
+    
+    public function modificar_datos_impositivos_ajax() {
+        $session = $this->session->all_userdata();
+        
+        $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
+        $this->form_validation->set_rules('saldo_cuenta_corriente', 'Saldo Cuenta Corriente', 'required|decimal');
+        $this->form_validation->set_rules('saldo_inicial', 'Saldo Inicial', 'required|decimal');
+        $this->form_validation->set_rules('saldo_a_cuenta', 'Saldo a Cuenta', 'required|decimal');
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = $this->input->post();
+            $datos['actualizado_por'] = $session['SID'];
+            $where = array(
+                'idcliente' => $this->input->post('idcliente')
+            );
+
+            $resultado = $this->clientes_model->update($datos, $where);
+            if ($resultado) {
+            $where = array(
+                'idcliente' => $this->input->post('idcliente')
+                );
+                $cliente = $this->clientes_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'clientes',
+                    'idtabla' => $this->input->post('idcliente'),
+                    'texto' => "<h2><strong>Se modificó los datos impositivos del cliente: " . $cliente['cliente']."</strong></h2>
+                    <p><strong>ID Cliente: </strong>" . $this->input->post('idcliente') . "<br />
+                    <strong>Ingresos Brutos: </strong>".$this->input->post('iibb')."<br />
+                    <strong>VAT: </strong>".$this->input->post('vat')."<br />
+                    <strong>Saldo Cuenta Corriente: </strong>".$this->input->post('saldo_cuenta_corriente')."<br />
+                    <strong>Saldo Inicial: </strong>".$this->input->post('saldo_inicial')."<br />
+                    <strong>Saldo a Cuenta: </strong>".$this->input->post('saldo_a_cuenta'),
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'edit'
+                );
+                $this->log_model->set($log);
+                
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'El cliente ' . $this->input->post('cliente') . ' se actualizó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el Cliente'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
 }
 
 ?>

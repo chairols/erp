@@ -120,76 +120,45 @@
 
         <!-- /.tab-pane -->
         <div class="tab-pane txR" id="tab_accounting" style="padding:10px;">
-
             <div class="row form-group">
-
                 <label class="control-label col-md-3">Ingresos Brutos</label>
-
                 <div class="col-md-6">
-
                     <input type="text" id="iibb" class="form-control" value="<?= $cliente['iibb'] ?>" maxlength="255">
-
                 </div>
-
             </div>
-
             <div class="row form-group">
-
                 <label class="control-label col-md-3">VAT</label>
-
                 <div class="col-md-6">
-
                     <input type="text" id="vat" class="form-control" value="<?= $cliente['vat'] ?>" maxlength="255">
-
                 </div>
-
             </div>
-
             <div class="row form-group">
-
                 <label class="control-label col-md-3">Saldo Cuenta Corriente</label>
-
                 <div class="col-md-6">
-
                     <input type="text" id="saldo_cuenta_corriente" class="form-control inputMask" value="<?= $cliente['saldo_cuenta_corriente'] ?>" data-inputmask="'mask': '9{1,17}.99'">
-
                 </div>
-
             </div>
-
             <div class="row form-group">
-
                 <label class="control-label col-md-3">Saldo Inicial</label>
-
                 <div class="col-md-6">
-
                     <input type="text" id="saldo_inicial" class="form-control inputMask" value="<?= $cliente['saldo_inicial'] ?>" data-inputmask="'mask': '9{1,17}.99'">
-
                 </div>
-
             </div>
-
             <div class="row form-group">
-
                 <label class="control-label col-md-3">Saldo a Cuenta</label>
-
                 <div class="col-md-6">
-
                     <input type="text" id="saldo_a_cuenta" class="form-control inputMask" value="<?= $cliente['saldo_a_cuenta'] ?>" data-inputmask="'mask': '9{1,17}.99'">
-
                 </div>
-
             </div>
-
             <div class="row form-group txL">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button type="button" id="modificar" class="btn btn-primary">Modificar</button>
-                    <button type="button" id="modificar_loading" class="btn btn-primary" style="display: none;"><i class="fa fa-refresh fa-spin"></i></button>
+                    <button type="button" id="modificar_datos_impositivos" class="btn btn-primary">Modificar</button>
+                    <button type="button" id="modificar_datos_impositivos_loading" class="btn btn-primary" style="display: none;"><i class="fa fa-refresh fa-spin"></i></button>
                 </div>
             </div>
-
         </div>
-
+        
+        
         <!-- /.tab-pane -->
         <div class="tab-pane txR" id="tab_horarios" style="padding:10px;">
             <div class="row form-group">

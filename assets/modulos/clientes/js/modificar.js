@@ -541,3 +541,54 @@ function borrar_agente(id) {
         }
     });
 }
+
+$("#modificar_datos_impositivos").click(function() {
+    datos = {
+        'idcliente': $("#idcliente").val(),
+        'iibb': $("#iibb").val(),
+        'vat': $("#vat").val(),
+        'saldo_cuenta_corriente': $("#saldo_cuenta_corriente").val(),
+        'saldo_inicial': $("#saldo_inicial").val(),
+        'saldo_a_cuenta': $("#saldo_a_cuenta").val()
+    };
+    
+    $.ajax({
+        type: 'POST',
+        url: '/clientes/modificar_datos_impositivos_ajax/',
+        data: datos,
+        beforeSend: function () {
+            $("#modificar_datos_impositivos").hide();
+            $("#modificar_datos_impositivos_loading").show();
+            Pace.restart();
+        },
+        success: function (data) {
+            $("#modificar_datos_impositivos_loading").hide();
+            $("#modificar_datos_impositivos").show();
+            Pace.stop();
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            allow_dismiss: true
+                        });
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            allow_dismiss: true
+                        });
+            }
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+            $("#modificar_datos_impositivos_loading").hide();
+            $("#modificar_datos_impositivos").show();
+            Pace.stop();
+        }
+    });
+});

@@ -20,6 +20,8 @@ class Tipos_responsables_model extends CI_Model {
     }
     
     /*
+     *  Clientes/modificar
+     * 
      *  Retenciones/modificar
      */
     public function get_where($where) {

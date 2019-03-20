@@ -19,6 +19,14 @@ class Empresas_tipos_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Clientes/modificar
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('empresas_tipos', $where);
+        return $query->row_array();
+    }
 }
 
 ?>

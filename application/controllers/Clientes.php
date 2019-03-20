@@ -195,9 +195,6 @@ class Clientes extends CI_Controller {
         $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
         $this->form_validation->set_rules('cliente', 'Cliente', 'required');
         $this->form_validation->set_rules('idtipo_responsable', 'Tipo de IVA', 'required|integer');
-        $this->form_validation->set_rules('saldo_cuenta_corriente', 'Saldo Cuenta Corriente', 'required|decimal');
-        $this->form_validation->set_rules('saldo_inicial', 'Saldo Inicial', 'required|decimal');
-        $this->form_validation->set_rules('saldo_a_cuenta', 'Saldo a Cuenta', 'required|decimal');
         $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('idcondicion_de_venta', 'Condición de Venta', 'required|integer');
         $this->form_validation->set_rules('idmoneda_limite', 'Moneda Límite de Crédito', 'required|integer');
@@ -218,6 +215,54 @@ class Clientes extends CI_Controller {
 
             $resultado = $this->clientes_model->update($datos, $where);
             if ($resultado) {
+                $where = array(
+                    'idcliente' => $this->input->post('idcliente')
+                );
+                $cliente = $this->clientes_model->get_where($where);
+                
+                $where = array(
+                    'idtipo_responsable' => $this->input->post('idtipo_responsable')
+                );
+                $tipo_responsable = $this->tipos_responsables_model->get_where($where);
+                
+                $where = array(
+                    'idempresa_tipo' => $this->input->post('idempresa_tipo')
+                );
+                $empresa_tipo = $this->empresas_tipos_model->get_where($where);
+                
+                $where = array(
+                    'idmoneda' => $this->input->post('idmoneda')
+                );
+                $moneda = $this->monedas_model->get_where($where);
+                
+                $where = array(
+                    'idcondicion_de_venta' => $this->input->post('idcondicion_de_venta')
+                );
+                $condicion_de_venta = $this->condiciones_de_venta_model->get_where($where);
+                
+                $where = array(
+                    'idmoneda' => $this->input->post('idmoneda_limite')
+                );
+                $moneda_limite = $this->monedas_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'clientes',
+                    'idtabla' => $this->input->post('idcliente'),
+                    'texto' => "<h2><strong>Se modificó el cliente: " . $cliente['cliente']."</strong></h2>
+                    <p><strong>ID Cliente: </strong>" . $this->input->post('idcliente') . "<br />
+                    <strong>CUIT: </strong>".$this->input->post('cuit')."<br />
+                    <strong>Tipo de IVA: </strong>".$tipo_responsable['tipo_responsable']."<br />
+                    <strong>Tipo de Cliente: </strong>".$empresa_tipo['empresa_tipo']."<br />
+                    <strong>Moneda: </strong>".$moneda['moneda']."<br />
+                    <strong>Condición de Venta: </strong>".$condicion_de_venta['condicion_de_venta']."<br />
+                    <strong>Límite de Crédito: </strong>".$moneda_limite['simbolo']." ".$this->input->post('limite_credito')."<br />
+                    <strong>Sitio Web: </strong>".$this->input->post('web')."<br />
+                    <strong>Observaciones: </strong>".$this->input->post('observaciones'),
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'edit'
+                );
+                $this->log_model->set($log);
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => 'El cliente ' . $this->input->post('cliente') . ' se actualizó correctamente'

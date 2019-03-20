@@ -46,6 +46,7 @@ class Clientes_model extends CI_Model {
      *  Clientes/agregar_agente_ajax
      *  Clientes/borrar_agente_ajax
      *  Clientes/borrar_horario_ajax
+     *  Clientes/modificar
      *  Clientes/modificar_sucursal_ajax
      * 
      *  Cotizaciones_clientes/actualizar_cabecera_ajax

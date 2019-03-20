@@ -35,6 +35,8 @@ class Monedas_model extends CI_Model {
     }
 
     /*
+     *  Clientes/modificar
+     * 
      *  Cotizaciones_clientes/actualizar_cabecera_ajax
      *  Cotizaciones_clientes/agregar_ajax
      *  Cotizaciones_clientes/agregar_articulo_ajax

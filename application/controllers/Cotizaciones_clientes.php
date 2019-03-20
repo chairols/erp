@@ -533,19 +533,19 @@ class Cotizaciones_clientes extends CI_Controller {
             $this->pdf->Cell(0, 0, utf8_decode($cotizacion_cliente['cliente']), 0, 0, 'L');
 
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(15, 64);
+            $this->pdf->SetXY(15, 62);
             $this->pdf->Cell(0, 0, 'DOMICILIO: ', 0, 0, 'L');
 
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(35, 64);
+            $this->pdf->SetXY(35, 62);
             $this->pdf->Cell(0, 0, $cotizacion_cliente['domicilio'], 0, 0, 'L');
 
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(35, 68);
+            $this->pdf->SetXY(35, 66);
             $this->pdf->Cell(0, 0, $cotizacion_cliente['localidad'], 0, 0, 'L');
 
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(15, 74);
+            $this->pdf->SetXY(15, 70);
             $this->pdf->Cell(0, 0, 'CONDICION IVA: ' . $tipo_responsable['tipo_responsable'], 0, 0, 'L');
 
             $this->pdf->SetFont('Courier', 'B', 10);

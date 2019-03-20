@@ -192,21 +192,7 @@ class Extranet extends CI_Controller {
 
             $this->pdf->SetTextColor(0, 0, 0);
             $this->pdf->SetFont('Arial', 'B', 12);
-            /*
-              $this->pdf->SetFont('Arial','B',18);
-              $this->pdf->SetXY(115, 16);
-              $this->pdf->Cell(0,0,'A',0,0,'L');
-
-              $this->pdf->SetFont('Arial','B', 8);
-              $this->pdf->SetXY(113, 20);
-              $this->pdf->Cell(0,0,'CODIGO',0,0,'L');
-
-
-              $this->pdf->SetFont('Arial','',8);
-              $this->pdf->SetXY(130, 10);
-              $this->pdf->Cell(0,0,'comprobanteDescripcion',0,0,'L');
-             */
-
+            
             $this->pdf->SetXY(114, 15);
             $this->pdf->Cell(0, 0, utf8_decode('COTIZACIÓN: ') . str_pad($idcotizacion_cliente, 8, '0', STR_PAD_LEFT), 0, 0, 'L');
 
@@ -218,30 +204,20 @@ class Extranet extends CI_Controller {
             $this->pdf->SetXY(15, 58);
             $this->pdf->Cell(0, 0, utf8_decode($cotizacion_cliente['cliente']), 0, 0, 'L');
 
-            /*
-              $this->pdf->SetFont('Arial','B',9);
-              $this->pdf->SetXY(15, 61);
-              $this->pdf->Cell(0,0,'razonSocial2',0,0,'L');
-
-
-              $this->pdf->SetFont('Arial', '', 9);
-              $this->pdf->SetXY(124, 61);
-              $this->pdf->Cell(0,0,'ordenDeCompra',0,0,'L');
-             */
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(15, 64);
+            $this->pdf->SetXY(15, 62);
             $this->pdf->Cell(0, 0, 'DOMICILIO: ', 0, 0, 'L');
 
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(35, 64);
+            $this->pdf->SetXY(35, 62);
             $this->pdf->Cell(0, 0, $cotizacion_cliente['domicilio'], 0, 0, 'L');
 
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(35, 68);
+            $this->pdf->SetXY(35, 66);
             $this->pdf->Cell(0, 0, $cotizacion_cliente['localidad'], 0, 0, 'L');
 
             $this->pdf->SetFont('Arial', '', 9);
-            $this->pdf->SetXY(15, 74);
+            $this->pdf->SetXY(15, 70);
             $this->pdf->Cell(0, 0, 'CONDICION IVA: ' . $tipo_responsable['tipo_responsable'], 0, 0, 'L');
 
             $this->pdf->SetFont('Courier', 'B', 10);
@@ -253,12 +229,9 @@ class Extranet extends CI_Controller {
             $this->pdf->SetXY(140, 80);
             $this->pdf->Cell(0, 0, 'MONEDA: ' . utf8_decode($moneda['moneda']), 0, 0, 'L');
 
-            /*
-              $this->pdf->SetFont('Courier','',9);
-              $this->pdf->SetXY(35, 88);
-              $this->pdf->Cell(0,0,'condicion2',0,0,'L');
-             */
-
+            $this->pdf->SetFont('Courier', 'B', 10);
+            $this->pdf->SetXY(140, 84);
+            $this->pdf->Cell(0, 0, utf8_decode('ATENCIÓN: '.$cotizacion_cliente['atencion']), 0, 0, 'L');
             //Salto de línea
             $this->pdf->Ln(10);
 
@@ -272,6 +245,25 @@ class Extranet extends CI_Controller {
                 $this->pdf->SetXY(30, $Y);
                 $this->pdf->Cell(0, 8, $item['descripcion'], 0, 1, 'L');
 
+                $texto_dias = '';
+                switch ($item['dias_entrega']) {
+                    case '0':
+                        $texto_dias = 'Inmediato';
+                        break;
+                    case '1':
+                        $texto_dias = '24 hs';
+                        break;
+                    case '2':
+                        $texto_dias = '48 hs';
+                        break;
+                    default:
+                        $texto_dias = $item['dias_entrega'].' días';
+                        break;
+                }
+                
+                $this->pdf->SetXY(120, $Y);
+                $this->pdf->Cell(0, 8, str_pad(utf8_decode($texto_dias), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
+                
                 $this->pdf->SetXY(146, $Y);
                 $this->pdf->Cell(0, 8, str_pad($item['precio'], 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
 
@@ -282,60 +274,9 @@ class Extranet extends CI_Controller {
                 $total += $item['cantidad'] * $item['precio'];
             }
 
-            /*
-              $this->pdf->SetFont('Courier','B',11);
-              $this->pdf->SetXY(180, $Y);
-              $this->pdf->Cell(0, 8, str_pad(number_format($total, 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
-             */
-            /*
-              $this->pdf->SetFont('Courier','B',12);
-              $this->pdf->SetXY(105, 185);
-              $this->pdf->Cell(0,0,'subtotal',0,0,'L');
-
-              $this->pdf->SetFont('Courier','B',12);
-              $this->pdf->SetXY(105, 190);
-              $this->pdf->Cell(0,0,'bonificacion',0,0,'L');
-
-              $this->pdf->SetFont('Courier','B',12);
-              $this->pdf->SetXY(105, 195);
-              $this->pdf->Cell(0,0,'gravado',0,0,'L');
-
-
-              $this->pdf->SetFont('Courier','B',12);
-              $this->pdf->SetXY(105, 200);
-              $this->pdf->Cell(0,0,'exento',0,0,'L');
-
-              $this->pdf->SetFont('Courier','B',12);
-              $this->pdf->SetXY(105, 205);
-              $this->pdf->Cell(0,0,'importeIva',0,0,'L');
-
-              $this->pdf->SetFont('Courier','B',12);
-              $this->pdf->SetXY(105, 210);
-              $this->pdf->Cell(0,0,'iibb',0,0,'L');
-
-              $this->pdf->SetFont('Courier','B',12);
-              $this->pdf->SetXY(105, 215);
-              $this->pdf->Cell(0,0,'iibb2',0,0,'L');
-             */
-
-            $this->pdf->SetFont('Courier', 'B', 11);
-            $this->pdf->SetXY(105, 220);
-            $this->pdf->Cell(0, 0, 'Total:', 0, 0, 'L');
-            $this->pdf->SetXY(180, 220);
-            $this->pdf->Cell(0, 0, str_pad(number_format($total, 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
-
-            $this->pdf->SetFont('Courier', 'B', 9);
-            $this->pdf->SetXY(10, 240);
-            $this->pdf->Cell(0, 0, '', 0, 0, 'L');
-
-            /*
-              $this->pdf->SetXY(10, 244);
-              $this->pdf->Cell(0,0,'dolar2',0,0,'L');
-
-              $this->pdf->SetXY(10, 248);
-              $this->pdf->Cell(0,0,'dolar3',0,0,'L');
-             */
+            
             // Footer
+            $cotizacion_cliente['total'] = $total;
             $this->pdf->Pie($cotizacion_cliente);
 
 

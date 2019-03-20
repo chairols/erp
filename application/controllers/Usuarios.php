@@ -305,27 +305,49 @@ class Usuarios extends CI_Controller {
 
     public function actualizar_foto() {
         $session = $this->session->all_userdata();
-        $this->r_session->check($session);
 
-        $config['upload_path'] = './upload/usuarios/perfil/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg';
-        /* $config['max_size'] = '100';
-          $config['max_width'] = '1024';
-          $config['max_height'] = '768'; */
-        $this->load->library('upload', $config);
-        if (!$this->upload->do_upload('archivo')) {
-            $error = array('error' => $this->upload->display_errors());
-            //var_dump($error);
-            show_404();
-        } else {
-            $data = $this->upload->data();
-            $datos = array(
-                'imagen' => '/upload/usuarios/perfil/' . $data['file_name']
-            );
-            $this->usuarios_model->update($datos, $session['SID']);
+        $filesCount = count($_FILES['files']['name']);
+        for ($i = 0; $i < $filesCount; $i++) {
+            $_FILES['file']['name'] = $_FILES['files']['name'][$i];
+            $_FILES['file']['type'] = $_FILES['files']['type'][$i];
+            $_FILES['file']['tmp_name'] = $_FILES['files']['tmp_name'][$i];
+            $_FILES['file']['error'] = $_FILES['files']['error'][$i];
+            $_FILES['file']['size'] = $_FILES['files']['size'][$i];
+
+            $f = explode('.', $_FILES['file']['name']);
+
+            $config['upload_path'] = './upload/usuarios/perfil/';
+            $config['allowed_types'] = '*';
+            //$config['file_name'] = $_FILES['file']['name'];
+            $config['owerwrite'] = FALSE;
+            $config['encrypt_name'] = TRUE;
+
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload('file')) {
+                $error = array('error' => $this->upload->display_errors());
+                show_404();
+            } else {
+                $data = array('upload_data' => $this->upload->data());
+
+                $datos = array(
+                    'imagen' => substr($config['upload_path'],1).$data['upload_data']['file_name']
+                );
+                $resultado = $this->usuarios_model->update($datos, $session['SID']);
+                
+                if($resultado) {
+                    $where = array(
+                        'idusuario' => $session['SID']
+                    );
+                    $usuario = $this->usuarios_model->get_where($where);
+                    
+                    $_SESSION['imagen'] = $usuario['imagen'];
+                }
+                
+            }
         }
     }
-
+    
+    
     public function modificar($idusuario = null) {
         $session = $this->session->all_userdata();
         $this->r_session->check($session);

@@ -1,6 +1,6 @@
 <div class="box box-primary">
     <div class="box-header">
-
+        
     </div>
     <div class="box-body no-padding">
         <div class="form-horizontal">
@@ -55,9 +55,7 @@
             <div class="form-group">
                 <label class="control-label col-xs-3">Imagen</label>
                 <div class="col-xs-6">
-                    <div id="DropzoneArchivos" class="dropzone txC" subir="/usuarios/actualizar_foto/" eliminar="">
-
-                    </div>
+                    <div class="dropzone" id="dz1"></div>
                 </div>
             </div>
             <div class="ln_solid"></div>

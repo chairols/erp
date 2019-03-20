@@ -32,6 +32,7 @@ $("#modificar").click(function () {
 });
 
 $(document).ready(function () {
+    /*
     var myDropzone = new Dropzone("#dropzone");
     myDropzone.on("success", function (file) {
         console.log(file);
@@ -43,5 +44,26 @@ $(document).ready(function () {
     myDropzone.on("error", function (file) {
         console.log(file);
         notifyError("No se pudo actualizar la foto de perfil", 1000);
+    });
+    */
+    
+    $('#dz1').dropzone({
+        url: '/usuarios/actualizar_foto/',
+        width: '100%',
+        height: 100,
+        margin: 0,
+        text: 'Arrastre aquí para subir',
+        allowedFileTypes: '*',
+        params:{
+            'action': 'save'
+        },
+        uploadOnDrop: true,
+        uploadOnPreview: false,
+        success: function(res, index){
+            //console.log(res, index);
+            //$("#idfoto").val(res.response);
+            console.log(res);
+            //actualizar_archivos();
+        }
     });
 });

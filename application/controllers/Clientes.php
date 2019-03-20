@@ -306,6 +306,9 @@ class Clientes extends CI_Controller {
         $this->form_validation->set_rules('idcliente', 'ID de Cliente', 'required|integer');
         $this->form_validation->set_rules('idcliente_sucursal', 'ID de Sucursal de Cliente', 'required|integer');
         $this->form_validation->set_rules('sucursal', 'Nombre Sucursal', 'required');
+        $this->form_validation->set_rules('idpais', 'Pais', 'required|integer');
+        $this->form_validation->set_rules('idprovincia', 'Provincia', 'required|integer');
+        $this->form_validation->set_rules('idtransporte', 'Transporte', 'required|integer');
 
         if ($this->form_validation->run() == FALSE) {
             $json = array(
@@ -326,6 +329,49 @@ class Clientes extends CI_Controller {
             $resultado = $this->clientes_model->update_sucursal($datos, $where);
 
             if ($resultado) {
+                $where = array(
+                    'idcliente' => $this->input->post('idcliente')
+                );
+                $cliente = $this->clientes_model->get_where($where);
+                
+                $where = array(
+                    'idpais' => $this->input->post('idpais')
+                );
+                $pais = $this->paises_model->get_where($where);
+                
+                $where = array(
+                    'idprovincia' => $this->input->post('idprovincia')
+                );
+                $provincia = $this->provincias_model->get_where($where);
+                
+                $where = array(
+                    'idtransporte' => $this->input->post('idtransporte')
+                );
+                $transporte = $this->transportes_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'clientes_sucursales',
+                    'idtabla' => $this->input->post('idcliente_sucursal'),
+                    'texto' => "<h2><strong>Se modificó la sucursal: " . $this->input->post('sucursal')."</strong></h2>
+                    <p><strong>ID Sucursal: </strong>" . $this->input->post('idcliente_sucursal') . "<br />
+                    <strong>ID Cliente: </strong>".$this->input->post('idcliente')."<br />
+                    <strong>Cliente: </strong>".$cliente['cliente']."<br />
+                    <strong>ID Pais: </strong>".$this->input->post('idpais')."<br />
+                    <strong>País: </strong>".$pais['pais']."<br />
+                    <strong>ID Provincia: </strong>".$this->input->post('idprovincia')."<br />
+                    <strong>Provincia: </strong>".$provincia['provincia']."<br />
+                    <strong>Localidad: </strong>".$this->input->post('localidad')."<br />
+                    <strong>Dirección: </strong>".$this->input->post('direccion')."<br />
+                    <strong>Código Postal: </strong>".$this->input->post('codigo_postal')."<br />
+                    <strong>Teléfono: </strong>".$this->input->post('telefono')."<br />
+                    <strong>ID Transporte: </strong>".$this->input->post('idtransporte')."<br />
+                    <strong>Transporte: </strong>".$transporte['transporte']."<br />
+                    <strong>Observaciones: </strong>".$this->input->post('observaciones'),
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'edit'
+                );
+                $this->log_model->set($log);
+                
                 $json = array(
                     'registros_modificados' => $resultado,
                     'status' => 'ok',

@@ -30,6 +30,8 @@ class Provincias_model extends CI_Model {
     }
     
     /*
+     *  Clientes/modificar_sucursal_ajax
+     * 
      *  Proveedores/agregar_ajax
      *  
      *  Provincias/get_provincia_ajax

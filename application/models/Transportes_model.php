@@ -56,6 +56,14 @@ class Transportes_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Clientes/modificar_sucursal_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('transportes', $where);
+        return $query->row_array();
+    }
 }
 
 ?>

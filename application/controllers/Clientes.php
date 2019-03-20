@@ -250,17 +250,19 @@ class Clientes extends CI_Controller {
                 'idcliente' => $this->input->post('idcliente'),
                 'sucursal' => $this->input->post('nombre'),
                 'estado' => 'A',
-                'creado_por' => $session['SID']
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'creado_por' => $session['SID'],
+                'actualizado_por' => $session['SID']
             );
-            $resultado = $this->clientes_model->set_sucursal($datos);
+            $idsucursal = $this->clientes_model->set_sucursal($datos);
             
-            if ($resultado) {
+            if ($idsucursal) {
                 $where = array(
                     'idcliente' => $this->input->post('idcliente')
                 );
                 $data['cliente'] = $this->clientes_model->get_where($where);
 
-                $where['idcliente_sucursal'] = $resultado;
+                $where['idcliente_sucursal'] = $idsucursal;
 
                 $data['sucursales'] = $this->clientes_model->gets_sucursales($where);
                 $data['paises'] = $this->paises_model->gets();
@@ -269,9 +271,21 @@ class Clientes extends CI_Controller {
 
                 $html = $this->load->view('clientes/sucursal', $data, TRUE);
 
+                $log = array(
+                    'tabla' => 'clientes_sucursales',
+                    'idtabla' => $idsucursal,
+                    'texto' => "<h2><strong>Se agregó la sucursal: " . $this->input->post('nombre') ."</strong></h2>
+                    <p><strong>ID de Sucursal: </strong>" .$idsucursal."<br />
+                    <strong>ID Cliente: </strong>" . $this->input->post('idcliente') . "<br />
+                    <strong>Cliente: </strong>".$data['cliente']['cliente'],
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+                $this->log_model->set($log);
+                
                 $json = array(
                     'html' => $html,
-                    'menu_html' => '<div class="boton_sucursal_menu info-box-number" id="boton_sucursal_menu_' . $resultado . '" sucursal="' . $resultado . '" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">' . $this->input->post('nombre') . '</div>',
+                    'menu_html' => '<div class="boton_sucursal_menu info-box-number" id="boton_sucursal_menu_' . $idsucursal . '" sucursal="' . $idsucursal . '" style="border-bottom:1px solid #eee;padding:10px 0px;cursor:pointer;">' . $this->input->post('nombre') . '</div>',
                     'status' => 'ok',
                     'data' => 'La sucursal ' . $this->input->post('nombre') . ' se creó correctamente'
                 );

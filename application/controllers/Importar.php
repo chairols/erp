@@ -91,6 +91,8 @@ class Importar extends CI_Controller {
                     //echo $porcentaje . " %\n";
                 }
 
+                $array[0] = preg_replace('/\x{EF}\x{BF}\x{BD}/u', '', mb_encode_numericentity(trim($array[0]), $convmap, "UTF-8"));
+                
 
                 //  CARACTERES AL FINAL DEL VALOR
                 //  { = POSITIVO

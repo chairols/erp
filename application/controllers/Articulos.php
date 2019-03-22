@@ -16,7 +16,8 @@ class Articulos extends CI_Controller {
             'parametros_model',
             'articulos_model',
             'marcas_model',
-            'lineas_model'
+            'lineas_model',
+            'log_model'
         ));
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
@@ -165,6 +166,29 @@ class Articulos extends CI_Controller {
                 $id = $this->articulos_model->set($datos);
 
                 if ($id) {
+                    $where = array(
+                        'idmarca' => $this->input->post('idmarca')
+                    );
+                    $marca = $this->marcas_model->get_where($where);
+                    
+                    $where = array(
+                        'idlinea' => $this->input->post('idlinea')
+                    );
+                    $linea = $this->lineas_model->get_where($where);
+                    
+                    $log = array(
+                        'tabla' => 'articulos',
+                        'idtabla' => $id,
+                        'texto' => "<h2><strong>Se creó el artículo: " . $this->input->post('articulo') . "</strong></h2>
+                    <p><strong>ID Artículo: </strong>" . $id . "<br />
+                    <strong>Marca: </strong>" . $marca['marca'] . "<br />
+                    <strong>Número de Orden: </strong>" . $this->input->post('numero_orden') . "<br />
+                    <strong>Línea: </strong>" . $linea['linea'],
+                        'idusuario' => $session['SID'],
+                        'tipo' => 'add'
+                    );
+                    $this->log_model->set($log);
+
                     $json = array(
                         'status' => 'ok',
                         'data' => 'El creó el artículo ' . $this->input->post('articulo')
@@ -174,7 +198,7 @@ class Articulos extends CI_Controller {
             }
         }
     }
-    
+
     public function get_where_json() {
         $where = $this->input->post();
         $articulo = $this->articulos_model->get_where($where);
@@ -183,12 +207,12 @@ class Articulos extends CI_Controller {
             'idmarca' => $articulo['idmarca']
         );
         $articulo['marca'] = $this->marcas_model->get_where($where);
-        
+
         $where = array(
             'idlinea' => $articulo['idlinea']
         );
         $articulo['linea'] = $this->lineas_model->get_where($where);
-        
+
         echo json_encode($articulo);
     }
 
@@ -203,12 +227,13 @@ class Articulos extends CI_Controller {
             );
             $resultado = $this->marcas_model->get_where($where);
 
-            $articulos[$key]['text'] .= "<b>".$resultado['marca']."</b>";
-            $articulos[$key]['text'] .= " - ".$value['stock'];
-            $articulos[$key]['text'] .= ' - <b>U$S '.$value['precio']."</b>";
+            $articulos[$key]['text'] .= "<b>" . $resultado['marca'] . "</b>";
+            $articulos[$key]['text'] .= " - " . $value['stock'];
+            $articulos[$key]['text'] .= ' - <b>U$S ' . $value['precio'] . "</b>";
         }
         echo json_encode($articulos);
     }
+
 }
 
 ?>

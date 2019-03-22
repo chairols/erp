@@ -10,9 +10,20 @@ class Log_model extends CI_Model {
     }
     
     /*
+     *  Artículos/agregar_ajax
+     * 
      *  Articulos_genericos/agregar_ajax
      * 
      *  Clientes/agregar_agente_ajax
+     *  Clientes/agregar_ajax
+     *  Clientes/agregar_horario_ajax
+     *  Clientes/borrar_agente_ajax
+     *  Clientes/borrar_horario_ajax
+     *  Clientes/eliminar_sucursal_ajax
+     *  Clientes/modificar_ajax
+     *  Clientes/modificar_datos_impositivos_ajax
+     *  Clientes/modificar_sucursal_ajax
+     *  Clientes/nueva_sucursal_ajax
      * 
      *  Cotizaciones_clientes/agregar_ajax
      *  Cotizaciones_clientes/borrar_articulo_ajax

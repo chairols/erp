@@ -86,7 +86,6 @@ class Importar extends CI_Controller {
                 $count++;
                 $init++;
 
-
                 if (round(($count * 100 / $cantidad)) > $porcentaje) {
                     $porcentaje = round(($count * 100 / $cantidad), 0, PHP_ROUND_HALF_DOWN);
                     //echo $porcentaje . " %\n";
@@ -113,7 +112,7 @@ class Importar extends CI_Controller {
                 //  [42] = DESCRIPCION
                 //if($array[0] == "6206 C3             ") {
                 $where = array(
-                    'articulo' => preg_replace('/\x{EF}\x{BF}\x{BD}/u', '', mb_encode_numericentity(trim($array[0]), $convmap, "UTF-8")),
+                    'articulo' => trim($array[0]),
                     'idmarca' => $array[1]
                 );
 
@@ -132,22 +131,18 @@ class Importar extends CI_Controller {
                 $array[13] = ($array[13] / 1000);  // stock_min
                 $array[14] = ($array[14] / 1000);  // stock_max
 
-                $signo = null;
+                $signo = 1;
                 if ($array[19][9] == '}') {
                     $signo = -1;
-                } else {
-                    $signo = 1;
-                }
+                } 
                 $array[19] = ((substr($array[19], 0, 9) / 100) * $signo);
 
-                $signo = null;
+                $signo = 1;
                 if ($array[20][9] == '}') {
                     $signo = -1;
-                } else {
-                    $signo = 1;
                 }
                 $array[20] = ((substr($array[20], 0, 9) / 100) * $signo);
-
+                
                 if ($array[21][9] == '}') {
                     $signo = -1;
                 } else {
@@ -173,23 +168,29 @@ class Importar extends CI_Controller {
                     'observations' => $array[41],
                     'description' => $array[42]
                 );
-
-                if (count($resultado) > 0) {
-                    $this->articulos_model->update($update, $resultado['idarticulo']);
+                
+                
+                if ($resultado) {
+                    array(
+                        'idarticulo' => $resultado['idarticulo']
+                    );
+                    $this->articulos_model->update($update, $where);
                 } else {
                     $update['articulo'] = trim($array[0]);
                     $update['idmarca'] = $array[1];
                     $this->articulos_model->set($update);
                 }
+                
                 /*
+                
                   echo "<PRE>";
                   print_r($array);
-                  print_r($resultado);
-                  print_r(count($resultado));
+                  var_dump($resultado);
                   print_r($update);
                   //$this->productos_model->update($update, $resultado['product_id']);
-                  echo "</PRE>"; */
-                //}
+                  echo "</PRE>"; 
+                */
+                
             }
 
             //var_dump($count);
@@ -201,6 +202,7 @@ class Importar extends CI_Controller {
             );
             echo json_encode($array);
             //echo $this->benchmark->elapsed_time('inicio', 'fin');
+            
         }
 
         //$data['archivos'] = get_dir_file_info('upload/importar/');

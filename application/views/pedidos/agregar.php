@@ -25,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Condición de Venta</label>
-                <div class="col-md-6">
+                <div class="col-md-6" id="div-condiciones">
                     
                 </div>
             </div>

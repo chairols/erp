@@ -1,5 +1,6 @@
 $("#TextAutoCompletecliente").focusout(function() {
     gets_sucursales();
+    gets_condiciones_de_venta();
 });
 
 
@@ -42,6 +43,32 @@ function gets_transportes() {
         },
         success: function (data) {
             $("#div-transportes").html(data);
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+        }
+    });
+    
+}
+
+function gets_condiciones_de_venta() {
+    datos = {
+        'idcliente': $("#cliente").val()
+    };
+    
+    $.ajax({
+        type: 'POST',
+        url: '/clientes/gets_condiciones_de_venta_select/',
+        data: datos,
+        beforeSend: function () {
+            $("#div-condiciones").html("<i class='fa fa-refresh fa-spin'></i>");
+        },
+        success: function (data) {
+            $("#div-condiciones").html(data);
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,

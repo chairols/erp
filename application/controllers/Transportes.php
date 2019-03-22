@@ -86,7 +86,7 @@ class Transportes extends CI_Controller {
 <strong>ID Provincia: </strong>" . $this->input->post('provincia') . "<br />
 <strong>Teléfono: </strong>" . $this->input->post('telefono') . "<br />
 <strong>ID Tipo de Resposabilidad: </strong>" . $this->input->post('idtipo_responsable') . "<br />
-<strong>C&oacute;digo Postal: </strong>" . $set['codigopostal'] . "<br />
+<strong>C&oacute;digo Postal: </strong>" . $set['codigo_postal'] . "<br />
 <strong>CUIT: </strong>" . $this->input->post('cuit') . "<br />
 <strong>Horario Desde: </strong>" . $this->input->post('horario_desde') . "<br />
 <strong>Horario Hasta: </strong>" . $this->input->post('horario_hasta') . "<br />

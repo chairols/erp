@@ -54,7 +54,7 @@ class Importar extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
-    public function actualizar_articulos_original($archivo = null) {
+    public function actualizar_articulos($archivo = null) {
         /*
           $data['title'] = 'Listado de Artículos';
           $data['session'] = $this->session->all_userdata();
@@ -160,7 +160,7 @@ class Importar extends CI_Controller {
 
                 $update = array(
                     'idlinea' => $array[2],
-                    'order_number' => $array[3],
+                    'numero_orden' => $array[3],
                     'rack' => $array[4],
                     'precio' => $array[6],
                     'price_fob' => $array[9],
@@ -207,7 +207,7 @@ class Importar extends CI_Controller {
         //$this->load->view('layout/app', $data);
     }
 
-    public function actualizar_articulos($archivo = null) {
+    private function actualizar_alernativo($archivo = null) {
 
         if ($archivo) {
 

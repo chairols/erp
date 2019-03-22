@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Transporte</label>
-                <div class="col-md-6">
+                <div class="col-md-6" id="div-transportes">
                     
                 </div>
             </div>

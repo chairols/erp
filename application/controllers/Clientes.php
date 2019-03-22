@@ -923,6 +923,17 @@ class Clientes extends CI_Controller {
             }
         }
     }
+    
+    public function gets_transportes_select() {
+        $where = array(
+            'idcliente_sucursal' => $this->input->post('idsucursal')
+        );
+        $data['sucursal'] = $this->clientes_model->get_where_sucursal($where);
+        
+        $data['transportes'] = $this->transportes_model->gets();
+
+        $this->load->view('clientes/gets_transportes_select', $data);
+    }
 }
 
 ?>

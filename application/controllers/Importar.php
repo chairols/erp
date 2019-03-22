@@ -113,7 +113,7 @@ class Importar extends CI_Controller {
                 //  [42] = DESCRIPCION
                 //if($array[0] == "6206 C3             ") {
                 $where = array(
-                    'articulo' => trim($array[0]),
+                    'articulo' => preg_replace('/\x{EF}\x{BF}\x{BD}/u', '', mb_encode_numericentity(trim($array[0]), $convmap, "UTF-8")),
                     'idmarca' => $array[1]
                 );
 

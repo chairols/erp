@@ -50,6 +50,7 @@ class Cotizaciones_clientes_model extends CI_Model {
     
     /*
      *  Cotizaciones_clientes/borrar_articulo_ajax
+     *  Cotizaciones_clientes/modificar_articulo_ajax
      */
     public function update_item($datos, $where) {
         $this->db->update('cotizaciones_clientes_items', $datos, $where);
@@ -107,6 +108,7 @@ class Cotizaciones_clientes_model extends CI_Model {
     
     /*
      *  Cotizaciones_clientes/borrar_articulo_ajax
+     *  Cotizaciones_clientes/get_articulo_where_json
      */
     public function get_where_item($where) {
         $query = $this->db->get_where('cotizaciones_clientes_items', $where);

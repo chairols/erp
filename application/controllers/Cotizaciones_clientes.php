@@ -248,7 +248,6 @@ class Cotizaciones_clientes extends CI_Controller {
                 'idmarca' => $data['articulos'][$key]['articulo']['idmarca']
             );
             $data['articulos'][$key]['marca'] = $this->marcas_model->get_where($where);
-
         }
 
         $this->load->view('cotizaciones_clientes/listar_articulos_tabla_ajax', $data);
@@ -520,7 +519,7 @@ class Cotizaciones_clientes extends CI_Controller {
 
             $this->pdf->SetTextColor(0, 0, 0);
             $this->pdf->SetFont('Arial', 'B', 12);
-            
+
             $this->pdf->SetXY(114, 15);
             $this->pdf->Cell(0, 0, utf8_decode('COTIZACIÓN: ') . str_pad($idcotizacion_cliente, 8, '0', STR_PAD_LEFT), 0, 0, 'L');
 
@@ -559,7 +558,7 @@ class Cotizaciones_clientes extends CI_Controller {
 
             $this->pdf->SetFont('Courier', 'B', 10);
             $this->pdf->SetXY(140, 84);
-            $this->pdf->Cell(0, 0, utf8_decode('ATENCIÓN: '.$cotizacion_cliente['atencion']), 0, 0, 'L');
+            $this->pdf->Cell(0, 0, utf8_decode('ATENCIÓN: ' . $cotizacion_cliente['atencion']), 0, 0, 'L');
             //Salto de línea
             $this->pdf->Ln(10);
 
@@ -585,13 +584,13 @@ class Cotizaciones_clientes extends CI_Controller {
                         $texto_dias = '48 hs';
                         break;
                     default:
-                        $texto_dias = $item['dias_entrega'].' días';
+                        $texto_dias = $item['dias_entrega'] . ' días';
                         break;
                 }
-                
+
                 $this->pdf->SetXY(120, $Y);
                 $this->pdf->Cell(0, 8, str_pad(utf8_decode($texto_dias), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
-                
+
                 $this->pdf->SetXY(146, $Y);
                 $this->pdf->Cell(0, 8, str_pad($item['precio'], 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
 
@@ -602,7 +601,7 @@ class Cotizaciones_clientes extends CI_Controller {
                 $total += $item['cantidad'] * $item['precio'];
             }
 
-            
+
             // Footer
             $cotizacion_cliente['total'] = $total;
             $this->pdf->Pie($cotizacion_cliente);
@@ -705,7 +704,7 @@ class Cotizaciones_clientes extends CI_Controller {
                     ->subject($subject)
                     ->attach(base_url() . 'extranet/cotizacion_cliente/' . $this->input->post('idcotizacion_cliente') . '/' . $this->generar_hash_cotizacion_para_extranet($this->input->post('idcotizacion_cliente')) . '/', '', 'Cotización ' . str_pad($cotizacion['idcotizacion_cliente'], 8, '0', STR_PAD_LEFT) . '.pdf')
                     ->message($body);
-            foreach($this->input->post('correos') as $correo) {
+            foreach ($this->input->post('correos') as $correo) {
                 $this->email->to($correo);
             }
             $result = $this->email->send();
@@ -724,7 +723,58 @@ class Cotizaciones_clientes extends CI_Controller {
                 echo json_encode($json);
             }
         }
+    }
 
+    public function get_articulo_where_json() {
+        $where = $this->input->post();
+
+        $item = $this->cotizaciones_clientes_model->get_where_item($where);
+
+        $where = array(
+            'idarticulo' => $item['idarticulo']
+        );
+        $item['articulo'] = $this->articulos_model->get_where($where);
+
+        echo json_encode($item);
+    }
+
+    public function modificar_articulo_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idcotizacion_cliente_item', 'ID Item', 'required|integer');
+        $this->form_validation->set_rules('cantidad', 'Cantidad', 'required');
+        $this->form_validation->set_rules('descripcion', 'Descripción', 'required');
+        $this->form_validation->set_rules('precio', 'Precio', 'required|decimal');
+        $this->form_validation->set_rules('dias_entrega', 'Días de Entrega', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = $this->input->post();
+            $where = array(
+                'idcotizacion_cliente_item' => $this->input->post('idcotizacion_cliente_item')
+            );
+
+            $resultado = $this->cotizaciones_clientes_model->update_item($datos, $where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizó el artículo'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el artículo'
+                );
+                echo json_encode($json);
+            }
+        }
     }
 
     private function formatear_fecha($fecha) {

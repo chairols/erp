@@ -1,6 +1,7 @@
 $("#TextAutoCompletecliente").focusout(function() {
     gets_sucursales();
     gets_condiciones_de_venta();
+    gets_monedas();
 });
 
 
@@ -79,4 +80,29 @@ function gets_condiciones_de_venta() {
         }
     });
     
+}
+
+function gets_monedas() {
+    datos = {
+        'idcliente': $("#cliente").val()
+    };
+    
+    $.ajax({
+        type: 'POST',
+        url: '/clientes/gets_monedas_select/',
+        data: datos,
+        beforeSend: function () {
+            $("#div-monedas").html("<i class='fa fa-refresh fa-spin'></i>");
+        },
+        success: function (data) {
+            $("#div-monedas").html(data);
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger',
+                        allow_dismiss: false
+                    });
+        }
+    });
 }

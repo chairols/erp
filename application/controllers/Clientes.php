@@ -945,6 +945,17 @@ class Clientes extends CI_Controller {
 
         $this->load->view('clientes/gets_condiciones_de_venta_select', $data);
     }
+    
+    public function gets_monedas_select() {
+        $where = array(
+            'idcliente' => $this->input->post('idcliente')
+        );
+        $data['cliente'] = $this->clientes_model->get_where($where);
+        
+        $data['monedas'] = $this->monedas_model->gets();
+        
+        $this->load->view('clientes/gets_monedas_select', $data);
+    }
 }
 
 ?>

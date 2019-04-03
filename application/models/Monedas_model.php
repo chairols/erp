@@ -62,6 +62,8 @@ class Monedas_model extends CI_Model {
     }
 
     /*
+     *  Clientes/gets_monedas_select
+     * 
      *  Cotizaciones_clientes/modificar
      * 
      *  Cotizaciones_proveedores/agregar

@@ -217,9 +217,19 @@ class Articulos extends CI_Controller {
     }
 
     public function gets_articulos_ajax_stock_y_precio() {
-        $where = $this->input->post();
-        $articulos = $this->articulos_model->gets_where_para_ajax_con_stock_y_precio($where, 255);
-
+        $like = $this->input->post();
+        $where['stock >'] = 0; 
+        
+        $articulos = $this->articulos_model->gets_where_para_ajax_con_stock_y_precio($like, $where, 255);
+        
+        $where = array();
+        $where['stock <='] = 0;
+        $articulos_sin_stock = $this->articulos_model->gets_where_para_ajax_con_stock_y_precio($like, $where, 255);
+        
+        foreach($articulos_sin_stock as $key => $value) {
+            $articulos[] = $value;
+        }
+        
         foreach ($articulos as $key => $value) {
             $articulos[$key]['text'] = $value['text'] . " - ";
             $where = array(
@@ -231,6 +241,8 @@ class Articulos extends CI_Controller {
             $articulos[$key]['text'] .= " - " . $value['stock'];
             $articulos[$key]['text'] .= ' - <b>U$S ' . $value['precio'] . "</b>";
         }
+        
+        
         echo json_encode($articulos);
     }
 

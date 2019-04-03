@@ -126,11 +126,12 @@ class Articulos_model extends CI_Model {
     /*
      *  Importaciones/agregar_items
      */
-    public function gets_where_para_ajax_con_stock_y_precio($where, $limit)
+    public function gets_where_para_ajax_con_stock_y_precio($like, $where, $limit)
     {
       $this->db->select('idarticulo as id, articulo as text, idmarca, stock, precio');
       $this->db->from('articulos');
-      $this->db->like($where);
+      $this->db->where($where);
+      $this->db->like($like);
       $this->db->order_by('articulo');
       $this->db->limit($limit);
 

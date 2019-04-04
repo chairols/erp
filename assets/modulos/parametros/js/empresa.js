@@ -14,6 +14,7 @@ $("#modificar").click(function () {
                     'telefono': $("#telefono").val(),
                     'email': $("#email").val(),
                     'idtipo_responsable': $("#idtipo_responsable").val(),
+                    'idtipo_iva': $("#idtipo_iva").val(),
                     'cuit': $("#cuit").val(),
                     'ingresos_brutos': $("#ingresos_brutos").val(),
                     'numero_importador': $("#numero_importador").val(),

@@ -18,7 +18,8 @@ class Parametros extends CI_Controller {
             'log_model',
             'provincias_model',
             'tipos_responsables_model',
-            'certificados_model'
+            'certificados_model',
+            'tipos_iva_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -232,6 +233,7 @@ class Parametros extends CI_Controller {
         $data['provincias'] = $this->provincias_model->gets();
         $data['tipos_responsables'] = $this->tipos_responsables_model->gets();
         $data['certificados'] = $this->certificados_model->gets();
+        $data['tipos_iva'] = $this->tipos_iva_model->gets();
 
         $this->load->view('layout/app', $data);
     }
@@ -247,6 +249,7 @@ class Parametros extends CI_Controller {
         $this->form_validation->set_rules('telefono', 'Teléfono', 'required');
         $this->form_validation->set_rules('email', 'E-mail', 'required|valid_email');
         $this->form_validation->set_rules('idtipo_responsable', 'Tipo de Responsable', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('idtipo_iva', 'Porcentaje de IVA', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('cuit', 'CUIT', 'required');
         $this->form_validation->set_rules('ingresos_brutos', 'Ingresos Brutos', 'required');
         $this->form_validation->set_rules('numero_importador', 'Número de Importador', 'required');

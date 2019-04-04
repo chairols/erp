@@ -8,6 +8,9 @@ class Tipos_iva_model extends CI_Model {
         parent::__construct();
     }
     
+    /*
+     *  Parametros/empresa
+     */
     public function gets() {
         $this->db->select('*');
         $this->db->from('tipos_iva');

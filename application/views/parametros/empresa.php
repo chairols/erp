@@ -62,6 +62,16 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label col-md-3">Porcentaje de IVA</label>
+                    <div class="col-md-6">
+                        <select id="idtipo_iva" class="form-control chosenSelect">
+                            <?php foreach($tipos_iva as $tipo_iva) { ?>
+                            <option value="<?=$tipo_iva['idtipo_iva']?>"<?=($tipo_iva['idtipo_iva']==$parametro['idtipo_iva'])?" selected":""?>><?=$tipo_iva['porcentaje']?> %</option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="control-label col-md-3">CUIT</label>
                     <div class="col-md-6">
                         <input type="text" maxlength="11" class="form-control" id="cuit" value="<?= $parametro['cuit'] ?>">

@@ -509,6 +509,97 @@ class Cotizaciones_proveedores extends CI_Controller {
 
         $this->load->view('layout/app', $data);
     }
+    
+    public function nacionales($pagina = 0) {
+        $data['title'] = 'Listar Cotización de Proveedores Nacionales';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'cotizaciones_proveedores/nacionales';
+        
+        
+        $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
+        $per_page = $per_page['valor'];
+
+        $where = $this->input->get();
+        $where['cotizaciones_proveedores.estado'] = 'A';
+        $where['cotizaciones_proveedores_items.estado'] = 'A';
+        $where['proveedores.idpais'] = 200;
+
+        /*
+         * inicio paginador
+         */
+        $total_rows = $this->cotizaciones_proveedores_model->get_cantidad_where($where);
+        $config['reuse_query_string'] = TRUE;
+        $config['base_url'] = '/cotizaciones_proveedores/nacionales/';
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $per_page;
+        $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        $data['links'] = $this->pagination->create_links();
+        $data['total_rows'] = $total_rows;
+        /*
+         * fin paginador
+         */
+
+        $data['cotizaciones'] = $this->cotizaciones_proveedores_model->gets_where_limit($where, $per_page, $pagina);
+        
+        foreach($data['cotizaciones'] as $key => $value) {
+            $data['cotizaciones'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha']);
+            
+            $where = array(
+                'idproveedor' => $value['idproveedor']
+            );
+            $data['cotizaciones'][$key]['proveedor'] = $this->proveedores_model->get_where($where);
+            
+            $where = array(
+                'idmoneda' => $value['idmoneda']
+            );
+            $data['cotizaciones'][$key]['moneda'] = $this->monedas_model->get_where($where);
+            
+            $data['cotizaciones'][$key]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
+            $data['cotizaciones'][$key]['cotizacion_moneda'] = $this->monedas_model->get_ultima_cotizacion_por_monedas($data['cotizaciones'][$key]['idmoneda']);
+            
+            $where = array(
+                'idcotizacion_proveedor' => $value['idcotizacion_proveedor'],
+                'estado' => 'A'
+            );
+            $data['cotizaciones'][$key]['items'] = $this->cotizaciones_proveedores_model->gets_articulos_where($where);
+            foreach($data['cotizaciones'][$key]['items'] as $key2 => $value2) {
+                $where = array(
+                    'idarticulo' => $value2['idarticulo']
+                );
+                $data['cotizaciones'][$key]['items'][$key2]['articulo'] = $this->articulos_model->get_where($where);
+                
+                $where = array(
+                    'idlinea' => $data['cotizaciones'][$key]['items'][$key2]['articulo']['idlinea']
+                );
+                $data['cotizaciones'][$key]['items'][$key2]['articulo']['linea'] = $this->lineas_model->get_where($where);
+                
+                $where = array(
+                    'idmarca' => $data['cotizaciones'][$key]['items'][$key2]['articulo']['idmarca']
+                );
+                $data['cotizaciones'][$key]['items'][$key2]['articulo']['marca'] = $this->marcas_model->get_where($where);
+                
+                $data['cotizaciones'][$key]['items'][$key2]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
+            }
+        }
+
+        $this->load->view('layout/app', $data);
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';

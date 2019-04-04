@@ -89,6 +89,7 @@ class Cotizaciones_proveedores_model extends CI_Model {
     public function get_cantidad_where($where) {
         $this->db->select('cotizaciones_proveedores.*');
         $this->db->from('cotizaciones_proveedores');
+        $this->db->join('proveedores', 'cotizaciones_proveedores.idproveedor = proveedores.idproveedor');
         $this->db->join('monedas', 'cotizaciones_proveedores.idmoneda = monedas.idmoneda');
         $this->db->join('cotizaciones_proveedores_items', 'cotizaciones_proveedores.idcotizacion_proveedor = cotizaciones_proveedores_items.idcotizacion_proveedor');
         $this->db->join('articulos', 'cotizaciones_proveedores_items.idarticulo = articulos.idarticulo');
@@ -105,6 +106,7 @@ class Cotizaciones_proveedores_model extends CI_Model {
     public function gets_where_limit($where, $per_page, $pagina) {
         $this->db->select('cotizaciones_proveedores.*, monedas.moneda');
         $this->db->from('cotizaciones_proveedores');
+        $this->db->join('proveedores', 'cotizaciones_proveedores.idproveedor = proveedores.idproveedor');
         $this->db->join('monedas', 'cotizaciones_proveedores.idmoneda = monedas.idmoneda');
         $this->db->join('cotizaciones_proveedores_items', 'cotizaciones_proveedores.idcotizacion_proveedor = cotizaciones_proveedores_items.idcotizacion_proveedor');
         $this->db->join('articulos', 'cotizaciones_proveedores_items.idarticulo = articulos.idarticulo');

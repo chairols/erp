@@ -78,7 +78,7 @@
                 <div class="col-md-6">
                     <select id="idtipo_iva" class="form-control chosenSelect">
                         <?php foreach($tipos_iva as $tipo_iva) { ?>
-                        <option value="<?=$tipo_iva['idtipo_iva']?>"><?=$tipo_iva['porcentaje']?> %</option>
+                        <option value="<?=$tipo_iva['idtipo_iva']?>"<?=($tipo_iva['idtipo_iva']==$parametro['idtipo_iva'])?" selected":""?>><?=$tipo_iva['porcentaje']?> %</option>
                         <?php } ?>
                     </select>
                 </div>

@@ -10,6 +10,8 @@ class Tipos_iva_model extends CI_Model {
     
     /*
      *  Parametros/empresa
+     * 
+     *  Pedidos/agregar
      */
     public function gets() {
         $this->db->select('*');

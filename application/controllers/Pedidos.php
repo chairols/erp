@@ -12,7 +12,8 @@ class Pedidos extends CI_Controller {
         ));
         $this->load->model(array(
             'monedas_model',
-            'parametros_model'
+            'parametros_model',
+            'tipos_iva_model'
         ));
         
         $session = $this->session->all_userdata();
@@ -30,6 +31,7 @@ class Pedidos extends CI_Controller {
 
         $data['dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1); // 1 es id del dolar
         $data['parametro'] = $this->parametros_model->get_parametros_empresa();
+        $data['tipos_iva'] = $this->tipos_iva_model->gets();
         
         $this->load->view('layout/app', $data);
     }

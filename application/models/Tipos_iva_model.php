@@ -21,6 +21,14 @@ class Tipos_iva_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Pedidos/agregar_ajax
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('tipos_iva', $where);
+        return $query->row_array();
+    }
 }
 
 ?>

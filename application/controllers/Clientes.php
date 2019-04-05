@@ -956,6 +956,15 @@ class Clientes extends CI_Controller {
         
         $this->load->view('clientes/gets_monedas_select', $data);
     }
+    
+    public function gets_imprime_despacho_select() {
+        $where = array(
+            'idcliente' => $this->input->post('idcliente')
+        );
+        $data['cliente'] = $this->clientes_model->get_where($where);
+        
+        $this->load->view('clientes/gets_imprime_despacho_select', $data);
+    }
 }
 
 ?>

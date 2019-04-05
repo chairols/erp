@@ -38,6 +38,8 @@ class Condiciones_de_venta_model extends CI_Model {
      *  Clientes/modificar
      * 
      *  Cotizaciones_clientes/pdf
+     * 
+     *  Pedidos/agregar_ajax
      */
     public function get_where($where) {
         $query = $this->db->get_where('condiciones_de_venta', $where);

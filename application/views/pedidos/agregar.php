@@ -43,14 +43,16 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Imprime Despacho</label>
-                <div class="col-md-6">
-                    
+                <div class="col-md-6" id="div-imprime-despacho">
+                    <select class="form-control chosenSelect" disabled="">
+                        
+                    </select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Orden de Compra</label>
                 <div class="col-md-6">
-                    <input class="form-control" id="ordendecompra">
+                    <input class="form-control" id="orden_de_compra" maxlength="50">
                 </div>
             </div>
             <div class="form-group">
@@ -64,13 +66,13 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Dólar Oficial</label>
                 <div class="col-md-6">
-                    <input type="text" class="form-control inputMask" value="<?=$dolar['valor']?>" data-inputmask="'mask': '9{1,2}.999999'">
+                    <input type="text" id="dolar_oficial" class="form-control inputMask" value="<?=$dolar['valor']?>" data-inputmask="'mask': '9{1,2}.999999'">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Factor de Corrección</label>
                 <div class="col-md-6">
-                    <input type="text" class="form-control inputMask" value="<?=$parametro['factor_correccion']?>" data-inputmask="'mask': '9{1,2}.99'">
+                    <input type="text" id="factor_correccion" class="form-control inputMask" value="<?=$parametro['factor_correccion']?>" data-inputmask="'mask': '9{1,2}.99'">
                 </div>
             </div>
             <div class="form-group">

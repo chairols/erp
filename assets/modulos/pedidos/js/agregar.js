@@ -33,7 +33,7 @@ function gets_sucursales() {
 
 function gets_transportes() {
     datos = {
-        'idsucursal': $("#idsucursal").val()
+        'idcliente_sucursal': $("#idcliente_sucursal").val()
     };
     
     $.ajax({

@@ -580,7 +580,7 @@ class Cotizaciones_clientes extends CI_Controller {
                 $this->pdf->Cell(0, 8, str_pad($item['cantidad'], 5, ' ', STR_PAD_LEFT), 0, 1, 'L');
 
                 $this->pdf->SetXY(30, $Y);
-                $this->pdf->Cell(0, 8, $item['descripcion'], 0, 1, 'L');
+                $this->pdf->Cell(0, 8, utf8_decode($item['descripcion']), 0, 1, 'L');
 
                 $texto_dias = '';
                 switch ($item['dias_entrega']) {

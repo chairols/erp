@@ -152,6 +152,28 @@ class Pedidos extends CI_Controller {
         }
     }
 
+    public function modificar($idpedido = null) {
+        if ($idpedido == null) {
+            redirect('/pedidos/listar/', 'refresh');
+        }
+        
+        $data['title'] = 'Modificar Pedido';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/pedidos/js/modificar.js'
+        );
+        $data['view'] = 'pedidos/modificar';
+
+        $where = array(
+            'idpedido' => $idpedido
+        );
+        $data['pedido'] = $this->pedidos_model->get_where($where);
+        $data['monedas'] = $this->monedas_model->gets();
+        $data['tipos_iva'] = $this->tipos_iva_model->gets();
+        
+        $this->load->view('layout/app', $data);
+    }
 }
 
 ?>

@@ -14,8 +14,16 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Cliente</label>
                 <div class="col-md-6">
-                    <input type="text" id="TextAutoCompletecliente" name="TextAutoCompletecliente" placeholder="Cliente" placeholderauto="Cliente inexistente" class="form-control TextAutoComplete" value="<?= $cotizacion_cliente['cliente']['cliente'] ?>" objectauto="clientes" actionauto="gets_clientes_ajax" iconauto="ship">
+                    <input type="text" id="TextAutoCompletecliente" name="TextAutoCompletecliente" placeholder="Cliente" placeholderauto="Cliente Inexistente" class="form-control TextAutoComplete" value="<?= $cotizacion_cliente['cliente']['cliente'] ?>" objectauto="clientes" actionauto="gets_clientes_ajax" iconauto="ship">
                     <input type="hidden" id="cliente" name="cliente" value="<?= $cotizacion_cliente['idcliente'] ?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Sucursal</label>
+                <div class="col-md-6" id="sucursal">
+                    <select id="idcliente_sucursal" class="form-control chosenSelect">
+                        
+                    </select>
                 </div>
             </div>
             <div class="form-group">

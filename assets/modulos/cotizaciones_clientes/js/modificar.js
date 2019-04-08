@@ -7,12 +7,46 @@ $(document).ready(function () {
     });
     actualizar_articulos();
     get_tipo_de_cambio();
+    actualizar_sucursal($("#cliente").val());
 });
+
+$("#cliente").change(function() {
+    actualizar_sucursal($("#cliente").val());
+});
+
+function actualizar_sucursal(id) {
+    datos = {
+        'idcliente': id
+    };
+    
+    $.ajax({
+        type: 'POST',
+        url: '/clientes/gets_sucursales_select/',
+        data: datos,
+        beforeSend: function () {
+            Pace.restart();
+        },
+        success: function (data) {
+            $("#sucursal").html(data);
+            Pace.stop();
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger'
+                    });
+            Pace.stop();
+        }
+    });
+}
+
+
 
 $("#actualizar").click(function () {
     datos = {
         'idcotizacion_cliente': $("#idcotizacion_cliente").val(),
         'idcliente': $("#cliente").val(),
+        'idcliente_sucursal': $("#idcliente_sucursal").val(),
         'idmoneda': $("#idmoneda").val(),
         'atencion': $("#atencion").val(),
         'fecha': $("#fecha").val(),

@@ -1,6 +1,6 @@
 $("#cliente").change(function() {
     actualizar_sucursal($("#cliente").val());
-})
+});
 
 function actualizar_sucursal(id) {
     datos = {

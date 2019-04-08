@@ -153,7 +153,7 @@ class Cotizaciones_clientes extends CI_Controller {
             'clientes_agentes.estado' => 'A'
         );
         $data['cotizacion_cliente']['cliente']['agentes'] = $this->clientes_model->gets_agentes_where($where);
-
+               
         $data['monedas'] = $this->monedas_model->gets();
 
         $data['cotizacion_cliente']['fecha_formateada'] = $this->formatear_fecha_para_mostrar($data['cotizacion_cliente']['fecha']);
@@ -167,6 +167,7 @@ class Cotizaciones_clientes extends CI_Controller {
         $session = $this->session->all_userdata();
 
         $this->form_validation->set_rules('idcliente', 'Cliente', 'required|integer');
+        $this->form_validation->set_rules('idcliente_sucursal', 'Sucursal', 'required|integer');
         $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
         $this->form_validation->set_rules('fecha', 'Fecha', 'required');
 
@@ -177,8 +178,22 @@ class Cotizaciones_clientes extends CI_Controller {
             );
             echo json_encode($json);
         } else {
+            $where = array(
+                'idcliente' => $this->input->post('idcliente')
+            );
+            $cliente = $this->clientes_model->get_where($where);
+            
+            $where = array(
+                'idcliente_sucursal' => $this->input->post('idcliente_sucursal')
+            );
+            $sucursal = $this->clientes_model->get_where_sucursal($where);
+            
             $datos = array(
                 'idcliente' => $this->input->post('idcliente'),
+                'cliente' => $cliente['cliente'],
+                'idsucursal' => $sucursal['idcliente_sucursal'],
+                'domicilio' => $sucursal['direccion'],
+                'localidad' => $sucursal['localidad'],
                 'idmoneda' => $this->input->post('idmoneda'),
                 'atencion' => $this->input->post('atencion'),
                 'fecha' => $this->formatear_fecha($this->input->post('fecha')),
@@ -192,11 +207,6 @@ class Cotizaciones_clientes extends CI_Controller {
             $resultado = $this->cotizaciones_clientes_model->update($datos, $where);
 
             if ($resultado) {
-                $where = array(
-                    'idcliente' => $this->input->post('idcliente')
-                );
-                $cliente = $this->clientes_model->get_where($where);
-
                 $where = array(
                     'idmoneda' => $this->input->post('idmoneda')
                 );

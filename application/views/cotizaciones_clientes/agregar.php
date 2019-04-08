@@ -14,7 +14,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Sucursal</label>
                 <div class="col-md-6" id="sucursal">
-                    <select id="idsucursal" class="form-control chosenSelect">
+                    <select id="idcliente_sucursal" class="form-control chosenSelect">
                         
                     </select>
                 </div>

@@ -31,7 +31,7 @@ function actualizar_sucursal(id) {
 $("#agregar").click(function() {
     datos = {
         'idcliente': $("#cliente").val(),
-        'idsucursal': $("#idsucursal").val(),
+        'idsucursal': $("#idcliente_sucursal").val(),
         'idmoneda': $("#idmoneda").val(),
         'atencion': $("#atencion").val(),
         'fecha': $("#fecha").val(),

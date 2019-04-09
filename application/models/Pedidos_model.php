@@ -23,6 +23,14 @@ class Pedidos_model extends CI_Model {
         $query = $this->db->get_where('pedidos', $where);
         return $query->row_array();
     }
+    
+    /*
+     *  Pedidos/actualizar_cabecera_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('pedidos', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

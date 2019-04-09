@@ -263,6 +263,12 @@ class Pedidos extends CI_Controller {
                 'data' => validation_errors()
             );
             echo json_encode($json);
+        } else {
+            $json = array(
+                'status' => 'ok',
+                'data' => 'Prueba de OK'
+            );
+            echo json_encode($json);
         }
     }
 }

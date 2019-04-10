@@ -110,6 +110,7 @@ class Importar extends CI_Controller {
                 //  [19] = STOCK ALMACEN 1
                 //  [20] = STOCK ALMACEN 2
                 //  [21] = PEDIDO DE IMPORTACION
+                //  [39] = NUMERO DE DESPACHO
                 //  [41] = OBSERVACIONES
                 //  [42] = DESCRIPCION
                 //if($array[0] == "6206 C3             ") {
@@ -167,6 +168,7 @@ class Importar extends CI_Controller {
                     'stock_pending' => $array[21],
                     'stock_min' => $array[13],
                     'stock_max' => $array[14],
+                    'despacho' => $array[39],
                     'observations' => $array[41],
                     'description' => $array[42]
                 );

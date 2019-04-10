@@ -21,7 +21,8 @@ class Pedidos extends CI_Controller {
             'condiciones_de_venta_model',
             'monedas_model',
             'tipos_iva_model',
-            'log_model'
+            'log_model',
+            'articulos_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -249,14 +250,14 @@ class Pedidos extends CI_Controller {
 
     public function agregar_articulo_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idpedido', 'ID Pedido', 'required|integer');
         $this->form_validation->set_rules('idarticulo', 'Artículo', 'required|integer');
         $this->form_validation->set_rules('muestra_marca', 'Muestra Marca', 'required');
         $this->form_validation->set_rules('almacen', 'Almacén', 'required|integer');
         $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
         $this->form_validation->set_rules('precio', 'Precio', 'required|decimal');
-        
+
         if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
@@ -264,13 +265,42 @@ class Pedidos extends CI_Controller {
             );
             echo json_encode($json);
         } else {
-            $json = array(
-                'status' => 'ok',
-                'data' => 'Prueba de OK'
+            $where = array(
+                'idarticulo' => $this->input->post('idarticulo')
             );
-            echo json_encode($json);
+            $articulo = $this->articulos_model->get_where($where);
+
+            $set = array(
+                'idpedido' => $this->input->post('idpedido'),
+                'idarticulo' => $this->input->post('idarticulo'),
+                'muestra_marca' => $this->input->post('muestra_marca'),
+                'almacen' => $this->input->post('almacen'),
+                'cantidad' => $this->input->post('cantidad'),
+                'cantidad_pendiente' => $this->input->post('cantidad'),
+                'precio' => $this->input->post('precio'),
+                'despacho' => $articulo['despacho'],
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'idcreador' => $session['SID'],
+                'actualizado_por' => $session['SID']
+            );
+
+            $resultado = $this->pedidos_model->set_item($set);
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se agregó el artículo ' . $articulo['articulo']
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Ocurrió un error inesperado'
+                );
+                echo json_encode($json);
+            }
         }
     }
+
 }
 
 ?>

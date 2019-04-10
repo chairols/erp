@@ -31,6 +31,14 @@ class Pedidos_model extends CI_Model {
         $this->db->update('pedidos', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Pedidos/agregar_articulo_ajax
+     */
+    public function set_item($datos) {
+        $this->db->insert('pedidos_items', $datos);
+        return $this->db->insert_id();
+    }
 }
 
 ?>

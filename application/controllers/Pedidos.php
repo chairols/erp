@@ -22,7 +22,8 @@ class Pedidos extends CI_Controller {
             'monedas_model',
             'tipos_iva_model',
             'log_model',
-            'articulos_model'
+            'articulos_model',
+            'marcas_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -269,10 +270,17 @@ class Pedidos extends CI_Controller {
                 'idarticulo' => $this->input->post('idarticulo')
             );
             $articulo = $this->articulos_model->get_where($where);
+            
+            $where = array(
+                'idmarca' => $articulo['idmarca']
+            );
+            $marca = $this->marcas_model->get_where($where);
 
             $set = array(
                 'idpedido' => $this->input->post('idpedido'),
                 'idarticulo' => $this->input->post('idarticulo'),
+                'articulo' => $articulo['articulo'],
+                'marca' => $marca['marca'],
                 'muestra_marca' => $this->input->post('muestra_marca'),
                 'almacen' => $this->input->post('almacen'),
                 'cantidad' => $this->input->post('cantidad'),
@@ -301,6 +309,14 @@ class Pedidos extends CI_Controller {
         }
     }
 
+    public function gets_articulos_tabla() {
+        $where = array(
+            'idpedido' => $this->input->post('idpedido')
+        );
+        $data['articulos'] = $this->pedidos_model->gets_articulos_where($where);
+        
+        $this->load->view('pedidos/gets_articulos_tabla', $data);
+    }
 }
 
 ?>

@@ -166,6 +166,13 @@
             </div>
         </div>
         <br><br><br><br>
-
+        <div id="articulos">
+            
+        </div>
+        <div id="articulos_loading" class="text-center" style="display: none;">
+            <h2>
+                <i class="fa fa-refresh fa-spin"></i>
+            </h2>
+        </div>
     </div>
 </div>

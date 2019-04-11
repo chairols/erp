@@ -198,6 +198,7 @@ $("#agregar").click(function () {
                 $("#articulo").val("");
                 $("#descripcion").val("");
                 $("#precio").val("");
+                $("#dias_entrega").val("0");
                 $("#observaciones_item").val("");
 
                 actualizar_articulos();

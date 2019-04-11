@@ -1,6 +1,7 @@
 $(document).ready(function() {
     actualizar_sucursal($("#cliente").val());
     gets_condiciones_de_venta();
+    gets_articulos();
 });
 
 function actualizar_sucursal(id) {
@@ -198,6 +199,13 @@ $("#agregar").click(function() {
                             type: 'success',
                             z_index: 2000
                         });
+                $("#TextAutoCompletearticulo").val("");
+                $("#articulo").val("");
+                $("#almacen").val("");
+                $("#cantidad").val("");
+                $("#precio").val("");
+                $("#TextAutoCompletearticulo").focus();
+                gets_articulos();
             }
         },
         error: function (xhr) { // if error occured
@@ -215,3 +223,38 @@ $("#agregar").click(function() {
     }); 
     
 });
+
+function gets_articulos() {
+    datos = {
+        'idpedido': $("#idpedido").val()
+    };
+    
+    $.ajax({
+        type: 'POST',
+        url: '/pedidos/gets_articulos_tabla/',
+        data: datos,
+        beforeSend: function () {
+            $("#articulos").hide();
+            $("#articulos_loading").show();
+            Pace.restart();
+        },
+        success: function (data) {
+            $("#articulos_loading").hide();
+            $("#articulos").show();
+            Pace.stop();
+            $("#articulos").html(data);
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>' + xhr.statusText + '</strong>',
+                    {
+                        type: 'error',
+                        z_index: 2000
+                    });
+            
+            console.log(xhr);
+            $("#articulos_loading").hide();
+            $("#articulos").show();
+            Pace.stop();
+        }
+    }); 
+}

@@ -39,6 +39,14 @@ class Pedidos_model extends CI_Model {
         $this->db->insert('pedidos_items', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Pedidos/gets_articulos_tabla
+     */
+    public function gets_articulos_where($where) {
+        $query = $this->db->get_where('pedidos_items', $where);
+        return $query->result_array();
+    }
 }
 
 ?>

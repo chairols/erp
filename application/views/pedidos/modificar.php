@@ -150,7 +150,7 @@
                 </select>
             </div>
             <div class="col-lg-1 col-xs-12">
-                <input type="text" id="almacen" class="form-control" onkeyup="saltar(event, 'cantidad');">
+                <input type="text" id="almacen" class="form-control inputMask" onkeyup="saltar(event, 'cantidad');" data-inputmask="'mask' : '9{1,1}'">
             </div>
             <div class="col-md-2 col-xs-12">
                 <input type="text" id="cantidad" class="form-control inputMask" data-inputmask="'mask': '9{1,8}'" onkeyup="saltar(event, 'precio');">

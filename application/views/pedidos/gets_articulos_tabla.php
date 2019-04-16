@@ -10,6 +10,7 @@
             <th>Almacén</th>
             <th>Precio Unitario</th>
             <th>Precio Total</th>
+            <th>Entrega</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -30,6 +31,7 @@
                 </td>
                 <td class="text-right"><?= $articulo['precio'] ?></td>
                 <td class="text-right"><?= number_format($articulo['cantidad_pendiente'] * $articulo['precio'], 2) ?></td>
+                <td class="text-right"><?=$articulo['fecha_formateada']?></td>
                 <td>
                     <a class="hint--top hint--bounce hint--info editar_articulo" aria-label="Modificar" idpedido_item="<?= $articulo['idpedido_item'] ?>">
                         <button type="button" id="editar" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#editar_articulo">
@@ -162,5 +164,39 @@
             }
         });
 
+    });
+    
+    $(".editar_articulo").click(function () {
+        datos = {
+            'idpedido_item': this.attributes.idpedido_item.value
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/pedidos/get_articulo_where_json/',
+            data: datos,
+            beforeSend: function () {
+                Pace.restart();
+            },
+            success: function (data) {
+                Pace.stop();
+                resultado = $.parseJSON(data);
+                $("#idcotizacion_cliente_item_editar").val(resultado['idcotizacion_cliente_item']);
+                $("#cantidad_editar").val(resultado['cantidad']);
+                $("#articulo_editar").val(resultado['articulo']['articulo']);
+                $("#descripcion_editar").val(resultado['descripcion']);
+                $("#precio_editar").val(resultado['precio']);
+                $("#dias_entrega_editar").val(resultado['dias_entrega']);
+                $("#observaciones_item_editar").val(resultado['observaciones_item']);
+            },
+            error: function (xhr) { // if error occured
+                $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                        {
+                            type: 'danger',
+                            z_index: 2000
+                        });
+                Pace.stop();
+            }
+        });
     });
 </script>

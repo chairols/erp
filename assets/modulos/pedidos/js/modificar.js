@@ -173,7 +173,8 @@ $("#agregar").click(function () {
         'muestra_marca': $("#marca").val(),
         'almacen': $("#almacen").val(),
         'cantidad': $("#cantidad").val(),
-        'precio': $("#precio").val()
+        'precio': $("#precio").val(),
+        'fecha_entrega': $("#fecha_entrega").val()
     };
 
     $.ajax({

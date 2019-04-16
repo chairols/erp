@@ -169,6 +169,12 @@ class Pedidos extends CI_Controller {
         $data['view'] = 'pedidos/modificar';
 
         $where = array(
+            'identificador' => 'pedidos_dias_entrega',
+            'idparametro_tipo' => 3
+        );
+        $data['dias_entrega'] = $this->parametros_model->get_where($where);
+
+        $where = array(
             'idpedido' => $idpedido
         );
         $data['pedido'] = $this->pedidos_model->get_where($where);
@@ -259,6 +265,7 @@ class Pedidos extends CI_Controller {
         $this->form_validation->set_rules('almacen', 'Almacén', 'required|integer');
         $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|integer');
         $this->form_validation->set_rules('precio', 'Precio', 'required|decimal');
+        $this->form_validation->set_rules('fecha_entrega', 'Fecha de Entrega', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $json = array(
@@ -271,7 +278,7 @@ class Pedidos extends CI_Controller {
                 'idarticulo' => $this->input->post('idarticulo')
             );
             $articulo = $this->articulos_model->get_where($where);
-            
+
             $where = array(
                 'idmarca' => $articulo['idmarca']
             );
@@ -287,6 +294,7 @@ class Pedidos extends CI_Controller {
                 'cantidad' => $this->input->post('cantidad'),
                 'cantidad_pendiente' => $this->input->post('cantidad'),
                 'precio' => $this->input->post('precio'),
+                'fecha_entrega' => $this->formatear_fecha($this->input->post('fecha_entrega')),
                 'despacho' => $articulo['despacho'],
                 'fecha_creacion' => date("Y-m-d H:i:s"),
                 'idcreador' => $session['SID'],
@@ -316,10 +324,13 @@ class Pedidos extends CI_Controller {
             'estado' => 'P'
         );
         $data['articulos'] = $this->pedidos_model->gets_articulos_where($where);
-        
+
+        foreach($data['articulos'] as $key => $value) {
+            $data['articulos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_entrega']);
+        }
         $this->load->view('pedidos/gets_articulos_tabla', $data);
     }
-    
+
     public function listar($pagina = 0) {
         $data['title'] = 'Listado de Pedidos';
         $data['session'] = $this->session->all_userdata();
@@ -365,67 +376,67 @@ class Pedidos extends CI_Controller {
          */
 
         $data['pedidos'] = $this->pedidos_model->gets_where_limit($where, $per_page, $pagina);
-        
+
         foreach ($data['pedidos'] as $key => $value) {
             $data['pedidos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_creacion']);
-            
+
             $where = array(
                 'idcliente' => $value['idcliente']
             );
             $data['pedidos'][$key]['cliente'] = $this->clientes_model->get_where($where);
-            
+
             $where = array(
                 'idmoneda' => $value['idmoneda']
             );
             $data['pedidos'][$key]['moneda'] = $this->monedas_model->get_where($where);
 
-            
+
             $data['pedidos'][$key]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
             $data['pedidos'][$key]['cotizacion_moneda'] = $this->monedas_model->get_ultima_cotizacion_por_monedas($data['pedidos'][$key]['idmoneda']);
-            
+
             $where = array(
                 'idpedido' => $value['idpedido'],
                 'estado' => 'P'
             );
             $data['pedidos'][$key]['items'] = $this->pedidos_model->gets_articulos_where($where);
-            
+
             foreach ($data['pedidos'][$key]['items'] as $key2 => $value2) {
                 $where = array(
                     'idarticulo' => $value2['idarticulo']
                 );
                 $data['pedidos'][$key]['items'][$key2]['articulo'] = $this->articulos_model->get_where($where);
-                
-                /*
-                $where = array(
-                    'idlinea' => $data['pedidos'][$key]['items'][$key2]['articulo']['idlinea']
-                );
-                $data['pedidos'][$key]['items'][$key2]['articulo']['linea'] = $this->lineas_model->get_where($where);
-                /*
-                $where = array(
-                    'idmarca' => $data['cotizaciones'][$key]['items'][$key2]['articulo']['idmarca']
-                );
-                $data['cotizaciones'][$key]['items'][$key2]['articulo']['marca'] = $this->marcas_model->get_where($where);
 
-                $data['cotizaciones'][$key]['items'][$key2]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
-             * */
+                /*
+                  $where = array(
+                  'idlinea' => $data['pedidos'][$key]['items'][$key2]['articulo']['idlinea']
+                  );
+                  $data['pedidos'][$key]['items'][$key2]['articulo']['linea'] = $this->lineas_model->get_where($where);
+                  /*
+                  $where = array(
+                  'idmarca' => $data['cotizaciones'][$key]['items'][$key2]['articulo']['idmarca']
+                  );
+                  $data['cotizaciones'][$key]['items'][$key2]['articulo']['marca'] = $this->marcas_model->get_where($where);
+
+                  $data['cotizaciones'][$key]['items'][$key2]['cotizacion_dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
+                 * */
             }
         }
         /*
-        foreach($data['pedidos'] as $key => $value) {
-            $data['pedidos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_creacion']);
-            
-            $where = array(
-                'pedidos_items.idpedido' => $value['idpedido'],
-                'pedidos_items.estado' => 'P'
-            );
-            $data['pedidos'][$key]['items'] = $this->pedidos_model->gets_articulos_where($where);
-        }
+          foreach($data['pedidos'] as $key => $value) {
+          $data['pedidos'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_creacion']);
+
+          $where = array(
+          'pedidos_items.idpedido' => $value['idpedido'],
+          'pedidos_items.estado' => 'P'
+          );
+          $data['pedidos'][$key]['items'] = $this->pedidos_model->gets_articulos_where($where);
+          }
          * 
          */
 
         $this->load->view('layout/app', $data);
     }
-    
+
     public function borrar_articulo_ajax() {
         $session = $this->session->all_userdata();
 
@@ -459,13 +470,13 @@ class Pedidos extends CI_Controller {
                     'texto' => "<h2><strong>Se eliminó el item: " . $item['articulo'] . "</strong></h2>
 
 <p>
-<strong>ID Artículo: </strong>".$item['idarticulo']."<br />
+<strong>ID Artículo: </strong>" . $item['idarticulo'] . "<br />
 <strong>Cantidad: </strong>" . $item['cantidad'] . "<br />
-<strong>Cantidad Pendiente: </strong>" .$item['cantidad_pendiente']."<br />
+<strong>Cantidad Pendiente: </strong>" . $item['cantidad_pendiente'] . "<br />
 <strong>Precio: </strong>" . $item['precio'] . "<br />
-<strong>Marca: </strong>" . $item['marca']."<br />
-<strong>Muestra Marca: </strong>".$item['muestra_marca']."<br />
-<strong>Almacén: </strong>". $item['almacen']."<br />
+<strong>Marca: </strong>" . $item['marca'] . "<br />
+<strong>Muestra Marca: </strong>" . $item['muestra_marca'] . "<br />
+<strong>Almacén: </strong>" . $item['almacen'] . "<br />
 </p>",
                     'idusuario' => $session['SID'],
                     'tipo' => 'del'
@@ -474,7 +485,7 @@ class Pedidos extends CI_Controller {
 
                 $json = array(
                     'status' => 'ok',
-                    'data' => 'Se eliminó correctamente el artículo '.$item['articulo']
+                    'data' => 'Se eliminó correctamente el artículo ' . $item['articulo']
                 );
                 echo json_encode($json);
             } else {
@@ -485,6 +496,30 @@ class Pedidos extends CI_Controller {
                 echo json_encode($json);
             }
         }
+    }
+
+    public function get_articulo_where_json() {
+        $where = $this->input->post();
+
+        $item = $this->pedidos_model->get_where_item($where);
+
+        $where = array(
+            'idarticulo' => $item['idarticulo']
+        );
+        $item['articulo'] = $this->articulos_model->get_where($where);
+
+        echo json_encode($item);
+    }
+
+    private function formatear_fecha($fecha) {
+        $aux = '';
+        $aux .= substr($fecha, 6, 4);
+        $aux .= '-';
+        $aux .= substr($fecha, 3, 2);
+        $aux .= '-';
+        $aux .= substr($fecha, 0, 2);
+
+        return $aux;
     }
     
     private function formatear_fecha_para_mostrar($fecha) {
@@ -497,6 +532,7 @@ class Pedidos extends CI_Controller {
 
         return $aux;
     }
+
 }
 
 ?>

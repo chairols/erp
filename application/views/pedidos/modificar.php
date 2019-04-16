@@ -133,34 +133,40 @@
             <div class="col-lg-1 col-xs-12 text-center">
                 <label class="control-label">Almacén</label>
             </div>
-            <div class="col-lg-2 col-xs-12 text-center">
+            <div class="col-lg-1 col-xs-12 text-center">
                 <label class="control-label">Cantidad</label>
             </div>
             <div class="col-lg-2 col-xs-12 text-center">
                 <label class="control-label">Precio</label>
             </div>
+            <div class="col-lg-2 col-xs-12 text-center">
+                <label class="control-label">Fecha Entrega</label>
+            </div>
             <div class="col-lg-4 col-xs-12">
-                <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo inexistente" class="form-control TextAutoComplete" objectauto="articulos" actionauto="gets_articulos_ajax_stock_y_precio" varsauto="estado:=A" iconauto="ship" onkeyup="saltar(event, 'marca');" autofocus="">
+                <input type="text" id="TextAutoCompletearticulo" name="TextAutoCompletearticulo" placeholder="Seleccionar Artículo" placeholderauto="Artículo inexistente" class="form-control input-sm TextAutoComplete" objectauto="articulos" actionauto="gets_articulos_ajax_stock_y_precio" varsauto="estado:=A" iconauto="ship" onkeyup="saltar(event, 'marca');" autofocus="">
                 <input type="hidden" id="articulo" name="articulo" value="">
             </div>
             <div class="col-lg-1 col-xs-12">
-                <select id="marca" class="form-control" onkeyup="saltar(event, 'almacen');">
+                <select id="marca" class="form-control input-sm" onkeyup="saltar(event, 'almacen');">
                     <option value="S">SI</option>
                     <option value="N">NO</option>
                 </select>
             </div>
             <div class="col-lg-1 col-xs-12">
-                <input type="text" id="almacen" class="form-control inputMask" onkeyup="saltar(event, 'cantidad');" data-inputmask="'mask' : '9{1,1}'">
-            </div>
-            <div class="col-md-2 col-xs-12">
-                <input type="text" id="cantidad" class="form-control inputMask" data-inputmask="'mask': '9{1,8}'" onkeyup="saltar(event, 'precio');">
-            </div>
-            <div class="col-md-2 col-xs-12">
-                <input type="text" id="precio" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'" onkeyup="saltar(event, 'agregar');">
+                <input type="text" id="almacen" class="form-control input-sm inputMask" onkeyup="saltar(event, 'cantidad');" data-inputmask="'mask' : '9{1,1}'">
             </div>
             <div class="col-md-1 col-xs-12">
-                <button type="button" id="agregar" class="btn btn-primary">Agregar</button>
-                <button type="button" id="agregar_loading" class="btn btn-primary" style="display: none;">
+                <input type="text" id="cantidad" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,8}'" onkeyup="saltar(event, 'precio');">
+            </div>
+            <div class="col-md-2 col-xs-12">
+                <input type="text" id="precio" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,17}.99'" onkeyup="saltar(event, 'agregar');">
+            </div>
+            <div class="col-md-2 col-xs-12">
+                <input type="text" id="fecha_entrega" value="<?= date("d/m/Y", strtotime("+".$dias_entrega['valor_sistema']." day")) ?>" class="form-control input-sm datePicker" placeholder="Seleccione una fecha">
+            </div>
+            <div class="col-md-1 col-xs-12">
+                <button type="button" id="agregar" class="btn btn-sm btn-primary">Agregar</button>
+                <button type="button" id="agregar_loading" class="btn btn-sm btn-primary" style="display: none;">
                     <i class="fa fa-refresh fa-spin"></i>
                 </button>
             </div>

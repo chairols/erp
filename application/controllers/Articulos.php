@@ -170,12 +170,12 @@ class Articulos extends CI_Controller {
                         'idmarca' => $this->input->post('idmarca')
                     );
                     $marca = $this->marcas_model->get_where($where);
-                    
+
                     $where = array(
                         'idlinea' => $this->input->post('idlinea')
                     );
                     $linea = $this->lineas_model->get_where($where);
-                    
+
                     $log = array(
                         'tabla' => 'articulos',
                         'idtabla' => $id,
@@ -203,33 +203,37 @@ class Articulos extends CI_Controller {
         $where = $this->input->post();
         $articulo = $this->articulos_model->get_where($where);
 
-        $where = array(
-            'idmarca' => $articulo['idmarca']
-        );
-        $articulo['marca'] = $this->marcas_model->get_where($where);
+        if ($articulo) {
+            $where = array(
+                'idmarca' => $articulo['idmarca']
+            );
+            $articulo['marca'] = $this->marcas_model->get_where($where);
 
-        $where = array(
-            'idlinea' => $articulo['idlinea']
-        );
-        $articulo['linea'] = $this->lineas_model->get_where($where);
-
+            $where = array(
+                'idlinea' => $articulo['idlinea']
+            );
+            $articulo['linea'] = $this->lineas_model->get_where($where);
+        } else {
+            $articulo = array();
+        }
+        
         echo json_encode($articulo);
     }
 
     public function gets_articulos_ajax_stock_y_precio() {
         $like = $this->input->post();
-        $where['stock >'] = 0; 
-        
+        $where['stock >'] = 0;
+
         $articulos = $this->articulos_model->gets_where_para_ajax_con_stock_y_precio($like, $where, 255);
-        
+
         $where = array();
         $where['stock <='] = 0;
         $articulos_sin_stock = $this->articulos_model->gets_where_para_ajax_con_stock_y_precio($like, $where, 255);
-        
-        foreach($articulos_sin_stock as $key => $value) {
+
+        foreach ($articulos_sin_stock as $key => $value) {
             $articulos[] = $value;
         }
-        
+
         foreach ($articulos as $key => $value) {
             $articulos[$key]['text'] = $value['text'] . " - ";
             $where = array(
@@ -241,8 +245,8 @@ class Articulos extends CI_Controller {
             $articulos[$key]['text'] .= " - " . $value['stock'];
             $articulos[$key]['text'] .= ' - <b>U$S ' . $value['precio'] . "</b>";
         }
-        
-        
+
+
         echo json_encode($articulos);
     }
 

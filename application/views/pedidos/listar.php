@@ -77,9 +77,9 @@
                             </div>
                             <div class="col-sm-3 col-xs-12">
                                 <div class="listRowInner">
-                                    <span class="smallTitle">Cantidad</span>
+                                    <span class="smallTitle">Cantidad Pendiente</span>
                                     <span class="listTextStrong">
-                                        <span class="label bg-navy"><?=$item['cantidad']?></span>
+                                        <span class="label bg-navy"><?=$item['cantidad_pendiente']?></span>
                                     </span>
                                 </div>
                             </div>
@@ -112,7 +112,3 @@
         </div>
     </div>
 </div>
-
-<pre>
-    <?php print_r($pedidos); ?>
-</pre>

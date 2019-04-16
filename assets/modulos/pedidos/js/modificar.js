@@ -1,14 +1,17 @@
-$(document).ready(function() {
+var tipo_de_cambio = 0;
+
+$(document).ready(function () {
     actualizar_sucursal($("#cliente").val());
     gets_condiciones_de_venta();
     gets_articulos();
+    get_tipo_de_cambio();
 });
 
 function actualizar_sucursal(id) {
     datos = {
         'idcliente': id
     };
-    
+
     $.ajax({
         type: 'POST',
         url: '/clientes/gets_sucursales_select/',
@@ -35,7 +38,7 @@ function gets_transportes() {
     datos = {
         'idcliente_sucursal': $("#idcliente_sucursal").val()
     };
-    
+
     $.ajax({
         type: 'POST',
         url: '/clientes/gets_transportes_select/',
@@ -54,14 +57,14 @@ function gets_transportes() {
                     });
         }
     });
-    
+
 }
 
 function gets_condiciones_de_venta() {
     datos = {
         'idcliente': $("#cliente").val()
     };
-    
+
     $.ajax({
         type: 'POST',
         url: '/clientes/gets_condiciones_de_venta_select/',
@@ -79,31 +82,31 @@ function gets_condiciones_de_venta() {
                         allow_dismiss: false
                     });
         }
-    });   
+    });
 }
 
 function saltar(e, id) {
     // Obtenemos la tecla pulsada
     (e.keyCode) ? k = e.keyCode : k = e.which;
-    
+
     // Si la tecla pulsada es enter (codigo ascii 13)
     if (k == 13) {
         // Si la variable id contiene "submit" enviamos el formulario
         console.log(k);
         console.log(e);
         console.log(id);
-        
-        
+
+
         if (id == "submit") {
             document.forms[0].submit();
         } else {
             // nos posicionamos en el siguiente input
-            $("#"+id).focus();
+            $("#" + id).focus();
         }
     }
 }
 
-$("#actualizar").click(function() {
+$("#actualizar").click(function () {
     datos = {
         'idpedido': $("#idpedido").val(),
         'idcliente': $("#cliente").val(),
@@ -117,9 +120,9 @@ $("#actualizar").click(function() {
         'dolar_oficial': $("#dolar_oficial").val(),
         'factor_correccion': $("#factor_correccion").val(),
         'idtipo_iva': $("#idtipo_iva").val()
-        // Concepto a facturar
+                // Concepto a facturar
     };
-    
+
     $.ajax({
         type: 'POST',
         url: '/pedidos/actualizar_cabecera_ajax/',
@@ -154,16 +157,16 @@ $("#actualizar").click(function() {
                         type: 'error',
                         z_index: 2000
                     });
-            
+
             console.log(xhr);
             $("#actualizar_loading").hide();
             $("#actualizar").show();
             Pace.stop();
         }
-    }); 
+    });
 });
 
-$("#agregar").click(function() {
+$("#agregar").click(function () {
     datos = {
         'idpedido': $("#idpedido").val(),
         'idarticulo': $("#articulo").val(),
@@ -172,7 +175,7 @@ $("#agregar").click(function() {
         'cantidad': $("#cantidad").val(),
         'precio': $("#precio").val()
     };
-    
+
     $.ajax({
         type: 'POST',
         url: '/pedidos/agregar_articulo_ajax/',
@@ -214,21 +217,21 @@ $("#agregar").click(function() {
                         type: 'error',
                         z_index: 2000
                     });
-            
+
             console.log(xhr);
             $("#agregar_loading").hide();
             $("#agregar").show();
             Pace.stop();
         }
-    }); 
-    
+    });
+
 });
 
 function gets_articulos() {
     datos = {
         'idpedido': $("#idpedido").val()
     };
-    
+
     $.ajax({
         type: 'POST',
         url: '/pedidos/gets_articulos_tabla/',
@@ -250,11 +253,65 @@ function gets_articulos() {
                         type: 'error',
                         z_index: 2000
                     });
-            
+
             console.log(xhr);
             $("#articulos_loading").hide();
             $("#articulos").show();
             Pace.stop();
         }
-    }); 
+    });
 }
+
+function get_tipo_de_cambio() {
+    $.ajax({
+        type: 'POST',
+        url: '/parametros/get_parametros_empresa_json/',
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            tipo_de_cambio = resultado['factor_correccion'];
+        },
+        error: function (xhr) { // if error occured
+            console.log(xhr);
+        }
+    });
+}
+
+$("#TextAutoCompletearticulo").focusout(function () {
+    datos = {
+        'idarticulo': $("#articulo").val(),
+        'estado': 'A'
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/articulos/get_where_json/',
+        data: datos,
+        beforeSend: function () {
+            Pace.restart();
+        },
+        success: function (data) {
+            Pace.stop();
+            resultado = $.parseJSON(data);
+
+            if (resultado['precio'] != 0) {
+                $("#precio").val(resultado['precio']);
+                if ($("#idmoneda").val() == '2') {
+                    precio = resultado['precio'] * tipo_de_cambio;
+                    $("#precio").val(precio.toFixed(2));
+                }
+            }
+
+
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger'
+                    });
+            Pace.stop();
+        }
+    });
+});
+

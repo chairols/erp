@@ -7,7 +7,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Cliente</label>
                 <div class="col-md-6">
-                    <input type="text" id="TextAutoCompletecliente" name="TextAutoCompletecliente" placeholder="Cliente" placeholderauto="Cliente inexistente" class="form-control TextAutoComplete" value="" objectauto="clientes" actionauto="gets_clientes_ajax" iconauto="ship" autofocus>
+                    <input type="text" id="TextAutoCompletecliente" name="TextAutoCompletecliente" placeholder="Cliente" placeholderauto="Cliente inexistente" class="form-control TextAutoComplete" value="" objectauto="clientes" actionauto="gets_clientes_ajax" iconauto="ship" autofocus onkeyup="saltar(event, 'orden_de_compra');">
                     <input type="hidden" id="cliente" name="cliente" value="">
                 </div>
             </div>
@@ -52,7 +52,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Orden de Compra</label>
                 <div class="col-md-6">
-                    <input class="form-control" id="orden_de_compra" maxlength="50">
+                    <input class="form-control" id="orden_de_compra" maxlength="50" onkeyup="saltar(event, 'agregar');">
                 </div>
             </div>
             <div class="form-group">

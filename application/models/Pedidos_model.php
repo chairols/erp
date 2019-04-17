@@ -88,6 +88,7 @@ class Pedidos_model extends CI_Model {
     
     /*
      *  Pedidos/borrar_articulo_ajax
+     *  Pedidos/modificar_item_ajax
      */
     public function update_item($datos, $where) {
         $this->db->update('pedidos_items', $datos, $where);

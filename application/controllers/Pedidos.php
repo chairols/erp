@@ -512,6 +512,49 @@ class Pedidos extends CI_Controller {
 
         echo json_encode($item);
     }
+    
+    public function modificar_item_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idpedido', 'ID Pedido', 'required|integer');
+        $this->form_validation->set_rules('idpedido_item', 'ID Pedido Item', 'required|integer');
+        $this->form_validation->set_rules('cantidad', 'Cantidad', 'required');
+        $this->form_validation->set_rules('muestra_marca', 'Imprime Marca', 'required');
+        $this->form_validation->set_rules('almacen', 'Almacén', 'required|integer');
+        $this->form_validation->set_rules('precio', 'Precio', 'required|decimal');
+        $this->form_validation->set_rules('fecha_entrega', 'Fecha de Entrega', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = $this->input->post();
+            $datos['fecha_entrega'] = $this->formatear_fecha($this->input->post('fecha_entrega'));
+            $where = array(
+                'idpedido_item' => $this->input->post('idpedido_item'),
+                'idpedido' => $this->input->post('idpedido')
+            );
+
+            $resultado = $this->pedidos_model->update_item($datos, $where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizó el artículo'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el artículo'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';

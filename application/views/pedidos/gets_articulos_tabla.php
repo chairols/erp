@@ -1,5 +1,5 @@
 <!-- Date Picker -->
-<link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">
+<!--<link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">-->
 
 <?php $total = 0; ?>
 <table class="table table-striped table-hover">
@@ -113,7 +113,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3">Fecha de Entrega</label>
                         <div class="col-md-6">
-                            <input type="text" id="fecha_entrega_editar" class="form-control" placeholder="Seleccione una fecha">
+                            <input type="text" id="fecha_entrega_editar" class="form-control" data-inputmask="'mask' : '99/99/9999'" placeholder="Seleccione una fecha">
                         </div>
                     </div>
                 </div>
@@ -134,8 +134,9 @@
     </div>
 </div>
 
-<!-- Date Picker -->
-<script src="/assets/vendors/datepicker/bootstrap-datepicker.js"></script>
+<!-- Input Mask -->
+<script src="/assets/vendors/jquery-mask/src/jquery.mask.js"></script>
+<script src="/assets/vendors/inputmask3/jquery.inputmask.bundle.min.js"></script>
 
 <script type="text/javascript">
     $(".borrar_articulo").click(function () {
@@ -219,28 +220,70 @@
         });
     });
 
+    
     $(document).ready(function () {
-        $.fn.datepicker.dates['es'] = {
-            days: ["Domingo", "Lunes", "Martes", "Miércoles", "Juves", "Viernes", "Sábado"],
-            daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
-            daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-            months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-            monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-            today: "Hoy",
-            clear: "Borrar",
-            format: "dd/mm/yyyy",
-            titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
-            weekStart: 1
+        $("#fecha_entrega_editar").inputmask();
+    });
+    
+    $("#modificar_item").click(function () {
+        datos = {
+            'idpedido': $("#idpedido").val(),
+            'idpedido_item': $("#idpedido_item_editar").val(),
+            'cantidad': $("#cantidad_editar").val(),
+            'cantidad_pendiente': $("#cantidad_pendiente_editar").val(),
+            'muestra_marca': $("#muestra_marca_editar").val(),
+            'almacen': $("#almacen_editar").val(),
+            'precio': $("#precio_editar").val(),
+            'fecha_entrega': $("#fecha_entrega_editar").val()
         };
-        $("#fecha_entrega_editar").datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            language: 'es'
+
+        $.ajax({
+            type: 'POST',
+            url: '/pedidos/modificar_item_ajax/',
+            data: datos,
+            beforeSend: function () {
+                $("#modificar_item").hide();
+                $("#modificar_item_loading").show();
+                Pace.restart();
+            },
+            success: function (data) {
+                Pace.stop();
+                $("#modificar_item_loading").hide();
+                $("#modificar_item").show();
+                resultado = $.parseJSON(data);
+                if (resultado['status'] == 'error') {
+                    $.notify('<strong>' + resultado['data'] + '</strong>',
+                            {
+                                type: 'danger',
+                            z_index: 2000
+                            });
+                } else if (resultado['status'] == 'ok') {
+                    $.notify('<strong>' + resultado['data'] + '</strong>',
+                            {
+                                type: 'success',
+                            z_index: 2000
+                            });
+                }
+
+            },
+            error: function (xhr) { // if error occured
+                $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                        {
+                            type: 'danger',
+                            z_index: 2000
+                        });
+                $("#modificar_item_loading").hide();
+                $("#modificar_item").show();
+                Pace.stop();
+            }
         });
     });
     
+    
     $(document).on('hide.bs.modal','#editar_articulo', function() {
         gets_articulos();
+        $(".modal-backdrop").hide();
     });
+    
 </script>
 

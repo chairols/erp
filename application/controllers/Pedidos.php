@@ -507,6 +507,8 @@ class Pedidos extends CI_Controller {
             'idarticulo' => $item['idarticulo']
         );
         $item['articulo'] = $this->articulos_model->get_where($where);
+        
+        $item['fecha_formateada'] = $this->formatear_fecha_para_mostrar($item['fecha_entrega']);
 
         echo json_encode($item);
     }

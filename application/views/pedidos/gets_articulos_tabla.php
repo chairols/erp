@@ -1,3 +1,6 @@
+<!-- Date Picker -->
+<link rel="stylesheet" href="/assets/vendors/datepicker/datepicker3.css">
+
 <?php $total = 0; ?>
 <table class="table table-striped table-hover">
     <thead>
@@ -31,7 +34,7 @@
                 </td>
                 <td class="text-right"><?= $articulo['precio'] ?></td>
                 <td class="text-right"><?= number_format($articulo['cantidad_pendiente'] * $articulo['precio'], 2) ?></td>
-                <td class="text-right"><?=$articulo['fecha_formateada']?></td>
+                <td class="text-right"><?= $articulo['fecha_formateada'] ?></td>
                 <td>
                     <a class="hint--top hint--bounce hint--info editar_articulo" aria-label="Modificar" idpedido_item="<?= $articulo['idpedido_item'] ?>">
                         <button type="button" id="editar" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#editar_articulo">
@@ -65,42 +68,53 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="gridSystemModalLabel">Modificar Artículo</h4>
             </div>
-            <input type="hidden" id="idcotizacion_cliente_item_editar">
+            <input type="hidden" id="idpedido_item_editar">
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h4>Cantidad</h4>
-                        <input type="text" id="cantidad_editar" class="form-control inputMask" data-inputmask="'mask': '9{1,8}'">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Cantidad</label>
+                        <div class="col-md-6">
+                            <input type="text" id="cantidad_editar" class="form-control inputMask" data-inputmask="'mask': '9{1,8}'">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h4>Cantidad Pendiente</h4>
-                        <input type="text" id="cantidad_pendiente_editar" class="form-control inputMask" data-inputmask="'mask': '9{1,8}'">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Cantidad Pendiente</label>
+                        <div class="col-md-6">
+                            <input type="text" id="cantidad_pendiente_editar" class="form-control inputMask" data-inputmask="'mask': '9{1,8}'">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h4>Artículo</h4>
-                        <input type="text" id="articulo_editar" class="form-control" disabled="">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Artículo</label>
+                        <div class="col-md-6">
+                            <input type="text" id="articulo_editar" class="form-control" disabled="">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h4>Imprime Marca</h4>
-                        <input type="text" id="descripcion_editar" class="form-control">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Imprime Marca</label>
+                        <div class="col-md-6">
+                            <select id="muestra_marca_editar" class="form-control">
+                                <option value="S">SI</option>
+                                <option value="N">NO</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h4>Almacén</h4>
-                        <input type="text" id="almacen_editar" class="form-control inputMask" data-inputmask="'mask' : '9{1,1}'">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Almacén</label>
+                        <div class="col-md-6">
+                            <input type="text" id="almacen_editar" class="form-control inputMask" data-inputmask="'mask' : '9{1,1}'">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h4>Precio</h4>
-                        <input type="text" id="precio_editar" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Precio</label>
+                        <div class="col-md-6">
+                            <input type="text" id="precio_editar" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Fecha de Entrega</label>
+                        <div class="col-md-6">
+                            <input type="text" id="fecha_entrega_editar" class="form-control" placeholder="Seleccione una fecha">
+                        </div>
                     </div>
                 </div>
                 <br>
@@ -115,9 +129,13 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
+<!-- Date Picker -->
+<script src="/assets/vendors/datepicker/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript">
     $(".borrar_articulo").click(function () {
@@ -165,7 +183,7 @@
         });
 
     });
-    
+
     $(".editar_articulo").click(function () {
         datos = {
             'idpedido_item': this.attributes.idpedido_item.value
@@ -181,13 +199,14 @@
             success: function (data) {
                 Pace.stop();
                 resultado = $.parseJSON(data);
-                $("#idcotizacion_cliente_item_editar").val(resultado['idcotizacion_cliente_item']);
+                $("#idpedido_item_editar").val(resultado['idpedido_item']);
                 $("#cantidad_editar").val(resultado['cantidad']);
+                $("#cantidad_pendiente_editar").val(resultado['cantidad_pendiente']);
                 $("#articulo_editar").val(resultado['articulo']['articulo']);
-                $("#descripcion_editar").val(resultado['descripcion']);
+                $("#muestra_marca_editar").val(resultado['muestra_marca']);
+                $("#almacen_editar").val(resultado['almacen']);
                 $("#precio_editar").val(resultado['precio']);
-                $("#dias_entrega_editar").val(resultado['dias_entrega']);
-                $("#observaciones_item_editar").val(resultado['observaciones_item']);
+                $("#fecha_entrega_editar").val(resultado['fecha_formateada']);
             },
             error: function (xhr) { // if error occured
                 $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
@@ -199,4 +218,25 @@
             }
         });
     });
+
+    $(document).ready(function () {
+        $.fn.datepicker.dates['es'] = {
+            days: ["Domingo", "Lunes", "Martes", "Miércoles", "Juves", "Viernes", "Sábado"],
+            daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+            daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+            monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            today: "Hoy",
+            clear: "Borrar",
+            format: "dd/mm/yyyy",
+            titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
+            weekStart: 1
+        };
+        $("#fecha_entrega_editar").datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            language: 'es'
+        });
+    });
 </script>
+

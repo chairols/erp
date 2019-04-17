@@ -238,5 +238,9 @@
             language: 'es'
         });
     });
+    
+    $(document).on('hide.bs.modal','#editar_articulo', function() {
+        gets_articulos();
+    });
 </script>
 

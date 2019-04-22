@@ -102,6 +102,24 @@ class Pedidos_model extends CI_Model {
         $query = $this->db->get_where('pedidos_items', $where);
         return $query->row_array();
     }
+    
+    /*
+     *  Facturacion/gets_pedidos_ajax
+     */
+    public function gets_where($where, $group_by, $order_by) {
+        $this->db->select('pedidos.*, monedas.moneda, monedas.simbolo');
+        $this->db->from('pedidos');
+        $this->db->join('pedidos_items', 'pedidos.idpedido = pedidos_items.idpedido');
+        $this->db->join('monedas', 'pedidos.idmoneda = monedas.idmoneda');
+        $this->db->join('clientes', 'pedidos.idcliente = clientes.idcliente');
+        $this->db->join('articulos', 'pedidos_items.idarticulo = articulos.idarticulo');
+        $this->db->where($where);
+        $this->db->group_by('pedidos.idpedido');
+        $this->db->order_by('clientes.cliente');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

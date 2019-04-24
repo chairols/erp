@@ -90,45 +90,45 @@ class Facturacion extends CI_Controller {
                         'idprovincia' => $cliente_domicilio_fiscal['idprovincia']
                     );
                     $provincia_fiscal = $this->provincias_model->get_where($where);
-                    
+
                     $where = array(
                         'idcliente_sucursal' => $pedido['idcliente_sucursal'],
                         'estado' => 'A'
                     );
                     $cliente_sucursal = $this->clientes_model->get_where_sucursal($where);
-                    
+
                     $where = array(
                         'idprovincia' => $cliente_sucursal['idprovincia']
                     );
                     $provincia = $this->provincias_model->get_where($where);
-                    
+
                     $where = array(
                         'idtipo_responsable' => $cliente['idtipo_responsable']
                     );
                     $tipo_responsable = $this->tipos_responsables_model->get_where($where);
-                    
+
                     $where = array(
                         'idcondicion_de_venta' => $pedido['idcondicion_de_venta']
                     );
                     $condicion_de_venta = $this->condiciones_de_venta_model->get_where($where);
-                    
+
                     $where = array(
                         'idtransporte' => $pedido['idtransporte']
                     );
                     $transporte = $this->transportes_model->get_where($where);
-                    
+
                     $where = array(
                         'idmoneda' => $pedido['idmoneda']
                     );
                     $moneda = $this->monedas_model->get_where($where);
-                    
+
                     $dolar_oficial = $this->monedas_model->get_ultima_cotizacion_por_monedas(1);
-                    
+
                     $where = array(
                         'idtipo_iva' => $pedido['idtipo_iva']
                     );
                     $tipo_iva = $this->tipos_iva_model->get_where($where);
-                    
+
                     $set = array(
                         'idcliente' => $pedido['idcliente'],
                         'cliente' => $cliente['cliente'],
@@ -164,18 +164,27 @@ class Facturacion extends CI_Controller {
                         'idcreador' => $session['SID'],
                         'actualizado_por' => $session['SID']
                     );
-                    
-                    $id = $this->comprobantes_model->set($set);
-                    
-                    $json = array(
-                        'status' => 'ok',
-                        'data' => $id
-                    );
-                    echo json_encode($json);
+
+                    $idcomprobante = $this->comprobantes_model->set($set);
+
+                    if ($idcomprobante) {
+                        
+                        $json = array(
+                            'status' => 'ok',
+                            'data' => $idcomprobante
+                        );
+                        echo json_encode($json);
+                    } else {
+                        $json = array(
+                            'status' => 'error',
+                            'data' => 'No se pudo crear el pre-comprobante'
+                        );
+                        echo json_encode($json);
+                    }
                 } else {
                     $json = array(
                         'status' => 'error',
-                        'data' => 'El cliente '.$cliente['cliente']. ' no tiene asignado un domicilio fiscal'
+                        'data' => 'El cliente ' . $cliente['cliente'] . ' no tiene asignado un domicilio fiscal'
                     );
                     echo json_encode($json);
                 }

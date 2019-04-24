@@ -9,7 +9,7 @@ class Comprobantes_model extends CI_Model {
     }
     
     /*
-     *  Importar/migrar_comprobantes
+     *  Facturacion/pedidos_ajax
      */
     public function set($datos) {
         $this->db->insert('comprobantes', $datos);

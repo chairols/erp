@@ -51,6 +51,8 @@ class Empleados extends CI_Controller {
         $this->form_validation->set_rules('apellido', 'Apellido', 'required');
         $this->form_validation->set_rules('legajo', 'Legajo', 'required|integer');
         $this->form_validation->set_rules('fecha_ingreso', 'Fecha de Ingreso', 'required');
+        $this->form_validation->set_rules('sueldo_bruto', 'Sueldo Bruto', 'required|decimal');
+        $this->form_validation->set_rules('osecac', 'O.S.E.C.A.C.', 'required');
         $this->form_validation->set_rules('idcalificacion', 'Calificacion', 'required|integer');
         $this->form_validation->set_rules('idusuario', 'Usuario de Sistema', 'required|integer');
 
@@ -77,6 +79,8 @@ class Empleados extends CI_Controller {
                     'nombre' => $this->input->post('nombre'),
                     'apellido' => $this->input->post('apellido'),
                     'fecha_ingreso' => $this->formatear_fecha($this->input->post('fecha_ingreso')),
+                    'sueldo_bruto' => $this->input->post('sueldo_bruto'),
+                    'osecac' => $this->input->post('osecac'),
                     'idcalificacion' => $this->input->post('idcalificacion'),
                     'idusuario' => $this->input->post('idusuario')
                 );

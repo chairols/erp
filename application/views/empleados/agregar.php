@@ -29,6 +29,21 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-3 control-label">Sueldo Bruto</label>
+                <div class="col-sm-6">
+                    <input type="text" id="sueldo_bruto" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,17}.99'">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">O.S.E.C.A.C.</label>
+                <div class="col-sm-6">
+                    <select class="control-label chosenSelect" id="osecac">
+                        <option value="N">NO</option>
+                        <option value="S">SI</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 control-label">Sección</label>
                 <div class="col-sm-6">
                     <select id="idseccion" class="form-control chosenSelect">

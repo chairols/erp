@@ -54,6 +54,8 @@ $("#agregar").click(function () {
         'apellido': $("#apellido").val(),
         'legajo': $("#legajo").val(),
         'fecha_ingreso': $("#fecha_ingreso").val(),
+        'sueldo_bruto': $("#sueldo_bruto").val(),
+        'osecac': $("#osecac").val(),
         'idcalificacion': $("#idcalificacion").val(),
         'idusuario': $("#idusuario").val()
     };

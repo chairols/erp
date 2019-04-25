@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Cantidad</label>
                 <div class="col-md-6">
-                    <input type="text" id="cantidad" class="form-control inputMask" data-inputmask="'mask' : '9{1,4}'">
+                    <input type="text" id="cantidad" class="form-control inputMask" data-inputmask="'mask' : '9{1,2}.99'">
                 </div>
             </div>
             <div class="form-group">

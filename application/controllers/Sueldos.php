@@ -56,10 +56,10 @@ class Sueldos extends CI_Controller {
 
             if ($concepto) {
                 $json = array(
-                        'status' => 'error',
-                        'data' => 'Ya existe el concepto '.$this->input->post('idsueldo_concepto')
-                    );
-                    echo json_encode($json);
+                    'status' => 'error',
+                    'data' => 'Ya existe el concepto ' . $this->input->post('idsueldo_concepto')
+                );
+                echo json_encode($json);
             } else {
                 $set = array(
                     'idsueldo_concepto' => $this->input->post('idsueldo_concepto'),
@@ -134,10 +134,71 @@ class Sueldos extends CI_Controller {
 
         $this->load->view('layout/app', $data);
     }
-    
-    public function conceptos_modificar() {
-        
+
+    public function conceptos_modificar($idsueldo_concepto = null) {
+        if ($idsueldo_concepto == null) {
+            redirect('/sueldos/conceptos_listar/', 'refresh');
+        }
+        $data['title'] = 'Modificar Concepto';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/sueldos/js/modificar_concepto.js'
+        );
+        $data['view'] = 'sueldos/modificar_concepto';
+
+        $where = array(
+            'idsueldo_concepto' => $idsueldo_concepto,
+            'estado' => 'A'
+        );
+        $data['sueldo_concepto'] = $this->sueldos_model->get_where_concepto($where);
+
+        $this->load->view('layout/app', $data);
     }
+
+    public function conceptos_modificar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idsueldo_concepto', 'Número de Concepto', 'required|integer');
+        $this->form_validation->set_rules('sueldo_concepto', 'Concepto', 'required');
+        $this->form_validation->set_rules('tipo', 'Tipo', 'required');
+        $this->form_validation->set_rules('cantidad', 'Cantidad', 'required|decimal');
+        $this->form_validation->set_rules('unidad', 'Unidad', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'sueldo_concepto' => $this->input->post('sueldo_concepto'),
+                'tipo' => $this->input->post('tipo'),
+                'cantidad' => $this->input->post('cantidad'),
+                'unidad' => $this->input->post('unidad')
+            );
+            $where = array(
+                'idsueldo_concepto' => $this->input->post('idsueldo_concepto')
+            );
+            $resultado = $this->sueldos_model->update_concepto($datos, $where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizó correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el Concepto'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
 }
 
 ?>

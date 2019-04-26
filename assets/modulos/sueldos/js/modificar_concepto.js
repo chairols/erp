@@ -1,4 +1,4 @@
-$("#agregar").click(function() {
+$("#modificar").click(function() {
     datos = {
         'idsueldo_concepto': $("#idsueldo_concepto").val(),
         'sueldo_concepto': $("#sueldo_concepto").val(),
@@ -8,17 +8,17 @@ $("#agregar").click(function() {
     };
     $.ajax({
         type: 'POST',
-        url: '/sueldos/agregar_concepto_ajax/',
+        url: '/sueldos/conceptos_modificar_ajax/',
         data: datos,
         beforeSend: function () {
             Pace.restart();
-            $("#agregar").hide();
-            $("#agregar_loading").show();
+            $("#modificar").hide();
+            $("#modificar_loading").show();
         },
         success: function (data) {
             Pace.stop();
-            $("#agregar_loading").hide();
-            $("#agregar").show();
+            $("#modificar_loading").hide();
+            $("#modificar").show();
             resultado = $.parseJSON(data);
             if (resultado['status'] == 'error') {
                 $.notify('<strong>' + resultado['data'] + '</strong>',
@@ -31,15 +31,11 @@ $("#agregar").click(function() {
                         {
                             type: 'success'
                         });
-                $("#idsueldo_concepto").val("");
-                $("#sueldo_concepto").val("");
-                $("#cantidad").val("");
-                $("#idsueldo_concepto").focus();
             }
         },
         error: function (xhr) { // if error occured
-            $("#agregar_loading").hide();
-            $("#agregar").show();
+            $("#modificar_loading").hide();
+            $("#modificar").show();
             Pace.stop();
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
                     {

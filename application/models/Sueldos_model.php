@@ -18,6 +18,7 @@ class Sueldos_model extends CI_Model {
 
     /*
      *  Sueldos/agregar_concepto_ajax
+     *  Sueldos/concepto_modificar
      */
     public function get_where_concepto($where) {
         $this->db->select("*");
@@ -52,6 +53,14 @@ class Sueldos_model extends CI_Model {
         
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    /*
+     *  Sueldos/conceptos_modificar_ajax
+     */
+    public function update_concepto($datos, $where) {
+        $this->db->update('sueldos_conceptos', $datos, $where);
+        return $this->db->affected_rows();
     }
 }
 

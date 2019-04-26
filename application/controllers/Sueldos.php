@@ -14,7 +14,8 @@ class Sueldos extends CI_Controller {
         ));
         $this->load->model(array(
             'sueldos_model',
-            'parametros_model'
+            'parametros_model',
+            'empleados_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -199,6 +200,20 @@ class Sueldos extends CI_Controller {
         }
     }
 
+    public function agregar() {
+        $data['title'] = 'Agregar Recibo de Sueldo';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        $data['view'] = 'sueldos/agregar';
+        
+        $where = array(
+            'estado' => 'A'
+        );
+        $data['empleados'] = $this->empleados_model->gets_where($where);
+
+        $this->load->view('layout/app', $data);
+    }
 }
 
 ?>

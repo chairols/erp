@@ -62,6 +62,19 @@ class Empleados_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Sueldos/agregar
+     */
+    public function gets_where($where) {
+        $this->db->select('*');
+        $this->db->from('empleados');
+        $this->db->where($where);
+        $this->db->order_by('idempleado');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

@@ -6,7 +6,7 @@
                     <input class="form-control" name="cliente" id="cliente" placeholder="Cliente" type="text" value="<?=$this->input->get('cliente')?>">
                 </div>
                 <div class="form-group col-lg-4">
-                    <input class="form-control col-lg-3" name="articulo" id="articulo" placeholder="Artículo" type="text" value="<?= $this->input->get('articulo') ?>">
+                    <input class="form-control col-lg-3" name="descripcion" id="descripcion" placeholder="Artículo" type="text" value="<?= $this->input->get('articulo') ?>">
                 </div>
                 <div class="form-group col-lg-2">
                     <button type="submit" class="btn btn-primary">Buscar</button>
@@ -62,7 +62,7 @@
                         <div class="row bg-gray" style="padding: 5px">
                             <div class="col-lg-4 col-sm-5 col-xs-12">
                                 <div class="listRowInner">
-                                    <span class="listTextStrong"><?=$item['articulo']['articulo']?></span>
+                                    <span class="listTextStrong"><?=$item['descripcion']?></span>
                                     <span class="smallTitle"><?=$item['articulo']['linea']['linea']?> (<?=$item['articulo']['marca']['marca']?>)</span>
                                 </div>
                             </div>

@@ -134,6 +134,10 @@ class Sueldos extends CI_Controller {
 
         $this->load->view('layout/app', $data);
     }
+    
+    public function conceptos_modificar() {
+        
+    }
 }
 
 ?>

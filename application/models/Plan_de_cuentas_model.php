@@ -37,6 +37,13 @@ class Plan_de_cuentas_model extends CI_Model {
         return $this->db->affected_rows();
     }
     
+    /*
+     * 
+     */
+    public function gets_where($where) {
+        $query = $this->db->get_where('plan_de_cuentas', $where);
+        return $query->result_array();
+    }
     
 }
 

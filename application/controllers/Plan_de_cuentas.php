@@ -12,7 +12,8 @@ class Plan_de_cuentas extends CI_Controller {
             'form_validation'
         ));
         $this->load->model(array(
-            'plan_de_cuentas_model'
+            'plan_de_cuentas_model',
+            'parametros_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -89,6 +90,37 @@ class Plan_de_cuentas extends CI_Controller {
         echo json_encode($this->plan_de_cuentas_model->gets_like($like));
     }
 
+    public function listar() {
+        $data['title'] = 'Listado de Plan de Cuentas';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['css'] = array(
+            '/assets/modulos/plan_de_cuentas/css/listar.css'
+        );
+        $data['javascript'] = array(
+            '/assets/vendors/Nestable-master/jquery.nestable.js',
+            '/assets/modulos/plan_de_cuentas/js/listar.js'
+        );
+
+        $data['cuentas'] = $this->gets_hijos(0);
+        
+        $data['view'] = 'plan_de_cuentas/listar';
+        $this->load->view('layout/app', $data);
+    }
+    
+    private function gets_hijos($idplan_de_cuenta) {
+        $where = array(
+            'idpadre' => $idplan_de_cuenta,
+            'estado' => 'A'
+        );
+        $hijos = $this->plan_de_cuentas_model->gets_where($where);
+        
+        foreach($hijos as $key => $value) {
+            $hijos[$key]['hijos'] = $this->gets_hijos($value['idplan_de_cuenta']);
+        }
+        
+        return $hijos;
+    }
 }
 
 ?>

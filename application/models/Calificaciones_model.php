@@ -37,6 +37,18 @@ class Calificaciones_model extends CI_Model {
         $this->db->update('calificaciones', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Sueldos/agregar_ajax
+     */
+    public function get_where($where) {
+        $this->db->select("*");
+        $this->db->from("calificaciones");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->row_array();
+    }
 }
 
 ?>

@@ -15,7 +15,8 @@ class Sueldos extends CI_Controller {
         $this->load->model(array(
             'sueldos_model',
             'parametros_model',
-            'empleados_model'
+            'empleados_model',
+            'calificaciones_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -204,9 +205,11 @@ class Sueldos extends CI_Controller {
         $data['title'] = 'Agregar Recibo de Sueldo';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/sueldos/js/agregar.js'
+        );
         $data['view'] = 'sueldos/agregar';
-        
+
         $where = array(
             'estado' => 'A'
         );
@@ -214,6 +217,111 @@ class Sueldos extends CI_Controller {
 
         $this->load->view('layout/app', $data);
     }
+
+    public function agregar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idempleado', 'Empleado', 'required|integer');
+        $this->form_validation->set_rules('periodo_mes', 'Mes', 'required|integer');
+        $this->form_validation->set_rules('periodo_anio', 'Año', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = $this->input->post();
+
+            $resultado = $this->sueldos_model->get_where($where);
+
+            if ($resultado) {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Ya existe un recibo de sueldo para este empleado y período'
+                );
+                echo json_encode($json);
+            } else {
+                $where = array(
+                    'idempleado' => $this->input->post('idempleado'),
+                    'estado' => 'A'
+                );
+                $empleado = $this->empleados_model->get_where($where);
+
+                $where = array(
+                    'idcalificacion' => $empleado['idcalificacion']
+                );
+                $calificacion = $this->calificaciones_model->get_where($where);
+
+                $where = array(
+                    'idcalificacion' => $calificacion['padre']
+                );
+                $categoria = $this->calificaciones_model->get_where($where);
+
+                $where = array(
+                    'idcalificacion' => $categoria['padre']
+                );
+                $seccion = $this->calificaciones_model->get_where($where);
+
+                $set = array(
+                    'idempleado' => $this->input->post('idempleado'),
+                    'empleado' => trim($empleado['nombre'] . ' ' . $empleado['apellido']),
+                    'idcalificacion' => $empleado['idcalificacion'],
+                    'seccion' => $seccion['calificacion'],
+                    'categoria' => $categoria['calificacion'],
+                    'calificacion' => $calificacion['calificacion'],
+                    'fecha_ingreso' => $empleado['fecha_ingreso'],
+                    'periodo_mes' => $this->input->post('periodo_mes'),
+                    'periodo_anio' => $this->input->post('periodo_anio'),
+                    'sueldo_bruto' => $empleado['sueldo_bruto'],
+                    'fecha_creacion' => date("Y-m-d H:i:s"),
+                    'idcreador' => $session['SID'],
+                    'actualizado_por' => $session['SID']
+                );
+
+                $idsueldo = $this->sueldos_model->set($set);
+
+                if ($idsueldo) {
+                    
+                    /*
+                     *  Concepto Sueldo
+                     */
+                    $where = array(
+                        'idsueldo_concepto' => 201
+                    );
+                    $concepto_sueldo = $this->sueldos_model->get_where_concepto($where);
+                    
+                    $set = array(
+                        'idsueldo' => $idsueldo,
+                        'idsueldo_concepto' => 201,
+                        'concepto' => $concepto_sueldo['sueldo_concepto'],
+                        'cantidad' => $concepto_sueldo['cantidad'],
+                        'unidad' => $concepto_sueldo['unidad'],
+                        'tipo' => $concepto_sueldo['tipo'],
+                        'valor' => $empleado['sueldo_bruto']
+                    );
+                    $this->sueldos_model->set_item($set);
+                    /*
+                     *  Fin Concepto Sueldo
+                     */
+                    
+                    $json = array(
+                        'status' => 'ok',
+                        'data' => $idsueldo
+                    );
+                    echo json_encode($json);
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'No se pudo crear el recibo de sueldo'
+                    );
+                    echo json_encode($json);
+                }
+            }
+        }
+    }
+
 }
 
 ?>

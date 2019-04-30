@@ -38,13 +38,25 @@ class Plan_de_cuentas_model extends CI_Model {
     }
     
     /*
-     * 
+     *  Plan_de_cuentas/gets_hijos
      */
     public function gets_where($where) {
-        $query = $this->db->get_where('plan_de_cuentas', $where);
+        $this->db->select("*");
+        $this->db->from('plan_de_cuentas');
+        $this->db->where($where);
+        $this->db->order_by('orden');
+
+        $query = $this->db->get();
         return $query->result_array();
     }
     
+    /*
+     *  Plan_de_cuentas/update_orden
+     */
+    public function update($datos, $where) {
+        $this->db->update('plan_de_cuentas', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

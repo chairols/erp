@@ -108,6 +108,27 @@ class Plan_de_cuentas extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
     
+    public function actualizar_orden() {
+        $this->form_validation->set_rules('orden', 'Orden', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $cuentas = json_decode($this->input->post('orden'));
+
+            $this->update_orden($cuentas, 0);
+            
+            $json = array(
+                'status' => 'ok'
+            );
+            echo json_encode($json);
+        }
+    }
+    
     private function gets_hijos($idplan_de_cuenta) {
         $where = array(
             'idpadre' => $idplan_de_cuenta,
@@ -120,6 +141,25 @@ class Plan_de_cuentas extends CI_Controller {
         }
         
         return $hijos;
+    }
+    
+    private function update_orden($cuentas, $idpadre) {
+        $i = 0;
+        foreach($cuentas as $cuenta) {
+            $datos = array(
+                'idpadre' => $idpadre,
+                'orden' => $i
+            );
+            $where = array(
+                'idplan_de_cuenta' => $cuenta->id
+            );
+            $this->plan_de_cuentas_model->update($datos, $where);
+            
+            if(isset($cuenta->children)) {
+                $this->update_orden($cuenta->children, $cuenta->id);
+            }
+            $i++;
+        }
     }
 }
 

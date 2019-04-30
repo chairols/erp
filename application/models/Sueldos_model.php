@@ -64,7 +64,7 @@ class Sueldos_model extends CI_Model {
     }
     
     /*
-     *  Sueldos/agregar_ajax
+     *  Sueldos/check
      */
     public function get_where($where) {
         $this->db->select("*");
@@ -89,6 +89,17 @@ class Sueldos_model extends CI_Model {
     public function set_item($datos) {
         $this->db->insert('sueldos_items', $datos);
         return $this->db->insert_id();
+    }
+    
+    public function gets_where_items($where) {
+        $this->db->select('*');
+        $this->db->from('sueldos_items');
+        $this->db->join('sueldos_conceptos', 'sueldos_items.idsueldo_concepto = sueldos_conceptos.idsueldo_concepto');
+        $this->db->where($where);
+        $this->db->order_by('sueldos_items.idsueldo_concepto');
+        
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }
 

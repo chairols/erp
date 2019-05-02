@@ -103,6 +103,7 @@ class Sueldos_model extends CI_Model {
     }
     
     /*
+     *  Sueldos/agregar_ajax
      *  Sueldos/parametros
      */
     public function get_where_parametro($where) {
@@ -121,6 +122,7 @@ class Sueldos_model extends CI_Model {
         $this->db->update('sueldos_parametros', $datos, $where);
         return $this->db->affected_rows();
     }
+    
 }
 
 ?>

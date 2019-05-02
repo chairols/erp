@@ -296,6 +296,30 @@ class Sueldos extends CI_Controller {
                  *  Fin Concepto Sueldo
                  */
 
+                /*
+                 *  Concepto Comida
+                 */
+                $where = array(
+                    'idsueldo_concepto' => 213
+                );
+                $concepto_comida = $this->sueldos_model->get_where_concepto($where);
+
+                $where = array(
+                    'idsueldo_parametro' => 'comida'
+                );
+                $comida = $this->sueldos_model->get_where_parametro($where);
+
+                $set = array(
+                    'idsueldo' => $idsueldo,
+                    'idsueldo_concepto' => 213,
+                    'concepto' => $concepto_comida['sueldo_concepto'],
+                    'cantidad' => $concepto_comida['cantidad'],
+                    'unidad' => $concepto_comida['unidad'],
+                    'tipo' => $concepto_comida['tipo'],
+                    'valor' => $comida['valor']
+                );
+                $this->sueldos_model->set_item($set);
+
                 $json = array(
                     'status' => 'ok',
                     'data' => $idsueldo

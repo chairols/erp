@@ -20,25 +20,32 @@
             <td class="text-right">
                 <?php if($item['tipo'] == 'R') { 
                     $remuneraciones += $item['valor'];
-                    echo $item['valor'];
+                    echo number_format($item['valor'], 2);
                  } ?>
             </td>
             <td class="text-right">
                  <?php if($item['tipo'] == 'N') { 
                      $remuneraciones_exentas += $item['valor'];
-                     echo $item['valor'];
+                     echo number_format($item['valor'], 2);
                  } ?>
             </td>
             <td class="text-right">
                  <?php if($item['tipo'] == 'D') {
                      $descuentos += $item['valor'];
-                     echo $item['valor'];
+                     echo number_format($item['valor'], 2);
                  } ?>
             </td>
             <td></td>
         </tr>
         <?php } ?>
     </tbody>
+    <tfoot>
+        <tr>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th class="text-right"><?=number_format($remuneraciones, 2);?></th>
+        </tr>
+    </tfoot>
 </table>
 <pre>
     <?php print_r($items); ?>

@@ -323,7 +323,7 @@ class Sueldos extends CI_Controller {
             '/assets/modulos/sueldos/js/modificar.js'
         );
         $data['view'] = 'sueldos/modificar';
-        
+
         $where = array(
             'idsueldo' => $idsueldo,
             'estado' => 'A'
@@ -370,9 +370,69 @@ class Sueldos extends CI_Controller {
             'sueldos_items.estado' => 'A'
         );
         $data['items'] = $this->sueldos_model->gets_where_items($where);
-        
+
         $this->load->view('sueldos/gets_items_tabla', $data);
     }
+
+    public function parametros() {
+        $data['title'] = 'Parámetros de Recibos de Sueldos';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/sueldos/js/parametros.js'
+        );
+        $data['view'] = 'sueldos/parametros';
+
+        $where = array(
+            'idsueldo_parametro' => 'comida'
+        );
+        $data['comida'] = $this->sueldos_model->get_where_parametro($where);
+
+        $this->load->view('layout/app', $data);
+    }
+
+    public function parametros_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('comida', 'Valor Comida', 'required|decimal');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $flag = true;
+
+            $datos = array(
+                'valor' => $this->input->post('comida')
+            );
+            $where = array(
+                'idsueldo_parametro' => 'comida'
+            );
+
+            $resultado = $this->sueldos_model->update_parametros($datos, $where);
+            if (!$resultado) {
+                $flag = false;
+            }
+
+            if ($flag) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizaron los parámetros'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudieron actualizar los parámetros'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
 }
 
 ?>

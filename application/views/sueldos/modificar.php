@@ -29,4 +29,10 @@
 </div>
 <pre>
     <?php print_r($sueldo); ?>
+<?php
+    $cumpleanos = new DateTime("2016-08-08");
+    $hoy = new DateTime();
+    $annos = $hoy->diff($cumpleanos);
+    echo $annos->y;
+?>
 </pre>

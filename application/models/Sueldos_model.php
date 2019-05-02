@@ -101,6 +101,26 @@ class Sueldos_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Sueldos/parametros
+     */
+    public function get_where_parametro($where) {
+        $this->db->select("*");
+        $this->db->from("sueldos_parametros");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+    
+    /*
+     *  Sueldos/parametros_ajax
+     */
+    public function update_parametros($datos, $where) {
+        $this->db->update('sueldos_parametros', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

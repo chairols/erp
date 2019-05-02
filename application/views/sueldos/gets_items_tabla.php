@@ -17,9 +17,24 @@
         <tr>
             <td><?=str_pad($item['idsueldo_concepto'], 4, '0', STR_PAD_LEFT);?> <?=$item['concepto']?></td>
             <td><?=($item['cantidad'] > 0)?$item['cantidad'].' '.$item['unidad']:""?></td>
-            <td class="text-right"><?=($item['tipo']=='R')?$item['valor']:""?></td>
-            <td class="text-right"><?=($item['tipo']=='N')?$item['valor']:""?></td>
-            <td class="text-right"><?=($item['tipo']=='D')?$item['valor']:""?></td>
+            <td class="text-right">
+                <?php if($item['tipo'] == 'R') { 
+                    $remuneraciones += $item['valor'];
+                    echo $item['valor'];
+                 } ?>
+            </td>
+            <td class="text-right">
+                 <?php if($item['tipo'] == 'N') { 
+                     $remuneraciones_exentas += $item['valor'];
+                     echo $item['valor'];
+                 } ?>
+            </td>
+            <td class="text-right">
+                 <?php if($item['tipo'] == 'D') {
+                     $descuentos += $item['valor'];
+                     echo $item['valor'];
+                 } ?>
+            </td>
             <td></td>
         </tr>
         <?php } ?>

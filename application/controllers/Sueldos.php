@@ -319,6 +319,35 @@ class Sueldos extends CI_Controller {
                     'valor' => $comida['valor']
                 );
                 $this->sueldos_model->set_item($set);
+                /*
+                 *  Fin Concepto Comida
+                 */
+
+                /*
+                 *  Concepto Antigüedad
+                 */
+                $where = array(
+                    'idsueldo_concepto' => 216
+                );
+                $concepto_antiguedad = $this->sueldos_model->get_where_concepto($where);
+
+                $ingreso = new DateTime($empleado['fecha_ingreso']);
+                $hoy = new DateTime();
+                $annos = $hoy->diff($ingreso);
+                //echo $annos->y;
+                
+                $antiguedad_valor = (($empleado['sueldo_bruto'] + $comida['valor']) * $annos->y) / 100;
+                
+                $set = array(
+                    'idsueldo' => $idsueldo,
+                    'idsueldo_concepto' => 216,
+                    'concepto' => $concepto_antiguedad['sueldo_concepto'],
+                    'cantidad' => $concepto_antiguedad['cantidad'],
+                    'unidad' => $concepto_antiguedad['unidad'],
+                    'tipo' => $concepto_antiguedad['tipo'],
+                    'valor' => $antiguedad_valor
+                );
+                $this->sueldos_model->set_item($set);
 
                 $json = array(
                     'status' => 'ok',

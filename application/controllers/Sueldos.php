@@ -379,6 +379,17 @@ class Sueldos extends CI_Controller {
                  *  Fin Concepto Presentismo
                  */
                 
+                $where = array(
+                    'sueldos_items.idsueldo' => $idsueldo,
+                    'sueldos_items.tipo' => 'R',
+                    'sueldos_items.estado' => 'A'
+                );
+                $items = $this->sueldos_model->gets_where_items($where);
+                $total = 0;
+                foreach($items as $item) {
+                    $total += $item['valor'];
+                }
+                
                 /*
                  *  Concepto Jubilación
                  */
@@ -386,18 +397,6 @@ class Sueldos extends CI_Controller {
                     'idsueldo_concepto' => 401
                 );
                 $concepto_jubilacion = $this->sueldos_model->get_where_concepto($where);
-                
-                $where = array(
-                    'sueldos_items.idsueldo' => $idsueldo,
-                    'sueldos_items.tipo' => 'R',
-                    'sueldos_items.estado' => 'A'
-                );
-                $items = $this->sueldos_model->gets_where_items($where);
-                
-                $total = 0;
-                foreach($items as $item) {
-                    $total += $item['valor'];
-                }
                 
                 $jubilacion_valor = ($total * $concepto_jubilacion['cantidad']) / 100;
                 
@@ -415,8 +414,30 @@ class Sueldos extends CI_Controller {
                  *  Fin Concepto Jubilación
                  */
                 
-                
+                /*
+                 *  Concepto LEY 19032
+                 */
+                $where = array(
+                    'idsueldo_concepto' => 402
+                );
+                $concepto_19032 = $this->sueldos_model->get_where_concepto($where);
 
+                $valor_19032 = ($total * $concepto_19032['cantidad']) / 100;
+                
+                $set = array(
+                    'idsueldo' => $idsueldo,
+                    'idsueldo_concepto' => 402,
+                    'concepto' => $concepto_19032['sueldo_concepto'],
+                    'cantidad' => $concepto_19032['cantidad'],
+                    'unidad' => $concepto_19032['unidad'],
+                    'tipo' => $concepto_19032['tipo'],
+                    'valor' => $valor_19032
+                );
+                $this->sueldos_model->set_item($set);
+                /*
+                 *  Fin Concepto LEY 19032
+                 */
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => $idsueldo

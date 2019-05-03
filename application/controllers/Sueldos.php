@@ -438,6 +438,30 @@ class Sueldos extends CI_Controller {
                  *  Fin Concepto LEY 19032
                  */
                 
+                /*
+                 *  Concepto FAECYS
+                 */
+                $where = array(
+                    'idsueldo_concepto' => 421
+                );
+                $concepto_faecys = $this->sueldos_model->get_where_concepto($where);
+                
+                $faecys_valor = ($total * $concepto_faecys['cantidad']) / 100;
+                
+                $set = array(
+                    'idsueldo' => $idsueldo,
+                    'idsueldo_concepto' => 421,
+                    'concepto' => $concepto_faecys['sueldo_concepto'],
+                    'cantidad' => $concepto_faecys['cantidad'],
+                    'unidad' => $concepto_faecys['unidad'],
+                    'tipo' => $concepto_faecys['tipo'],
+                    'valor' => $faecys_valor
+                );
+                $this->sueldos_model->set_item($set);
+                /*
+                 *  Fin Concepto FAECYS
+                 */
+                
                 $json = array(
                     'status' => 'ok',
                     'data' => $idsueldo

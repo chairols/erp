@@ -439,6 +439,54 @@ class Sueldos extends CI_Controller {
                  */
                 
                 /*
+                 *  Concepto LEY 23660
+                 */
+                $where = array(
+                    'idsueldo_concepto' => 405
+                );
+                $concepto_23660 = $this->sueldos_model->get_where_concepto($where);
+
+                $valor_23660 = ($total * 0.03 * 0.9);
+                
+                $set = array(
+                    'idsueldo' => $idsueldo,
+                    'idsueldo_concepto' => 405,
+                    'concepto' => $concepto_23660['sueldo_concepto'],
+                    'cantidad' => $concepto_23660['cantidad'],
+                    'unidad' => $concepto_23660['unidad'],
+                    'tipo' => $concepto_23660['tipo'],
+                    'valor' => $valor_23660
+                );
+                $this->sueldos_model->set_item($set);
+                /*
+                 *  Fin Concepto LEY 23660
+                 */
+                
+                /*
+                 *  Concepto A.N.S.S.A.L.
+                 */
+                $where = array(
+                    'idsueldo_concepto' => 406
+                );
+                $concepto_anssal = $this->sueldos_model->get_where_concepto($where);
+
+                $valor_anssal = ($total * 0.03 * 0.1);
+                
+                $set = array(
+                    'idsueldo' => $idsueldo,
+                    'idsueldo_concepto' => 406,
+                    'concepto' => $concepto_anssal['sueldo_concepto'],
+                    'cantidad' => $concepto_anssal['cantidad'],
+                    'unidad' => $concepto_anssal['unidad'],
+                    'tipo' => $concepto_anssal['tipo'],
+                    'valor' => $valor_anssal
+                );
+                $this->sueldos_model->set_item($set);
+                /*
+                 *  Fin Concepto A.N.S.S.A.L.
+                 */
+                
+                /*
                  *  Concepto FAECYS
                  */
                 $where = array(
@@ -460,6 +508,29 @@ class Sueldos extends CI_Controller {
                 $this->sueldos_model->set_item($set);
                 /*
                  *  Fin Concepto FAECYS
+                 */
+                
+                /*
+                 *  Concepto Fondo Asistencial
+                 */
+                $where = array(
+                    'idsueldo_concepto' => 422
+                );
+                $concepto_fondo_asistencial = $this->sueldos_model->get_where_concepto($where);
+                $fondo_asistencial_valor = ($total * $concepto_fondo_asistencial['cantidad']) / 100;
+                
+                $set = array(
+                    'idsueldo' => $idsueldo,
+                    'idsueldo_concepto' => 422,
+                    'concepto' => $concepto_fondo_asistencial['sueldo_concepto'],
+                    'cantidad' => $concepto_fondo_asistencial['cantidad'],
+                    'unidad' => $concepto_fondo_asistencial['unidad'],
+                    'tipo' => $concepto_fondo_asistencial['tipo'],
+                    'valor' => $fondo_asistencial_valor
+                );
+                $this->sueldos_model->set_item($set);
+                /*
+                 *  Fin Concepto Fondo Asistencial
                  */
                 
                 $json = array(

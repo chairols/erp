@@ -52,7 +52,8 @@ function agregar() {
     datos = {
         'idempleado': $("#idempleado").val(),
         'periodo_mes': $("#mes").val(),
-        'periodo_anio': $("#anio").val()
+        'periodo_anio': $("#anio").val(),
+        'presentismo': $("#presentismo").val()
     };
     $.ajax({
         type: 'POST',

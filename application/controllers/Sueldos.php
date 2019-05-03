@@ -224,6 +224,7 @@ class Sueldos extends CI_Controller {
         $this->form_validation->set_rules('idempleado', 'Empleado', 'required|integer');
         $this->form_validation->set_rules('periodo_mes', 'Mes', 'required|integer');
         $this->form_validation->set_rules('periodo_anio', 'Año', 'required|integer');
+        $this->form_validation->set_rules('presentismo', 'Presentismo', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $json = array(
@@ -335,9 +336,9 @@ class Sueldos extends CI_Controller {
                 $hoy = new DateTime();
                 $annos = $hoy->diff($ingreso);
                 //echo $annos->y;
-                
+
                 $antiguedad_valor = (($empleado['sueldo_bruto'] + $comida['valor']) * $annos->y) / 100;
-                
+
                 $set = array(
                     'idsueldo' => $idsueldo,
                     'idsueldo_concepto' => 216,
@@ -348,6 +349,73 @@ class Sueldos extends CI_Controller {
                     'valor' => $antiguedad_valor
                 );
                 $this->sueldos_model->set_item($set);
+                /*
+                 *  Fin Concepto Antigüedad
+                 */
+
+                /*
+                 *  Concepto Presentismo
+                 */
+                if ($this->input->post('presentismo') == 'S') {
+                    $where = array(
+                        'idsueldo_concepto' => 205
+                    );
+                    $concepto_presentismo = $this->sueldos_model->get_where_concepto($where);
+
+                    $presentismo_valor = ($empleado['sueldo_bruto'] + $comida['valor'] + $antiguedad_valor) / 12;
+
+                    $set = array(
+                        'idsueldo' => $idsueldo,
+                        'idsueldo_concepto' => 216,
+                        'concepto' => $concepto_presentismo['sueldo_concepto'],
+                        'cantidad' => $concepto_presentismo['cantidad'],
+                        'unidad' => $concepto_presentismo['unidad'],
+                        'tipo' => $concepto_presentismo['tipo'],
+                        'valor' => $presentismo_valor
+                    );
+                    $this->sueldos_model->set_item($set);
+                }
+                /*
+                 *  Fin Concepto Presentismo
+                 */
+                
+                /*
+                 *  Concepto Jubilación
+                 */
+                $where = array(
+                    'idsueldo_concepto' => 401
+                );
+                $concepto_jubilacion = $this->sueldos_model->get_where_concepto($where);
+                
+                $where = array(
+                    'sueldos_items.idsueldo' => $idsueldo,
+                    'sueldos_items.tipo' => 'R',
+                    'sueldos_items.estado' => 'A'
+                );
+                $items = $this->sueldos_model->gets_where_items($where);
+                
+                $total = 0;
+                foreach($items as $item) {
+                    $total += $item['valor'];
+                }
+                
+                $jubilacion_valor = ($total * $concepto_jubilacion['cantidad']) / 100;
+                
+                $set = array(
+                    'idsueldo' => $idsueldo,
+                    'idsueldo_concepto' => 401,
+                    'concepto' => $concepto_jubilacion['sueldo_concepto'],
+                    'cantidad' => $concepto_jubilacion['cantidad'],
+                    'unidad' => $concepto_jubilacion['unidad'],
+                    'tipo' => $concepto_jubilacion['tipo'],
+                    'valor' => $jubilacion_valor
+                );
+                $this->sueldos_model->set_item($set);
+                /*
+                 *  Fin Concepto Jubilación
+                 */
+                
+                
 
                 $json = array(
                     'status' => 'ok',
@@ -398,9 +466,13 @@ class Sueldos extends CI_Controller {
             );
             echo json_encode($json);
         } else {
-            $where = $this->input->post();
-
+            $where = array(
+                'idempleado' => $this->input->post('idempleado'),
+                'periodo_mes' => $this->input->post('periodo_mes'),
+                'periodo_anio' => $this->input->post('periodo_anio')
+            );
             $resultado = $this->sueldos_model->get_where($where);
+
             if ($resultado) {
                 $json = array(
                     'status' => 'ok',

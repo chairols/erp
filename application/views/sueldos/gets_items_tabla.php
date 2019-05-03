@@ -40,10 +40,13 @@
         <?php } ?>
     </tbody>
     <tfoot>
-        <tr>
-            <th>&nbsp;</th>
+        <tr class="bg-green-gradient">
+            <th>TOTAL</th>
             <th>&nbsp;</th>
             <th class="text-right"><?=number_format($remuneraciones, 2);?></th>
+            <th class="text-right"><?=number_format($remuneraciones_exentas, 2);?></th>
+            <th class="text-right"><?=number_format($descuentos, 2);?></th>
+            <th>&nbsp;</th>
         </tr>
     </tfoot>
 </table>

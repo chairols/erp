@@ -36,6 +36,15 @@
                     <input type="text" id="anio" class="form-control inputMask" data-inputmask="'mask' : '9{4,4}'" value="<?=date("Y")?>">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Presentismo</label>
+                <div class="col-md-6">
+                    <select class="form-control chosenSelect" id="presentismo">
+                        <option value="S">SI</option>
+                        <option value="N">NO</option>
+                    </select>
+                </div>
+            </div>
             <div class="ln_solid"></div>
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

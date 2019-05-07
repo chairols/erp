@@ -144,9 +144,9 @@ class Lineas extends CI_Controller {
     
     public function gets_lineas_ajax() {
         $where = $this->input->post();
-        $articulos = $this->lineas_model->gets_where_para_ajax($where, 100);
+        $lineas = $this->lineas_model->gets_where_para_ajax($where);
 
-        echo json_encode($articulos);
+        echo json_encode($lineas);
     }
 }
 

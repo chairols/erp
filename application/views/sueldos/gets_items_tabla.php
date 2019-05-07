@@ -46,10 +46,7 @@
             <th class="text-right"><?=number_format($remuneraciones, 2);?></th>
             <th class="text-right"><?=number_format($remuneraciones_exentas, 2);?></th>
             <th class="text-right"><?=number_format($descuentos, 2);?></th>
-            <th>&nbsp;</th>
+            <th class="text-right"><?=number_format($remuneraciones+$remuneraciones_exentas-$descuentos, 2);?></th>
         </tr>
     </tfoot>
 </table>
-<pre>
-    <?php print_r($items); ?>
-</pre>

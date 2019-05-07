@@ -24,7 +24,11 @@
                         <td><?=$empleado['nombre']?> <?=$empleado['apellido']?></td>
                         <td><?=$empleado['fecha_ingreso_formateada'] ?></td>
                         <td>
-                            
+                            <a href="/empleados/modificar/<?= $empleado['idempleado'] ?>/" class="hint--top hint--bounce hint--info" aria-label="Modificar">
+                                <button class="btn btn-primary btn-xs" type="button">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 <?php } ?>

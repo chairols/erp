@@ -6,7 +6,7 @@
                     <input class="form-control" name="cliente" id="cliente" placeholder="Cliente" type="text" value="<?=$this->input->get('cliente')?>">
                 </div>
                 <div class="form-group col-lg-4">
-                    <input class="form-control col-lg-3" name="descripcion" id="descripcion" placeholder="Artículo" type="text" value="<?= $this->input->get('articulo') ?>">
+                    <input class="form-control col-lg-3" name="descripcion" id="descripcion" placeholder="Artículo" type="text" value="<?= $this->input->get('descripcion') ?>">
                 </div>
                 <div class="form-group col-lg-2">
                     <button type="submit" class="btn btn-primary">Buscar</button>

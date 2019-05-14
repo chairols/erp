@@ -223,20 +223,23 @@
                             <div class="box-title"><strong><h4>Crear Artículo Genérico</h4></strong></div>
                             <div class="form-group">
                                 <strong>Línea</strong>
-                                <input type="text" id="TextAutoCompletelinea" name="TextAutoCompletelinea" placeholder="Seleccionar Línea" placeholderauto="Línea inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione una línea" objectauto="Lineas" actionauto="gets_lineas_ajax" varsauto="estado:=A" iconauto="ship">
+                                <input type="text" id="TextAutoCompletelinea" name="TextAutoCompletelinea" placeholder="Seleccionar Línea" placeholderauto="Línea inexistente" class="form-control TextAutoComplete" value="" validateEmpty="Seleccione una línea" objectauto="Lineas" actionauto="gets_lineas_ajax" varsauto="estado:=A" iconauto="ship" onkeyup="saltar(event, 'codigo');">
                                 <input type="hidden" id="linea" name="linea" value="">
                             </div>
                             <div class="form-group">
                                 <strong>Artículo Genérico</strong>
-                                <input type="text" id="codigo" maxlength="255" class="form-control">
+                                <input type="text" id="codigo" maxlength="255" class="form-control" onkeyup="saltar(event, 'numero_orden');">
                             </div>
                             <div class="form-group">
                                 <strong>Número de Orden</strong>
-                                <input type="text" id="numero_orden" maxlength="9" class="form-control">
+                                <input type="text" id="numero_orden" maxlength="9" class="form-control" onkeyup="saltar(event, 'creargenerico');">
                             </div>
                             <div class="box-footer txC">
-                                <button class="btn btn-sm btn-success" id="creargenerico" type="button">
-                                    Crear Genérico <i class="fa fa-arrow-right"></i>
+                                <button class="btn btn-primary" id="creargenerico" type="button">
+                                    Crear Genérico
+                                </button>
+                                <button class="btn btn-primary" id="creargenerico_loading" type="button" style="display: none;">
+                                    <i class="fa fa-refresh fa-spin"></i>
                                 </button>
                             </div>
                         </div>

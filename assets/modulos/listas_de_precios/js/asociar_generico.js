@@ -207,10 +207,14 @@ $("#creargenerico").click(function () {
         url: '/articulos_genericos/agregar_ajax/',
         data: datos,
         beforeSend: function () {
-            $("#creargenerico").attr('disabled', 'disabled');
+            $("#creargenerico").hide();
+            $("#creargenerico_loading").show();
+            //$("#creargenerico").attr('disabled', 'disabled');
         },
         success: function (data) {
-            $("#creargenerico").removeAttr('disabled');
+            //$("#creargenerico").removeAttr('disabled');
+            $("#creargenerico_loading").hide();
+            $("#creargenerico").show();
             resultado = $.parseJSON(data);
             if (resultado['status'] == 'error') {
                 $.notify('<strong>' + resultado['data'] + '</strong>',
@@ -229,6 +233,14 @@ $("#creargenerico").click(function () {
                 $("#codigo").val("");
                 $("#numero_orden").val("");
             }
+        },
+        error: function (xhr) { // if error occured
+            $("#creargenerico_loading").hide();
+            $("#creargenerico").show();
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger'
+                    });
         }
     });
 
@@ -256,3 +268,24 @@ $("#buscador").keyup(function () {
     }
 
 });
+
+function saltar(e, id) {
+    // Obtenemos la tecla pulsada
+    (e.keyCode) ? k = e.keyCode : k = e.which;
+    
+    // Si la tecla pulsada es enter (codigo ascii 13)
+    if (k == 13) {
+        // Si la variable id contiene "submit" enviamos el formulario
+        console.log(k);
+        console.log(e);
+        console.log(id);
+        
+        
+        if (id == "submit") {
+            document.forms[0].submit();
+        } else {
+            // nos posicionamos en el siguiente input
+            $("#"+id).focus();
+        }
+    }
+}

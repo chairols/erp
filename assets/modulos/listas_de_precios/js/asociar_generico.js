@@ -213,9 +213,17 @@ $("#creargenerico").click(function () {
             $("#creargenerico").removeAttr('disabled');
             resultado = $.parseJSON(data);
             if (resultado['status'] == 'error') {
-                notificarErrorEnModal(resultado['data']);
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger',
+                            z_index: 2000
+                        });
             } else if (resultado['status'] == 'ok') {
-                notificarOKEnModal(resultado['data']);
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success',
+                            z_index: 2000
+                        });
                 $("#TextAutoCompletelinea").val("");
                 $("#linea").val("");
                 $("#codigo").val("");
@@ -225,18 +233,6 @@ $("#creargenerico").click(function () {
     });
 
 });
-
-function notificarErrorEnModal(mensaje) {
-    $("#notificaciones").show();
-    $("#notificaciones").html("<div class='alert alert-danger'>" + mensaje + "</div>");
-    $("#notificaciones").fadeOut(5000);
-}
-
-function notificarOKEnModal(mensaje) {
-    $("#notificaciones").show();
-    $("#notificaciones").html("<div class='alert alert-success'>" + mensaje + "</div>");
-    $("#notificaciones").fadeOut(5000);
-}
 
 $("#buscador").keyup(function () {
     buscador = $("#buscador").val();

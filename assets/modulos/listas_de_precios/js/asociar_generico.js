@@ -228,7 +228,6 @@ $("#creargenerico").click(function () {
                             type: 'success',
                             z_index: 2000
                         });
-                $("#TextAutoCompletelinea").focus();
                 $("#TextAutoCompletelinea").val("");
                 $("#linea").val("");
                 $("#codigo").val("");

@@ -232,6 +232,7 @@ $("#creargenerico").click(function () {
                 $("#linea").val("");
                 $("#codigo").val("");
                 $("#numero_orden").val("");
+                $("#TextAutoCompletelinea").focus();
             }
         },
         error: function (xhr) { // if error occured

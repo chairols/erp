@@ -228,11 +228,12 @@ $("#creargenerico").click(function () {
                             type: 'success',
                             z_index: 2000
                         });
+                $("#TextAutoCompletelinea").focus();
                 $("#TextAutoCompletelinea").val("");
                 $("#linea").val("");
                 $("#codigo").val("");
                 $("#numero_orden").val("");
-                $("#TextAutoCompletelinea").focus();
+                
             }
         },
         error: function (xhr) { // if error occured

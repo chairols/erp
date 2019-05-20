@@ -17,7 +17,8 @@ class Articulos_genericos extends CI_Controller {
             'articulos_genericos_model',
             'articulos_model',
             'lineas_model',
-            'log_model'
+            'log_model',
+            'listas_de_precios_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -139,7 +140,18 @@ class Articulos_genericos extends CI_Controller {
     public function gets_articulos_ajax() {
         $where = $this->input->post();
         $where['estado'] = 'A';
-        echo json_encode($this->articulos_genericos_model->gets_where($where));
+        
+        $articulos = $this->articulos_genericos_model->gets_where($where);
+        
+        foreach($articulos as $key => $value) {
+            $where = array(
+                'idarticulo_generico' => $value['id'],
+                'estado' => 'A'
+            );
+            $cantidad = $this->listas_de_precios_model->get_cantidad_items_where($where, array());
+            $articulos[$key]['text'] = $value['text'].' - ( '.$cantidad.' asociados )';
+        }
+        echo json_encode($articulos);
     }
 
     public function gets_articulos_tabla_ajax() {

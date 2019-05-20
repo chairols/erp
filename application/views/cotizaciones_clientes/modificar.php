@@ -103,7 +103,7 @@
                     <input type="hidden" id="articulo" name="articulo" value="">
                 </div>
                 <div class="col-lg-4 col-xs-12">
-                    <input type="text" id="descripcion" class="form-control input-sm" onkeyup="saltar(event, 'precio');">
+                    <input type="text" id="descripcion" class="form-control input-sm" onkeyup="saltar(event, 'precio');" maxlength="39">
                 </div>
                 <div class="col-md-2 col-xs-12">
                     <input type="text" id="precio" class="form-control input-sm inputMask" data-inputmask="'mask': '9{1,17}.99'" onkeyup="saltar(event, 'agregar');">

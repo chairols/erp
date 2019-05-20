@@ -139,19 +139,7 @@ class Articulos_genericos extends CI_Controller {
     public function gets_articulos_ajax() {
         $where = $this->input->post();
         $where['estado'] = 'A';
-        
-        $articulos = $this->articulos_genericos_model->gets_where($where);
-        foreach($articulos as $key => $value) {
-            $where = array(
-                'articulos.idarticulo_generico' => $value['id'],
-                'articulos.estado' => 'A'
-            );
-            $cantidad = $this->articulos_model->get_qty_where($where);
-            
-            $articulos[$key]['text'] = $value['text'].' - ( '.$cantidad.' asociados )';
-        }
-        
-        echo json_encode($articulos);
+        echo json_encode($this->articulos_genericos_model->gets_where($where));
     }
 
     public function gets_articulos_tabla_ajax() {

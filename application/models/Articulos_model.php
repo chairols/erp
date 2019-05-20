@@ -22,19 +22,6 @@ class Articulos_model extends CI_Model {
         $query = $this->db->count_all_results();
         return $query;
     }
-    
-    /*
-     *  Articulos_genericos/gets_articulos_ajax
-     */
-    public function get_qty_where($where) {
-        $this->db->select('*');
-        $this->db->from('articulos');
-        $this->db->where($where);
-
-        $query = $this->db->count_all_results();
-        return $query;
-    }
-    
 
     /*
      *  Articulos/listar

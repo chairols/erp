@@ -143,9 +143,10 @@ class Articulos_genericos extends CI_Controller {
         $articulos = $this->articulos_genericos_model->gets_where($where);
         foreach($articulos as $key => $value) {
             $where = array(
-                'idarticulo_generico' => $value['id']
+                'articulos.idarticulo_generico' => $value['id'],
+                'articulos.estado' => 'A'
             );
-            $cantidad = $this->articulos_genericos_model->get_cantidad_where($where);
+            $cantidad = $this->articulos_model->get_qty_where($where);
             
             $articulos[$key]['text'] = $value['text'].' - ( '.$cantidad.' asociados )';
         }

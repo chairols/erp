@@ -10,7 +10,6 @@ class Articulos_genericos_model extends CI_Model {
     
     /*
      *  Articulos_genericos/finalizados
-     *  Articulos_genericos/gets_articulos_ajax
      */
     public function get_cantidad_where($where) {
         $this->db->select('*');

@@ -555,6 +555,9 @@ class Sueldos extends CI_Controller {
                     );
                     $this->sueldos_model->set_item($set);
                 }
+                /*
+                 *  Fin Concepto Pago Préstamo
+                 */
 
 
                 $json = array(

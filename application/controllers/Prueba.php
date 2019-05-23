@@ -523,6 +523,9 @@ EOD;
         exit;
     }
 
+    public function trivia() {
+        $this->load->view('prueba/trivia');
+    }
 }
 
 ?>

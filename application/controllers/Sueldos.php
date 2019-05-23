@@ -225,6 +225,7 @@ class Sueldos extends CI_Controller {
         $this->form_validation->set_rules('periodo_mes', 'Mes', 'required|integer');
         $this->form_validation->set_rules('periodo_anio', 'Año', 'required|integer');
         $this->form_validation->set_rules('presentismo', 'Presentismo', 'required');
+        $this->form_validation->set_rules('prestamo', 'Pago Préstamo', 'required|less_than[1]');
 
         if ($this->form_validation->run() == FALSE) {
             $json = array(
@@ -378,7 +379,7 @@ class Sueldos extends CI_Controller {
                 /*
                  *  Fin Concepto Presentismo
                  */
-                
+
                 $where = array(
                     'sueldos_items.idsueldo' => $idsueldo,
                     'sueldos_items.tipo' => 'R',
@@ -386,10 +387,10 @@ class Sueldos extends CI_Controller {
                 );
                 $items = $this->sueldos_model->gets_where_items($where);
                 $total = 0;
-                foreach($items as $item) {
+                foreach ($items as $item) {
                     $total += $item['valor'];
                 }
-                
+
                 /*
                  *  Concepto Jubilación
                  */
@@ -397,9 +398,9 @@ class Sueldos extends CI_Controller {
                     'idsueldo_concepto' => 401
                 );
                 $concepto_jubilacion = $this->sueldos_model->get_where_concepto($where);
-                
+
                 $jubilacion_valor = ($total * $concepto_jubilacion['cantidad']) / 100;
-                
+
                 $set = array(
                     'idsueldo' => $idsueldo,
                     'idsueldo_concepto' => 401,
@@ -413,7 +414,7 @@ class Sueldos extends CI_Controller {
                 /*
                  *  Fin Concepto Jubilación
                  */
-                
+
                 /*
                  *  Concepto LEY 19032
                  */
@@ -423,7 +424,7 @@ class Sueldos extends CI_Controller {
                 $concepto_19032 = $this->sueldos_model->get_where_concepto($where);
 
                 $valor_19032 = ($total * $concepto_19032['cantidad']) / 100;
-                
+
                 $set = array(
                     'idsueldo' => $idsueldo,
                     'idsueldo_concepto' => 402,
@@ -437,7 +438,7 @@ class Sueldos extends CI_Controller {
                 /*
                  *  Fin Concepto LEY 19032
                  */
-                
+
                 /*
                  *  Concepto LEY 23660
                  */
@@ -447,7 +448,7 @@ class Sueldos extends CI_Controller {
                 $concepto_23660 = $this->sueldos_model->get_where_concepto($where);
 
                 $valor_23660 = ($total * 0.03 * 0.9);
-                
+
                 $set = array(
                     'idsueldo' => $idsueldo,
                     'idsueldo_concepto' => 405,
@@ -461,7 +462,7 @@ class Sueldos extends CI_Controller {
                 /*
                  *  Fin Concepto LEY 23660
                  */
-                
+
                 /*
                  *  Concepto A.N.S.S.A.L.
                  */
@@ -471,7 +472,7 @@ class Sueldos extends CI_Controller {
                 $concepto_anssal = $this->sueldos_model->get_where_concepto($where);
 
                 $valor_anssal = ($total * 0.03 * 0.1);
-                
+
                 $set = array(
                     'idsueldo' => $idsueldo,
                     'idsueldo_concepto' => 406,
@@ -485,7 +486,7 @@ class Sueldos extends CI_Controller {
                 /*
                  *  Fin Concepto A.N.S.S.A.L.
                  */
-                
+
                 /*
                  *  Concepto FAECYS
                  */
@@ -493,9 +494,9 @@ class Sueldos extends CI_Controller {
                     'idsueldo_concepto' => 421
                 );
                 $concepto_faecys = $this->sueldos_model->get_where_concepto($where);
-                
+
                 $faecys_valor = ($total * $concepto_faecys['cantidad']) / 100;
-                
+
                 $set = array(
                     'idsueldo' => $idsueldo,
                     'idsueldo_concepto' => 421,
@@ -509,7 +510,7 @@ class Sueldos extends CI_Controller {
                 /*
                  *  Fin Concepto FAECYS
                  */
-                
+
                 /*
                  *  Concepto Fondo Asistencial
                  */
@@ -518,7 +519,7 @@ class Sueldos extends CI_Controller {
                 );
                 $concepto_fondo_asistencial = $this->sueldos_model->get_where_concepto($where);
                 $fondo_asistencial_valor = ($total * $concepto_fondo_asistencial['cantidad']) / 100;
-                
+
                 $set = array(
                     'idsueldo' => $idsueldo,
                     'idsueldo_concepto' => 422,
@@ -532,7 +533,30 @@ class Sueldos extends CI_Controller {
                 /*
                  *  Fin Concepto Fondo Asistencial
                  */
-                
+
+                /*
+                 *  Concepto Pago Préstamo
+                 */
+                if ($this->input->post('prestamo') < 0) {
+                    $where = array(
+                        'idsueldo_concepto' => 431
+                    );
+                    $concepto_pago_prestamo = $this->sueldos_model->get_where_concepto($where);
+                    $pago_prestamo = $this->input->post('prestamo');
+
+                    $set = array(
+                        'idsueldo' => $idsueldo,
+                        'idsueldo_concepto' => 431,
+                        'concepto' => $concepto_pago_prestamo['sueldo_concepto'],
+                        'cantidad' => $concepto_pago_prestamo['cantidad'],
+                        'unidad' => $concepto_pago_prestamo['unidad'],
+                        'tipo' => $concepto_pago_prestamo['tipo'],
+                        'valor' => $pago_prestamo
+                    );
+                    $this->sueldos_model->set_item($set);
+                }
+
+
                 $json = array(
                     'status' => 'ok',
                     'data' => $idsueldo

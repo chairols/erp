@@ -122,7 +122,32 @@ class Sueldos_model extends CI_Model {
         $this->db->update('sueldos_parametros', $datos, $where);
         return $this->db->affected_rows();
     }
-    
+
+    /*
+     *  Sueldos/listar   
+     */
+    public function get_cantidad_where($where) {
+        $this->db->select('*');
+        $this->db->from('sueldos');
+        $this->db->like($where);
+        
+        $query = $this->db->count_all_results();
+        return $query;
+    }
+
+    /*
+     *  Sueldos/listar
+     */
+    public function gets_where_limit($where, $per_page, $pagina) {
+        $this->db->select('*');
+        $this->db->from('sueldos');
+        $this->db->like($where);
+        $this->db->order_by('periodo_anio DESC, periodo_mes DESC, idsueldo DESC');
+        $this->db->limit($per_page, $pagina);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

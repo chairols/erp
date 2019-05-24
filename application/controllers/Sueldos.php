@@ -222,6 +222,7 @@ class Sueldos extends CI_Controller {
         $session = $this->session->all_userdata();
 
         $this->form_validation->set_rules('idempleado', 'Empleado', 'required|integer');
+        $this->form_validation->set_rules('sueldo_bruto', 'Sueldo Bruto', 'required|decimal');
         $this->form_validation->set_rules('periodo_mes', 'Mes', 'required|integer');
         $this->form_validation->set_rules('periodo_anio', 'Año', 'required|integer');
         $this->form_validation->set_rules('presentismo', 'Presentismo', 'required');
@@ -234,7 +235,6 @@ class Sueldos extends CI_Controller {
             );
             echo json_encode($json);
         } else {
-
             $where = array(
                 'idempleado' => $this->input->post('idempleado'),
                 'estado' => 'A'
@@ -266,7 +266,7 @@ class Sueldos extends CI_Controller {
                 'fecha_ingreso' => $empleado['fecha_ingreso'],
                 'periodo_mes' => $this->input->post('periodo_mes'),
                 'periodo_anio' => $this->input->post('periodo_anio'),
-                'sueldo_bruto' => $empleado['sueldo_bruto'],
+                'sueldo_bruto' => $this->input->post('sueldo_bruto'),
                 'fecha_creacion' => date("Y-m-d H:i:s"),
                 'idcreador' => $session['SID'],
                 'actualizado_por' => $session['SID']
@@ -291,7 +291,7 @@ class Sueldos extends CI_Controller {
                     'cantidad' => $concepto_sueldo['cantidad'],
                     'unidad' => $concepto_sueldo['unidad'],
                     'tipo' => $concepto_sueldo['tipo'],
-                    'valor' => $empleado['sueldo_bruto']
+                    'valor' => $this->input->post('sueldo_bruto')
                 );
                 $this->sueldos_model->set_item($set);
                 /*
@@ -338,7 +338,7 @@ class Sueldos extends CI_Controller {
                 $annos = $hoy->diff($ingreso);
                 //echo $annos->y;
 
-                $antiguedad_valor = (($empleado['sueldo_bruto'] + $comida['valor']) * $annos->y) / 100;
+                $antiguedad_valor = (($this->input->post('sueldo_bruto') + $comida['valor']) * $annos->y) / 100;
 
                 $set = array(
                     'idsueldo' => $idsueldo,
@@ -363,7 +363,7 @@ class Sueldos extends CI_Controller {
                     );
                     $concepto_presentismo = $this->sueldos_model->get_where_concepto($where);
 
-                    $presentismo_valor = ($empleado['sueldo_bruto'] + $comida['valor'] + $antiguedad_valor) / 12;
+                    $presentismo_valor = ($this->input->post('sueldo_bruto') + $comida['valor'] + $antiguedad_valor) / 12;
 
                     $set = array(
                         'idsueldo' => $idsueldo,

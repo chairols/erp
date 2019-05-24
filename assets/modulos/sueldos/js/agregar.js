@@ -51,6 +51,7 @@ $("#agregar").click(function () {
 function agregar() {
     datos = {
         'idempleado': $("#idempleado").val(),
+        'sueldo_bruto': $("#sueldo_bruto").val(),
         'periodo_mes': $("#mes").val(),
         'periodo_anio': $("#anio").val(),
         'presentismo': $("#presentismo").val(),

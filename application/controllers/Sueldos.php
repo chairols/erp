@@ -756,6 +756,39 @@ class Sueldos extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
 
+    public function get_where_ajax() {
+        $this->form_validation->set_rules('idempleado', 'Empleado', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'idempleado' => $this->input->post('idempleado'),
+                'estado' => 'A'
+            );
+            $empleado = $this->empleados_model->get_where($where);
+
+            if ($empleado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizó el Sueldo Bruto',
+                    'empleado' => $empleado
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Ocurrió un error inesperado'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
 }
 
 ?>

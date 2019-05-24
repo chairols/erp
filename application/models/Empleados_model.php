@@ -10,6 +10,8 @@ class Empleados_model extends CI_Model {
 
     /*
      *  Retenciones/agregar_ajax
+     * 
+     *  Sueldos/get_where_ajax
      */
     public function get_max_legajo_where($where) {
         $this->db->select_max('idempleado');

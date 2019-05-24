@@ -30,7 +30,7 @@ $("#agregar").click(function () {
                         agregar();
                     }
                 });
-            } else if(resultado['status'] == 'agregar') {
+            } else if (resultado['status'] == 'agregar') {
                 agregar();
             }
         },
@@ -93,3 +93,47 @@ function agregar() {
         }
     });
 }
+
+$("#idempleado").change(function() {
+    get_empleado($("#idempleado").val());
+});
+
+function get_empleado() {
+    datos = {
+        'idempleado': $("#idempleado").val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/sueldos/get_where_ajax/',
+        data: datos,
+        beforeSend: function () {
+            
+        },
+        success: function (data) {
+            resultado = $.parseJSON(data);
+            if (resultado['status'] == 'error') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'danger'
+                        });
+
+            } else if (resultado['status'] == 'ok') {
+                $.notify('<strong>' + resultado['data'] + '</strong>',
+                        {
+                            type: 'success'
+                        });
+                $("#sueldo_bruto").val(resultado['empleado']['sueldo_bruto']);
+            }
+        },
+        error: function (xhr) { // if error occured
+            $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
+                    {
+                        type: 'danger'
+                    });
+        }
+    });
+}
+
+$(document).ready(function() {
+    get_empleado($("#idempleado").val());
+});

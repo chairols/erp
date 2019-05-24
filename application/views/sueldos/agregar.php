@@ -15,6 +15,12 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-md-3">Sueldo Bruto</label>
+                <div class="col-md-6">
+                    <input type="text" id="sueldo_bruto" class="form-control inputMask" data-inputmask="'mask': '9{1,17}.99'" value="0.00">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label col-md-3">Período</label>
                 <div class="col-md-3">
                     <select class="form-control chosenSelect" id="mes">

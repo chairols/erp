@@ -226,6 +226,7 @@ class Sueldos extends CI_Controller {
         $this->form_validation->set_rules('periodo_mes', 'Mes', 'required|integer');
         $this->form_validation->set_rules('periodo_anio', 'Año', 'required|integer');
         $this->form_validation->set_rules('presentismo', 'Presentismo', 'required');
+        $this->form_validation->set_rules('horas_extra_100', 'Horas Extras al 100%', 'required|integer');
         $this->form_validation->set_rules('prestamo', 'Pago Préstamo', 'required|less_than[1]');
 
         if ($this->form_validation->run() == FALSE) {
@@ -367,7 +368,7 @@ class Sueldos extends CI_Controller {
 
                     $set = array(
                         'idsueldo' => $idsueldo,
-                        'idsueldo_concepto' => 216,
+                        'idsueldo_concepto' => 205,
                         'concepto' => $concepto_presentismo['sueldo_concepto'],
                         'cantidad' => $concepto_presentismo['cantidad'],
                         'unidad' => $concepto_presentismo['unidad'],
@@ -378,6 +379,60 @@ class Sueldos extends CI_Controller {
                 }
                 /*
                  *  Fin Concepto Presentismo
+                 */
+
+
+
+                /*
+                 *  Concepto Horas Extras al 100%
+                 */
+                if ($this->input->post('horas_extra_100') > 0) {
+                    $where = array(
+                        'sueldos_items.idsueldo' => $idsueldo,
+                        'sueldos_items.tipo' => 'R',
+                        'sueldos_items.estado' => 'A'
+                    );
+                    $items = $this->sueldos_model->gets_where_items($where);
+                    $total = 0;
+                    foreach ($items as $item) {
+                        $total += $item['valor'];
+                    }
+
+                    $where = array(
+                        'idsueldo_concepto' => 235
+                    );
+                    $concepto_horas_extra_100 = $this->sueldos_model->get_where_concepto($where);
+
+                    $valor_hora = ($total / 30 / 9 * 2);
+
+                    $total_horas_extra = $this->input->post('horas_extra_100') * $valor_hora;
+
+                    $set = array(
+                        'idsueldo' => $idsueldo,
+                        'idsueldo_concepto' => 235,
+                        'concepto' => $concepto_horas_extra_100['sueldo_concepto'],
+                        'cantidad' => $this->input->post('horas_extra_100'),
+                        'unidad' => $concepto_horas_extra_100['unidad'],
+                        'tipo' => $concepto_horas_extra_100['tipo'],
+                        'valor' => $total_horas_extra
+                    );
+                    $this->sueldos_model->set_item($set);
+                    
+                    
+                    $presentismo_valor = ($this->input->post('sueldo_bruto') + $comida['valor'] + $antiguedad_valor) / 12;
+                    $total_presentismo_horas_extra = $total_horas_extra / 12;
+                    $datos = array(
+                        'valor' => $total_presentismo_horas_extra + $presentismo_valor
+                    );
+                    $where = array(
+                        'idsueldo' => $idsueldo,
+                        'idsueldo_concepto' => 205
+                    );
+                    $this->sueldos_model->update_item($datos, $where);
+                    
+                }
+                /*
+                 *  Fin Concepto Horas Extras al 100%
                  */
 
                 $where = array(

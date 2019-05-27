@@ -16,7 +16,7 @@
         <?php foreach($items as $item) { ?>
         <tr>
             <td><?=str_pad($item['idsueldo_concepto'], 4, '0', STR_PAD_LEFT);?> <?=$item['concepto']?></td>
-            <td><?=($item['cantidad'] > 0)?$item['cantidad'].' '.$item['unidad']:""?></td>
+            <td><?=($item['cantidad'] > 0)?$item['cantidad'].' '.$item['unidad']:""?> <?=$item['cantidad']?></td>
             <td class="text-right">
                 <?php if($item['tipo'] == 'R') { 
                     $remuneraciones += $item['valor'];

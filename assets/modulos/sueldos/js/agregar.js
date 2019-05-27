@@ -55,6 +55,7 @@ function agregar() {
         'periodo_mes': $("#mes").val(),
         'periodo_anio': $("#anio").val(),
         'presentismo': $("#presentismo").val(),
+        'horas_extra_100': $("#horas_extra_100").val(),
         'prestamo': $("#prestamo").val()
     };
     $.ajax({

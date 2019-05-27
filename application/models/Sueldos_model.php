@@ -148,6 +148,14 @@ class Sueldos_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Sueldos/agregar_ajax
+     */
+    public function update_item($datos, $where) {
+        $this->db->update('sueldos_items', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

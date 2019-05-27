@@ -52,6 +52,12 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-md-3">Horas Extras al 100%</label>
+                <div class="col-md-6">
+                    <input type="text" id="horas_extra_100" class="form-control inputMask" data-inputmask="'mask': '9{1,3}'" value="0">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label col-md-3">Pago Préstamo</label>
                 <div class="col-md-6">
                     <input type="text" id="prestamo" class="form-control inputMask" data-inputmask="'mask': '[-]9{1,17}.99'" value="0.00">

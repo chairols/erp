@@ -13,6 +13,9 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Período</label>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" value="<?=$sueldo['periodo_mes']?>/<?=$sueldo['periodo_anio']?>" disabled="">
+                </div>
             </div>
         </div>
     </div>

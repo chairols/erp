@@ -33,7 +33,7 @@
                     <tr>
                         <td><?= $sueldo['empleado'] ?></td>
                         <td><?= $sueldo['periodo_mes'] ?>/<?=$sueldo['periodo_anio']?></td>
-                        <td class="text-right"><?= number_format($sueldo['sueldo_bruto'], 2) ?></td>
+                        <td class="text-right"><span class="label label-primary"><?= number_format($sueldo['sueldo_bruto'], 2) ?></span></td>
                         <?php 
                         $remunerativo = 0;
                         $no_remunerativo = 0;
@@ -56,10 +56,10 @@
                             }
                         }
                         ?>
-                        <td class="text-right"><?= number_format($remunerativo, 2); ?></td>
-                        <td class="text-right"><?= number_format($no_remunerativo, 2); ?></td>
-                        <td class="text-right"><?= number_format($descuentos, 2); ?></td>
-                        <td class="text-right"><?= number_format($sueldo_neto, 2); ?></td>
+                        <td class="text-right"><span class="label label-success"><?= number_format($remunerativo, 2); ?></span></td>
+                        <td class="text-right"><span class="label label-info"><?= number_format($no_remunerativo, 2); ?></span></td>
+                        <td class="text-right"><span class="label label-danger"><?= number_format($descuentos, 2); ?></span></td>
+                        <td class="text-right"><span class="label label-success"><?= number_format($sueldo_neto, 2); ?></span></td>
                         <td>
                             <a href="/sueldos/modificar/<?= $sueldo['idsueldo'] ?>/" class="hint--top hint--bounce hint--info" aria-label="Modificar">
                                 <button class="btn btn-primary btn-xs" type="button">

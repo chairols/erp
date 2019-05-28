@@ -9,6 +9,7 @@ class Sueldos extends CI_Controller {
         $this->load->library(array(
             'session',
             'r_session',
+            'pdf_recibo_sueldo',
             'form_validation',
             'pagination'
         ));
@@ -17,6 +18,9 @@ class Sueldos extends CI_Controller {
             'parametros_model',
             'empleados_model',
             'calificaciones_model'
+        ));
+        $this->load->helper(array(
+            'url'
         ));
 
         $session = $this->session->all_userdata();
@@ -417,8 +421,8 @@ class Sueldos extends CI_Controller {
                         'valor' => $total_horas_extra
                     );
                     $this->sueldos_model->set_item($set);
-                    
-                    
+
+
                     $presentismo_valor = ($this->input->post('sueldo_bruto') + $comida['valor'] + $antiguedad_valor) / 12;
                     $total_presentismo_horas_extra = $total_horas_extra / 12;
                     $datos = array(
@@ -429,7 +433,6 @@ class Sueldos extends CI_Controller {
                         'idsueldo_concepto' => 205
                     );
                     $this->sueldos_model->update_item($datos, $where);
-                    
                 }
                 /*
                  *  Fin Concepto Horas Extras al 100%
@@ -844,6 +847,91 @@ class Sueldos extends CI_Controller {
         }
     }
 
+    public function pdf($idsueldo = null, $modo = null) {
+        if ($idsueldo != null && $modo != null) {
+            $this->pdf = new Pdf_recibo_sueldo();
+            $this->pdf->AddPage();
+            $this->pdf->AliasNbPages();
+
+            $empresa = $this->parametros_model->get_parametros_empresa();
+
+            $where = array(
+                'idsueldo' => $idsueldo,
+                'estado' => 'A'
+            );
+            $sueldo = $this->sueldos_model->get_where($where);
+            
+            $meses = array(
+                '1' => 'ENERO',
+                '2' => 'FEBRERO',
+                '3' => 'MARZO',
+                '4' => 'ABRIL',
+                '5' => 'MAYO',
+                '6' => 'JUNIO',
+                '7' => 'JULIO',
+                '8' => 'AGOSTO',
+                '9' => 'SEPTIEMBRE',
+                '10' => 'OCTUBRE',
+                '11' => 'NOVIEMBRE',
+                '12' => 'DICIEMBRE'
+            );
+            
+            $this->pdf->SetTextColor(0, 0, 0);
+            $this->pdf->SetFont('Arial', '', 9);
+            
+            $this->pdf->SetXY(20, 27);
+            $this->pdf->Cell(0, 0, utf8_decode($empresa['empresa']), 0, 0, 'L');
+
+            $this->pdf->SetXY(87, 27);
+            $this->pdf->Cell(0, 0, utf8_decode($empresa['direccion']), 0, 0, 'L');
+            
+            $this->pdf->SetXY(133, 35);
+            $this->pdf->Cell(0, 0, utf8_decode($empresa['cuit']), 0, 0, 'L');
+            
+            $this->pdf->SetXY(20, 47);
+            $this->pdf->Cell(0, 0, utf8_decode($sueldo['empleado']), 0, 0, 'L');
+            
+            $this->pdf->SetXY(87, 47);
+            $this->pdf->Cell(0, 0, utf8_decode($sueldo['seccion']), 0, 0, 'L');
+            
+            $this->pdf->SetXY(143, 47);
+            $this->pdf->Cell(0, 0, utf8_decode($sueldo['idempleado']), 0, 0, 'L');
+            
+            $this->pdf->SetXY(156, 47);
+            $this->pdf->Cell(0, 0, $this->formatear_fecha_para_mostrar($sueldo['fecha_ingreso']), 0, 0, 'L');
+            
+            $this->pdf->SetXY(20, 60);
+            $this->pdf->Cell(0, 0, $meses[$sueldo['periodo_mes']].' DE '.$sueldo['periodo_anio'], 0, 0, 'L');
+            
+            $this->pdf->SetXY(87, 60);
+            $this->pdf->Cell(0, 0, $sueldo['categoria'], 0, 0, 'L');
+            
+            $this->pdf->SetXY(127, 60);
+            $this->pdf->Cell(0, 0, $sueldo['calificacion'], 0, 0, 'L');
+            
+            $this->pdf->SetXY(156, 60);
+            $this->pdf->Cell(0, 0, $sueldo['sueldo_bruto'], 0, 0, 'L');
+            
+            // Footer
+            //$this->pdf->Pie($cotizacion_cliente);
+
+
+            $this->pdf->Output('Recibo.pdf', $modo);
+            
+            var_dump($sueldo);
+        }
+    }
+
+    private function formatear_fecha_para_mostrar($fecha) {
+        $aux = '';
+        $aux .= substr($fecha, 8, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 5, 2);
+        $aux .= '/';
+        $aux .= substr($fecha, 0, 4);
+
+        return $aux;
+    }
 }
 
 ?>

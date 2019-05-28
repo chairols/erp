@@ -94,7 +94,6 @@ class Sueldos_model extends CI_Model {
     public function gets_where_items($where) {
         $this->db->select('*');
         $this->db->from('sueldos_items');
-        $this->db->join('sueldos_conceptos', 'sueldos_items.idsueldo_concepto = sueldos_conceptos.idsueldo_concepto');
         $this->db->where($where);
         $this->db->order_by('sueldos_items.idsueldo_concepto');
         

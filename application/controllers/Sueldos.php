@@ -11,7 +11,8 @@ class Sueldos extends CI_Controller {
             'r_session',
             'pdf_recibo_sueldo',
             'form_validation',
-            'pagination'
+            'pagination',
+            'numeroaletras'
         ));
         $this->load->model(array(
             'sueldos_model',
@@ -860,7 +861,13 @@ class Sueldos extends CI_Controller {
                 'estado' => 'A'
             );
             $sueldo = $this->sueldos_model->get_where($where);
-            
+
+            $where = array(
+                'idsueldo' => $idsueldo,
+                'estado' => 'A'
+            );
+            $items = $this->sueldos_model->gets_where_items($where);
+
             $meses = array(
                 '1' => 'ENERO',
                 '2' => 'FEBRERO',
@@ -875,50 +882,115 @@ class Sueldos extends CI_Controller {
                 '11' => 'NOVIEMBRE',
                 '12' => 'DICIEMBRE'
             );
-            
+
             $this->pdf->SetTextColor(0, 0, 0);
             $this->pdf->SetFont('Arial', '', 9);
-            
+
             $this->pdf->SetXY(20, 27);
             $this->pdf->Cell(0, 0, utf8_decode($empresa['empresa']), 0, 0, 'L');
 
             $this->pdf->SetXY(87, 27);
             $this->pdf->Cell(0, 0, utf8_decode($empresa['direccion']), 0, 0, 'L');
-            
+
             $this->pdf->SetXY(133, 35);
             $this->pdf->Cell(0, 0, utf8_decode($empresa['cuit']), 0, 0, 'L');
-            
+
             $this->pdf->SetXY(20, 47);
             $this->pdf->Cell(0, 0, utf8_decode($sueldo['empleado']), 0, 0, 'L');
-            
+
             $this->pdf->SetXY(87, 47);
             $this->pdf->Cell(0, 0, utf8_decode($sueldo['seccion']), 0, 0, 'L');
-            
+
             $this->pdf->SetXY(143, 47);
             $this->pdf->Cell(0, 0, utf8_decode($sueldo['idempleado']), 0, 0, 'L');
-            
+
             $this->pdf->SetXY(156, 47);
             $this->pdf->Cell(0, 0, $this->formatear_fecha_para_mostrar($sueldo['fecha_ingreso']), 0, 0, 'L');
-            
+
             $this->pdf->SetXY(20, 60);
-            $this->pdf->Cell(0, 0, $meses[$sueldo['periodo_mes']].' DE '.$sueldo['periodo_anio'], 0, 0, 'L');
-            
+            $this->pdf->Cell(0, 0, $meses[$sueldo['periodo_mes']] . ' DE ' . $sueldo['periodo_anio'], 0, 0, 'L');
+
             $this->pdf->SetXY(87, 60);
-            $this->pdf->Cell(0, 0, $sueldo['categoria'], 0, 0, 'L');
-            
+            $this->pdf->Cell(0, 0, utf8_decode($sueldo['categoria']), 0, 0, 'L');
+
             $this->pdf->SetXY(127, 60);
-            $this->pdf->Cell(0, 0, $sueldo['calificacion'], 0, 0, 'L');
-            
+            $this->pdf->Cell(0, 0, utf8_decode($sueldo['calificacion']), 0, 0, 'L');
+
             $this->pdf->SetXY(156, 60);
             $this->pdf->Cell(0, 0, $sueldo['sueldo_bruto'], 0, 0, 'L');
+
+            $x = 0;
+            $y = 75;
+            $remunerativo = 0;
+            $no_remunerativo = 0;
+            $descuentos = 0;
+            foreach ($items as $item) {
+                $this->pdf->SetXY(20, $y);
+                $this->pdf->Cell(0, 0, str_pad($item['idsueldo_concepto'], 4, '0', STR_PAD_LEFT) . ' ' . utf8_decode($item['concepto']), 0, 0, 'L');
+
+                if ($item['cantidad'] > 0) {
+                    $this->pdf->SetXY(83, $y);
+                    $this->pdf->Cell(15, 0, $item['cantidad'], 0, 0, 'R');
+                }
+
+                switch ($item['tipo']) {
+                    case 'R':
+                        $x = 112;
+                        $remunerativo += $item['valor'];
+                        break;
+                    case 'N':
+                        $x = 135;
+                        $no_remunerativo += $item['valor'];
+                        break;
+                    case 'D':
+                        $x = 170;
+                        $descuentos += $item['valor'];
+                        break;
+                }
+                $this->pdf->SetXY($x, $y);
+                $this->pdf->Cell(15, 0, number_format($item['valor'], 2), 0, 0, 'R');
+
+                $y += 4;
+            }
+
+            // Total Remunerativo
+            $this->pdf->SetXY(112, 155);
+            $this->pdf->Cell(15, 0, number_format($remunerativo, 2), 0, 0, 'R');
+
+            // Total No Remunerativo
+            $this->pdf->SetXY(135, 155);
+            $this->pdf->Cell(15, 0, number_format($no_remunerativo, 2), 0, 0, 'R');
+            
+            // Total Descuentos
+            $this->pdf->SetXY(170, 155);
+            $this->pdf->Cell(15, 0, number_format($descuentos, 2), 0, 0, 'R');
+            
+            // Total
+            $total = $remunerativo + $no_remunerativo - $descuentos;
+            $this->pdf->SetXY(170, 164);
+            $this->pdf->Cell(15, 0, number_format($total, 2), 0, 0, 'R');
+            
+            $numeroaletras = $this->numeroaletras->convertir($total, 'pesos', 'centavos');
+            $this->pdf->SetXY(25, 171);
+            $this->pdf->Cell(0, 0, $numeroaletras, 0, 0, 'L');
+            
+            $this->pdf->SetFont('Arial','B',9);
+            
+            $this->pdf->SetXY(30, 193);
+            $this->pdf->Cell(0, 0, 'CREDICOOP', 0, 0, 'L');
+            
+            $this->pdf->SetXY(78, 193);
+            $this->pdf->Cell(0, 0, 'FORMA DE PAGO: Dep. Bancario', 0, 0, 'L');
+            
+            $this->pdf->SetXY(78, 197);
+            $this->pdf->Cell(0, 0, 'BANCO: CREDICOOP', 0, 0, 'L');
             
             // Footer
             //$this->pdf->Pie($cotizacion_cliente);
 
 
             $this->pdf->Output('Recibo.pdf', $modo);
-            
-            var_dump($sueldo);
+
         }
     }
 
@@ -932,6 +1004,7 @@ class Sueldos extends CI_Controller {
 
         return $aux;
     }
+
 }
 
 ?>

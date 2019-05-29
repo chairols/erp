@@ -24,31 +24,8 @@
             $this->SetFont('Courier','B',10);
             //Número de página
             //$this->Cell(0,10,'Página '.$this->PageNo().'/{nb}',0,0,'C');
-            $this->SetXY(10, -30);
-            $this->Cell(0,10,'No incluye impuestos',0,0,'');
             
-            $this->SetXY(105, -30);
-            $this->Cell(0, 10, 'Total:', 0, 0, 'L');
             
-            $this->SetXY(180, -30);
-            $this->Cell(0, 10, str_pad(number_format($this->cotizacion['total'], 2), 10, ' ', STR_PAD_LEFT), 0, 1, 'L');
-
-            //$this->SetFont('i2of5','',24);
-            //$this->SetFont('ccode39','',10);
-            //$this->SetXY(70, -33);
-            //$this->Cell(0,0,'('.$factura['codigoDeBarras'].')',0,0,'L');  
-            /*
-            $this->SetFont('Courier','B',8);
-            $this->SetXY(72, -28);
-            $this->Cell(0,0,$this->factura['cae'],0,0,'L');
-
-            $this->SetFont('Courier','',7);
-            $this->SetXY(160, -28);
-            $this->Cell(0,0,$this->factura['nroCae'],0,0,'L');
-
-            $this->SetFont('Courier','',7);
-            $this->SetXY(160, -25);
-            $this->Cell(0,0,$this->factura['vtoCae'],0,0,'L');*/
        }
        
        public function Pie($cot) {

@@ -155,6 +155,14 @@ class Sueldos_model extends CI_Model {
         $this->db->update('sueldos_items', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    /*
+     *  Sueldos/borrar_recibo_sueldo
+     */
+    public function update($datos, $where) {
+        $this->db->update('sueldos', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

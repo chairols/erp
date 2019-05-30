@@ -18,7 +18,8 @@ class Sueldos extends CI_Controller {
             'sueldos_model',
             'parametros_model',
             'empleados_model',
-            'calificaciones_model'
+            'calificaciones_model',
+            'log_model'
         ));
         $this->load->helper(array(
             'url'
@@ -671,7 +672,8 @@ class Sueldos extends CI_Controller {
             $where = array(
                 'idempleado' => $this->input->post('idempleado'),
                 'periodo_mes' => $this->input->post('periodo_mes'),
-                'periodo_anio' => $this->input->post('periodo_anio')
+                'periodo_anio' => $this->input->post('periodo_anio'),
+                'estado' => 'A'
             );
             $resultado = $this->sueldos_model->get_where($where);
 
@@ -764,7 +766,9 @@ class Sueldos extends CI_Controller {
         $data['title'] = 'Listado de Recibos de Sueldo';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/sueldos/js/listar.js'
+        );
         $data['view'] = 'sueldos/listar';
 
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
@@ -991,6 +995,50 @@ class Sueldos extends CI_Controller {
 
             $this->pdf->Output('Recibo.pdf', $modo);
 
+        }
+    }
+    
+    public function borrar_recibo_sueldo() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idsueldo', 'ID Recibo de Sueldo', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idsueldo' => $this->input->post('idsueldo')
+            );
+            $resultado = $this->sueldos_model->update($datos, $where);
+            if ($resultado) {
+                $log = array(
+                    'tabla' => 'sueldos',
+                    'idtabla' => $this->input->post('idsueldo'),
+                    'texto' => "<h2><strong>Se borró el recibo de sueldo (Borrado lógico)</strong></h2>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'del'
+                );
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se borró correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo borrar la retención.'
+                );
+                echo json_encode($json);
+            }
         }
     }
 

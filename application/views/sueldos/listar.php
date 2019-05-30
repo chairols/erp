@@ -72,7 +72,7 @@
                                 </button>
                             </a>
                             <a class="hint--top hint--bounce hint--error" aria-label="Eliminar">
-                                <button class="btn btn-danger btn-xs borrar_retencion" idsueldo="<?= $sueldo['idsueldo'] ?>" empleado="<?= $sueldo['empleado'] ?>">
+                                <button class="btn btn-danger btn-xs borrar_recibo" idsueldo="<?= $sueldo['idsueldo'] ?>" empleado="<?= $sueldo['empleado'] ?>">
                                     <i class="fa fa-trash-o"></i>
                                 </button>
                             </a>

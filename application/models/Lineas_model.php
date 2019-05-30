@@ -61,15 +61,27 @@ class Lineas_model extends CI_Model {
     /*
      *  Lineas/gets_lineas_ajax
      */
-    public function gets_where_para_ajax($where)
-    {
-      $this->db->select('idlinea as id, linea as text');
-      $this->db->from('lineas');
-      $this->db->like($where);
-      $this->db->order_by('linea');
+    public function gets_where_para_ajax($where) {
+        $this->db->select('idlinea as id, linea as text');
+        $this->db->from('lineas');
+        $this->db->like($where);
+        $this->db->order_by('linea');
 
-      $query = $this->db->get();
-      return $query->result_array();
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    /*
+     *  Articulos/listar
+     */
+    public function gets_where($where) {
+        $this->db->select('*');
+        $this->db->from('lineas');
+        $this->db->like($where);
+        $this->db->order_by('linea');
+        
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }
 

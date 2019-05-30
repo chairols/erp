@@ -11,13 +11,14 @@ class Articulos_model extends CI_Model {
     /*
      *  Articulos/listar
      */
-    public function get_cantidad_where($where) {
+    public function get_cantidad_where($where, $like) {
         $this->db->select('*');
         $this->db->from('articulos');
         $this->db->join('lineas', 'articulos.idlinea = lineas.idlinea');
         $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca');
         $this->db->join('articulos_genericos', 'articulos.idarticulo_generico = articulos_genericos.idarticulo_generico', 'left');
-        $this->db->like($where);
+        $this->db->where($where);
+        $this->db->like($like);
 
         $query = $this->db->count_all_results();
         return $query;
@@ -26,14 +27,15 @@ class Articulos_model extends CI_Model {
     /*
      *  Articulos/listar
      */
-    public function gets_where_limit($where, $per_page, $pagina) {
+    public function gets_where_limit($where, $like, $per_page, $pagina) {
         $this->db->select('*');
         $this->db->from('articulos');
         $this->db->join('lineas', 'articulos.idlinea = lineas.idlinea');
         $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca');
         $this->db->join('articulos_genericos', 'articulos.idarticulo_generico = articulos_genericos.idarticulo_generico', 'left');
-        $this->db->like($where);
-        $this->db->order_by('articulo');
+        $this->db->where($where);
+        $this->db->like($like);
+        $this->db->order_by('articulos.numero_orden, articulos.articulo');
         $this->db->limit($per_page, $pagina);
 
         $query = $this->db->get();

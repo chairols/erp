@@ -33,13 +33,37 @@ class Articulos extends CI_Controller {
         $per_page = $per_page['valor'];
         $data['per_page'] = $per_page;
 
-        $where = $this->input->get();
+        $where = array();
+        $like = array();
         $where['articulos.estado'] = 'A';
+        if($this->input->get('articulo')) {
+            $like['articulos.articulo'] = $this->input->get('articulo');
+        }
+        if($this->input->get('numero_orden')) {
+            $like['articulos.numero_orden'] = $this->input->get('numero_orden');
+        }
+        if(strlen($this->input->get('idlinea'))) {
+            $where['articulos.idlinea'] = $this->input->get('idlinea');
+        }
+        if(strlen($this->input->get('stock'))) {
+            if($this->input->get('stock') == 'S') {
+                $where['articulos.stock >'] = 0;
+            } else if($this->input->get('stock') == 'N') {
+                $where['articulos.stock'] = 0;
+            }
+        }
+        if(strlen($this->input->get('precio'))) {
+            if($this->input->get('precio') == 'S') {
+                $where['articulos.precio >'] = 0;
+            } else if($this->input->get('precio') == "N") {
+                $where['articulos.precio'] = 0;
+            }
+        }
 
         /*
          * inicio paginador
          */
-        $total_rows = $this->articulos_model->get_cantidad_where($where);
+        $total_rows = $this->articulos_model->get_cantidad_where($where, $like);
         $config['reuse_query_string'] = TRUE;
         $config['base_url'] = '/articulos/listar/';
         $config['total_rows'] = $total_rows;
@@ -66,7 +90,11 @@ class Articulos extends CI_Controller {
          * fin paginador
          */
 
-        $data['articulos'] = $this->articulos_model->gets_where_limit($where, $per_page, $pagina);
+        $data['articulos'] = $this->articulos_model->gets_where_limit($where, $like, $per_page, $pagina);
+        $where = array(
+            'estado' => 'A'
+        );
+        $data['lineas'] = $this->lineas_model->gets_where($where);
 
         $data['view'] = 'articulos/listar';
         $this->load->view('layout/app', $data);

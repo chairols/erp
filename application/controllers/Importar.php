@@ -171,7 +171,7 @@ class Importar extends CI_Controller {
                     'stock_min' => $array[13],
                     'stock_max' => $array[14],
                     'despacho' => $array[39],
-                    'observations' => $array[41],
+                    'observaciones' => $array[41],
                     'description' => $array[42]
                 );
                 

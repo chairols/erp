@@ -40,7 +40,7 @@ class Articulos extends CI_Controller {
             $like['articulos.articulo'] = $this->input->get('articulo');
         }
         if($this->input->get('numero_orden')) {
-            $like['articulos.numero_orden'] = $this->input->get('numero_orden');
+            $where['articulos.numero_orden'] = $this->input->get('numero_orden');
         }
         if(strlen($this->input->get('idlinea'))) {
             $where['articulos.idlinea'] = $this->input->get('idlinea');
@@ -278,6 +278,19 @@ class Articulos extends CI_Controller {
         echo json_encode($articulos);
     }
 
+    public function modificar($idarticulo = null) {
+        if($idarticulo == null) {
+            redirect('/articulos/listar/', 'refresh');
+        }
+        $data['title'] = 'Modificar Artículo';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array();
+        
+        
+        $data['view'] = 'articulos/modificar';
+        $this->load->view('layout/app', $data);
+    }
 }
 
 ?>

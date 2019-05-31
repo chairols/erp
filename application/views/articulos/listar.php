@@ -56,6 +56,7 @@
                     <th>Stock</th>
                     <th>Precio</th>
                     <th>Estantería</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,6 +83,13 @@
                         </td>
                         <td class="text-right">
                             <span class="badge bg-purple"><?=$articulo['rack']?></span>
+                        </td>
+                        <td>
+                            <a href="/articulos/modificar/<?= $articulo['idarticulo'] ?>/" class="hint--top hint--bounce hint--info" aria-label="Modificar">
+                                <button class="btn btn-primary btn-xs" type="button">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 <?php } ?>

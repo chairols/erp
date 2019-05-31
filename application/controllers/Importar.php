@@ -66,7 +66,7 @@ class Importar extends CI_Controller {
         if ($archivo) {
             $this->benchmark->mark('inicio');
 
-            $cantidad = $this->articulos_model->get_cantidad_where(array());
+            $cantidad = $this->articulos_model->get_cantidad_where(array(), array());
 
             //var_dump($cantidad);
 

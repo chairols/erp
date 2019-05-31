@@ -285,12 +285,30 @@ class Articulos extends CI_Controller {
         $data['title'] = 'Modificar Artículo';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/articulos/js/modificar.js'
+        );
         
+        $where = array(
+            'idarticulo' => $idarticulo
+        );
+        $data['articulo'] = $this->articulos_model->get_where($where);
+        
+        $where = array(
+            'idmarca' => $data['articulo']['idmarca']
+        );
+        $data['articulo']['marca'] = $this->marcas_model->get_where($where);
+        
+        $where = array(
+            'estado' => 'A'
+        );
+        $data['lineas'] = $this->lineas_model->gets_where($where);
         
         $data['view'] = 'articulos/modificar';
         $this->load->view('layout/app', $data);
     }
+    
+    
 }
 
 ?>

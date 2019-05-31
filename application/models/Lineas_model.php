@@ -73,6 +73,7 @@ class Lineas_model extends CI_Model {
 
     /*
      *  Articulos/listar
+     *  Articulos/modificar
      */
     public function gets_where($where) {
         $this->db->select('*');

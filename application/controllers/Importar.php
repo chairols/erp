@@ -91,7 +91,8 @@ class Importar extends CI_Controller {
                     $porcentaje = round(($count * 100 / $cantidad), 0, PHP_ROUND_HALF_DOWN);
                     //echo $porcentaje . " %\n";
                 }*/
-
+                
+                $convmap = array(0x80, 0x10ffff, 0, 0xffffff);
                 $array[0] = preg_replace('/\x{EF}\x{BF}\x{BD}/u', '', mb_encode_numericentity(trim($array[0]), $convmap, "UTF-8"));
                 
 

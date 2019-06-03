@@ -308,7 +308,63 @@ class Articulos extends CI_Controller {
         $this->load->view('layout/app', $data);
     }
     
-    
+    public function modificar_ajax() {
+        $session = $this->session->all_userdata();
+        
+        $this->form_validation->set_rules('idarticulo', 'ID de Artículo', 'required|integer');
+        $this->form_validation->set_rules('numero_orden', 'Número de Orden', 'required|integer');
+        $this->form_validation->set_rules('idlinea', 'Línea', 'required|integer');
+        // Despacho no es obligatorio
+        $this->form_validation->set_rules('precio', 'Precio de Venta', 'required|decimal');
+        $this->form_validation->set_rules('stock', 'Stock', 'required|integer');
+        $this->form_validation->set_rules('stock_min', 'Stock Mínimo', 'required|integer');
+        $this->form_validation->set_rules('stock_max', 'Stock Máximo', 'required|integer');
+        $this->form_validation->set_rules('costo_fob', 'Costo FOB', 'required|decimal');
+        $this->form_validation->set_rules('costo_despachado', 'Costo Despachado', 'required|decimal');
+        // Estantería no es obligatorio
+        // Observaciones no es obligatorio
+        
+        if($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'numero_orden' => $this->input->post('numero_orden'),
+                'idlinea' => $this->input->post('idlinea'),
+                'despacho' => $this->input->post('despacho'),
+                'precio' => $this->input->post('precio'),
+                'stock' => $this->input->post('stock'),
+                'stock_min' => $this->input->post('stock_min'),
+                'stock_max' => $this->input->post('stock_max'),
+                'costo_fob' => $this->input->post('costo_fob'),
+                'costo_despachado' => $this->input->post('costo_despachado'),
+                'rack' => $this->input->post('rack'),
+                'observaciones' => $this->input->post('observaciones')
+            );
+            $where = array(
+                'idarticulo' => $this->input->post('idarticulo')
+            );
+            $resultado = $this->articulos_model->update($datos, $where);
+            
+            if($resultado) {
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizó el artículo'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el artículo'
+                );
+                echo json_encode($json);
+            }
+            
+        }
+    }
 }
 
 ?>

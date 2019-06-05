@@ -24,14 +24,69 @@ class Usuarios extends CI_Controller {
 
     public function login() {
 
+        /*
+          $this->form_validation->set_rules('usuario', 'Usuario', 'required');
+          $this->form_validation->set_rules('password', 'Password', 'required');
+
+
+          if ($this->form_validation->run() == FALSE) {
+
+          } else {
+          $usuario = $this->usuarios_model->get_usuario($this->input->post('usuario'), sha1($this->input->post('password')));
+          if (!empty($usuario)) {
+          $perfil = $this->usuarios_model->get_perfil($usuario['idusuario']);
+
+          $datos = array(
+          'SID' => $usuario['idusuario'],
+          'usuario' => $usuario['usuario'],
+          'nombre' => $usuario['nombre'],
+          'apellido' => $usuario['apellido'],
+          'correo' => $usuario['email'],
+          'imagen' => $usuario['imagen'],
+          'perfil' => $perfil['idperfil']
+          );
+          $this->session->set_userdata($datos);
+
+          $datos = array(
+          'ultimo_acceso' => date("Y-m-d H:i:s")
+          );
+          $this->usuarios_model->update($datos, $usuario['idusuario']);
+
+          if (!empty($this->input->post('remember'))) {
+          setcookie("login_usuario", $this->input->post('usuario'), time() + (10 * 365 * 24 * 60 * 60));
+          setcookie("login_password", $this->input->post('password'), time() + (10 * 365 * 24 * 60 * 60));
+          } else {
+          setcookie("login_usuario", "", time() - 100);
+          setcookie("login_password", "", time() - 100);
+          }
+
+          redirect('/dashboard/', 'refresh');
+          }
+          }
+         */
+
+        $data['title'] = "Login de Usuarios";
+        $session = $this->session->all_userdata();
+        if (!empty($session['SID'])) {
+            redirect('/dashboard/', 'refresh');
+        } else {
+            $this->load->view('usuarios/login', $data);
+        }
+    }
+
+    public function login_ajax() {
         $this->form_validation->set_rules('usuario', 'Usuario', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
 
-
         if ($this->form_validation->run() == FALSE) {
-            
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
         } else {
             $usuario = $this->usuarios_model->get_usuario($this->input->post('usuario'), sha1($this->input->post('password')));
+
             if (!empty($usuario)) {
                 $perfil = $this->usuarios_model->get_perfil($usuario['idusuario']);
 
@@ -51,24 +106,26 @@ class Usuarios extends CI_Controller {
                 );
                 $this->usuarios_model->update($datos, $usuario['idusuario']);
 
-                if (!empty($this->input->post('remember'))) {
+                if ($this->input->post('remember') == 'true') {
                     setcookie("login_usuario", $this->input->post('usuario'), time() + (10 * 365 * 24 * 60 * 60));
                     setcookie("login_password", $this->input->post('password'), time() + (10 * 365 * 24 * 60 * 60));
                 } else {
                     setcookie("login_usuario", "", time() - 100);
                     setcookie("login_password", "", time() - 100);
                 }
-
-                redirect('/dashboard/', 'refresh');
+                
+                $json = array(
+                        'status' => 'ok',
+                        'data' => 'Login Satisfactorio ',
+                    );
+                    echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Las credenciales son incorrectas'
+                );
+                echo json_encode($json);
             }
-        }
-
-        $data['title'] = "Login de Usuarios";
-        $session = $this->session->all_userdata();
-        if (!empty($session['SID'])) {
-            redirect('/dashboard/', 'refresh');
-        } else {
-            $this->load->view('usuarios/login', $data);
         }
     }
 
@@ -330,24 +387,22 @@ class Usuarios extends CI_Controller {
                 $data = array('upload_data' => $this->upload->data());
 
                 $datos = array(
-                    'imagen' => substr($config['upload_path'],1).$data['upload_data']['file_name']
+                    'imagen' => substr($config['upload_path'], 1) . $data['upload_data']['file_name']
                 );
                 $resultado = $this->usuarios_model->update($datos, $session['SID']);
-                
-                if($resultado) {
+
+                if ($resultado) {
                     $where = array(
                         'idusuario' => $session['SID']
                     );
                     $usuario = $this->usuarios_model->get_where($where);
-                    
+
                     $_SESSION['imagen'] = $usuario['imagen'];
                 }
-                
             }
         }
     }
-    
-    
+
     public function modificar($idusuario = null) {
         $session = $this->session->all_userdata();
         $this->r_session->check($session);

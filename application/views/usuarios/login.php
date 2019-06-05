@@ -30,30 +30,33 @@
             <!-- /.login-logo -->
             <div class="login-box-body">
 
-                <form method="post">
+                <div>
                     <div class="form-group has-feedback">
-                        <input type="text" id="usuario" name="usuario" class="form-control" value="<?=(isset($_COOKIE['login_usuario']))?$_COOKIE['login_usuario']:""?>" placeholder="Usuario" autofocus required>
+                        <input type="text" id="usuario" name="usuario" class="form-control" value="<?= (isset($_COOKIE['login_usuario'])) ? $_COOKIE['login_usuario'] : "" ?>" placeholder="Usuario" autofocus required>
                         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
-                        <input type="password" id="password" name="password" class="form-control" value="<?=(isset($_COOKIE['login_password']))?$_COOKIE['login_password']:""?>" placeholder="Contraseña">
+                        <input type="password" id="password" name="password" class="form-control" value="<?= (isset($_COOKIE['login_password'])) ? $_COOKIE['login_password'] : "" ?>" placeholder="Contraseña">
                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
                     <div class="row">
                         <div class="col-xs-8">
                             <div class="checkbox icheck">
                                 <label>
-                                    <input type="checkbox" name="remember" id="remember"<?=(isset($_COOKIE['login_usuario']) && isset($_COOKIE['login_password']))?" checked":""?>> Recordarme
+                                    <input type="checkbox" name="remember" id="remember"<?= (isset($_COOKIE['login_usuario']) && isset($_COOKIE['login_password'])) ? " checked" : "" ?>> Recordarme
                                 </label>
                             </div>
                         </div>
                         <!-- /.col -->
                         <div class="col-xs-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                            <button type="button" id="login" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                            <button type="button" id="login_loading" class="btn btn-primary btn-block btn-flat" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </button>
                         </div>
                         <!-- /.col -->
                     </div>
-                </form>
+                </div>
 
 
             </div>
@@ -67,6 +70,11 @@
         <script src="/assets/template/js/bootstrap.min.js"></script>
         <!-- iCheck -->
         <script src="/assets/vendors/iCheck/icheck.min.js"></script>
+        <!-- Notify -->
+        <script src="/assets/vendors/bootstrap-notify/notify.js"></script>
+        <!-- Script -->
+        <script src="/assets/modulos/usuarios/js/login.js"></script>
+
         <script>
             $(function () {
                 $('input').iCheck({

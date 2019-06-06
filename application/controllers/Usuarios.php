@@ -23,47 +23,45 @@ class Usuarios extends CI_Controller {
     }
 
     public function login() {
-
-        /*
-          $this->form_validation->set_rules('usuario', 'Usuario', 'required');
-          $this->form_validation->set_rules('password', 'Password', 'required');
+        $this->form_validation->set_rules('usuario', 'Usuario', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
 
 
-          if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) {
+            
+        } else {
+            $usuario = $this->usuarios_model->get_usuario($this->input->post('usuario'), sha1($this->input->post('password')));
+            if (!empty($usuario)) {
+                $perfil = $this->usuarios_model->get_perfil($usuario['idusuario']);
 
-          } else {
-          $usuario = $this->usuarios_model->get_usuario($this->input->post('usuario'), sha1($this->input->post('password')));
-          if (!empty($usuario)) {
-          $perfil = $this->usuarios_model->get_perfil($usuario['idusuario']);
+                $datos = array(
+                    'SID' => $usuario['idusuario'],
+                    'usuario' => $usuario['usuario'],
+                    'nombre' => $usuario['nombre'],
+                    'apellido' => $usuario['apellido'],
+                    'correo' => $usuario['email'],
+                    'imagen' => $usuario['imagen'],
+                    'perfil' => $perfil['idperfil']
+                );
+                $this->session->set_userdata($datos);
 
-          $datos = array(
-          'SID' => $usuario['idusuario'],
-          'usuario' => $usuario['usuario'],
-          'nombre' => $usuario['nombre'],
-          'apellido' => $usuario['apellido'],
-          'correo' => $usuario['email'],
-          'imagen' => $usuario['imagen'],
-          'perfil' => $perfil['idperfil']
-          );
-          $this->session->set_userdata($datos);
+                $datos = array(
+                    'ultimo_acceso' => date("Y-m-d H:i:s")
+                );
+                $this->usuarios_model->update($datos, $usuario['idusuario']);
 
-          $datos = array(
-          'ultimo_acceso' => date("Y-m-d H:i:s")
-          );
-          $this->usuarios_model->update($datos, $usuario['idusuario']);
+                if (!empty($this->input->post('remember'))) {
+                    setcookie("login_usuario", $this->input->post('usuario'), time() + (10 * 365 * 24 * 60 * 60));
+                    setcookie("login_password", $this->input->post('password'), time() + (10 * 365 * 24 * 60 * 60));
+                } else {
+                    setcookie("login_usuario", "", time() - 100);
+                    setcookie("login_password", "", time() - 100);
+                }
 
-          if (!empty($this->input->post('remember'))) {
-          setcookie("login_usuario", $this->input->post('usuario'), time() + (10 * 365 * 24 * 60 * 60));
-          setcookie("login_password", $this->input->post('password'), time() + (10 * 365 * 24 * 60 * 60));
-          } else {
-          setcookie("login_usuario", "", time() - 100);
-          setcookie("login_password", "", time() - 100);
-          }
+                redirect('/dashboard/', 'refresh');
+            }
+        }
 
-          redirect('/dashboard/', 'refresh');
-          }
-          }
-         */
 
         $data['title'] = "Login de Usuarios";
         $session = $this->session->all_userdata();
@@ -109,16 +107,29 @@ class Usuarios extends CI_Controller {
                 if ($this->input->post('remember') == 'true') {
                     setcookie("login_usuario", $this->input->post('usuario'), time() + (10 * 365 * 24 * 60 * 60));
                     setcookie("login_password", $this->input->post('password'), time() + (10 * 365 * 24 * 60 * 60));
+
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'Seteó cookie ' . $this->input->post('remember'),
+                    );
+                    echo json_encode($json);
                 } else {
                     setcookie("login_usuario", "", time() - 100);
                     setcookie("login_password", "", time() - 100);
-                }
-                
-                $json = array(
-                        'status' => 'ok',
-                        'data' => 'Login Satisfactorio ',
+
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'No seteó cookie ' . $this->input->post('remember'),
                     );
                     echo json_encode($json);
+                }
+
+                /*
+                  $json = array(
+                  'status' => 'ok',
+                  'data' => 'Login Satisfactorio',
+                  );
+                  echo json_encode($json); */
             } else {
                 $json = array(
                     'status' => 'error',

@@ -45,6 +45,7 @@ class Articulos_model extends CI_Model {
 
     /*
      *  Articulos/agregar_ajax
+     *  Articulos/borrar_articulo_ajax
      *  Artículos/get_where_json
      *  Artículos/modificar
      * 
@@ -68,6 +69,7 @@ class Articulos_model extends CI_Model {
     
     /*
      *  Articulos/agregar_ajax
+     *  Articulos/borrar_articulo_ajax
      */
     public function update($datos, $where) {
         $this->db->update('articulos', $datos, $where);

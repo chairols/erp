@@ -94,6 +94,11 @@
                                     <i class="fa fa-edit"></i>
                                 </button>
                             </a>
+                            <a class="hint--top hint--bounce hint--error" aria-label="Eliminar">
+                                <button class="btn btn-danger btn-xs borrar_articulo" idarticulo="<?=$articulo['idarticulo']?>" articulo="<?=$articulo['articulo']?>" marca="<?=$articulo['marca']?>" type="button">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 <?php } ?>

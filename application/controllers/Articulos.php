@@ -27,7 +27,9 @@ class Articulos extends CI_Controller {
         $data['title'] = 'Listado de Artículos';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/articulos/js/listar.js'
+        );
 
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
@@ -440,19 +442,19 @@ class Articulos extends CI_Controller {
                         'idmarca' => $this->input->post('idmarca')
                     );
                     $marca = $this->marcas_model->get_where($where);
-                    
+
                     $where = array(
                         'idlinea' => $this->input->post('idlinea')
                     );
                     $linea = $this->lineas_model->get_where($where);
-                    
+
                     $log = array(
                         'tabla' => 'articulos',
                         'idtabla' => $id,
                         'texto' => "<h2><strong>Se agregó el artículo: " . $this->input->post('articulo') . "</strong></h2>
-                    <p><strong>ID Artículo: </strong>" . $id ."<br />
+                    <p><strong>ID Artículo: </strong>" . $id . "<br />
                     <strong>ID Marca: </strong>" . $this->input->post('idmarca') . "<br />
-                    <strong>Marca: </strong>" . $marca['marca'] ."<br />
+                    <strong>Marca: </strong>" . $marca['marca'] . "<br />
                     <strong>Número de Orden: </strong>" . $this->input->post('numero_orden') . "<br />
                     <strong>ID Línea: </strong>" . $this->input->post('idlinea') . "<br />
                     <strong>Línea: </strong>" . $linea['linea'] . "<br />
@@ -462,15 +464,15 @@ class Articulos extends CI_Controller {
                     <strong>Stock Mínimo: </strong>" . $this->input->post('stock_min') . "<br />
                     <strong>Stock Máximo: </strong>" . $this->input->post('stock_max') . "<br />
                     <strong>Costo FOB: </strong>" . $this->input->post('costo_fob') . "<br />
-                    <strong>Costo Despachado: </strong>" . $this->input->post('costo_despachado'). "<br />
-                    <strong>Estantería: </strong>" . $this->input->post('rack')."<br />
+                    <strong>Costo Despachado: </strong>" . $this->input->post('costo_despachado') . "<br />
+                    <strong>Estantería: </strong>" . $this->input->post('rack') . "<br />
                     <strong>Observaciones: </strong>" . $this->input->post('observaciones') . "</p>",
                         'idusuario' => $session['SID'],
                         'tipo' => 'add'
                     );
 
                     $this->log_model->set($log);
-                    
+
                     $json = array(
                         'status' => 'ok',
                         'data' => 'El artículo ' . $this->input->post('articulo') . ' se creó correctamente'
@@ -483,6 +485,65 @@ class Articulos extends CI_Controller {
                     );
                     echo json_encode($json);
                 }
+            }
+        }
+    }
+
+    public function borrar_articulo_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idarticulo', 'ID Artículo', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idarticulo' => $this->input->post('idarticulo')
+            );
+            $resultado = $this->articulos_model->update($datos, $where);
+            if ($resultado) {
+                $where = array(
+                    'idarticulo' => $this->input->post('idarticulo'),
+                    'estado' => 'I'
+                );
+                $articulo = $this->articulos_model->get_where($where);
+                
+                $where = array(
+                    'idmarca' => $articulo['idmarca']
+                );
+                $marca = $this->marcas_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'articulos',
+                    'idtabla' => $this->input->post('idarticulo'),
+                    'texto' => "<h2><strong>Se eliminó el artículo: " . $articulo['articulo'] . "</strong></h2>
+                    <p><strong>ID Artículo: </strong>" . $this->input->post('idarticulo') . "<br />
+                    <strong>ID Marca: </strong>" . $marca['idmarca'] . "<br />
+                    <strong>Marca: </strong>" . $marca['marca'] . "</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'add'
+                );
+
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se borró correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo borrar la retención.'
+                );
+                echo json_encode($json);
             }
         }
     }

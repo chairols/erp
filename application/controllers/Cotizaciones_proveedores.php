@@ -488,6 +488,8 @@ class Cotizaciones_proveedores extends CI_Controller {
             );
             $data['cotizaciones'][$key]['items'] = $this->cotizaciones_proveedores_model->gets_articulos_where($where);
             foreach($data['cotizaciones'][$key]['items'] as $key2 => $value2) {
+                $data['cotizaciones'][$key]['items'][$key2]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value2['fecha']);
+                
                 $where = array(
                     'idarticulo' => $value2['idarticulo']
                 );

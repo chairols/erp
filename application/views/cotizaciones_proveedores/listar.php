@@ -35,9 +35,9 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-lg-1 col-md-2 col-sm-3 col-xs-3">
+                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
                     <div class="listRowInner">
-                        <span class="smallTitle">Fecha</span>
+                        <span class="smallTitle">Fecha Cotización</span>
                         <span class="listTextStrong">
                             <span class="label label-info"><?=$cotizacion['fecha_formateada']?></span>
                         </span>
@@ -70,11 +70,19 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12">
+                            <div class="col-sm-1 col-xs-12">
                                 <div class="listRowInner">
                                     <span class="smallTitle">Cantidad</span>
                                     <span class="listTextStrong">
                                         <span class="label bg-navy"><?=$item['cantidad']?></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-xs-12">
+                                <div class="listRowInner">
+                                    <span class="smallTitle">Fecha Entrega</span>
+                                    <span class="listTextStrong">
+                                        <span class="label bg-blue-gradient"><?=$item['fecha_formateada']?></span>
                                     </span>
                                 </div>
                             </div>

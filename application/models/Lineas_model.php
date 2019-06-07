@@ -37,6 +37,7 @@ class Lineas_model extends CI_Model {
     
     /*
      *  Artículos/agregar_ajax
+     *  Artículos/agregar_full_ajax
      *  Artículos/get_where_json
      * 
      *  Articulos_genericos/agregar_ajax

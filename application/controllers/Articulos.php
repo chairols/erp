@@ -36,26 +36,26 @@ class Articulos extends CI_Controller {
         $where = array();
         $like = array();
         $where['articulos.estado'] = 'A';
-        if($this->input->get('articulo')) {
+        if ($this->input->get('articulo')) {
             $like['articulos.articulo'] = $this->input->get('articulo');
         }
-        if($this->input->get('numero_orden')) {
+        if ($this->input->get('numero_orden')) {
             $where['articulos.numero_orden'] = $this->input->get('numero_orden');
         }
-        if(strlen($this->input->get('idlinea'))) {
+        if (strlen($this->input->get('idlinea'))) {
             $where['articulos.idlinea'] = $this->input->get('idlinea');
         }
-        if(strlen($this->input->get('stock'))) {
-            if($this->input->get('stock') == 'S') {
+        if (strlen($this->input->get('stock'))) {
+            if ($this->input->get('stock') == 'S') {
                 $where['articulos.stock >'] = 0;
-            } else if($this->input->get('stock') == 'N') {
+            } else if ($this->input->get('stock') == 'N') {
                 $where['articulos.stock'] = 0;
             }
         }
-        if(strlen($this->input->get('precio'))) {
-            if($this->input->get('precio') == 'S') {
+        if (strlen($this->input->get('precio'))) {
+            if ($this->input->get('precio') == 'S') {
                 $where['articulos.precio >'] = 0;
-            } else if($this->input->get('precio') == "N") {
+            } else if ($this->input->get('precio') == "N") {
                 $where['articulos.precio'] = 0;
             }
         }
@@ -244,7 +244,7 @@ class Articulos extends CI_Controller {
         } else {
             $articulo = array();
         }
-        
+
         echo json_encode($articulo);
     }
 
@@ -279,7 +279,7 @@ class Articulos extends CI_Controller {
     }
 
     public function modificar($idarticulo = null) {
-        if($idarticulo == null) {
+        if ($idarticulo == null) {
             redirect('/articulos/listar/', 'refresh');
         }
         $data['title'] = 'Modificar Artículo';
@@ -288,29 +288,29 @@ class Articulos extends CI_Controller {
         $data['javascript'] = array(
             '/assets/modulos/articulos/js/modificar.js'
         );
-        
+
         $where = array(
             'idarticulo' => $idarticulo
         );
         $data['articulo'] = $this->articulos_model->get_where($where);
-        
+
         $where = array(
             'idmarca' => $data['articulo']['idmarca']
         );
         $data['articulo']['marca'] = $this->marcas_model->get_where($where);
-        
+
         $where = array(
             'estado' => 'A'
         );
         $data['lineas'] = $this->lineas_model->gets_where($where);
-        
+
         $data['view'] = 'articulos/modificar';
         $this->load->view('layout/app', $data);
     }
-    
+
     public function modificar_ajax() {
         $session = $this->session->all_userdata();
-        
+
         $this->form_validation->set_rules('idarticulo', 'ID de Artículo', 'required|integer');
         $this->form_validation->set_rules('numero_orden', 'Número de Orden', 'required|integer');
         $this->form_validation->set_rules('idlinea', 'Línea', 'required|integer');
@@ -323,8 +323,8 @@ class Articulos extends CI_Controller {
         $this->form_validation->set_rules('costo_despachado', 'Costo Despachado', 'required|decimal');
         // Estantería no es obligatorio
         // Observaciones no es obligatorio
-        
-        if($this->form_validation->run() == FALSE) {
+
+        if ($this->form_validation->run() == FALSE) {
             $json = array(
                 'status' => 'error',
                 'data' => validation_errors()
@@ -348,8 +348,8 @@ class Articulos extends CI_Controller {
                 'idarticulo' => $this->input->post('idarticulo')
             );
             $resultado = $this->articulos_model->update($datos, $where);
-            
-            if($resultado) {
+
+            if ($resultado) {
                 $json = array(
                     'status' => 'ok',
                     'data' => 'Se actualizó el artículo'
@@ -362,9 +362,131 @@ class Articulos extends CI_Controller {
                 );
                 echo json_encode($json);
             }
-            
         }
     }
+
+    public function agregar() {
+        $data['title'] = 'Agregar Artículo';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/articulos/js/agregar.js'
+        );
+
+        $where = array(
+            'estado' => 'A'
+        );
+        $data['marcas'] = $this->marcas_model->gets();
+        $data['lineas'] = $this->lineas_model->gets_where($where);
+
+        $data['view'] = 'articulos/agregar';
+        $this->load->view('layout/app', $data);
+    }
+
+    public function agregar_full_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('articulo', 'Artículo', 'required');
+        $this->form_validation->set_rules('idmarca', 'Marca', 'required');
+        $this->form_validation->set_rules('numero_orden', 'Número de Orden', 'required|integer');
+        $this->form_validation->set_rules('idlinea', 'Línea', 'required|integer');
+        // Despacho no es obligatorio
+        $this->form_validation->set_rules('precio', 'Precio de Venta', 'decimal');
+        $this->form_validation->set_rules('stock', 'Stock', 'integer');
+        $this->form_validation->set_rules('stock_min', 'Stock Mínimo', 'integer');
+        $this->form_validation->set_rules('stock_max', 'Stock Máximo', 'integer');
+        $this->form_validation->set_rules('costo_fob', 'Costo FOB', 'decimal');
+        $this->form_validation->set_rules('costo_despachado', 'Costo Despachado', 'decimal');
+        // Estantería no es obligatorio
+        // Observaciones no es obligatorio
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $where = array(
+                'articulo' => $this->input->post('articulo'),
+                'idmarca' => $this->input->post('idmarca')
+            );
+            $articulo = $this->articulos_model->get_where($where);
+            if ($articulo) { // Si el artículo existe
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'El artículo ' . $this->input->post('articulo') . ' ya existe'
+                );
+                echo json_encode($json);
+            } else {  // Si el artículo no existe
+                $datos = array(
+                    'articulo' => $this->input->post('articulo'),
+                    'idmarca' => $this->input->post('idmarca'),
+                    'numero_orden' => $this->input->post('numero_orden'),
+                    'idlinea' => $this->input->post('idlinea'),
+                    'despacho' => $this->input->post('despacho'),
+                    'precio' => $this->input->post('precio'),
+                    'stock' => $this->input->post('stock'),
+                    'stock_min' => $this->input->post('stock_min'),
+                    'stock_max' => $this->input->post('stock_max'),
+                    'costo_fob' => $this->input->post('costo_fob'),
+                    'costo_despachado' => $this->input->post('costo_despachado'),
+                    'rack' => $this->input->post('rack'),
+                    'observaciones' => $this->input->post('observaciones')
+                );
+                $id = $this->articulos_model->set($datos);
+                if ($id) { // Si se agregó
+                    $where = array(
+                        'idmarca' => $this->input->post('idmarca')
+                    );
+                    $marca = $this->marcas_model->get_where($where);
+                    
+                    $where = array(
+                        'idlinea' => $this->input->post('idlinea')
+                    );
+                    $linea = $this->lineas_model->get_where($where);
+                    
+                    $log = array(
+                        'tabla' => 'articulos',
+                        'idtabla' => $id,
+                        'texto' => "<h2><strong>Se agregó el artículo: " . $this->input->post('articulo') . "</strong></h2>
+                    <p><strong>ID Artículo: </strong>" . $id ."<br />
+                    <strong>ID Marca: </strong>" . $this->input->post('idmarca') . "<br />
+                    <strong>Marca: </strong>" . $marca['marca'] ."<br />
+                    <strong>Número de Orden: </strong>" . $this->input->post('numero_orden') . "<br />
+                    <strong>ID Línea: </strong>" . $this->input->post('idlinea') . "<br />
+                    <strong>Línea: </strong>" . $linea['linea'] . "<br />
+                    <strong>Despacho de Aduana: </strong>" . $this->input->post('despacho') . "<br />
+                    <strong>Precio de Venta: </strong>" . $this->input->post('precio') . "<br />
+                    <strong>Stock: </strong>" . $this->input->post('stock') . "<br />
+                    <strong>Stock Mínimo: </strong>" . $this->input->post('stock_min') . "<br />
+                    <strong>Stock Máximo: </strong>" . $this->input->post('stock_max') . "<br />
+                    <strong>Costo FOB: </strong>" . $this->input->post('costo_fob') . "<br />
+                    <strong>Costo Despachado: </strong>" . $this->input->post('costo_despachado'). "<br />
+                    <strong>Estantería: </strong>" . $this->input->post('rack')."<br />
+                    <strong>Observaciones: </strong>" . $this->input->post('observaciones') . "</p>",
+                        'idusuario' => $session['SID'],
+                        'tipo' => 'add'
+                    );
+
+                    $this->log_model->set($log);
+                    
+                    $json = array(
+                        'status' => 'ok',
+                        'data' => 'El artículo ' . $this->input->post('articulo') . ' se creó correctamente'
+                    );
+                    echo json_encode($json);
+                } else { // Si no se pudo agregar
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'No se pudo crear el artículo'
+                    );
+                    echo json_encode($json);
+                }
+            }
+        }
+    }
+
 }
 
 ?>

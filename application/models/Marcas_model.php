@@ -42,6 +42,7 @@ class Marcas_model extends CI_Model {
     
     /*
      *  Artículos/agregar_ajax
+     *  Artículos/agregar_full_ajax
      *  Artículos/gets_articulos_ajax
      *  Artículos/get_where_json
      *  Artículos/modificar

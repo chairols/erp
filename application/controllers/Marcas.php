@@ -130,7 +130,7 @@ class Marcas extends CI_Controller {
                     <p><strong>ID Marca: </strong>" . $id . "<br />
                     <strong>Nombre corto: </strong>" . $this->input->post('nombre_corto') . "<br />
                     <strong>Color de Fondo: </strong>" . $this->input->post('color_fondo') . "<br />
-                    <strong>Color de Letra: </strong>" . $this->input->post('color_letra'),
+                    <strong>Color de Letra: </strong>" . $this->input->post('color_letra') . "</p>",
                         'idusuario' => $session['SID'],
                         'tipo' => 'add'
                     );

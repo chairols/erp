@@ -153,6 +153,88 @@ class Marcas extends CI_Controller {
         }
     }
 
+    public function modificar($idmarca = null) {
+        $session = $this->session->all_userdata();
+        if ($idmarca == null) {
+            redirect('/marcas/listar/', 'refresh');
+        }
+
+        $data['title'] = 'Modificar Marca';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['css'] = array(
+            '/assets/vendors/colorpicker/bootstrap-colorpicker.min.css'
+        );
+        $data['javascript'] = array(
+            '/assets/vendors/colorpicker/bootstrap-colorpicker.min.js',
+            '/assets/modulos/marcas/js/modificar.js'
+        );
+
+        $where = array(
+            'idmarca' => $idmarca,
+            'estado' => 'A'
+        );
+        $data['marca'] = $this->marcas_model->get_where($where);
+
+        $data['view'] = 'marcas/modificar';
+        $this->load->view('layout/app', $data);
+    }
+
+    public function modificar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idmarca', 'ID Marca', 'required');
+        $this->form_validation->set_rules('marca', 'Marca', 'required');
+        $this->form_validation->set_rules('nombre_corto', 'Nombre Corto', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'marca' => $this->input->post('marca'),
+                'nombre_corto' => $this->input->post('nombre_corto'),
+                'color_fondo' => $this->input->post('color_fondo'),
+                'color_letra' => $this->input->post('color_letra')
+            );
+            $where = array(
+                'idmarca' => $this->input->post('idmarca')
+            );
+
+            $resultado = $this->marcas_model->update($datos, $where);
+            if ($resultado) {  // Si se modificó
+                $log = array(
+                    'tabla' => 'marcas',
+                    'idtabla' => $this->input->post('idmarca'),
+                    'texto' => "<h2><strong>Se modificó la marca: " . $this->input->post('marca') . "</strong></h2>
+                    <p><strong>ID Marca: </strong>" . $this->input->post('idmarca') . "<br />
+                    <strong>Nombre corto: </strong>" . $this->input->post('nombre_corto') . "<br />
+                    <strong>Color de Fondo: </strong>" . $this->input->post('color_fondo') . "<br />
+                    <strong>Color de Letra: </strong>" . $this->input->post('color_letra') . "</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'edit'
+                );
+
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizó correctamente'
+                );
+                echo json_encode($json);
+            } else {  // Si no se pudo modificar
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'Ocurrió un error y no se pudo actualizar'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
 }
 
 ?>

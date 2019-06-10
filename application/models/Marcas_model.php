@@ -55,6 +55,7 @@ class Marcas_model extends CI_Model {
      *  Importaciones/modificar_item
      * 
      *  Marcas/agregar_ajax
+     *  Marcas/modificar
      */
     public function get_where($where) {
         $query = $this->db->get_where('marcas', $where);
@@ -95,6 +96,14 @@ class Marcas_model extends CI_Model {
     public function set($datos) {
         $this->db->insert('marcas', $datos);
         return $this->db->insert_id();
+    }
+    
+    /* 
+     *  Marcas/modificar_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('marcas', $datos, $where);
+        return $this->db->affected_rows();
     }
 }
 

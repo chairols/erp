@@ -28,7 +28,7 @@
                             <td><?= $linea['linea'] ?></td>
                             <td><?= $linea['nombre_corto'] ?></td>
                             <td>
-                                <a href="/lineas/modificar/<?= $linea['idlinea'] ?>/" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">
+                                <a href="/lineas/modificar/<?= $linea['idlinea'] ?>/" class="hint--top hint--bounce hint--info" aria-label="Modificar">
                                     <button class="btn btn-primary btn-xs">
                                         <i class="fa fa-edit"></i>
                                     </button>

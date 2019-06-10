@@ -42,7 +42,7 @@
                         <?php } ?>
                     </td>
                     <td>
-                        <a href="/corredores/modificar/<?=$corredor['idcorredor']?>/" class="hint--top-right hint--bounce hint--info" aria-label="Modificar">
+                        <a href="/corredores/modificar/<?=$corredor['idcorredor']?>/" class="hint--top hint--bounce hint--info" aria-label="Modificar">
                             <button class="btn btn-primary btn-xs">
                                 <i class="fa fa-edit"></i>
                             </button>

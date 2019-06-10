@@ -26,7 +26,7 @@
                         <tr>
                             <td><?= $perfil['perfil'] ?></td>
                             <td>
-                                <a href="/perfiles/modificar/<?=$perfil['idperfil']?>" data-pacement="top" data-toggle="tooltip" data-original-title="Modificar" class="tooltips">
+                                <a href="/perfiles/modificar/<?=$perfil['idperfil']?>" class="hint--top hint--bounce hint--info" aria-label="Modificar">
                                     <button class="btn btn-primary btn-xs">
                                         <i class="fa fa-edit"></i>
                                     </button>

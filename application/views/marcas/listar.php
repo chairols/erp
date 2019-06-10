@@ -32,6 +32,11 @@
                                     <i class="fa fa-edit"></i>
                                 </button>
                             </a>
+                            <a class="hint--top hint--bounce hint--error borrar_marca" aria-label="Eliminar" idmarca="<?=$marca['idmarca']?>" marca="<?=$marca['marca']?>">
+                                <button class="btn btn-danger btn-xs" type="button">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 <?php } ?>

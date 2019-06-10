@@ -24,7 +24,9 @@ class Marcas extends CI_Controller {
         $data['title'] = 'Listado de Marcas';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/marcas/js/listar.js'
+        );
 
 
         $per_page = 10;
@@ -234,7 +236,59 @@ class Marcas extends CI_Controller {
             }
         }
     }
+    
+    public function borrar_ajax() {
+        $session = $this->session->all_userdata();
 
+        $this->form_validation->set_rules('idmarca', 'ID Retención', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idmarca' => $this->input->post('idmarca')
+            );
+            $resultado = $this->marcas_model->update($datos, $where);
+            if ($resultado) {
+                $where = array(
+                    'idmarca' => $this->input->post('idmarca')
+                );
+                $marca = $this->marcas_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'marcas',
+                    'idtabla' => $this->input->post('idmarca'),
+                    'texto' => "<h2><strong>Se borró la marca (Borrado lógico)</strong></h2>
+                    <p><strong>Marca: </strong>".$marca['marca']."<br />
+                    <strong>Nombre Corto: </strong>".$marca['nombre_corto']."<br />
+                    <strong>Color de Fondo: </strong>".$marca['color_fondo']."<br />
+                    <strong>Color de Letra: </strong>".$marca['color_letra']."</p>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'del'
+                );
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se borró correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo borrar la marca.'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
 }
 
 ?>

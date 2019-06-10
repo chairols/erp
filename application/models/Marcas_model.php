@@ -55,6 +55,7 @@ class Marcas_model extends CI_Model {
      *  Importaciones/modificar_item
      * 
      *  Marcas/agregar_ajax
+     *  Marcas/borrar_ajax
      *  Marcas/modificar
      */
     public function get_where($where) {

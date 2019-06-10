@@ -13,9 +13,11 @@ $("#buscar").click(function() {
         data: datos,
         beforeSend: function () {
             $("#resultado").html("<h1 class='text-center'><i class='fa fa-refresh fa-spin'></i></h1>");
+            Pace.restart();
         },
         success: function (data) {
             $("#resultado").html(data);
+            Pace.stop();
         },
         error: function (xhr) { // if error occured
             $.notify('<strong>Ha ocurrido el siguiente error:</strong><br>' + xhr.statusText,
@@ -25,6 +27,7 @@ $("#buscar").click(function() {
                     });
             
             $("#resultado").html(xhr.statusText);
+            Pace.stop();
         }
     });
 });

@@ -143,6 +143,23 @@ class Articulos_model extends CI_Model {
       $query = $this->db->get();
       return $query->result_array();
     }
+    
+    /*
+     *  Articulos/reporte_ajax
+     */
+    public function gets_where_like($where, $like) {
+        $this->db->select('*');
+        $this->db->from('articulos');
+        $this->db->join('lineas', 'articulos.idlinea = lineas.idlinea');
+        $this->db->join('marcas', 'articulos.idmarca = marcas.idmarca');
+        $this->db->join('articulos_genericos', 'articulos.idarticulo_generico = articulos_genericos.idarticulo_generico', 'left');
+        $this->db->where($where);
+        $this->db->like($like);
+        $this->db->order_by('articulo');
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 ?>

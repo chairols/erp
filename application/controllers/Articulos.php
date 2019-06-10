@@ -551,7 +551,63 @@ class Articulos extends CI_Controller {
             }
         }
     }
-
+    
+    public function reporte() {
+        $data['title'] = 'Reporte de Artículos';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/articulos/js/reporte.js'
+        );
+        
+        $where = array(
+            'estado' => 'A'
+        );
+        $data['lineas'] = $this->lineas_model->gets_where($where);
+        $data['marcas'] = $this->marcas_model->gets_where($where);
+        
+        $data['view'] = 'articulos/reporte';
+        $this->load->view('layout/app', $data);
+    }
+    
+    public function reporte_ajax() {
+        $where = array();
+        $like = array();
+        $where['articulos.estado'] = 'A';
+        if ($this->input->get('articulo')) {
+            $like['articulos.articulo'] = $this->input->get('articulo');
+        }
+        if ($this->input->get('numero_orden')) {
+            $where['articulos.numero_orden'] = $this->input->get('numero_orden');
+        }
+        if ($this->input->get('idmarca')) {
+            $where['articulos.idmarca'] = $this->input->get('idmarca');
+        }
+        if (strlen($this->input->get('idlinea'))) {
+            $where['articulos.idlinea'] = $this->input->get('idlinea');
+        }
+        if (strlen($this->input->get('stock'))) {
+            if ($this->input->get('stock') == 'S') {
+                $where['articulos.stock >'] = 0;
+            } else if ($this->input->get('stock') == 'N') {
+                $where['articulos.stock'] = 0;
+            }
+        }
+        if (strlen($this->input->get('precio'))) {
+            if ($this->input->get('precio') == 'S') {
+                $where['articulos.precio >'] = 0;
+            } else if ($this->input->get('precio') == "N") {
+                $where['articulos.precio'] = 0;
+            }
+        }
+        
+        $data['articulos'] = $this->articulos_model->gets_where_like($where, $like);
+        
+        $this->load->view('articulos/reporte_ajax', $data);
+        /*echo "<pre>";
+        print_r($data);
+        echo "</pre>";*/
+    }
 }
 
 ?>

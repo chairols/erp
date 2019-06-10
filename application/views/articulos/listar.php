@@ -2,13 +2,21 @@
     <div class="box-header">
         <form method="GET" action="/articulos/listar/" class="input-group input-group-sm col-md-12">
             <div class="row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <input class="form-control" name="articulo" id="articulo" placeholder="Artículo" type="text" value="<?= $this->input->get('articulo') ?>">
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-2">
                     <input class="form-control" name="numero_orden" id="numero_orden" placeholder="Número de Orden" type="text" value="<?= $this->input->get('numero_orden') ?>">
                 </div>
-                <div class="col-md-4">
+                <div class="form-group col-md-2">
+                    <select class="form-control chosenSelect" name="idmarca" id="idmarca">
+                        <option value="">--- Todas ---</option>
+                        <?php foreach($marcas as $marca) { ?>
+                        <option value="<?=$marca['idmarca']?>"<?=($marca['idmarca']==$this->input->get('idmarca'))?" selected":""?>><?=$marca['marca']?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-md-5">
                     <div class="box-tools">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <?= $links ?>

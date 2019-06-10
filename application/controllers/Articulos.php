@@ -44,6 +44,9 @@ class Articulos extends CI_Controller {
         if ($this->input->get('numero_orden')) {
             $where['articulos.numero_orden'] = $this->input->get('numero_orden');
         }
+        if ($this->input->get('idmarca')) {
+            $where['articulos.idmarca'] = $this->input->get('idmarca');
+        }
         if (strlen($this->input->get('idlinea'))) {
             $where['articulos.idlinea'] = $this->input->get('idlinea');
         }
@@ -97,6 +100,7 @@ class Articulos extends CI_Controller {
             'estado' => 'A'
         );
         $data['lineas'] = $this->lineas_model->gets_where($where);
+        $data['marcas'] = $this->marcas_model->gets_where($where);
 
         $data['view'] = 'articulos/listar';
         $this->load->view('layout/app', $data);

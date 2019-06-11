@@ -378,6 +378,39 @@ class Listas_de_precios_model extends CI_Model {
         return $query->row_array();
     }
     
+    /*
+     *  Optimizar/proceso_1
+     */
+    public function gets_ultimas_listas_por_proveedor() {
+        $this->db->select("idlista_de_precios, max(fecha) as fecha, idproveedor, proveedor");
+        $this->db->from("listas_de_precios");
+        $this->db->group_by("idproveedor");
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /*
+     *  Optimizar/proceso_1
+     */
+    public function borrar_item_where($where) {
+        $this->db->delete('listas_de_precios_items', $where);
+        return $this->db->affected_rows();
+    }
+    
+    /*
+     *  Optimizar/proceso_1
+     */
+    public function gets_items_full_where($where) {
+        $this->db->select("*");
+        $this->db->from("listas_de_precios_items");
+        $this->db->join("listas_de_precios", "listas_de_precios_items.idlista_de_precios = listas_de_precios.idlista_de_precios");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
 }
 
 ?>

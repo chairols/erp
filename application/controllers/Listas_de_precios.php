@@ -861,6 +861,33 @@ class Listas_de_precios extends CI_Controller {
         $data['view'] = 'listas_de_precios/precios_por_proveedor';
         $this->load->view('layout/app', $data);
     }
+    
+    public function optimizar() {  //  No se utiliza, se reemplaza por optimizar/sistema
+        $listas = $this->listas_de_precios_model->gets_ultimas_listas_por_proveedor();
+
+        $items_sin_asociar = 0;
+        foreach ($listas as $key => $value) {
+            $where = array(
+                'listas_de_precios.idproveedor' => $value['idproveedor'],
+                'listas_de_precios.fecha <' => $value['fecha'],
+                'listas_de_precios_items.idarticulo_generico' => 0
+            );
+            $listas[$key]['items'] = $this->listas_de_precios_model->gets_items_full_where($where);
+        }
+        
+        
+        
+        
+        /*$data['title'] = 'Otimizar Listas de Precios';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/listas_de_precios/js/optimizar.js'
+        );
+
+        $data['view'] = 'listas_de_precios/optimizar';
+        $this->load->view('layout/app', $data);*/
+    }
 
     private function formatear_fecha($fecha) {
         $aux = '';

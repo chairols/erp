@@ -85,6 +85,14 @@ class Lineas_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    /*
+     *  Lineas/modificar_ajax
+     */
+    public function update($datos, $where) {
+        $this->db->update('lineas', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

@@ -17,6 +17,9 @@ class Lineas extends CI_Controller {
             'lineas_model',
             'log_model'
         ));
+        $this->load->helper(array(
+            'url'
+        ));
 
         $session = $this->session->all_userdata();
         $this->r_session->check($session);
@@ -141,13 +144,87 @@ class Lineas extends CI_Controller {
             }
         }
     }
-    
+
     public function gets_lineas_ajax() {
         $where = $this->input->post();
         $lineas = $this->lineas_model->gets_where_para_ajax($where);
 
         echo json_encode($lineas);
     }
+
+    public function modificar($idlinea = null) {
+        $session = $this->session->all_userdata();
+        if ($idlinea == null) {
+            redirect('/lineas/listar/', 'refresh');
+        }
+
+        $data['title'] = 'Modificar Línea';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/lineas/js/modificar.js'
+        );
+
+        $where = array(
+            'idlinea' => $idlinea,
+            'estado' => 'A'
+        );
+        $data['linea'] = $this->lineas_model->get_where($where);
+
+        $data['view'] = 'lineas/modificar';
+        $this->load->view('layout/app', $data);
+    }
+
+    public function modificar_ajax() {
+        $session = $this->session->all_userdata();
+
+        $this->form_validation->set_rules('idlinea', 'ID de Línea', 'required|integer');
+        $this->form_validation->set_rules('linea', 'Línea', 'required');
+        $this->form_validation->set_rules('nombre_corto', 'Nombre Corto', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'linea' => $this->input->post('linea'),
+                'nombre_corto' => $this->input->post('nombre_corto')
+            );
+            $where = array(
+                'idlinea' => $this->input->post('idlinea')
+            );
+            $resultado = $this->lineas_model->update($datos, $where);
+
+            if ($resultado) {
+                $log = array(
+                    'tabla' => 'lineas',
+                    'idtabla' => $this->input->post('idlinea'),
+                    'texto' => 'Se modificó la línea: ' . $this->input->post('linea') . '<br />
+                    <p><strong>ID Linea: </strong>'.$this->input->post('idlinea').'<br />
+                    <strong>Nombre Corto: </strong>' . $this->input->post('nombre_corto').'</p>',
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'edit'
+                );
+                $this->log_model->set($log);
+                
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se actualizó el artículo'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo actualizar el artículo'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
+
 }
 
 ?>

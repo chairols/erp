@@ -71,7 +71,7 @@ class Marcas extends CI_Controller {
 
     public function gets_marcas_ajax() {
         $where = $this->input->post();
-        echo json_encode($this->marcas_model->gets_where($where));
+        echo json_encode($this->marcas_model->gets_where_ajax($where));
     }
 
     public function agregar() {

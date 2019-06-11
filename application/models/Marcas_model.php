@@ -113,6 +113,8 @@ class Marcas_model extends CI_Model {
     
     /*
      *  Articulos/listar
+     *  
+     *  Marcas/gets_marcas_ajax
      */
     public function gets_where($where) {
         $query = $this->db->get_where('marcas', $where);

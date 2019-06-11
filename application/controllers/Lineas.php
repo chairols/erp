@@ -29,7 +29,9 @@ class Lineas extends CI_Controller {
         $data['title'] = 'Listado de Líneas';
         $data['session'] = $this->session->all_userdata();
         $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array();
+        $data['javascript'] = array(
+            '/assets/modulos/lineas/js/listar.js'
+        );
 
         $per_page = $this->parametros_model->get_valor_parametro_por_usuario('per_page', $data['session']['SID']);
         $per_page = $per_page['valor'];
@@ -224,7 +226,55 @@ class Lineas extends CI_Controller {
             }
         }
     }
+    
+    public function borrar_ajax() {
+        $session = $this->session->all_userdata();
 
+        $this->form_validation->set_rules('idlinea', 'ID Línea', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
+            $datos = array(
+                'estado' => 'I'
+            );
+            $where = array(
+                'idlinea' => $this->input->post('idlinea')
+            );
+            $resultado = $this->lineas_model->update($datos, $where);
+            if ($resultado) {
+                $where = array(
+                    'idlinea' => $this->input->post('idlinea')
+                );
+                $linea = $this->lineas_model->get_where($where);
+                
+                $log = array(
+                    'tabla' => 'lineas',
+                    'idtabla' => $this->input->post('idlinea'),
+                    'texto' => "<h2><strong>Se borró la línea (Borrado lógico): </strong>".$linea['linea']."</h2>",
+                    'idusuario' => $session['SID'],
+                    'tipo' => 'del'
+                );
+                $this->log_model->set($log);
+
+                $json = array(
+                    'status' => 'ok',
+                    'data' => 'Se borró correctamente'
+                );
+                echo json_encode($json);
+            } else {
+                $json = array(
+                    'status' => 'error',
+                    'data' => 'No se pudo borrar la retención.'
+                );
+                echo json_encode($json);
+            }
+        }
+    }
 }
 
 ?>

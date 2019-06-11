@@ -32,6 +32,7 @@ class Log_model extends CI_Model {
      *  Cotizaciones_proveedores/agregar_articulo_ajax
      * 
      *  Lineas/agregar_ajax
+     *  Lineas/borrar_ajax
      *  Lineas/modificar_ajax
      * 
      *  Marcas/agregar_ajax

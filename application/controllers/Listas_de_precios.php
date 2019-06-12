@@ -812,7 +812,7 @@ class Listas_de_precios extends CI_Controller {
             $total_rows = $this->listas_de_precios_model->get_minimo_precio_comparacion_item_cantidad($idlista_de_precios_comparacion, $this->input->get('idproveedor'));
             $total_rows = $total_rows['cantidad'];
             $config['reuse_query_string'] = TRUE;
-            $config['base_url'] = '/listas_de_precios/precios_por_proveedor/'.$idlista_de_precios_comparacion.'/';
+            $config['base_url'] = '/listas_de_precios/precios_por_proveedor/' . $idlista_de_precios_comparacion . '/';
             $config['total_rows'] = $total_rows;
             $config['per_page'] = $per_page;
             $config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
@@ -837,14 +837,14 @@ class Listas_de_precios extends CI_Controller {
              */
 
             $data['items'] = $this->listas_de_precios_model->get_minimo_precio_comparacion_item($idlista_de_precios_comparacion, $this->input->get('idproveedor'), $per_page, $pagina);
-            
-            foreach($data['items'] as $key => $value) {
+
+            foreach ($data['items'] as $key => $value) {
                 $where = array(
                     'listas_de_precios_comparaciones_items.idarticulo_generico' => $value['idarticulo_generico'],
                     'listas_de_precios_comparaciones_items.idlista_de_precios_comparacion' => $idlista_de_precios_comparacion
                 );
                 $data['items'][$key]['items'] = $this->listas_de_precios_model->gets_comparaciones_items($where);
-                
+
                 $where = array(
                     'idlista_de_precios_comparacion_item' => $value['idlista_de_precios_comparacion_item'],
                     'estado' => 'A'
@@ -861,32 +861,22 @@ class Listas_de_precios extends CI_Controller {
         $data['view'] = 'listas_de_precios/precios_por_proveedor';
         $this->load->view('layout/app', $data);
     }
-    
+
     public function optimizar() {  //  No se utiliza, se reemplaza por optimizar/sistema
-        $listas = $this->listas_de_precios_model->gets_ultimas_listas_por_proveedor();
+        $this->load->dbutil();
+        
+        var_dump($this->dbutil->optimize_table('listas_de_precios_items'));
 
-        $items_sin_asociar = 0;
-        foreach ($listas as $key => $value) {
-            $where = array(
-                'listas_de_precios.idproveedor' => $value['idproveedor'],
-                'listas_de_precios.fecha <' => $value['fecha'],
-                'listas_de_precios_items.idarticulo_generico' => 0
-            );
-            $listas[$key]['items'] = $this->listas_de_precios_model->gets_items_full_where($where);
-        }
-        
-        
-        
-        
-        /*$data['title'] = 'Otimizar Listas de Precios';
-        $data['session'] = $this->session->all_userdata();
-        $data['menu'] = $this->r_session->get_menu();
-        $data['javascript'] = array(
-            '/assets/modulos/listas_de_precios/js/optimizar.js'
-        );
 
-        $data['view'] = 'listas_de_precios/optimizar';
-        $this->load->view('layout/app', $data);*/
+        /* $data['title'] = 'Otimizar Listas de Precios';
+          $data['session'] = $this->session->all_userdata();
+          $data['menu'] = $this->r_session->get_menu();
+          $data['javascript'] = array(
+          '/assets/modulos/listas_de_precios/js/optimizar.js'
+          );
+
+          $data['view'] = 'listas_de_precios/optimizar';
+          $this->load->view('layout/app', $data); */
     }
 
     private function formatear_fecha($fecha) {

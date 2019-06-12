@@ -1,20 +1,14 @@
 <div class="box box-primary box-solid">
     <div class="box-header">
         <h3 class="box-title"><?= $title ?></h3>
+        <div class="box-tools pull-right">
+            <button class="button btn bg-orange" id="comenzar">Comenzar Optimización</button>
+            <button class="button btn bg-orange" id="comenzar_loading" style="display: none;">
+                <i class="fa fa-refresh fa-spin"></i>
+            </button>
+        </div>
     </div>
     <div class="box-body">
-        <div class="row">
-            <div class="form-group">
-                <label class="control-label col-md-4"></label>
-                <div class="col-md-4">
-                    <button class="button btn btn-primary" id="comenzar">Comenzar Optimización</button>
-                    <button class="button btn btn-primary" id="comenzar_loading" style="display: none;">
-                        <i class="fa fa-refresh fa-spin"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <br>
         <table class="table table-bordered table-hover table-striped table-responsive">
             <thead>
                 <tr>

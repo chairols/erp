@@ -515,7 +515,7 @@ EOD;
                 ->attach('https://erp.rollerservice.com.ar/prueba/tcpdf/', '', 'Nuevo Nombre.pdf')
                 ->message($body)
                 ->send();
-        
+
         var_dump($result);
         echo '<br />';
         echo $this->email->print_debugger();
@@ -526,6 +526,123 @@ EOD;
     public function trivia() {
         $this->load->view('prueba/trivia');
     }
+
+    public function post() {
+        $this->load->model(array(
+            'parametros_model'
+        ));
+        require_once('assets/vendors/afip/wsfe-class-ci.php');
+        /*
+         * Certificado de Homologación
+         */
+        $certificado = "upload/certificados/certificado-2019-06-14.crt";
+        $clave = "upload/certificados/privada-2019-06-14";
+        $urlwsaa = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
+
+        $data['parametro'] = $this->parametros_model->get_parametros_empresa();
+
+        //$CUIT = $data['parametro']['cuit'];
+        $CUIT = 20300348689;
+        $urlwsaa = URLWSAA;
+
+        $wsfe = new WsFE();
+        $wsfe->CUIT = floatval($CUIT);
+        $wsfe->setURL(URLWSW);
+
+        $PtoVta = 3;
+        $TipoComp = 1;
+        $UltimoNroComprobante = 0;
+
+        if ($wsfe->Login($certificado, $clave, $urlwsaa)) {
+            if (!$wsfe->RecuperaLastCMP($PtoVta, $TipoComp)) {
+                echo $wsfe->ErrorDesc;
+            } else {
+                $r = $wsfe->getUltimoComprobanteAutorizado($PtoVta, $TipoComp);
+                $UltimoNroComprobante = $r->CbteNro;
+                var_dump($r);
+            }
+        }
+
+        $concepto = 1;  //  1=Producto
+        $TipoDoc = 80;  //  80=CUIT
+        $CuitCliente = 33647656779;
+        $FechaComprobante = date("Ymd");
+        $Total = 12400; // Total Gravado
+        $ImpTotConc = 0; // Total no Gravado
+        $ImpNeto = 10000;
+        $ImpOpEx = 0;  //  Importe Exento
+        $FchServDesde = "";  // Obligatorio en concepto 2 y 3
+        $FchServHasta = "";  // Obligatorio en concepto 2 y 3
+        $FchVtoPago = ""; // Obligatorio en concepto 2 y 3
+        $MonedaId = "PES";
+        $MonedaCotizacion = 1;
+
+        /*
+         *  Agregar IVA
+         */
+        $IdIVA = 5;   //  Tipo de IVA, ej 5 = 21%    FEParamGetTiposIVA
+        $ImporteIVA = 2100;
+
+
+        /*
+         *  Agregar Tributo
+         */
+        $IdTributo = 2;   //  En este caso, 2 = Impuestos Provinciales   FEParamGetTiposTributos
+        $TributoDescripcion = "Percepcion IIBB";
+        $TributoBaseImponible = $ImpNeto;
+        $TributoAlicuota = 3;
+        $TributoImporte = 300;
+
+
+        if ($wsfe->Login($certificado, $clave, $urlwsaa)) {
+            if (!$wsfe->RecuperaLastCMP($PtoVta, $TipoComp)) {
+                echo $wsfe->ErrorDesc;
+            } else {
+                $wsfe->Reset();
+                $NumeroFacturaDesde = $wsfe->RespUltNro + 1;
+                $NumeroFacturaHasta = $NumeroFacturaDesde;
+
+                $wsfe->AgregaFactura($concepto, $TipoDoc, $CuitCliente, $NumeroFacturaDesde, $NumeroFacturaHasta, $FechaComprobante, $Total, $ImpTotConc, $ImpNeto, $ImpOpEx, $FchServDesde, $FchServHasta, $FchVtoPago, $MonedaId, $MonedaCotizacion);
+                $wsfe->AgregaIva($IdIVA, $ImpNeto, $ImporteIVA);
+                $wsfe->AgregaTributo($IdTributo, $TributoDescripcion, $TributoBaseImponible, $TributoAlicuota, $TributoImporte);
+
+
+                $auth = false;
+                try {
+                    if ($wsfe->Autorizar($PtoVta, $TipoComp)) {
+                        $auth = true;
+                    } else {
+                        echo $wsfe->ErrorDesc;
+                    }
+                } catch (Exception $e) {
+                    if ($wsfe->CmpConsultar($TipoComp, $PtoVta, $NumeroFacturaDesde, $cbte)) {
+                        $auth = true;
+                    } else {
+                        //cii
+                    }
+                }
+                if ($auth) {
+                    
+                    $data['invoice_num'] = sprintf('%04d-', $PtoVta) . sprintf('%08d', $NumeroFacturaDesde);
+                    $data['CAE'] = $wsfe->RespCAE;
+                    $data['Vto'] = $wsfe->RespVencimiento;
+                    //$data['barcode'] = $cuit . sprintf('%02d', $TipoComp) . sprintf('%04d', $PtoVta) . $wsfe->RespCAE . $wsfe->RespVencimiento;
+
+                    echo "<pre>";
+                    print_r($data);
+                    print_r($wsfe);
+                    echo "</pre>";
+                }
+            }
+        }
+
+
+        foreach ($this->input->post() as $post) {
+            var_dump($post);
+            var_dump(count($post));
+        }
+    }
+
 }
 
 ?>

@@ -46,11 +46,14 @@ class Transportes_model extends CI_Model {
     
     /*
      *  Clientes/modificar
+     * 
+     *  Facturacion/pedido_modificar
      */
     public function gets() {
         $this->db->select('transportes.*, provincias.provincia as jurisdiccion');
         $this->db->from('transportes');
         $this->db->join('provincias', 'transportes.idprovincia = provincias.idprovincia');
+        $this->db->where(array('transportes.estado' => 'A'));
         $this->db->order_by('transporte');
         
         $query = $this->db->get();

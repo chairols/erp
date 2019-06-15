@@ -15,6 +15,14 @@ class Comprobantes_model extends CI_Model {
         $this->db->insert('comprobantes', $datos);
         return $this->db->insert_id();
     }
+    
+    /*
+     *  Facturacion/pedido_modificar
+     */
+    public function get_where($where) {
+        $query = $this->db->get_where('comprobantes', $where);
+        return $query->row_array();
+    }
 }
 
 ?>

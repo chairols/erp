@@ -39,6 +39,8 @@ class Condiciones_de_venta_model extends CI_Model {
      * 
      *  Cotizaciones_clientes/pdf
      * 
+     *  Facturacion/pedido_modificar
+     * 
      *  Pedidos/agregar_ajax
      */
     public function get_where($where) {

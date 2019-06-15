@@ -20,7 +20,8 @@ class Facturacion extends CI_Controller {
             'transportes_model',
             'monedas_model',
             'tipos_iva_model',
-            'comprobantes_model'
+            'comprobantes_model',
+            'parametros_model'
         ));
 
         $session = $this->session->all_userdata();
@@ -131,6 +132,7 @@ class Facturacion extends CI_Controller {
 
                     $set = array(
                         'idcliente' => $pedido['idcliente'],
+                        'idpedido' => $this->input->post('idpedido'),
                         'cliente' => $cliente['cliente'],
                         'direccion_fiscal' => $cliente_domicilio_fiscal['direccion'],
                         'codigo_postal_fiscal' => $cliente_domicilio_fiscal['codigo_postal'],
@@ -196,6 +198,59 @@ class Facturacion extends CI_Controller {
                 echo json_encode($json);
             }
         }
+    }
+    
+    public function pedido_modificar($idcomprobante = null) {
+        $session = $this->session->all_userdata();
+        if($idcomprobante == null) {
+            redirect('/facturacion/pedidos/', 'refresh');
+        }
+        $data['title'] = 'Preparar Factura';
+        $data['session'] = $this->session->all_userdata();
+        $data['menu'] = $this->r_session->get_menu();
+        $data['javascript'] = array(
+            '/assets/modulos/facturacion/js/pedido_modificar.js'
+        );
+        
+        $where = array(
+            'idcomprobante' => $idcomprobante
+        );
+        $data['comprobante'] = $this->comprobantes_model->get_where($where);
+        
+        if($data['comprobante']['estado'] != 'P') {
+            redirect('/facturacion/pedidos/', 'refresh');
+        }
+        
+        $data['condiciones'] = $this->condiciones_de_venta_model->gets();
+        $data['transportes'] = $this->transportes_model->gets();
+        $data['monedas'] = $this->monedas_model->gets();
+        $data['dolar'] = $this->monedas_model->get_ultima_cotizacion_por_monedas(1); // 1 es id del dolar
+        $data['parametro'] = $this->parametros_model->get_parametros_empresa();
+        $data['tipos_iva'] = $this->tipos_iva_model->gets();
+        
+        $where = array(
+            'idmoneda' => $data['comprobante']['idmoneda']
+        );
+        $data['comprobante']['moneda'] = $this->monedas_model->get_where($where);
+        
+        /*
+         *  Traigo los items pendientes
+         */
+        $where = array(
+            'idpedido' => $data['comprobante']['idpedido'],
+            'estado' => 'P'
+        );
+        $data['comprobante']['items'] = $this->pedidos_model->gets_articulos_where($where);
+
+        foreach($data['comprobante']['items'] as $key => $value) {
+            $data['comprobante']['items'][$key]['fecha_formateada'] = $this->formatear_fecha_para_mostrar($value['fecha_entrega']);
+        }
+        /*
+         *  Fin de búsqueda de items
+         */
+        
+        $data['view'] = 'facturacion/pedido_modificar';
+        $this->load->view('layout/app', $data);
     }
 
     private function formatear_fecha_para_mostrar($fecha) {

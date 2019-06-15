@@ -58,7 +58,7 @@ $("#crear").click(function() {
                             type: 'success',
                             z_index: 2000
                         });
-                
+                window.location.href = "/facturacion/pedido_modificar/" + resultado['data'] + '/';
             }
         },
         error: function (xhr) { // if error occured

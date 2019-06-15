@@ -69,6 +69,8 @@ class Monedas_model extends CI_Model {
      *  Cotizaciones_proveedores/agregar
      *  Cotizaciones_proveedores/modificar
      * 
+     *  Facturacion/pedido_modificar
+     * 
      *  Importaciones/agregar
      * 
      *  Listas_de_precios/asociar_generico

@@ -1,5 +1,6 @@
 <div class="box box-primary box-solid collapsed-box">
     <div class="box-header">
+        <input type="hidden" id="idcomprobante" value="<?=$comprobante['idcomprobante']?>">
         <input type="hidden" id="idcliente" value="<?=$comprobante['idcliente']?>">
         <h3 class="box-title"><?=$comprobante['cliente']?> - <?=$comprobante['orden_de_compra']?> - <?=$comprobante['moneda']['moneda']?></h3>
         <div class="box-tools pull-right">
@@ -13,6 +14,12 @@
                 <label class="control-label col-md-3">Cliente</label>
                 <div class="col-md-6">
                     <input type="text" class="form-control" value="<?=$comprobante['cliente']?>" disabled="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">CUIT</label>
+                <div class="col-md-6">
+                    <input type="text" id="cuit" class="form-control" value="<?=$comprobante['cuit']?>" disabled="">
                 </div>
             </div>
             <div class="form-group">
@@ -65,7 +72,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Moneda</label>
                 <div class="col-md-6">
-                    <select class="form-control chosenSelect">
+                    <select id="idmoneda" class="form-control chosenSelect">
                         <?php foreach($monedas as $moneda) { ?>
                         <option value="<?=$moneda['idmoneda']?>"<?=($moneda['idmoneda']==$comprobante['idmoneda'])?" selected":""?>><?=$moneda['moneda']?></option>
                         <?php } ?>
@@ -140,8 +147,22 @@
                 <?php } ?>
             </tbody>
         </table>
-        <div class="text-center">
-            <button type="button" id="facturar" class="btn btn-primary">Facturar</button>
+        <div class="form-horizontal">
+            <div class="ln_solid"></div>
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-3">
+                    <select class="form-control chosenSelect" id="tipo_comprobante">
+                        <option value="1">Factura</option>
+                        <option value="1R">Factura y Remito</option>
+                        <option value="2">Nota de Débito</option>
+                        <option value="3">Nota de Crédito</option>
+                        <option value="R">Remito</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" id="facturar" class="btn btn-primary">Facturar</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

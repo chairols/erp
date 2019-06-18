@@ -6,14 +6,14 @@
 define ("WSDLWSAA", "assets/vendors/afip/wsaa.wsdl");
 define ("WSDLWSW", "assets/vendors/afip/wsfe.wsdl");
 define ("WSDLWSCDC", "wscdc.wsdl");
-#define ("URLWSAA", "https://wsaahomo.afip.gov.ar/ws/services/LoginCms");
-#define ("URLWSW", "https://wswhomo.afip.gov.ar/wsfev1/service.asmx");
-#define ("URLWSCDC", "https://wswhomo.afip.gov.ar/WSCDC/service.asmx");
+define ("URLWSAA", "https://wsaahomo.afip.gov.ar/ws/services/LoginCms");
+define ("URLWSW", "https://wswhomo.afip.gov.ar/wsfev1/service.asmx");
+define ("URLWSCDC", "https://wswhomo.afip.gov.ar/WSCDC/service.asmx");
 define ("ARBA_TEMPLATE_XML", "<CONSULTA-ALICUOTA><fechaDesde>20160801</fechaDesde><fechaHasta>20160831</fechaHasta><cantidadContribuyentes>1</cantidadContribuyentes><contribuyentes class=\"list\"><contribuyente><cuitContribuyente>20123456789</cuitContribuyente></contribuyente></contribuyentes></CONSULTA-ALICUOTA>");
 # Cambiar para produccion
-define ("URLWSAA", "https://wsaa.afip.gov.ar/ws/services/LoginCms");
-define ("URLWSW", "https://servicios1.afip.gov.ar/wsfev1/service.asmx");
-define ("URLWSCDC", "https://servicios1.afip.gov.ar/WSCDC/service.asmx");
+#define ("URLWSAA", "https://wsaa.afip.gov.ar/ws/services/LoginCms");
+#define ("URLWSW", "https://servicios1.afip.gov.ar/wsfev1/service.asmx");
+#define ("URLWSCDC", "https://servicios1.afip.gov.ar/WSCDC/service.asmx");
 #==============================================================================
 
 date_default_timezone_set('America/Buenos_Aires');

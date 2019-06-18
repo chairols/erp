@@ -23,6 +23,14 @@ class Comprobantes_model extends CI_Model {
         $query = $this->db->get_where('comprobantes', $where);
         return $query->row_array();
     }
+    
+    /*
+     *  Facturacion/facturar_afip
+     */
+    public function update($datos, $where) {
+        $this->db->update('comprobantes', $datos, $where);
+        return $this->db->affected_rows();
+    }
 }
 
 ?>

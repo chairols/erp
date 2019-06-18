@@ -2,6 +2,13 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Prueba.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/views/articulos/agregar.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/assets/modulos/facturacion/js/pedido_modificar.js</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/controllers/Facturacion.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/application/views/facturacion/pedido_modificar.php</file>
+            <file>file:/C:/Program%20Files%20(x86)/Ampps/www/erp/assets/modulos/retenciones/js/agregar.js</file>
+        </group>
     </open-files>
 </project-private>

@@ -531,7 +531,7 @@ EOD;
         $this->load->model(array(
             'parametros_model'
         ));
-        require_once('assets/vendors/afip/wsfe-class-ci.php');
+        require_once('assets/vendors/afip/wsfe-class-ci-homologacion.php');
         /*
          * Certificado de Homologación
          */

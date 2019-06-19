@@ -47,9 +47,13 @@ function post() {
         data: datos,
         beforeSend: function () {
             Pace.restart();
+            $("#facturar").hide();
+            $("#facturar_loading").show();
         },
         success: function (data) {
             Pace.stop();
+            $("#facturar_loading").hide();
+            $("#facturar").show();
             resultado = $.parseJSON(data);
             if (resultado['status'] == 'error') {
                 $.notify('<strong>' + resultado['data'] + '</strong>',
@@ -65,6 +69,8 @@ function post() {
                         type: 'danger'
                     });
             Pace.stop();
+            $("#facturar_loading").hide();
+            $("#facturar").show();
         }
     });
 }

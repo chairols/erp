@@ -161,6 +161,9 @@
                 </div>
                 <div class="col-md-3">
                     <button type="button" id="facturar" class="btn btn-primary">Facturar</button>
+                    <button type="button" id="facturar_loading" class="btn btn-primary" style="display: none;">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </button>
                 </div>
             </div>
         </div>

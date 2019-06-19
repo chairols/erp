@@ -31,6 +31,17 @@ class Comprobantes_model extends CI_Model {
         $this->db->update('comprobantes', $datos, $where);
         return $this->db->affected_rows();
     }
+    
+    public function get_ultimo_comprobante($PtoVta, $TipoComp) {
+        $query = $this->db->query("SELECT max(numero_comprobante) as numero
+                                    FROM
+                                        comprobantes
+                                    WHERE
+                                        punto_de_venta = '$PtoVta' AND
+                                        idtipo_comprobante = '$TipoComp' AND
+                                        estado = 'P'");
+        return $query->row_array();
+    }
 }
 
 ?>

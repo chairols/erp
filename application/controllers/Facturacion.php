@@ -270,6 +270,115 @@ class Facturacion extends CI_Controller {
             );
             echo json_encode($json);
         } else {
+            $TipoComp = null;
+            switch ($this->input->post('tipo_comprobante')) {
+                case '1': // Factura A
+                    $TipoComp = 1;
+                    if (!$this->facturar_afip_check_ultimo_comprobante($TipoComp)) {
+                        break;
+                    }
+                    break;
+                case '1R': // Factura A y Remito
+                    $TipoComp = 1;
+                    if (!$this->facturar_afip_check_ultimo_comprobante($TipoComp)) {
+                        break;
+                    }
+                    break;
+                case '2': // Nota de Débito A
+                    $TipoComp = 2;
+                    if (!$this->facturar_afip_check_ultimo_comprobante($TipoComp)) {
+                        break;
+                    }
+                    break;
+                case '3': // Nota de Crédito A
+                    $TipoComp = 3;
+                    if (!$this->facturar_afip_check_ultimo_comprobante($TipoComp)) {
+                        break;
+                    }
+                    break;
+                case 'R':
+
+                    break;
+            }
+        }
+    }
+
+    private function facturar_afip_check_ultimo_comprobante($TipoComp) {
+        /*
+         *  Para salir a producción hay que reemplazar
+         *  
+         *  require de homologación por real
+         *  certificado de homologación por real
+         *  clave de homologación por real
+         *  urlwsaa de homologación por real
+         *  $CUIT hardcodeado por el post
+         */
+        require_once('assets/vendors/afip/wsfe-class-ci-homologacion.php');
+        /*
+         * Certificado de Homologación
+         */
+        $certificado = "upload/certificados/certificado-2019-06-14.crt";
+        $clave = "upload/certificados/privada-2019-06-14";
+        $urlwsaa = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
+
+        //$data['parametro'] = $this->parametros_model->get_parametros_empresa();
+        //$CUIT = $data['parametro']['cuit'];
+
+        $CUIT = 20300348689;
+
+        $wsfe = new WsFE();
+        $wsfe->CUIT = floatval($CUIT);
+        $wsfe->setURL(URLWSW);
+
+        $where = array(
+            'identificador' => 'punto_comprobantes'
+        );
+        $punto_comprobantes = $this->parametros_model->get_where($where);
+        $PtoVta = $punto_comprobantes['valor_sistema'];
+
+        if ($wsfe->Login($certificado, $clave, $urlwsaa)) {
+            if (!$wsfe->RecuperaLastCMP($PtoVta, $TipoComp)) {
+                $json = array(
+                    'status' => 'error',
+                    'data' => $wsfe->ErrorDesc
+                );
+                echo json_encode($json);
+            } else {
+                $r = $wsfe->getUltimoComprobanteAutorizado($PtoVta, $TipoComp);
+                $UltimoNroComprobanteAfip = $r->CbteNro;
+
+                $UltimoComprobante = $this->comprobantes_model->get_ultimo_comprobante($PtoVta, $TipoComp);
+
+                if ($UltimoNroComprobanteAfip == $UltimoComprobante['numero']) {
+                    return 1;
+                } else {
+                    $json = array(
+                        'status' => 'error',
+                        'data' => 'No coinciden los números de comprobantes<br>AFIP tiene último número ' . $UltimoNroComprobanteAfip . '<br>y en sistema el último número es ' . $UltimoComprobante['numero']
+                    );
+                    echo json_encode($json);
+                    return 0;
+                }
+            }
+        }
+    }
+
+    public function facturar_afip_original() {
+        $this->form_validation->set_rules('idcomprobante', 'ID de Comprobante', 'required|integer');
+        $this->form_validation->set_rules('cuit', 'CUIT del Cliente', 'required');
+        $this->form_validation->set_rules('pendientes[]', 'Cantidad Pendiente', 'required');
+        $this->form_validation->set_rules('precios[]', 'Precios', 'required');
+        $this->form_validation->set_rules('idmoneda', 'Moneda', 'required|integer');
+        $this->form_validation->set_rules('idtipo_iva', 'Porcentaje de IVA', 'required|integer');
+        $this->form_validation->set_rules('tipo_comprobante', 'Tipo de Comprobante', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $json = array(
+                'status' => 'error',
+                'data' => validation_errors()
+            );
+            echo json_encode($json);
+        } else {
             $this->load->model(array(
                 'parametros_model'
             ));
@@ -417,7 +526,7 @@ class Facturacion extends CI_Controller {
             $wsfe->CUIT = floatval($CUIT);
             $wsfe->setURL(URLWSW);
 
-            
+
             $UltimoNroComprobante = 0;
             if ($wsfe->Login($certificado, $clave, $urlwsaa)) {
                 if (!$wsfe->RecuperaLastCMP($PtoVta, $TipoComp)) {
@@ -433,7 +542,7 @@ class Facturacion extends CI_Controller {
                     $wsfe->Reset();
                     $NumeroFacturaDesde = $wsfe->RespUltNro + 1;
                     $NumeroFacturaHasta = $NumeroFacturaDesde;
-                    
+
                     $wsfe->AgregaFactura($concepto, $TipoDoc, 33647656779, $NumeroFacturaDesde, $NumeroFacturaHasta, $FechaComprobante, $Total, $ImpTotConc, $ImpNeto, $ImpOpEx, $FchServDesde, $FchServHasta, $FchVtoPago, $MonedaId, $MonedaCotizacion);
                     $wsfe->AgregaIva($IdIVA, $ImpNeto, $ImporteIVA);
                     $wsfe->AgregaTributo($IdTributo, $TributoDescripcion, $TributoBaseImponible, $TributoAlicuota, $TributoImporte);
@@ -472,7 +581,7 @@ class Facturacion extends CI_Controller {
                         );
                         $this->comprobantes_model->update($datos, $where);
                         var_dump($datos);
-                        
+
                         $data['invoice_num'] = sprintf('%04d-', $PtoVta) . sprintf('%08d', $NumeroFacturaDesde);
                         $data['CAE'] = $wsfe->RespCAE;
                         $data['Vto'] = $wsfe->RespVencimiento;

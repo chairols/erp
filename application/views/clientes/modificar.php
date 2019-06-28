@@ -86,7 +86,7 @@
             <div class="row form-group">
                 <label class="control-label col-md-3">Observaciones</label>
                 <div class="col-md-6">
-                    <textarea id="observaciones" class="form-control"><?= $cliente['observaciones'] ?></textarea>
+                    <textarea id="observaciones" class="form-control" rows="20"><?= $cliente['observaciones'] ?></textarea>
                 </div>
             </div>
             <div class="row form-group txL">
